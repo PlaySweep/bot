@@ -22,8 +22,8 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
-  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
-  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
+  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" if user.session[:history]
+  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" if user.session[:history]
   if user.session[:upcoming].empty? && user.session[:current].empty? && user.session[:completed].empty?
     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nYou have nothing in flight for the day! Get started below 👇"
     quick_replies = ["Select picks"]
