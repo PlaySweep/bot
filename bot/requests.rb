@@ -1,5 +1,5 @@
 GRAPH_URL = 'https://graph.facebook.com/v2.8'.freeze
-SWEEP_API = 'https://e5ffb228.ngrok.io'.freeze
+SWEEP_API = ENV["API_URL"].freeze
 
 def get_fb_user
   url = "#{GRAPH_URL}/#{user.id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}"

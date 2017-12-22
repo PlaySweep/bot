@@ -102,14 +102,14 @@ get '/' do
 end
 
 get "/request" do
-  redirect "https://www.facebook.com/v2.11/dialog/oauth?client_id=#{@client_id}&scope=user_friends,email&redirect_uri=https://e52ea8d3.ngrok.io/oauth/facebook/callback"
+  redirect "https://www.facebook.com/v2.11/dialog/oauth?client_id=#{@client_id}&scope=user_friends,email&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback"
 end
 
 get "/oauth/facebook/callback" do
   session[:oauth][:code] = params[:code]
 
   http = Net::HTTP.new "graph.facebook.com", 443
-  request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=https://e52ea8d3.ngrok.io/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{session[:oauth][:code]}"
+  request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{session[:oauth][:code]}"
   http.use_ssl = true
   response = http.request request
 

@@ -43,7 +43,7 @@ module Commands
       {
         type: :web_url,
         messenger_extensions: true,
-        url: "https://18c9b5a6.ngrok.io?id=#{user.id}&sport=#{sport.downcase}",
+        url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
         title: "Pick now 🙌",
         webview_height_ratio: 'tall'
       }
@@ -69,7 +69,7 @@ module Commands
       {
         type: :web_url,
         messenger_extensions: true,
-        url: "https://e52ea8d3.ngrok.io/request",
+        url: "#{ENV["BOT_URL"]}/request",
         title: "Log in with Facebook",
         webview_height_ratio: 'tall'
       }
