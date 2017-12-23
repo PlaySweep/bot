@@ -35,7 +35,7 @@ Rubotnik.route :message do
     text: text,
     quick_replies: quick_replies
   }
-  bind 'friends' do
+  bind 'invite', 'friends' do
     show_invite
   end
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
