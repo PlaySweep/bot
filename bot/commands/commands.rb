@@ -188,20 +188,11 @@ module Commands
       say text, quick_replies: %w[NFL NCAA NBA]
       stop_thread
     when 'Up next'
+      result = user.session[:upcoming].nil?
+      puts result.inspect
+      puts user.session[:upcoming].inspect
       if user.session[:upcoming].nil?
         say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-        next_command :status
-      else
-        next_up = user.session[:upcoming].first unless next_up.nil?
-        symbol = next_up["spread"] > 0 ? "+" : "" unless next_up.nil?
-        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites" unless next_up.nil?
-        teams = ""
-        upcoming = user.session[:upcoming][1..-1] unless next_up.nil?
-        upcoming.each_with_index do |team, index|
-          teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
-        end
-        text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
-        say text, quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     when 'Live'
