@@ -26,11 +26,6 @@ module Profile
             type: 'postback',
             title: 'Help',
             payload: 'HELP'
-          },
-          {
-            type: 'postback',
-            title: 'How To Play',
-            payload: 'HOW TO PLAY'
           }
         ]
       }
