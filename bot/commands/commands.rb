@@ -188,17 +188,21 @@ module Commands
       say text, quick_replies: %w[NFL NCAA NBA]
       stop_thread
     when 'Up next'
-      next_up = user.session[:upcoming].first
-      symbol = next_up["spread"] > 0 ? "+" : ""
-      spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
-      teams = ""
-      upcoming = user.session[:upcoming][1..-1]
-      upcoming.each_with_index do |team, index|
-        teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
+      if user.session[:upcoming]
+        next_up = user.session[:upcoming].first
+        symbol = next_up["spread"] > 0 ? "+" : ""
+        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
+        teams = ""
+        upcoming = user.session[:upcoming][1..-1]
+        upcoming.each_with_index do |team, index|
+          teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
+        end
+        text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
+        say text, quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+        next_command :status
+      else
+        say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
       end
-      text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
-      say text, quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-      next_command :status
     when 'Live'
       teams = ""
       in_progress = user.session[:in_progress]
