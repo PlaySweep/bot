@@ -18,7 +18,7 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do
-  bind 'log', 'in' do
+  bind 'login' do
     show_login
   end
   get_status # refactor
