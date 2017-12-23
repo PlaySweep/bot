@@ -52,7 +52,7 @@ Rubotnik.route :message do
 
   bind 'notifications', 'settings', 'preferences', 'alerts', to: :notifications, reply_with: {
      text: "Tap the options below to manage your notification settings 👇",
-     quick_replies: ["Reminders", "Props", "Game Recaps"]
+     quick_replies: ["Reminders", "Props", "Game recaps"]
   }
 
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {

@@ -21,9 +21,9 @@ module Commands
       text = "We will send you live, in-game props throughout the week.\n\nTap below to update your preference ⏰"
       say text, quick_replies: [["On", "Props On"], ["Off", "Props Off"], ["Skip", "Props Skip"]]
       next_command :set_props
-    when 'Game Recaps'
+    when 'Game recaps'
       message.typing_off
-      text = "We will give you recaps after your games finish with a quick update on your results.\n\nTap below to update your preference ⏰"
+      text = "We will send you recaps after your games finish with a quick update on your results.\n\nTap below to update your preference ⏰"
       say text, quick_replies: [["For every win", "Recaps Win"], ["For every loss", "Recaps Loss"], ["For a Sweep", "Recaps Sweep"], ["Skip", "Recaps Skip"]]
       next_command :set_recaps
     else
@@ -174,7 +174,7 @@ module Commands
   end
 
   def select_picks
-    text = "Choose your sport?"
+    text = "Choose your sport..."
     say text, quick_replies: %w[NFL NCAA NBA]
     stop_thread
   end
@@ -184,7 +184,7 @@ module Commands
     message.typing_on
     case message.quick_reply
     when 'Select picks'
-      text = "Choose your sport?"
+      text = "Choose your sport..."
       say text, quick_replies: %w[NFL NCAA NBA]
       stop_thread
     when 'Up next'
