@@ -192,11 +192,11 @@ module Commands
         say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
-        next_up = user.session[:upcoming].first
-        symbol = next_up["spread"] > 0 ? "+" : ""
-        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
+        next_up = user.session[:upcoming].first unless next_up.nil?
+        symbol = next_up["spread"] > 0 ? "+" : "" unless next_up.nil?
+        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites" unless next_up.nil?
         teams = ""
-        upcoming = user.session[:upcoming][1..-1]
+        upcoming = user.session[:upcoming][1..-1] unless next_up.nil?
         upcoming.each_with_index do |team, index|
           teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
         end
