@@ -38,6 +38,44 @@ module Commands
     }
   ].freeze
 
+  INVITE_FRIENDS = [
+    {
+      "title":"Refer your friends and earn mulligans!",
+      "subtitle":"A mulligan can buy you another shot at hitting 4 consecutive wins.",
+      "image_url":"https://i.imgur.com/UDErRSF.png",
+      "buttons": [
+        {
+          "type": "element_share",
+          "share_contents": { 
+            "attachment": {
+              "type": "template",
+              "payload": {
+                "template_type": "generic",
+                "elements": [
+                  {
+                    "title": "Sweep",
+                    "subtitle": "Hit 4 Consecutive Wins and earn Amazon Cash!",
+                    "default_action": {
+                      "type": "web_url",
+                      "url": "http://www.playsweep.com/"
+                    },
+                    "buttons": [
+                      {
+                        "type": "web_url",
+                        "url": "http://m.me/PlaySweep", 
+                        "title": "Try Out Sweep"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ].freeze
+
   def show_button_template sport
     payload = [
       {
@@ -80,6 +118,10 @@ module Commands
 
   def show_carousel
     show(UI::FBCarousel.new(CAROUSEL))
+  end
+
+  def show_invite
+    show(UI::FBInvite.new(INVITE_FRIENDS, quick_replies = [{ content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }]))
   end
 
   def show_image

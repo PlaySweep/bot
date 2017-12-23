@@ -35,6 +35,9 @@ Rubotnik.route :message do
     text: text,
     quick_replies: quick_replies
   }
+  bind 'invite', 'friends', all: true do
+    show_invite
+  end
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
   bind 'nfl' do
