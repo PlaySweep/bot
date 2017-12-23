@@ -188,10 +188,10 @@ module Commands
       say text, quick_replies: %w[NFL NCAA NBA]
       stop_thread
     when 'Up next'
-      result = user.session[:upcoming].nil?
+      result = user.session[:upcoming].empty?
       puts result.inspect
       puts user.session[:upcoming].inspect
-      if user.session[:upcoming].nil?
+      if user.session[:upcoming].empty?
         say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
