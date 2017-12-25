@@ -35,10 +35,23 @@ task :send_notification do
         }
       }
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-      puts "Delivered win message... for #{pick.inspect}"
+      puts "Delivered win message...for #{pick.inspect}"
+    elsif pick["result"] == "L" && pick["user"]["notification_settings"]["recap_loss"]
+      emoji = "🤷"
+      symbol = pick["spread"] > 0 ? "+" : ""
+      text = "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) lost to the #{pick["opponent_abbrev"]} #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: pick["user"]["facebook_uuid"] },
+        message: {
+          text: "#{text}\n\n#{emoji} You now have #{pick["user"]["current_streak"]} wins in a row",
+          quick_replies: menu
+        }
+      }
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      puts "Delivered loss message...for #{pick.inspect}"
     else
-      puts "ELSE..."
-      puts pick["matchup"].inspect
+      puts "Reminders not set for #{pick["user"]}"
     end
   end
 end
