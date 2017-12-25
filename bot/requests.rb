@@ -1,5 +1,5 @@
-GRAPH_URL = 'https://graph.facebook.com/v2.8'.freeze
-SWEEP_API = ENV["API_URL"].freeze
+GRAPH_URL = 'https://graph.facebook.com/v2.8'
+SWEEP_API = ENV["API_URL"]
 
 def get_fb_user
   url = "#{GRAPH_URL}/#{user.id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}"
@@ -41,12 +41,30 @@ def get_status
   user.session[:completed] = response["completed"]
 end
 
+def get_picks
+  url = "#{SWEEP_API}/api/v1/picks" 
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  @picks = response["picks"]
+end
+
+def get_recently_completed
+  url = "#{SWEEP_API}/api/v1/picks?recently_completed=true" 
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  @recently_completed = response["picks"]
+end
+
 def graph_api options
   url = "#{GRAPH_URL}/#{user.id}?access_token=#{ENV["ACCESS_TOKEN"]}"
   response = HTTParty.get(url)
   response = JSON.parse(response.body)
   puts response.inspect
   response
+end
+
+def test_api
+  puts "Running in the rake file..."
 end
 
 # def get_fb_friends

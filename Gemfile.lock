@@ -16,6 +16,7 @@ GEM
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    rake (12.3.0)
     rubotnik (0.1.1)
       addressable
       dotenv
@@ -36,6 +37,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   rubotnik
 
 BUNDLED WITH
