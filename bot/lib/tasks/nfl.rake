@@ -35,9 +35,9 @@ task :send_notification do
         }
       }
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-      puts "Delivered win message..."
+      puts "Delivered win message... for #{pick.inspect}"
     else
-      puts pick.inspect
+      puts "ELSE..."
       puts pick["matchup"].inspect
     end
   end
