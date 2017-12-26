@@ -2,6 +2,7 @@ namespace :nfl do
 
 desc "Select Picks Reminder"
 task :send_notification do
+  puts "Looking for notifications to send..."
   get_picks
   menu = [
     {
