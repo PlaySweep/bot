@@ -43,8 +43,8 @@ Rubotnik.route :message do
   bind 'nfl' do
     show_button_template('NFL')
   end
-  bind 'ncaa' do
-    show_button_template('NCAA')
+  bind 'ncaaf' do
+    show_button_template('NCAAF')
   end
   bind 'nba' do
     show_button_template('NBA')
