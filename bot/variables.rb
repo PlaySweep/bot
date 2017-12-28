@@ -88,15 +88,15 @@ module Commands
     ]
     case sport
     when 'NFL'
-      quick_replies = [{ content_type: 'text', title: "NCAA", payload: "NCAA" }, { content_type: 'text', title: "NBA", payload: "NBA" }]
+      quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }, { content_type: 'text', title: "NBA", payload: "NBA" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
       show(button_template)
-    when 'NCAA'
+    when 'NCAAF'
       quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NBA", payload: "NBA" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAA?", payload, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
       show(button_template)
     when 'NBA'
-      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAA", payload: "NCAA" }]
+      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
       show(button_template)
     end

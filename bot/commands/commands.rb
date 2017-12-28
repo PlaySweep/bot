@@ -175,7 +175,7 @@ module Commands
 
   def select_picks
     text = "Choose your sport..."
-    say text, quick_replies: %w[NFL NCAA NBA]
+    say text, quick_replies: %w[NFL NCAAF NBA]
     stop_thread
   end
 
@@ -185,7 +185,7 @@ module Commands
     case message.quick_reply
     when 'Select picks'
       text = "Choose your sport..."
-      say text, quick_replies: %w[NFL NCAA NBA]
+      say text, quick_replies: %w[NFL NCAAF NBA]
       stop_thread
     when 'Up next'
       if user.session[:upcoming].empty?
