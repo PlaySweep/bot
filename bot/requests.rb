@@ -11,9 +11,8 @@ end
 
 def get_or_set_user
   get_fb_user
-  puts "Graph user..."
-  puts @graph_user.inspect
-  url = "#{SWEEP_API}/api/v1/users/#{user.id}"
+  puts "Graph user...#{@graph_user.inspect}"
+  url = "#{SWEEP_API}/api/v1/users/#{@graph_user['id']}"
   response = HTTParty.get(url)
   response = JSON.parse(response.body)
   if response["user"].empty?
