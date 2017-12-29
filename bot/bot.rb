@@ -22,17 +22,17 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
-  # user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" if user.session[:history]
-  # user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" if user.session[:history]
-  # if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
-    # text = "You have nothing in flight for the day! Get started below 👇"
-  #   quick_replies = ["Select picks"]
-  # else
-    # text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}"
-  #   quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
-  # end
+  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" if user.session[:history]
+  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" if user.session[:history]
+  if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
+    text = "You have nothing in flight for the day! Get started below 👇"
+    quick_replies = ["Select picks"]
+  else
+    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}"
+    quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
+  end
   bind 'current', 'status', to: :status, reply_with: {
-    text: text = "You have nothing in flight for the day! Get started below 👇" if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil? : user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" if user.session[:history]; user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" if user.session[:history]; text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}",
+    text: text,
     quick_replies: quick_replies
   }
   bind 'invite', 'friends' do
