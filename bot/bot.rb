@@ -42,7 +42,7 @@ Rubotnik.route :message do
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
   bind 'select', 'picks', 'available', to: :select_picks
   bind 'in-game', 'picks', all: true, to: :in_game
-  bind 'games', 'my', 'picks', to: :games
+  bind 'games', to: :games
   bind 'nfl' do
     show_button_template('NFL')
   end
