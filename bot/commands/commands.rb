@@ -185,6 +185,10 @@ module Commands
     stop_thread
   end
 
+  def mulligans
+    show_invite
+  end
+
   def status
     get_status
     message.typing_on
