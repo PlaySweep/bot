@@ -35,7 +35,7 @@ Rubotnik.route :message do
     text: text,
     quick_replies: [["Games", "Games"], ["More action", "More action"]]
   }
-  bind 'invite', 'friends' do
+  bind 'invite' do
     show_invite
   end
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
@@ -46,9 +46,9 @@ Rubotnik.route :message do
   bind 'ncaaf' do
     show_button_template('NCAAF')
   end
-  bind 'nba' do
-    show_button_template('NBA')
-  end
+  # bind 'nba' do
+  #   show_button_template('NBA')
+  # end
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
@@ -65,7 +65,7 @@ Rubotnik.route :message do
   # bind 'image', to: :show_image
 
   default do
-    say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+    say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
   end
 end
 

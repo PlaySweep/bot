@@ -28,7 +28,7 @@ module Commands
       next_command :set_recaps
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -52,7 +52,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -76,7 +76,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -102,7 +102,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -122,7 +122,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -142,7 +142,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
@@ -162,20 +162,20 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end
 
   def help
     text = "Here are some keywords to help you navigate our app 👇\n\nStatus\nLeaderboard\nManage updates"
-    say text, quick_replies: ["Status", "Select picks", "Friends"]
+    say text, quick_replies: ["Status", "Select picks", "Invite"]
     stop_thread
   end
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: %w[NFL NCAAF NBA]
+    say text, quick_replies: %w[NFL NCAAF]
     stop_thread
   end
 
@@ -185,7 +185,7 @@ module Commands
     case message.quick_reply
     when 'Select picks'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: %w[NFL NCAAF NBA]
+      say text, quick_replies: %w[NFL NCAAF]
       stop_thread
     when 'More action'
       text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
@@ -249,7 +249,7 @@ module Commands
       end
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
+      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
       stop_thread
     end
   end

@@ -40,8 +40,8 @@ module Commands
 
   INVITE_FRIENDS = [
     {
-      "title":"Once they accept your invite and play, you'll get a mulligan. They will too. Win-win!",
-      "subtitle":"Use mulligans to erase your last loss and keep your winning streak alive!",
+      "title":"Once they accept your invite and play, you'll get a mulligan. They will too!",
+      "subtitle":"Use mulligans if you lose to keep your winning streak alive!",
       "image_url":"https://i.imgur.com/kDb3LQo.png",
       "buttons": [
         {
@@ -77,28 +77,35 @@ module Commands
   ].freeze
 
   def show_button_template sport
+    case sport
+    when 'NFL'
+      image_url = "https://i.imgur.com/ke2hFzp.png"
+    when 'NCAAF'
+      image_url = "https://i.imgur.com/mveSwHJ.png"
+    end
     payload = [
       {
         type: :web_url,
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
         title: "Pick now 🙌",
+        image_url: image_url,
         webview_height_ratio: 'tall'
       }
     ]
     case sport
     when 'NFL'
-      quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }, { content_type: 'text', title: "NBA", payload: "NBA" }]
+      quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
       show(button_template)
     when 'NCAAF'
-      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NBA", payload: "NBA" }]
+      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
       show(button_template)
-    when 'NBA'
-      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
-      show(button_template)
+    # when 'NBA'
+    #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
+    #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
+    #   show(button_template)
     end
   end
 
@@ -124,10 +131,10 @@ module Commands
     show(UI::FBInvite.new(INVITE_FRIENDS, quick_replies = [{ content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }]))
   end
 
-  def show_image
-    say "Wait a bit while I pick a nice random image for you"
-    img_url = 'https://unsplash.it/600/400?random'
-    image = UI::ImageAttachment.new(img_url)
-    show(image)
-  end
+  # def show_image
+  #   say "Wait a bit while I pick a nice random image for you"
+  #   img_url = 'https://unsplash.it/600/400?random'
+  #   image = UI::ImageAttachment.new(img_url)
+  #   show(image)
+  # end
 end
