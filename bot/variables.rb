@@ -89,18 +89,17 @@ module Commands
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
         title: "Pick now 🙌",
-        image_url: image_url,
         webview_height_ratio: 'tall'
       }
     ]
     case sport
     when 'NFL'
       quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, image_url, quick_replies)
       show(button_template)
     when 'NCAAF'
       quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, image_url, quick_replies)
       show(button_template)
     # when 'NBA'
     #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
