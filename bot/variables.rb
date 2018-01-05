@@ -40,9 +40,9 @@ module Commands
 
   INVITE_FRIENDS = [
     {
-      "title":"Refer your friends and earn mulligans!",
-      "subtitle":"A mulligan can buy you another shot at hitting 4 consecutive wins.",
-      "image_url":"https://i.imgur.com/y27BYeQ.png",
+      "title":"Just hit em' with an invite and once they play you'll get a mulligan. They will too.",
+      "subtitle":"Use mulligans to erase your last loss and keep your winning streak alive!",
+      "image_url":"https://i.imgur.com/WbkTLhx.png",
       "buttons": [
         {
           "type": "element_share",
