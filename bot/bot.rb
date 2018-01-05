@@ -29,7 +29,7 @@ Rubotnik.route :message do
     quick_replies = ["Select picks"]
     stop_thread
   else
-    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}"
+    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
@@ -41,6 +41,7 @@ Rubotnik.route :message do
   bind 'more', 'action', to: :more_action
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
   bind 'select', 'picks', 'available', to: :select_picks
+  bind 'in-game', 'picks', all: true, to: :in_game
   bind 'nfl' do
     show_button_template('NFL')
   end
@@ -53,7 +54,7 @@ Rubotnik.route :message do
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
-     quick_replies: ["Reminders", "Props", "Game recaps"]
+     quick_replies: ["Reminders", "In-game", "Game recaps"]
   }
 
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {

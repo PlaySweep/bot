@@ -16,7 +16,7 @@ module Commands
       text = "We will remind you when you haven't made any picks for the week.\n\nTap below to update your preference ⏰"
       say text, quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"], ["Skip", "Reminders Skip"]]
       next_command :set_reminders
-    when 'Props'
+    when 'In-game'
       message.typing_off
       text = "We will send you live, in-game props throughout the week.\n\nTap below to update your preference ⏰"
       say text, quick_replies: [["On", "Props On"], ["Off", "Props Off"], ["Skip", "Props Skip"]]
@@ -181,7 +181,13 @@ module Commands
 
   def more_action
     text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["Make more picks", "Select picks"]]
+    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
+    stop_thread
+  end
+
+  def in_game
+    text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
+    say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
     stop_thread
   end
 
@@ -195,8 +201,10 @@ module Commands
       stop_thread
     when 'More action'
       text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-      say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["Make more picks", "Select picks"]]
+      say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
       next_command :status
+    when 'In-game picks'
+      next_command :in_game
     when 'Earn mulligans'
       show_invite
       stop_thread
