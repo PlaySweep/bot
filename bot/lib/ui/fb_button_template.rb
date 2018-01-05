@@ -2,7 +2,7 @@ module UI
   ########################### BUTTON TEMPLATE #############################
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/button-template
   class FBButtonTemplate
-    def initialize(text, buttons, image_url = nil, quick_replies = nil)
+    def initialize(text, buttons, quick_replies = nil)
       @template = {
         recipient: {
           id: nil
@@ -13,7 +13,6 @@ module UI
             payload: {
               template_type: 'button',
               text: text,
-              image_url: image_url,
               buttons: parse_buttons(buttons)
             }
           }

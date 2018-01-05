@@ -40,9 +40,9 @@ module Commands
 
   INVITE_FRIENDS = [
     {
-      "title":"Once they accept your invite and play, you'll get a mulligan. They will too!",
-      "subtitle":"Use mulligans if you lose to keep your winning streak alive!",
-      "image_url":"https://i.imgur.com/kDb3LQo.png",
+      "title":"Refer your friends and earn mulligans!",
+      "subtitle":"For every 3 friends who plays Sweep, you'll get to erase a loss.",
+      "image_url":"https://i.imgur.com/GB28b5L.png",
       "buttons": [
         {
           "type": "element_share",
@@ -53,17 +53,18 @@ module Commands
                 "template_type": "generic",
                 "elements": [
                   {
-                    "title": "Sweep",
-                    "subtitle": "Hit 4 Consecutive Wins and earn Amazon Cash!",
+                    "title": "Predict 4 games in a row and win Amazon Cash!",
+                    "subtitle": "Make your picks now and you might walk away with an Amazon gift card by putting your knowledge up to the test.",
                     "default_action": {
                       "type": "web_url",
-                      "url": "http://www.playsweep.com/"
+                      "url": "http://www.playsweep.com/",
+                      "image_url": "https://i.imgur.com/HTdeDZj.png"
                     },
                     "buttons": [
                       {
                         "type": "web_url",
                         "url": "http://m.me/PlaySweep", 
-                        "title": "Try Out Sweep"
+                        "title": "Play Sweep Now"
                       }
                     ]
                   }
@@ -95,11 +96,11 @@ module Commands
     case sport
     when 'NFL'
       quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, image_url, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
       show(button_template)
     when 'NCAAF'
       quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, image_url, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
       show(button_template)
     # when 'NBA'
     #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
