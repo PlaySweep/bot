@@ -296,13 +296,13 @@ module Commands
     when "How to play"
       message.typing_off
       text = "✅ You will have at least one game to choose from each day.\n\n✅ You can select as many or as few games as you want, completely free.\n\n✅ Getting 4 wins in a row is considered a Sweep.\n\nTo learn more about how the prizes work, tap below 👇"
-      say text, quick_replies: ["What about prizes?", "Select picks", "Manage updates"]
+      say text, quick_replies: ["Select picks"]
       stop_thread
-    when "What about prizes?"
-      message.typing_off
-      text = "We offer a $50 (Amazon) prize pool every day a game is played.\n\n✅ Take home the entire prize pool if you are the only one to hit a Sweep.\n\n✅ Share the prize pool with others if there are more winners.\n\n✅ The prize pool will rollover if no one hits a Sweep.\n\nNow get started by tapping below! 😁"
-      say text, quick_replies: ["Select picks", "Manage updates"]
-      stop_thread
+    # when "What about prizes?"
+    #   message.typing_off
+    #   text = "We offer a $50 (Amazon) prize pool every day a game is played.\n\n✅ Take home the entire prize pool if you are the only one to hit a Sweep.\n\n✅ Share the prize pool with others if there are more winners.\n\n✅ The prize pool will rollover if no one hits a Sweep.\n\nNow get started by tapping below! 😁"
+    #   say text, quick_replies: ["Select picks", "Manage updates"]
+    #   stop_thread
     end
   end
 end
