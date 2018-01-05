@@ -33,7 +33,7 @@ Rubotnik.route :message do
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
-    quick_replies: ["Games", "More action"]
+    quick_replies: [["Games", "Games"], ["More action", "More action"]]
   }
   bind 'invite', 'friends' do
     show_invite

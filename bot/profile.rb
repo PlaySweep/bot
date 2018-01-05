@@ -24,11 +24,6 @@ module Profile
         call_to_actions: [
           {
             type: 'postback',
-            title: 'Manage updates',
-            payload: 'MANAGE UPDATES'
-          },
-          {
-            type: 'postback',
             title: 'Help',
             payload: 'HELP'
           }
