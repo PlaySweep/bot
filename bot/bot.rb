@@ -30,11 +30,10 @@ Rubotnik.route :message do
     stop_thread
   else
     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}"
-    quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
-    quick_replies: quick_replies
+    quick_replies: ["Games", "More action"]
   }
   bind 'invite', 'friends' do
     show_invite
@@ -77,10 +76,6 @@ Rubotnik.route :postback do
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
-  bind 'MANAGE UPDATES', to: :manage_updates_postback, reply_with: {
-    text: "Tap the options below to manage your preferences 👇",
-    quick_replies: ["Reminders", "Props", "Game recaps"]
-  }
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################

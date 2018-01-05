@@ -33,12 +33,6 @@ module Commands
     end
   end
 
-  def manage_updates_postback
-    text = "Tap the options below to manage your preferences 👇"
-    say text, quick_replies: ["Reminders", "Props", "Game recaps"]
-    next_command :manage_updates
-  end
-
   def set_reminders
     message.typing_on
     case message.quick_reply
@@ -174,7 +168,7 @@ module Commands
   end
 
   def help
-    text = "Here are some keywords to help you navigate our app👇\n\nStatus\nLeaderboard\nManage updates"
+    text = "Here are some keywords to help you navigate our app 👇\n\nStatus\nLeaderboard\nManage updates"
     say text, quick_replies: ["Status", "Select picks", "Friends"]
     stop_thread
   end
@@ -193,6 +187,14 @@ module Commands
       text = "Choose your sport..."
       say text, quick_replies: %w[NFL NCAAF NBA]
       stop_thread
+    when 'More action'
+      text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
+      say text, quick_replies: [["Earn mulligans", "MULLIGANS"], ["Make more picks", "MORE SPORTS"]]
+      stop_thread
+    when 'Games'
+      text = "Choose from the sports below 👇"
+      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
+      next_command :status
     when 'Up next'
       if user.session[:upcoming].empty?
         say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
