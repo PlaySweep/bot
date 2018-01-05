@@ -198,11 +198,10 @@ module Commands
       say text, quick_replies: [["Earn mulligans", "MULLIGANS"], ["Make more picks", "MORE SPORTS"]]
       next_command :status
     when 'Earn mulligans'
-      show_invite
-      stop_thread
+      say "Mulligans run...", quick_replies: [["Invite", "Invite"]]
     when 'Games'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
+      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
       next_command :status
     when 'Up next'
       if user.session[:upcoming].empty?
