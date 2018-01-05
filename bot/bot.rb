@@ -77,7 +77,9 @@ Rubotnik.route :postback do
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
-  bind 'MULLIGANS', to: :mulligans
+  bind 'MULLIGANS' do
+    show_invite
+  end
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################
