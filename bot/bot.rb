@@ -35,7 +35,7 @@ Rubotnik.route :message do
     text: text,
     quick_replies: [["Games", "Games"], ["More action", "More action"]]
   }
-  bind 'invite' do
+  bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
   bind 'more', 'action', to: :more_action
