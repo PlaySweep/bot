@@ -174,7 +174,7 @@ module Commands
   end
 
   def select_picks
-    text = "Choose your sport..."
+    text = "Choose from the sports below 👇"
     say text, quick_replies: %w[NFL NCAAF NBA]
     stop_thread
   end
@@ -184,7 +184,7 @@ module Commands
     message.typing_on
     case message.quick_reply
     when 'Select picks'
-      text = "Choose your sport..."
+      text = "Choose from the sports below 👇"
       say text, quick_replies: %w[NFL NCAAF NBA]
       stop_thread
     when 'More action'

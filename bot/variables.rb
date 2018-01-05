@@ -42,7 +42,7 @@ module Commands
     {
       "title":"Refer your friends and earn mulligans!",
       "subtitle":"A mulligan can buy you another shot at hitting 4 consecutive wins.",
-      "image_url":"https://s1.gifyu.com/images/49938532062931872.png",
+      "image_url":"https://i.imgur.com/xVISK0x.png",
       "buttons": [
         {
           "type": "element_share",
