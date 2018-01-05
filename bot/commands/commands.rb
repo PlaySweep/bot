@@ -181,7 +181,7 @@ module Commands
 
   def more_action
     text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-    say text, quick_replies: [["Earn mulligans", "MULLIGANS"], ["Make more picks", "MORE SPORTS"]]
+    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["Make more picks", "Select picks"]]
     stop_thread
   end
 
@@ -195,7 +195,7 @@ module Commands
       stop_thread
     when 'More action'
       text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-      say text, quick_replies: [["Earn mulligans", "MULLIGANS"], ["Make more picks", "MORE SPORTS"]]
+      say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["Make more picks", "Select picks"]]
       next_command :status
     when 'Earn mulligans'
       say "Mulligans run...", quick_replies: [["Invite", "Invite"]]
