@@ -185,12 +185,6 @@ module Commands
     stop_thread
   end
 
-  def in_game
-    text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
-    say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
-    stop_thread
-  end
-
   def status
     get_status
     message.typing_on
@@ -204,7 +198,9 @@ module Commands
       say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
       next_command :status
     when 'In-game picks'
-      next_command :in_game
+      text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
+      say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
+      stop_thread
     when 'Earn mulligans'
       show_invite
       stop_thread
