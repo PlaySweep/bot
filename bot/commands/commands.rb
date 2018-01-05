@@ -186,7 +186,9 @@ module Commands
   end
 
   def mulligans
-    show_invite
+    text = "Mulligans 👇"
+    say text, quick_replies: ["Invite"]
+    stop_thread
   end
 
   def status
