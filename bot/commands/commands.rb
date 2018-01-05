@@ -198,6 +198,12 @@ module Commands
     stop_thread
   end
 
+  def games
+    text = "Choose from the sports below 👇"
+    say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+    next_command :status
+  end
+
   def status
     get_status
     message.typing_on
