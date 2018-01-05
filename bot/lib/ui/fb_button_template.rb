@@ -8,12 +8,12 @@ module UI
           id: nil
         },
         message: {
-          image_url: image_url,
           attachment: {
             type: 'template',
             payload: {
               template_type: 'button',
               text: text,
+              image_url: image_url,
               buttons: parse_buttons(buttons)
             }
           }
