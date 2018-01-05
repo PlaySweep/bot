@@ -4,7 +4,7 @@ module Commands
   def start
     user = get_or_set_user["user"]
     text = "Welcome to Sweep #{user["first_name"]}!\n\nPick 4 wins in a row for your chance at a $50 gift card from Amazon."
-    say text, quick_replies: ["How to play", "Select picks", "Manage updates"]
+    say text, quick_replies: ["How to play", "Select picks"]
     stop_thread
   end
 
