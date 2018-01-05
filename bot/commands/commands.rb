@@ -33,6 +33,12 @@ module Commands
     end
   end
 
+  def manage_updates_postback
+    text = "Tap the options below to manage your preferences 👇",
+    say text, quick_replies: ["Reminders", "Props", "Game recaps"]
+    next_command :manage_updates
+  end
+
   def set_reminders
     message.typing_on
     case message.quick_reply
