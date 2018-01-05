@@ -310,7 +310,7 @@ module Commands
     case message.text
     when "How to play"
       message.typing_off
-      text = "✅ You will have at least one game to choose from each day.\n\n✅ You can select as many or as few games as you want, completely free.\n\n✅ Getting 4 wins in a row is considered a Sweep.\n\nTo learn more about how the prizes work, tap below 👇"
+      text = "✅ You will have at least one game to choose from each day.\n\n✅ You can select as many or as few games as you want, completely free.\n\n✅ Getting 4 wins in a row is considered a Sweep.\n\nTap below to get started making your picks 👇"
       say text, quick_replies: ["Select picks"]
       stop_thread
     # when "What about prizes?"
