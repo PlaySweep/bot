@@ -179,6 +179,12 @@ module Commands
     stop_thread
   end
 
+  def more_action
+    text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
+    say text, quick_replies: [["Earn mulligans", "MULLIGANS"], ["Make more picks", "MORE SPORTS"]]
+    stop_thread
+  end
+
   def status
     get_status
     message.typing_on

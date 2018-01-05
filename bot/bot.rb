@@ -38,6 +38,7 @@ Rubotnik.route :message do
   bind 'invite' do
     show_invite
   end
+  bind 'more', 'action', to: :more_action
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
   bind 'select', 'picks', 'available', to: :select_picks
   bind 'nfl' do
