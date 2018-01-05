@@ -209,7 +209,7 @@ module Commands
       text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
       quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
     end
-    say text, quick_replies
+    say text, quick_replies: quick_replies
     next_command :status
   end
 
@@ -244,7 +244,7 @@ module Commands
         quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
       end
       text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below for more details on your picks 👍"
-      say text, quick_replies
+      say text, quick_replies: quick_replies
       next_command :status
     when 'Up next'
       if user.session[:upcoming].empty?
