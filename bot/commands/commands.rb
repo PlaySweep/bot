@@ -34,7 +34,7 @@ module Commands
   end
 
   def manage_updates_postback
-    text = "Tap the options below to manage your preferences 👇",
+    text = "Tap the options below to manage your preferences 👇"
     say text, quick_replies: ["Reminders", "Props", "Game recaps"]
     next_command :manage_updates
   end
