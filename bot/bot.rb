@@ -77,7 +77,7 @@ Rubotnik.route :postback do
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
-  bind 'MANAGE_UPDATES', to: :manage_updates, reply_with: {
+  bind 'MANAGE UPDATES', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
      quick_replies: ["Reminders", "Props", "Game recaps"]
   }
