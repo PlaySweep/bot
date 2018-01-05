@@ -4,11 +4,11 @@ module Commands
   def start
     user = get_or_set_user["user"]
     text = "Welcome to Sweep #{user["first_name"]}!\n\nPick 4 wins in a row for your chance at a $50 gift card from Amazon."
-    say text, quick_replies: ["How to play", "Select picks", "Notifications"]
+    say text, quick_replies: ["How to play", "Select picks", "Manage updates"]
     stop_thread
   end
 
-  def notifications
+  def manage_updates
     message.typing_on
     case message.text
     when 'Reminders'
@@ -39,16 +39,16 @@ module Commands
     when 'Reminders On'
       set_notification_settings(:reminders, true)
       text = "We will notify you before the games start..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Reminders Off'
       set_notification_settings(:reminders, false)
       text = "We will stop notifying you before the games start..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Reminders Skip'
       text = "Manage your notifications or get started making your picks below 👇"
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -63,16 +63,16 @@ module Commands
     when 'Props On'
       set_notification_settings(:props, true)
       text = "We will notify you when prop bets become available..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Props Off'
       set_notification_settings(:props, false)
       text = "We will stop notifying you when prop bets become available..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Props Skip'
       text = "Manage your notifications or get started making your picks below 👇"
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -98,7 +98,7 @@ module Commands
       next_command :set_recap_sweep
     when 'Recaps Skip'
       text = "Manage your notifications or get started making your picks below 👇"
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -113,12 +113,12 @@ module Commands
     when 'Wins Yes'
       set_notification_settings(:recap_all, true)
       text = "We will notify you for every win..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Wins No'
       set_notification_settings(:recap_all, false)
       text = "We will stop notifying you for every win..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -133,12 +133,12 @@ module Commands
     when 'Losses Yes'
       set_notification_settings(:recap_loss, true)
       text = "We will notify you for every loss..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Losses No'
       set_notification_settings(:recap_loss, false)
       text = "We will stop notifying you for every loss..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -153,12 +153,12 @@ module Commands
     when 'Sweep Yes'
       set_notification_settings(:recap_sweep, true)
       text = "We will notify you when you hit a Sweep..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     when 'Sweep No'
       set_notification_settings(:recap_sweep, false)
       text = "We will stop notifying you when you hit a Sweep..."
-      say text, quick_replies: ["Notifications", "Select picks"]
+      say text, quick_replies: ["Manage updates", "Select picks"]
       stop_thread
     else
       message.typing_off
@@ -168,7 +168,7 @@ module Commands
   end
 
   def help
-    text = "Here are some keywords to help you navigate our app👇\n\nStatus\nLeaderboard\nNotifications"
+    text = "Here are some keywords to help you navigate our app👇\n\nStatus\nLeaderboard\nManage updates"
     say text, quick_replies: ["Status", "Select picks", "Friends"]
     stop_thread
   end
@@ -252,12 +252,12 @@ module Commands
     when "How to play"
       message.typing_off
       text = "✅ You will have at least one game to choose from each day.\n\n✅ You can select as many or as few games as you want, completely free.\n\n✅ Getting 4 wins in a row is considered a Sweep.\n\nTo learn more about how the prizes work, tap below 👇"
-      say text, quick_replies: ["What about prizes?", "Select picks", "Notifications"]
+      say text, quick_replies: ["What about prizes?", "Select picks", "Manage updates"]
       stop_thread
     when "What about prizes?"
       message.typing_off
       text = "We offer a $50 (Amazon) prize pool every day a game is played.\n\n✅ Take home the entire prize pool if you are the only one to hit a Sweep.\n\n✅ Share the prize pool with others if there are more winners.\n\n✅ The prize pool will rollover if no one hits a Sweep.\n\nNow get started by tapping below! 😁"
-      say text, quick_replies: ["Select picks", "Notifications"]
+      say text, quick_replies: ["Select picks", "Manage updates"]
       stop_thread
     end
   end

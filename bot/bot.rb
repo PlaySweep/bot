@@ -27,6 +27,7 @@ Rubotnik.route :message do
   if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
     text = "You have nothing in flight for the day! Get started below 👇"
     quick_replies = ["Select picks"]
+    stop_thread
   else
     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}"
     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"]]
@@ -39,7 +40,7 @@ Rubotnik.route :message do
     show_invite
   end
   bind 'how', 'to', 'play', 'prizes', to: :how_to_play
-  bind 'select', 'picks', all: true, to: :select_picks
+  bind 'select', 'picks', 'available' to: :select_picks
   bind 'nfl' do
     show_button_template('NFL')
   end
@@ -50,8 +51,8 @@ Rubotnik.route :message do
     show_button_template('NBA')
   end
 
-  bind 'notifications', 'settings', 'preferences', 'alerts', to: :notifications, reply_with: {
-     text: "Tap the options below to manage your notification settings 👇",
+  bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
+     text: "Tap the options below to manage your preferences 👇",
      quick_replies: ["Reminders", "Props", "Game recaps"]
   }
 
@@ -62,7 +63,7 @@ Rubotnik.route :message do
 
   # Look for more UI examples in commands/ui_examples.rb
   # Rubotnik currently supports Image, Button Template and Carousel
-  bind 'image', to: :show_image
+  # bind 'image', to: :show_image
 
   default do
     say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Friends"]
@@ -76,6 +77,10 @@ Rubotnik.route :postback do
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
+  bind 'MANAGE_UPDATES', to: :manage_updates, reply_with: {
+     text: "Tap the options below to manage your preferences 👇",
+     quick_replies: ["Reminders", "Props", "Game recaps"]
+  }
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################
