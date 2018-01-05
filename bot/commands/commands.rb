@@ -26,6 +26,11 @@ module Commands
       text = "We will send you recaps after your games finish with a quick update on your results.\n\nTap below to update your preference ⏰"
       say text, quick_replies: [["For every win", "Recaps Win"], ["For every loss", "Recaps Loss"], ["For a Sweep", "Recaps Sweep"], ["Skip", "Recaps Skip"]]
       next_command :set_recaps
+    when "I'm done"
+      message.typing_off
+      text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
+      say text, quick_replies: [["Games", "Games"], ["More action", "More action"]]
+      stop_thread
     else
       message.typing_off
       say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]

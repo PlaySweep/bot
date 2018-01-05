@@ -54,7 +54,7 @@ Rubotnik.route :message do
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
-     quick_replies: ["Reminders", "In-game", "Game recaps"]
+     quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
   }
 
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {
