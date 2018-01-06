@@ -27,7 +27,7 @@ Rubotnik.route :message do
     quick_replies = ["Select picks"]
     stop_thread
   else
-    if user.session[:upcoming].empty? && user.session[:current].empty? && user.session[:completed].empty?
+    if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
       text = "You have nothing in flight for the day! Get started below 👇"
       quick_replies = ["Select picks"]
       stop_thread
