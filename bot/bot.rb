@@ -21,16 +21,16 @@ Rubotnik.route :message do
   bind 'login' do
     show_login
   end
-  # get_status # refactor
-  # user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].try(:empty?)
-  # user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].try(:empty?)
-  # if user.session[:upcoming].try(:empty?) && user.session[:current].try(:empty?) && user.session[:completed].try(:empty?)
-  #   text = "You have nothing in flight for the day! Get started below 👇"
-  #   quick_replies = ["Select picks"]
-  #   stop_thread
-  # else
-  #   text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-  # end
+  get_status # refactor
+  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history]
+  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history]
+  if user.session[:upcoming] && user.session[:current] && user.session[:completed]
+    text = "You have nothing in flight for the day! Get started below 👇"
+    quick_replies = ["Select picks"]
+    stop_thread
+  else
+    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
+  end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
     quick_replies: [["Games", "Games"], ["More action", "More action"]]
