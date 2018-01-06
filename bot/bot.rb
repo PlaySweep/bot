@@ -22,20 +22,14 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
-  if user.session == {}
+  if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
     text = "You have nothing in flight for the day! Get started below 👇"
     quick_replies = ["Select picks"]
     stop_thread
   else
-    if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
-      text = "You have nothing in flight for the day! Get started below 👇"
-      quick_replies = ["Select picks"]
-      stop_thread
-    else
-      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
-      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
-      text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-    end
+    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
+    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
+    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
