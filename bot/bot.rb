@@ -22,22 +22,20 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
-  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil? || user.session[:history].empty?
-  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil? || user.session[:history].empty?
-  puts "HISTORY"*10
-  puts user.session[:history]["current_streak"].inspect
-  puts "UPCOMING"*10
-  puts user.session[:upcoming].inspect
-  puts "CURRENT"*10
-  puts user.session[:current].inspect
-  puts "COMPLETED"*10
-  puts user.session[:completed].inspect
-  if user.session[:upcoming] && user.session[:current] && user.session[:completed]
+  if session == {}
     text = "You have nothing in flight for the day! Get started below 👇"
     quick_replies = ["Select picks"]
     stop_thread
   else
-    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
+    if user.session[:upcoming].empty? && user.session[:current].empty? && user.session[:completed].empty?
+      text = "You have nothing in flight for the day! Get started below 👇"
+      quick_replies = ["Select picks"]
+      stop_thread
+    else
+      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
+      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
+      text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
+    end
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
