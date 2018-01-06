@@ -28,8 +28,8 @@ module Commands
       next_command :set_recaps
     when "I'm done"
       message.typing_off
-      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
-      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
+      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
       text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
       say text, quick_replies: [["Games", "Games"], ["More action", "More action"]]
       stop_thread
@@ -199,9 +199,9 @@ module Commands
   end
 
   def games
-    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
-    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
-    if user.session[:upcoming].empty? && user.session[:current].empty? && user.session[:completed].empty?
+    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
+    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
+    if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
       text = "You have nothing in flight for the day! Get started below 👇"
       quick_replies = ["Select picks"]
       stop_thread
@@ -233,9 +233,9 @@ module Commands
       show_invite
       stop_thread
     when 'Games'
-      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
-      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
-      if user.session[:upcoming].empty? && user.session[:current].empty? && user.session[:completed].empty?
+      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
+      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
+      if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
         text = "You have nothing in flight for the day! Get started below 👇"
         quick_replies = ["Select picks"]
         stop_thread
@@ -247,7 +247,7 @@ module Commands
       say text, quick_replies: quick_replies
       next_command :status
     when 'Up next'
-      if user.session[:upcoming].empty?
+      if user.session[:upcoming].nil?
         say "You have no games coming up...", quick_replies: [["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
@@ -264,7 +264,7 @@ module Commands
         next_command :status
       end
     when 'Live'
-      if user.session[:in_progress].empty?
+      if user.session[:in_progress].nil?
         say "You have no games in progress...", quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
@@ -281,7 +281,7 @@ module Commands
         next_command :status
       end
     when 'Completed'
-      if user.session[:completed].empty?
+      if user.session[:completed].nil?
         say "You have nothing completed for today...", quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
         next_command :status
       else
