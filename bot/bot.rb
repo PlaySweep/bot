@@ -22,7 +22,7 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
-  if session == {}
+  if user.session == {}
     text = "You have nothing in flight for the day! Get started below 👇"
     quick_replies = ["Select picks"]
     stop_thread
