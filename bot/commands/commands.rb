@@ -264,7 +264,7 @@ module Commands
         next_command :status
       end
     when 'Live'
-      if user.session[:in_progress].nil?
+      if user.session[:in_progress].nil? || user.session[:in_progress].count == 0
         say "You have no games in progress...", quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
