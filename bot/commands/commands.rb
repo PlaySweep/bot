@@ -292,7 +292,7 @@ module Commands
         completed.each_with_index do |team, index|
           team["result"] == "W" ? result = "👍" : result = "👎"
           symbol = team["spread"] > 0 ? "+" : ""
-          teams.concat("#{result} #{team["team_abbrev"]} covered (#{symbol}#{team["spread"]})\n")
+          teams.concat("#{result} #{team["team_abbrev"]} (#{symbol}#{team["spread"]})\n")
         end
         text = "Today's record 👇\n\n#{teams}"
         say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
