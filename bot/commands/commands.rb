@@ -179,8 +179,7 @@ module Commands
     text = "We get it, #{user["first_name"]}...you've probably got some questions.\n\nWe are just getting started, and we know getting used to all this bot stuff can take some time at first (#botworldproblems 🙄)\n\nBut we know that the more feedback and concerns we hear back from you, the better."
     call_to_action = "While we work to find some better solutions, we would love for you to hit us up with whatever is on your mind by direct messaging Ben Sweep on Facebook Messenger.\n\nIn the meantime, get back on track by tapping on those little bubbles below 👌"
     say text
-    sleep 3
-    message.typing_on
+    sleep 5
     say call_to_action, quick_replies: ["Status", "Select picks", "Earn mulligans"]
     stop_thread
   end
