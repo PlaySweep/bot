@@ -22,18 +22,20 @@ Rubotnik.route :message do
     show_login
   end
   get_status # refactor
+  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
+  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
   if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
-    text = "You have nothing in flight for the day! Get started below 👇"
-    quick_replies = ["Select picks"]
+    status_text = "You have nothing in flight for the day! Get started below 👇"
+    status_quick_replies = ["Select picks"]
     stop_thread
   else
-    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
-    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
-    text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
+    messages = ["Here is where the rubber meets the road, #{user.session[:history]["user"]["first_name"]}", "We always like to know where we stand, so here is where you stand so far #{user.session[:history]["user"]["first_name"]}"]
+    status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+    status_quick_replies = [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
   end
   bind 'current', 'status', to: :status, reply_with: {
-    text: text,
-    quick_replies: [["Game status", "Games"], ["More action", "More action"]]
+    text: status_text,
+    quick_replies: status_quick_replies
   }
   bind 'invite', 'earn', 'mulligans' do
     show_invite
@@ -41,8 +43,8 @@ Rubotnik.route :message do
   bind 'more', 'action', all:true, to: :more_action
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
-  bind 'in-game', 'picks', all: true, to: :in_game
-  bind 'games', to: :games
+  # bind 'in-game', 'picks', all: true, to: :in_game
+  # bind 'games', to: :games
   bind 'nfl' do
     show_button_template('NFL')
   end
