@@ -31,7 +31,7 @@ module Commands
       user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
       user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
       text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-      say text, quick_replies: [["Games", "Games"], ["More action", "More action"]]
+      say text, quick_replies: [["Game status", "Games"], ["More action", "More action"]]
       stop_thread
     else
       message.typing_off

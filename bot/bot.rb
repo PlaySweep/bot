@@ -33,7 +33,7 @@ Rubotnik.route :message do
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: text,
-    quick_replies: [["Games", "Games"], ["More action", "More action"]]
+    quick_replies: [["Game status", "Games"], ["More action", "More action"]]
   }
   bind 'invite', 'earn', 'mulligans' do
     show_invite
@@ -79,6 +79,7 @@ Rubotnik.route :postback do
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
+  bind 'Select picks', to: :select_picks
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################
