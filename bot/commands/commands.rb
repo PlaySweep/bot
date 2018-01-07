@@ -228,7 +228,7 @@ module Commands
     when 'In-game picks'
       text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
       say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
-      stop_thread
+      next_command :status
     when 'Earn mulligans'
       show_invite
       stop_thread
