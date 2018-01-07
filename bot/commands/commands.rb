@@ -224,7 +224,7 @@ module Commands
     when 'More action'
       text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
       say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
-      stop_thread
+      next_command :status
     when 'In-game picks'
       text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
       say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
