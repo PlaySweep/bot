@@ -294,7 +294,7 @@ module Commands
           symbol = team["spread"] > 0 ? "+" : ""
           teams.concat("#{result} #{team["team_abbrev"]} covered (#{symbol}#{team["spread"]})\n")
         end
-        text = "#{default}\n\nToday's record 👇\n\n#{teams}"
+        text = "Today's record 👇\n\n#{teams}"
         say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
         next_command :status
       end
