@@ -58,7 +58,6 @@ task :send_notification do
   ]
   @recently_completed.each do |pick|
     if pick["result"] == "W"
-      puts "Notifying #{pick["team_abbrev"]}..."
       if pick["user"]["notification_settings"]["recap_all"]
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
@@ -75,11 +74,11 @@ task :send_notification do
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         puts "**Send Game Recap Win** sent"
       end
+      puts "Set notification to true"
       set_notified pick["id"]
     end
       
     if pick["result"] == "L"
-      puts "Notifying #{pick["team_abbrev"]}..."
       if pick["user"]["notification_settings"]["recap_loss"]
         emoji = "🤷"
         symbol = pick["spread"] > 0 ? "+" : ""
@@ -95,9 +94,9 @@ task :send_notification do
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         puts "**Send Game Recap Loss** sent"
       end
+      puts "Set notification to true"
       set_notified pick["id"]
     end
-    puts "Notified pick id: #{pick["id"]}"
   end
 end
 
