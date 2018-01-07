@@ -66,6 +66,26 @@ def test_api
   puts "Running in the rake file..."
 end
 
+def get_user_picks id
+  url = "#{SWEEP_API}/api/v1/users/#{id}/picks" 
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  response["upcoming"]
+end
+
+def get_users_with_reminders
+  url = "#{SWEEP_API}/api/v1/users?reminders=true" 
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  @users = response["users"]
+end
+
+def set_notified pick_id
+  url = "#{SWEEP_API}/api/v1/picks/#{pick_id}/notified"
+  params = { :pick => { :notified => true } }
+  response = HTTParty.patch(url, query: params)
+end
+
 # def get_fb_friends
 #   url = "#{GRAPH_URL}/#{user.id}/friends?access_token=#{ENV["ACCESS_TOKEN"]}"
 #   response = HTTParty.get(url)

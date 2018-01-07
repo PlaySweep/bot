@@ -40,7 +40,7 @@ Rubotnik.route :message do
   end
   bind 'more', 'action', all:true, to: :more_action
   bind 'how', 'to', 'play', to: :how_to_play
-  bind 'select', 'picks', 'available', to: :select_picks
+  bind 'select', 'picks', all: true, to: :select_picks
   bind 'in-game', 'picks', all: true, to: :in_game
   bind 'games', to: :games
   bind 'nfl' do

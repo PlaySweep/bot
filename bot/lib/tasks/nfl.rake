@@ -1,34 +1,69 @@
 namespace :nfl do
 
-desc "Select Picks Reminder"
-task :send_notification do
-  puts "Looking for notifications to send..."
-  get_picks
+desc "Send Reminder"
+task :send_reminder do
+  puts "Looking to **Send Reminder**"
+  get_users_with_reminders
   menu = [
     {
       content_type: 'text',
+      title: 'Update picks',
+      payload: 'Select picks'
+    },
+    {
+      content_type: 'text',
       title: 'Status',
-      payload: 'STATUS'
+      payload: 'Status'
     },
     {
       content_type: 'text',
-      title: 'Select picks',
-      payload: 'SELECT PICKS'
-    },
-    {
-      content_type: 'text',
-      title: 'Invite Friends',
-      payload: 'Invite friends'
+      title: 'Manage updates',
+      payload: 'Manage updates'
     }
   ]
-  @picks.each do |pick|
+  @users.each do |user|
+    message_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: user["user"]["facebook_uuid"] },
+      message: {
+        text: "Hey #{user["user"]["first_name"]} 👋, you still haven't made any picks for the day, but you've still got time!",
+        quick_replies: menu
+      }
+    }
+    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+    puts "**Send Reminder** sent to #{user.inspect}"
+  end
+end
+
+desc "Send Game Recap"
+task :send_notification do
+  puts "Looking to **Send Game Recap**"
+  get_recently_completed
+  menu = [
+    {
+      content_type: 'text',
+      title: 'Earn mulligans',
+      payload: 'Earn mulligans'
+    },
+    {
+      content_type: 'text',
+      title: 'Status',
+      payload: 'Status'
+    },
+    {
+      content_type: 'text',
+      title: 'Manage updates',
+      payload: 'Manage updates'
+    }
+  ]
+  @recently_completed.each do |pick|
     if pick["result"] == "W"
-      puts "Win pick...#{pick.inspect}"
+      puts "Notifying #{pick["team_abbrev"]}..."
       if pick["user"]["notification_settings"]["recap_all"]
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) beat the #{pick["opponent_abbrev"]} #{pick["matchup"]["winner_score"]}-#{pick["matchup"]["loser_score"]}."
+        text = "Nice win #{pick["user"]["first_name"]}! The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["winner_score"]}-#{pick["matchup"]["loser_score"]}."
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -38,15 +73,16 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        puts "**Send Game Recap Win** sent to #{user.inspect}"
       end
     end
       
     if pick["result"] == "L"
-      puts "Loss pick...#{pick.inspect}"
+      puts "Notifying #{pick["team_abbrev"]}..."
       if pick["user"]["notification_settings"]["recap_loss"]
         emoji = "🤷"
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) lost to the #{pick["opponent_abbrev"]} #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
+        text = "Bummer #{pick["user"]["first_name"]}. The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -56,8 +92,11 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        puts "**Send Game Recap Loss** sent to #{user.inspect}"
       end
     end
+    set_notified pick["id"]
+    puts "Notified pick id: #{pick["id"]}"
   end
 end
 end
