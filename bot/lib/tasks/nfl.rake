@@ -75,6 +75,7 @@ task :send_notification do
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         puts "**Send Game Recap Win** sent"
       end
+      set_notified pick["id"]
     end
       
     if pick["result"] == "L"
@@ -94,9 +95,10 @@ task :send_notification do
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         puts "**Send Game Recap Loss** sent"
       end
+      set_notified pick["id"]
     end
-    set_notified pick["id"]
     puts "Notified pick id: #{pick["id"]}"
   end
 end
+
 end
