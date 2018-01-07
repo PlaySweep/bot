@@ -2,8 +2,8 @@ module Commands
   # If the command is bound with reply_with specified,
   # you have to deal with user response to the last message and react on it.
   def start
-    user = get_or_set_user["user"]
-    text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie."
+    @user = get_or_set_user["user"]
+    text = "Welcome to Sweep #{@user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie."
     say text, quick_replies: ["How to play", "Select picks"]
     stop_thread
   end
@@ -175,8 +175,12 @@ module Commands
   end
 
   def help
-    text = "Here are some keywords to help you navigate our app 👇\n\nStatus\nLeaderboard\nManage updates"
-    say text, quick_replies: ["Status", "Select picks", "Invite"]
+    text = "We get it, #{@user["first_name"]}...you've probably got some questions.\n\nWe are just getting started, and we know getting used to all this bot stuff can take some time at first (#botworldproblems 🙄)\n\nBut we know that the more feedback and concerns we hear back from you, the better."
+    call_to_action = "While we work to find some better solutions, we would love for you to hit us up with whatever is on your mind by direct messaging Ben Sweep on Facebook Messenger.\n\nIn the meantime, get back on track by tapping on those little bubbles below 👌"
+    say text
+    sleep 3
+    message.typing_on
+    say call_to_action, quick_replies: ["Status", "Select picks", "Earn mulligans"]
     stop_thread
   end
 
