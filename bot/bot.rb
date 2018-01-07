@@ -29,7 +29,7 @@ Rubotnik.route :message do
     status_quick_replies = ["Select picks"]
     stop_thread
   else
-    messages = ["Here is where the rubber meets the road, #{user.session[:history]["user"]["first_name"]}", "We always like to know where we stand, so here is where you stand so far #{user.session[:history]["user"]["first_name"]}"]
+    messages = ["Here is where the rubber meets the road", "We always like to know where we stand, so here is where you stand so far"]
     status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
     status_quick_replies = [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
   end
