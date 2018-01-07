@@ -73,7 +73,7 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-        puts "**Send Game Recap Win** sent to #{user.inspect}"
+        puts "**Send Game Recap Win** sent"
       end
     end
       
@@ -92,7 +92,7 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-        puts "**Send Game Recap Loss** sent to #{user.inspect}"
+        puts "**Send Game Recap Loss** sent"
       end
     end
     set_notified pick["id"]
