@@ -128,7 +128,7 @@ module Commands
   end
 
   def show_invite
-    show(UI::FBInvite.new(INVITE_FRIENDS, quick_replies = [{ content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }]))
+    show(UI::FBInvite.new(INVITE_FRIENDS, quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }, { content_type: 'text', title: "Select picks", payload: "Select picks" }]))
   end
 
   # def show_image
