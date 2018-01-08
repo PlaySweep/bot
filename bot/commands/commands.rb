@@ -205,13 +205,13 @@ module Commands
   # def games
   #   user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
   #   user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
-  #   if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
+  #   if user.session[:upcoming].nil? && user.session[:completed].nil? && user.session[:completed].nil?
   #     text = "You have nothing in flight for the day! Get started below 👇"
   #     quick_replies = ["Select picks"]
   #     stop_thread
   #   else
   #     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-  #     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+  #     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
   #   end
   #   say text, quick_replies: quick_replies
   #   next_command :status
@@ -225,10 +225,10 @@ module Commands
       text = "Choose from the sports below 👇"
       say text, quick_replies: %w[NFL NCAAF]
       stop_thread
-    when 'Current streak'
+    when 'Wins'
       user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  
       text = "#{messages.sample}\n\nTake a look at our other options below for more details on upcoming, in-progress, or completed picks 👍"
-      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
       next_command :status
     when 'More action'
       text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
@@ -243,7 +243,7 @@ module Commands
       stop_thread
     when 'Up next'
       if user.session[:upcoming].nil?
-        say "You have no games coming up...", quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         next_up = user.session[:upcoming].first
@@ -255,12 +255,12 @@ module Commands
           teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
         end
         text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
-        say text, quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     when 'Live'
       if user.session[:in_progress].nil? || user.session[:in_progress].count == 0
-        say "You have no games in progress...", quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say "You have no games in progress...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         teams = ""
@@ -272,12 +272,12 @@ module Commands
           teams.concat("#{team["team_abbrev"]}, ")
         end
         text = "The #{teams} are in progress now..."
-        say text, quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     when 'Completed'
       if user.session[:completed].nil?
-        say "You have nothing completed for today...", quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
+        say "You have nothing completed for today...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         teams = ""
@@ -290,7 +290,7 @@ module Commands
           teams.concat("#{result} #{team["team_abbrev"]} (#{symbol}#{team["spread"]})\n")
         end
         text = "Today's record 👇\n\n#{teams}"
-        say text, quick_replies: [["Current streak (#{user.session[:history]["current_streak"]})", "Current streak"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
+        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     else
