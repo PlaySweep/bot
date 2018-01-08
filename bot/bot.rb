@@ -39,6 +39,7 @@ Rubotnik.route :message do |request|
     text: status_text,
     quick_replies: status_quick_replies
   }
+  bind "I'm", "good", all: true, to: :reset
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
@@ -74,7 +75,7 @@ Rubotnik.route :message do |request|
   # bind 'image', to: :show_image
 
   default do
-    say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm ok right now", "Status"]]
+    say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
   end
 end
 
@@ -86,7 +87,6 @@ Rubotnik.route :postback do
   bind 'HELP', to: :help
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
-  bind 'Status', to: :status
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################
