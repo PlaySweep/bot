@@ -19,18 +19,19 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 Rubotnik.route :message do |request|
   get_status if (request.message.text && request.message.quick_reply) == 'Status'
-  get_fb_user if @graph_user.nil?
+  get_fb_user unless @graph_user
 
   bind 'login' do
     show_login
   end
-  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil? || user.session.empty?
-  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil? || user.session.empty?
-  if (user.session.empty?) || (user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:current].nil?)
+
+  if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) || (user.session[:in_progress].nil? || user.session[:in_progress].empty?) || (user.session[:current].nil? || user.session[:current].empty?) 
     status_text = "You have nothing in flight for the day! Get started below 👇"
     status_quick_replies = ["Select picks"]
     stop_thread
   else
+    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
     messages = ["Here is where the rubber meets the road #{@graph_user["first_name"]}", "We always like to know where we stand, so here is where you stand so far today"]
     status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
     status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
