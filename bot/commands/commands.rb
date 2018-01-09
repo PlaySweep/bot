@@ -4,7 +4,14 @@ module Commands
   def start
     user = get_or_set_user["user"]
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie."
-    say text, quick_replies: ["How to play", "Select picks"]
+    say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
+    stop_thread
+  end
+
+  def reset
+    user = get_or_set_user["user"]
+    text = "Welcome back to the flow, #{user["first_name"]}! Get back on track with the options below 🙌"
+    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
     stop_thread
   end
 
@@ -28,14 +35,34 @@ module Commands
       next_command :set_recaps
     when "I'm done"
       message.typing_off
-      user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
-      user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
-      text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-      say text, quick_replies: [["Game status", "Games"], ["More action", "More action"]]
+      text = "Tap the options below to check your game status or make some picks 🙌"
+      say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"]]
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      stop_thread
+    end
+  end
+
+  def send_feedback
+    user = get_or_set_user["user"]
+    message.typing_on
+    quick_replies = [["Select picks", "Select picks"], ["Status", "Status"], ["Earn mulligans", "Earn mulligans"]]
+    if message.text != "Eh, nevermind"
+      full_name = "#{user["name"]}"
+      say "Thanks for the feedback! We'll reach out to you soon...", quick_replies: quick_replies
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: 1842184635853672 },
+        message: {
+          text: "Feedback from #{full_name}\n\n#{message.text}"
+        }
+      }
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      stop_thread
+    else
+      say "Get back on track with the options below!", quick_replies: quick_replies
       stop_thread
     end
   end
@@ -59,7 +86,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -83,7 +110,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -109,7 +136,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -129,7 +156,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -149,7 +176,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -169,7 +196,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -180,7 +207,7 @@ module Commands
     call_to_action = "While we work to find some better solutions, we would love for you to hit us up with whatever is on your mind by direct messaging Ben Sweep on Facebook Messenger.\n\nIn the meantime, get back on track by tapping on those little bubbles below 👌"
     say text
     sleep 8
-    say call_to_action, quick_replies: ["Status", "Select picks", "Earn mulligans"]
+    say call_to_action, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
     stop_thread
   end
 
@@ -205,13 +232,13 @@ module Commands
   # def games
   #   user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
   #   user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
-  #   if user.session[:upcoming].nil? && user.session[:completed].nil? && user.session[:completed].nil?
+  #   if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:current].nil?
   #     text = "You have nothing in flight for the day! Get started below 👇"
   #     quick_replies = ["Select picks"]
   #     stop_thread
   #   else
   #     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-  #     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+  #     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
   #   end
   #   say text, quick_replies: quick_replies
   #   next_command :status
@@ -228,22 +255,14 @@ module Commands
     when 'Wins'
       user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  
       text = "#{messages.sample}\n\nTake a look at our other options below for more details on upcoming, in-progress, or completed picks 👍"
-      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
-      next_command :status
-    when 'More action'
-      text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-      say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
-      next_command :status
-    when 'In-game picks'
-      text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
-      say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
+      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
       next_command :status
     when 'Earn mulligans'
       show_invite
       stop_thread
     when 'Up next'
-      if user.session[:upcoming].nil?
-        say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+      if user.session[:upcoming].nil? || user.session[:upcoming].empty?
+        say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         next_up = user.session[:upcoming].first
@@ -255,12 +274,12 @@ module Commands
           teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
         end
         text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
-        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     when 'Live'
-      if user.session[:in_progress].nil? || user.session[:in_progress].count == 0
-        say "You have no games in progress...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+      if user.session[:in_progress].nil? || user.session[:in_progress].empty?
+        say "You have no games in progress...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         teams = ""
@@ -272,18 +291,18 @@ module Commands
           teams.concat("#{team["team_abbrev"]}, ")
         end
         text = "The #{teams} are in progress now..."
-        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
     when 'Completed'
-      if user.session[:completed].nil?
+      if user.session[:current].nil? || user.session[:current].empty?
         say "You have nothing completed for today...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
         next_command :status
       else
         teams = ""
         user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
         user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
-        completed = user.session[:completed]
+        completed = user.session[:current]
         completed.each_with_index do |team, index|
           team["result"] == "W" ? result = "👍" : result = "👎"
           symbol = team["spread"] > 0 ? "+" : ""
@@ -295,7 +314,7 @@ module Commands
       end
     else
       message.typing_off
-      say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end

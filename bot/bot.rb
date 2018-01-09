@@ -17,34 +17,39 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
-Rubotnik.route :message do
+Rubotnik.route :message do |request|
+  get_status if (request.message.text && request.message.quick_reply) == 'Status'
+  get_fb_user if @graph_user.nil?
+
   bind 'login' do
     show_login
   end
-  get_status # refactor
-  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
-  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
-  if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:completed].nil?
+  user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil? || user.session.empty?
+  user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil? || user.session.empty?
+  if (user.session.empty?) || (user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:current].nil?)
     status_text = "You have nothing in flight for the day! Get started below 👇"
     status_quick_replies = ["Select picks"]
     stop_thread
   else
-    messages = ["Here is where the rubber meets the road", "We always like to know where we stand, so here is where you stand so far"]
+    messages = ["Here is where the rubber meets the road #{@graph_user["first_name"]}", "We always like to know where we stand, so here is where you stand so far today"]
     status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
-    status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:completed].count})", "Completed"], ["Select Picks", "Select picks"]]
+    status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
   end
   bind 'current', 'status', to: :status, reply_with: {
     text: status_text,
     quick_replies: status_quick_replies
   }
+  bind "I'm", "good", all: true, to: :reset
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
-  bind 'more', 'action', all:true, to: :more_action
+  bind 'send', 'feedback', all: true, to: :send_feedback, reply_with: {
+    text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings, so type your message in the box below and one of our guys will reach out to you soon 🤝",
+    quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
+  }
+  bind 'more', 'action', all: true, to: :more_action
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
-  # bind 'in-game', 'picks', all: true, to: :in_game
-  # bind 'games', to: :games
   bind 'nfl' do
     show_button_template('NFL')
   end
@@ -70,7 +75,7 @@ Rubotnik.route :message do
   # bind 'image', to: :show_image
 
   default do
-    say "Sorry, didn't catch that 🤷\n\nGet back on track with the options below 👇", quick_replies: ["Status", "Select picks", "Invite"]
+    say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
   end
 end
 
