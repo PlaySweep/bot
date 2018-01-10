@@ -52,14 +52,16 @@ module Commands
     if message.text != "Eh, nevermind"
       full_name = "#{user["name"]}"
       say "Thanks for the feedback! We'll reach out to you soon...", quick_replies: quick_replies
-      message_options = {
-        messaging_type: "UPDATE",
-        recipient: { id: 1842184635853672 },
-        message: {
-          text: "Feedback from #{full_name}\n\n#{message.text}"
+      [1566539433429514, 1842184635853672].each do |sweep_user_id|
+        message_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: sweep_user_id },
+          message: {
+            text: "Feedback from #{full_name}\n\n#{message.text}"
+          }
         }
-      }
-      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      end
       stop_thread
     else
       say "Great! Tap below to get back in the action 🎬", quick_replies: quick_replies
