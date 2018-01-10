@@ -81,8 +81,8 @@ module Commands
     case sport
     when 'NFL'
       image_url = "https://i.imgur.com/ke2hFzp.png"
-    when 'NCAAF'
-      image_url = "https://i.imgur.com/mveSwHJ.png"
+    # when 'NCAAF'
+    #   image_url = "https://i.imgur.com/mveSwHJ.png"
     end
     payload = [
       {
@@ -95,13 +95,13 @@ module Commands
     ]
     case sport
     when 'NFL'
-      quick_replies = [{ content_type: 'text', title: "NCAAF", payload: "NCAAF" }, { content_type: 'text', title: "Status", payload: "Status" }]
+      quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
       show(button_template)
-    when 'NCAAF'
-      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
-      show(button_template)
+    # when 'NCAAF'
+    #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
+    #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
+    #   show(button_template)
     # when 'NBA'
     #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
     #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)

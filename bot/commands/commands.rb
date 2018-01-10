@@ -213,13 +213,13 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: %w[NFL NCAAF]
+    say text, quick_replies: %w[NFL]
     stop_thread
   end
 
-  def more_action
-    text = "Looking for more chances to win? Invite some of your friends to play and receive a mulligan which you can use at any time to keep your streak alive!"
-    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["In-game picks", "In-game picks"], ["Make more picks", "Select picks"]]
+  def more_picks
+    text = "In return for getting one of your friends to play Sweep with you, we will unlock another chance for you to hit your own Sweep!"
+    say text, quick_replies: [["Unlock game", "Unlock game"], ["Update picks", "Select picks"]]
     stop_thread
   end
 
@@ -250,7 +250,7 @@ module Commands
     case message.quick_reply
     when 'Select picks'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: %w[NFL NCAAF]
+      say text, quick_replies: %w[NFL]
       stop_thread
     when 'Wins'
       user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  

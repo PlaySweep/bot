@@ -17,6 +17,13 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
+Bot.on :referral do |referral|
+  puts referral.sender    # => { 'id' => '1008372609250235' }
+  puts referral.recipient # => { 'id' => '2015573629214912' }
+  puts referral.sent_at   # => 2016-04-22 21:30:36 +0200
+  puts referral.ref       # => 'MYPARAM'
+end
+
 Rubotnik.route :message do |request|
   get_status if (request.message.text || request.message.quick_reply) == 'Status'
   get_fb_user unless @graph_user
@@ -48,15 +55,19 @@ Rubotnik.route :message do |request|
     text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings...\n\nType your message in the box below and one of our guys will reach out to you soon 🤝",
     quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
   }
-  bind 'more', 'action', all: true, to: :more_action
+  bind 'unlock', 'game' do
+    show_invite
+  end
+  bind 'get', 'more', 'picks', all: true, to: :more_picks
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
+  bind 'update', 'picks', all: true, to: :select_picks
   bind 'nfl' do
     show_button_template('NFL')
   end
-  bind 'ncaaf' do
-    show_button_template('NCAAF')
-  end
+  # bind 'ncaaf' do
+  #   show_button_template('NCAAF')
+  # end
   # bind 'nba' do
   #   show_button_template('NBA')
   # end
@@ -94,6 +105,9 @@ Rubotnik.route :postback do
     text = "We're giving away a mulligan for every 3 friends that play Sweep from your referral, while your friends earn one immediately 🎉\n\nSpread the word and earn some mulligans! 😉"
     say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["I'm good", "I'm good"]]
     stop_thread
+  end
+  bind 'UNLOCK GAME' do
+    show_invite
   end
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
