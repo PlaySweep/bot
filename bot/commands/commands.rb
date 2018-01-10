@@ -40,7 +40,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -62,7 +62,7 @@ module Commands
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
       stop_thread
     else
-      say "Get back on track with the options below!", quick_replies: quick_replies
+      say "Great! Tap below to get back in the action 🎬", quick_replies: quick_replies
       stop_thread
     end
   end
@@ -86,7 +86,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -110,7 +110,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -136,7 +136,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -156,7 +156,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -176,7 +176,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -196,7 +196,7 @@ module Commands
       stop_thread
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end
@@ -314,7 +314,7 @@ module Commands
       end
     else
       message.typing_off
-      say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
       stop_thread
     end
   end

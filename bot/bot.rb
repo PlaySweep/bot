@@ -18,16 +18,16 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |request|
-  get_status if (request.message.text && request.message.quick_reply) == 'Status'
+  get_status if (request.message.text || request.message.quick_reply) == 'Status'
   get_fb_user unless @graph_user
 
   bind 'login' do
     show_login
   end
 
-  if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) || (user.session[:in_progress].nil? || user.session[:in_progress].empty?) || (user.session[:current].nil? || user.session[:current].empty?) 
+  if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
     status_text = "You have nothing in flight for the day! Get started below 👇"
-    status_quick_replies = ["Select picks"]
+    status_quick_replies = [["Select picks", "Select picks"]]
     stop_thread
   else
     user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
@@ -40,12 +40,12 @@ Rubotnik.route :message do |request|
     text: status_text,
     quick_replies: status_quick_replies
   }
-  bind "I'm", "good", all: true, to: :reset
+  bind "'i'm", "good", "eh", "nevermind", to: :reset
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
   bind 'send', 'feedback', all: true, to: :send_feedback, reply_with: {
-    text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings, so type your message in the box below and one of our guys will reach out to you soon 🤝",
+    text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings...\n\nType your message in the box below and one of our guys will reach out to you soon 🤝",
     quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
   }
   bind 'more', 'action', all: true, to: :more_action
@@ -76,7 +76,7 @@ Rubotnik.route :message do |request|
   # bind 'image', to: :show_image
 
   default do
-    say "We're new. We know we have a lot of improvements to make 🔧\n\nBut if you're into this sort of thing, let us know what you got hung up on so we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+    say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
   end
 end
 
@@ -85,7 +85,16 @@ end
 Rubotnik.route :postback do
   bind 'START', to: :start 
   bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
-  bind 'HELP', to: :help
+  bind 'SEND FEEDBACK' do
+    text = "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉"
+    say text, quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+    stop_thread
+  end
+  bind 'INVITE FRIENDS' do
+    text = "We're giving away a mulligan for every 3 friends that play Sweep from your referral, while your friends earn one immediately 🎉\n\nSpread the word and earn some mulligans! 😉"
+    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["I'm good", "I'm good"]]
+    stop_thread
+  end
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
 end

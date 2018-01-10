@@ -24,8 +24,13 @@ module Profile
         call_to_actions: [
           {
             type: 'postback',
-            title: 'Help',
-            payload: 'HELP'
+            title: 'Invite friends',
+            payload: 'INVITE FRIENDS'
+          },
+          {
+            type: 'postback',
+            title: 'Send feedback',
+            payload: 'SEND FEEDBACK'
           }
         ]
       }
