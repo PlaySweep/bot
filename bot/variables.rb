@@ -63,7 +63,7 @@ module Commands
                     "buttons": [
                       {
                         "type": "web_url",
-                        "url": "http://m.me/PlaySweep?ref=1234", 
+                        "url": "http://m.me/PlaySweep", 
                         "title": "Play Sweep Now"
                       }
                     ]
