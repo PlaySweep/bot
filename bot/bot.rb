@@ -17,7 +17,7 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
-Bot.on :referral do |referral|
+Rubotnik.route :referral do |referral|
   puts referral.sender    # => { 'id' => '1008372609250235' }
   puts referral.recipient # => { 'id' => '2015573629214912' }
   puts referral.sent_at   # => 2016-04-22 21:30:36 +0200
