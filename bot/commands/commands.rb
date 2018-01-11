@@ -3,7 +3,7 @@ module Commands
   # you have to deal with user response to the last message and react on it.
   def start
     user = get_or_set_user["user"]
-    text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie."
+    text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
     stop_thread
   end
@@ -222,6 +222,13 @@ module Commands
   def more_picks
     text = "In return for getting one of your friends to play Sweep with you, we will unlock another chance for you to hit your own Sweep!"
     say text, quick_replies: [["Unlock game", "Unlock game"], ["Update picks", "Select picks"]]
+    stop_thread
+  end
+
+  def more_action
+    user = get_or_set_user["user"]
+    text = "We'll have more action for you soon #{user["first_name"]}! Stay tuned"
+    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
     stop_thread
   end
 
