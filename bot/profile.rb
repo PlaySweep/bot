@@ -31,6 +31,11 @@ module Profile
             type: 'postback',
             title: 'Send feedback',
             payload: 'SEND FEEDBACK'
+          },
+          {
+            type: 'postback',
+            title: 'Manage updates',
+            payload: 'MANAGE UPDATES'
           }
         ]
       }

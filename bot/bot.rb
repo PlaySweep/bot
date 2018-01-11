@@ -109,6 +109,11 @@ Rubotnik.route :postback do
   bind 'UNLOCK GAME' do
     show_invite
   end
+  bind 'MANAGE UPDATES' do
+    text = "Tap the options below to manage your preferences 👇"
+    say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
+    next_command :manage_updates
+  end
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
 end
