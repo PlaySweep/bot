@@ -11,7 +11,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "Hey {{user_first_name}} 👋\n\nWe're Sweep, a sports bot!\n\nGet 4 wins in a row and win up to $50 Amazon Gift Card every game day!"
+        text: "Hey {{user_first_name}} 👋\n\nWe're Sweep!!\n\nGet 4 wins in a row and win up to $50 worth of Amazon gift cards every game day!"
       }
     ]
   }
