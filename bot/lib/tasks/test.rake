@@ -26,7 +26,7 @@ task :test_reminder do
 
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1827403637334265 },
+    recipient: { id: 1842184635853672 },
     message: {
       text: "Hey Ryan 👋, we noticed you don't have any upcoming picks for the day, but that's ok! You've still got time...\n\nGet in there and make your picks below 👇",
       quick_replies: menu
@@ -38,9 +38,9 @@ end
 desc "Test Recap"
 task :test_recap do
   # if [:PROD_USER]
-  #   user = 1827403637334265
+  #   user = 1827403637334265 # sweep
   # else
-  #   user = 1842184635853672
+  #   user = 1842184635853672 # sweep_development
   # end
 
   menu = [
@@ -63,7 +63,7 @@ task :test_recap do
 
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1827403637334265 },
+    recipient: { id: 1842184635853672 },
     message: {
       text: "Nice 24-20 cover with the Eagles Ryan 🦅! You've got 1 win in a row 🔥\n\nDon't miss this chance to earn an extra game by getting one of your friends to play on Sweep with you!",
       quick_replies: menu

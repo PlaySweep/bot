@@ -23,6 +23,14 @@ def get_or_set_user
   response
 end
 
+def get_user_friends user_id, access_token
+  url = "#{GRAPH_URL}/#{user_id}/friends?access_token=#{access_token}"
+  uri = URI(url)
+  response = Net::HTTP.get_response(uri)
+  response = JSON.parse(response.body)
+  @user_friends = response
+end
+
 def set_notification_settings type, action
   url = "#{SWEEP_API}/api/v1/users/#{user.id}"
   params = { :user => { type => action } }

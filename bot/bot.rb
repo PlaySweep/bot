@@ -28,15 +28,17 @@ Rubotnik.route :message do |request|
   get_status if (request.message.text || request.message.quick_reply) == 'Status'
   get_fb_user unless @graph_user
 
-  bind 'login' do
+  bind 'login', 'facebook' do
     show_login
   end
 
   if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+    
     status_text = "You have nothing in flight for the day! Get started below 👇"
     status_quick_replies = [["Select picks", "Select picks"]]
     stop_thread
   else
+    
     user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
     user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
     messages = ["Here is where the rubber meets the road #{@graph_user["first_name"]}", "We always like to know where we stand, so here is where you stand so far today"]
@@ -135,32 +137,61 @@ before do
 
   @client_id = ENV["APP_ID"]
   @client_secret = ENV["APP_SECRET"]
-
-  session[:oauth] ||= {}
 end
 
 get '/' do
-  puts "Access token..."
-  puts session[:oauth][:access_token].inspect
+  
+end
+
+get '/success' do
+  get_user_friends(1842184635853672, ENV['ACCESS_TOKEN'])
+  puts "Successful authentication!"
+  puts "Access token...#{session[:access_token]}"
+  menu = [
+    {
+      content_type: 'text',
+      title: 'Friends',
+      payload: 'Friends'
+    },
+    {
+      content_type: 'text',
+      title: 'Status',
+      payload: 'Status'
+    },
+    {
+      content_type: 'text',
+      title: 'Manage updates',
+      payload: 'Manage updates'
+    }
+  ]
+
+  message_options = {
+    messaging_type: "UPDATE",
+    recipient: { id: 1842184635853672 },
+    message: {
+      text: "You can now take a look at how your friends are doing! #{@user_friends.inspect}",
+      quick_replies: menu
+    }
+  }
+  Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
 end
 
 get "/request" do
+  session[:access_token] = nil
   redirect "https://www.facebook.com/v2.11/dialog/oauth?client_id=#{@client_id}&scope=user_friends,email&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback"
 end
 
 get "/oauth/facebook/callback" do
-  session[:oauth][:code] = params[:code]
-
   http = Net::HTTP.new "graph.facebook.com", 443
-  request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{session[:oauth][:code]}"
+  request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{params[:code]}"
   http.use_ssl = true
   response = http.request request
-
   body = JSON.parse(response.body)
-  session[:oauth][:access_token] = body["access_token"]
-  session[:oauth][:token_type] = body["token_type"]
-  session[:oauth][:expires_in] = body["expires_in"]
-  redirect "/"
+  puts "Response: #{body.inspect}"
+  # @auth_token = body["access_token"]
+  # session[:access_token] = "EAACaERT7YxUBACURzRJKUx8Nf2XotZCG30v8MrQmIWCJTqkxURma2tKpus55GRizwqC5ZB4vqEnnfjZCX4J5EQdCyOZBT2bOkcQeXOsVhQuMvGwXIs6vF701KWqNgnTZBtBgNZCyrHZCOEF8MiJ6JxQ9wHKZBa9LSjQnt5abyWZCubQZDZD"
+  session[:access_token] = body["access_token"]
+  redirect "/success"
 end
 
 ############################ TEST ON LOCALHOST #################################
