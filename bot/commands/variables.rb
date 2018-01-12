@@ -115,8 +115,10 @@ module Commands
                        "buttons": [
                          {
                            "type": "web_url",
+                           "messenger_extensions": true,
                            "url": "http://m.me/PlaySweep?ref=#{@graph_user["id"]}", 
-                           "title": "Play Sweep Now"
+                           "title": "Play Sweep Now",
+                           "webview_height_ratio": 'tall'
                          }
                        ]
                      }
