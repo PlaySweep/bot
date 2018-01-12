@@ -6,9 +6,8 @@ module Commands
     user = get_or_set_user["user"]
     puts "New user? => #{@new_user}"
     puts "User object: #{user.inspect}"
-    puts "Referrer Id: #{postback.referral["ref"]}"
     puts "Referrer count: #{user["referral_count"]}"
-    puts "Referred: #{user["referred"]}"
+    puts "Referrer Id: #{postback.referral.ref}"
     if @new_user
       update_sender(postback.referral["ref"], user["referral_count"])
       update_recipient
