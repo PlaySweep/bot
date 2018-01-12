@@ -11,12 +11,11 @@ module Commands
     puts "Referrer Id: #{postback.referral.ref}"
     referral_count = user["referral_data"]["referral_count"]
     referred = user["referral_data"]["referred"]
-    if @new_user && !referred
-      update_sender(postback.referral.ref, referral_count)
-      update_recipient user["facebook_uuid"]
-    else
-      update_sender(postback.referral.ref, referral_count)
-      update_recipient user["facebook_uuid"]
+    if postback.referral
+      if @new_user && !referred
+        update_sender(postback.referral.ref, referral_count)
+        update_recipient user["facebook_uuid"]
+      end
     end
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
