@@ -10,6 +10,7 @@ def get_fb_user
 end
 
 def get_or_set_user
+  @new_user = false
   get_fb_user
   puts "Graph user...#{@graph_user.inspect}"
   url = "#{SWEEP_API}/api/v1/users/#{@graph_user['id']}"
@@ -19,6 +20,9 @@ def get_or_set_user
     url = "#{SWEEP_API}/api/v1/users"
     params = { :user => { :facebook_uuid => @graph_user["id"], :first_name => @graph_user["first_name"], :last_name => @graph_user["last_name"] } }
     response = HTTParty.post(url, query: params)
+    if response.code == 200
+      @new_user = true
+    end
   end
   response
 end
