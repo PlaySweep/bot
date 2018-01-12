@@ -58,6 +58,7 @@ Rubotnik.route :message do |request|
   bind 'unlock', 'game' do
     show_invite
   end
+  bind 'more', 'action', all: true, to: :more_action
   bind 'get', 'more', 'picks', all: true, to: :more_picks
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
@@ -113,6 +114,11 @@ Rubotnik.route :postback do
     text = "Tap the options below to manage your preferences 👇"
     say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
+  end
+  bind 'More action' do
+    text = "We'll have more action for you soon #{@graph_user["first_name"]}! Stay tuned"
+    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+    stop_thread
   end
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
