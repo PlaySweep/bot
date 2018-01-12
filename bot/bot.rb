@@ -17,13 +17,6 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
-Rubotnik.route :referral do |referral|
-  puts referral.sender    # => { 'id' => '1008372609250235' }
-  puts referral.recipient # => { 'id' => '2015573629214912' }
-  puts referral.sent_at   # => 2016-04-22 21:30:36 +0200
-  puts referral.ref       # => 'MYPARAM'
-end
-
 Rubotnik.route :message do |request|
   get_status if (request.message.text || request.message.quick_reply) == 'Status'
   get_fb_user unless @graph_user

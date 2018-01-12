@@ -6,11 +6,17 @@ module Commands
     user = get_or_set_user["user"]
     puts "New user? => #{@new_user}"
     puts "User object: #{user.inspect}"
-    puts "Referrer count: #{user["referral_count"]}"
+    puts "Referrer count: #{user["referral_data"]["referral_count"]}"
+    puts "Referred: #{user["referral_data"]["referred"]}"
     puts "Referrer Id: #{postback.referral.ref}"
-    if @new_user
-      update_sender(postback.referral["ref"], user["referral_count"])
-      update_recipient
+    referral_count = user["referral_data"]["referral_count"]
+    referred = user["referral_data"]["referred"]
+    if @new_user && !referred
+      update_sender(postback.referral["ref"], referral_count)
+      update_recipient user["id"]
+    else
+      update_sender(postback.referral["ref"], referral_count)
+      update_recipient user["id"]
     end
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]

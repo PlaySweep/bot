@@ -34,10 +34,9 @@ def update_sender id, referral_count
   response = HTTParty.patch(url, query: params)
 end
 
-def update_recipient referral_count
-  url = "#{SWEEP_API}/api/v1/users/#{user.id}"
-  referral_count = referral_count += 1
-  params = { :user => { :referred => true, :referral_count => referral_count } }
+def update_recipient id
+  url = "#{SWEEP_API}/api/v1/users/#{id}"
+  params = { :user => { :referred => true, :mulligan_count => 1 } }
   response = HTTParty.patch(url, query: params)
 end
 
