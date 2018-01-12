@@ -3,6 +3,7 @@ module Commands
   # you have to deal with user response to the last message and react on it.
 
   def start
+    puts "Referrer Id: #{postback.inspect}"
     user = get_or_set_user["user"]
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
