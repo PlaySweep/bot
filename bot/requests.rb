@@ -27,6 +27,20 @@ def get_or_set_user
   response
 end
 
+def update_sender id, referral_count
+  url = "#{SWEEP_API}/api/v1/users/#{id}"
+  referral_count = referral_count += 1
+  params = { :user => { :referral_count => referral_count } }
+  response = HTTParty.patch(url, query: params)
+end
+
+def update_recipient referral_count
+  url = "#{SWEEP_API}/api/v1/users/#{user.id}"
+  referral_count = referral_count += 1
+  params = { :user => { :referred => true, :referral_count => referral_count } }
+  response = HTTParty.patch(url, query: params)
+end
+
 def set_notification_settings type, action
   url = "#{SWEEP_API}/api/v1/users/#{user.id}"
   params = { :user => { type => action } }
