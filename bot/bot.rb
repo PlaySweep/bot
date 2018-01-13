@@ -17,13 +17,6 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
-Rubotnik.route :referral do |referral|
-  puts referral.sender    # => { 'id' => '1008372609250235' }
-  puts referral.recipient # => { 'id' => '2015573629214912' }
-  puts referral.sent_at   # => 2016-04-22 21:30:36 +0200
-  puts referral.ref       # => 'MYPARAM'
-end
-
 Rubotnik.route :message do |request|
   get_status if (request.message.text || request.message.quick_reply) == 'Status'
   get_fb_user unless @graph_user
@@ -60,6 +53,7 @@ Rubotnik.route :message do |request|
   bind 'unlock', 'game' do
     show_invite
   end
+  bind 'more', 'action', all: true, to: :more_action
   bind 'get', 'more', 'picks', all: true, to: :more_picks
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
@@ -115,6 +109,11 @@ Rubotnik.route :postback do
     text = "Tap the options below to manage your preferences 👇"
     say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
+  end
+  bind 'More action' do
+    text = "We'll have more action for you soon #{@graph_user["first_name"]}! Stay tuned"
+    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+    stop_thread
   end
   bind 'MORE SPORTS', to: :select_picks
   bind 'Select picks', to: :select_picks
