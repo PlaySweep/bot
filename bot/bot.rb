@@ -58,6 +58,10 @@ Rubotnik.route :message do |request|
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
   bind 'update', 'picks', all: true, to: :select_picks
+  # bind 'use', 'mulligan', all: true, to: :use_mulligan, reply_with: {
+  #   text: "Alright #{@graph_user["first_name"]}, you have 1 mulligan to use. Do you want to use it now to keep your streak alive?",
+  #   quick_replies: [["Yes", "Use Mulligan Yes"], ["No, not now", "Use Mulligan No"]]
+  # }
   bind 'nfl' do
     show_button_template('NFL')
   end

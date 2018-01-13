@@ -1,16 +1,11 @@
 desc "Test Reminder"
 task :test_reminder do
-  # if [:PROD_USER]
-  #   user = 1827403637334265
-  # else
-  #   user = 1842184635853672
-  # end
-
+  
   menu = [
     {
       content_type: 'text',
-      title: 'Select picks',
-      payload: 'Select picks'
+      title: 'Use mulligan',
+      payload: 'Use mulligan'
     },
     {
       content_type: 'text',
@@ -26,9 +21,9 @@ task :test_reminder do
 
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1842184635853672 },
+    recipient: { id: 1594944847261256 },
     message: {
-      text: "Hey Ryan 👋, we noticed you don't have any upcoming picks for the day, but that's ok! You've still got time...\n\nGet in there and make your picks below 👇",
+      text: "The Falcons came up short against the spread (+3.5) with a 21-27 loss to the Eagles.\n\nBut fortunately, you have a mulligan to use to keep your streak alive!",
       quick_replies: menu
     }
   }
@@ -37,11 +32,6 @@ end
 
 desc "Test Recap"
 task :test_recap do
-  # if [:PROD_USER]
-  #   user = 1827403637334265 # sweep
-  # else
-  #   user = 1842184635853672 # sweep_development
-  # end
 
   menu = [
     {
@@ -63,7 +53,7 @@ task :test_recap do
 
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1842184635853672 },
+    recipient: { id: 1594944847261256 },
     message: {
       text: "Nice 24-20 cover with the Eagles Ryan 🦅! You've got 1 win in a row 🔥\n\nDon't miss this chance to earn an extra game by getting one of your friends to play on Sweep with you!",
       quick_replies: menu
