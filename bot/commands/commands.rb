@@ -18,6 +18,21 @@ module Commands
     stop_thread
   end
 
+  # def use_mulligan
+  #   user = get_or_set_user["user"]
+  #   message.typing_on
+  #   case message.quick_reply
+  #   when 'Use Mulligan Yes'
+  #     # make a call to the api to decrement mulligan count by 1 and reset the current_streak to the previous_streak
+  #     text = "Nice! Your streak is now back to 3!\n\nYou have 0 mulligans left. Remember, if you can find 3 of your friends to join you on Sweep we will send you another mulligan!"
+  #     say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+  #   when 'Use Mulligan No'
+  #     text = "I like where your heads at #{user["first_name"]}, save those bail outs for later 👍\n\nGet back to it below 👇"
+  #     say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+  #   end
+  #   stop_thread
+  # end
+
   def reset
     user = get_or_set_user["user"]
     text = "Welcome back to the flow, #{user["first_name"]}! Get back on track with the options below 🙌"
