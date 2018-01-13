@@ -18,6 +18,13 @@ module Commands
     stop_thread
   end
 
+  def profile
+    user = get_or_set_user["user"]
+    text = "Check out your stats #{@graph_user["first_name"]}...\n\nReferral count: 2\nSweep coins: 10\n\nFor a more detailed view, check out the dashboard in the web view!"
+    say text, quick_replies: [["Dashboard", "Dashboard"], ["Status", 'Status'], ["Select picks", "Select picks"]]
+    stop_thread
+  end
+
   def reset
     user = get_or_set_user["user"]
     text = "Welcome back to the flow, #{user["first_name"]}! Get back on track with the options below 🙌"

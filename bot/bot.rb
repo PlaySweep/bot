@@ -67,7 +67,10 @@ Rubotnik.route :message do |request|
   # bind 'nba' do
   #   show_button_template('NBA')
   # end
-
+  bind 'profile', to: :profile, reply_with: {
+     text: "Check out your stats #{@graph_user["first_name"]}...\n\nReferral count: 2\nSweep coins: 10\n\nFor a more detailed view, check out the dashboard in the web view!",
+     quick_replies: [["Dashboard", "Dashboard"], ["Status", 'Status'], ["Select picks", "Select picks"]]
+  }
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
      quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
@@ -116,6 +119,7 @@ Rubotnik.route :postback do
     stop_thread
   end
   bind 'MORE SPORTS', to: :select_picks
+  bind 'PROFILE', to: :profile
   bind 'Select picks', to: :select_picks
 end
 

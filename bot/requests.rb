@@ -11,7 +11,7 @@ end
 
 def get_or_set_user
   @new_user = false
-  get_fb_user
+  get_fb_user unless @graph_user
   puts "Graph user...#{@graph_user.inspect}"
   url = "#{SWEEP_API}/api/v1/users/#{@graph_user['id']}"
   response = HTTParty.get(url)

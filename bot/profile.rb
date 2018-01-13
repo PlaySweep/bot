@@ -23,19 +23,30 @@ module Profile
         composer_input_disabled: false,
         call_to_actions: [
           {
+            type: 'nested',
+            title: 'My account',
+            call_to_actions: [
+              {
+                type: 'postback',
+                title: 'Profile',
+                payload: 'PROFILE'
+              },
+              {
+                type: 'postback',
+                title: 'Manage updates',
+                payload: 'MANAGE UPDATES'
+              },
+              {
+                type: 'postback',
+                title: 'Send feedback',
+                payload: 'SEND FEEDBACK'
+              }
+            ]
+          },
+          {
             type: 'postback',
             title: 'Invite friends',
             payload: 'INVITE FRIENDS'
-          },
-          {
-            type: 'postback',
-            title: 'Send feedback',
-            payload: 'SEND FEEDBACK'
-          },
-          {
-            type: 'postback',
-            title: 'Manage updates',
-            payload: 'MANAGE UPDATES'
           }
         ]
       }
