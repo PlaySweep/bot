@@ -7,7 +7,7 @@ task :send_reminder do
   menu = [
     {
       content_type: 'text',
-      title: 'Update picks',
+      title: 'Select picks',
       payload: 'Select picks'
     },
     {
@@ -26,7 +26,7 @@ task :send_reminder do
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
       message: {
-        text: "Hey #{user["user"]["first_name"]} 👋, you still haven't made any picks for the day, but you've still got time!",
+        text: "Hey #{user["user"]["first_name"]} 👋, don't forget to select your picks for todays games!",
         quick_replies: menu
       }
     }

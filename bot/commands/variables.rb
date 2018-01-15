@@ -108,10 +108,6 @@ module Commands
                        "title": "Predict 4 games in a row and win Amazon Cash!",
                        "subtitle": "Make your picks now and you might walk away with an Amazon gift card by putting your knowledge up to the test.",
                        "image_url": "https://i.imgur.com/sjnqRyd.png",
-                       "default_action": {
-                         "type": "web_url",
-                         "url": "http://www.playsweep.com/"
-                       },
                        "buttons": [
                          {
                            "type": "web_url",
