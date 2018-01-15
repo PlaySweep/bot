@@ -43,6 +43,21 @@ module Commands
   def manage_updates
     message.typing_on
     case message.text
+    when 'Status'
+      get_status
+      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+        status_text = "You have nothing in flight for the day! Get started below 👇"
+        status_quick_replies = [["Select picks", "Select picks"]]
+        stop_thread
+      else
+        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+        messages = ["Let's get to the important stuff..."]
+        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      end
+      say status_text, quick_replies: status_quick_replies
+      next_command :status
     when 'Reminders'
       message.typing_off
       text = "We will remind you when you haven't made any picks for the week.\n\nTap below to update your preference ⏰"
@@ -97,6 +112,21 @@ module Commands
   def set_reminders
     message.typing_on
     case message.quick_reply
+    when 'Status'
+      get_status
+      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+        status_text = "You have nothing in flight for the day! Get started below 👇"
+        status_quick_replies = [["Select picks", "Select picks"]]
+        stop_thread
+      else
+        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+        messages = ["Let's get to the important stuff..."]
+        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      end
+      say status_text, quick_replies: status_quick_replies
+      next_command :status
     when 'Reminders On'
       set_notification_settings(:reminders, true)
       text = "We will notify you before the games start..."
@@ -121,6 +151,21 @@ module Commands
   def set_props
     message.typing_on
     case message.quick_reply
+    when 'Status'
+      get_status
+      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+        status_text = "You have nothing in flight for the day! Get started below 👇"
+        status_quick_replies = [["Select picks", "Select picks"]]
+        stop_thread
+      else
+        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+        messages = ["Let's get to the important stuff..."]
+        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      end
+      say status_text, quick_replies: status_quick_replies
+      next_command :status
     when 'Props On'
       set_notification_settings(:props, true)
       text = "We will notify you when prop bets become available..."
@@ -145,6 +190,21 @@ module Commands
   def set_recaps
     message.typing_on
     case message.quick_reply
+    when 'Status'
+      get_status
+      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+        status_text = "You have nothing in flight for the day! Get started below 👇"
+        status_quick_replies = [["Select picks", "Select picks"]]
+        stop_thread
+      else
+        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+        messages = ["Let's get to the important stuff..."]
+        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      end
+      say status_text, quick_replies: status_quick_replies
+      next_command :status
     when 'Recaps Win'
       text = "Would you like to be notified for every win?"
       say text, quick_replies: [["Yes", "Wins Yes"], ["No", "Wins No"]]
@@ -282,6 +342,24 @@ module Commands
     get_status
     message.typing_on
     case message.quick_reply
+    when 'Status'
+      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
+        status_text = "You have nothing in flight for the day! Get started below 👇"
+        status_quick_replies = [["Select picks", "Select picks"]]
+        stop_thread
+      else
+        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
+        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
+        messages = ["Let's get to the important stuff..."]
+        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
+        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
+      end
+      say status_text, quick_replies: status_quick_replies
+      next_command :status
+    when 'Manage updates'
+      text = "Tap the options below to manage your preferences 👇"
+      say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
+      next_command :manage_updates
     when 'Select picks'
       text = "Choose from the sports below 👇"
       say text, quick_replies: %w[NFL]
