@@ -11,7 +11,7 @@ module Commands
       referral_count = user["referral_data"]["referral_count"]
       if @new_user
         puts "New user being updated..."
-        update_sender(postback.referral.ref, referral_count)
+        update_sender(postback.referral.ref, referral_count.to_i)
       end
     end
     stop_thread
