@@ -10,6 +10,7 @@ module Commands
       puts "Referrer Id: #{postback.referral.ref}"
       referral_count = user["referral_data"]["referral_count"]
       if @new_user
+        puts "New user being updated..."
         update_sender(postback.referral.ref, referral_count)
       end
     end

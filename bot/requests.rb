@@ -32,6 +32,7 @@ def update_sender id, referral_count
   referral_count = referral_count += 1
   params = { :user => { :referred => true, :referral_count => referral_count } }
   response = HTTParty.patch(url, query: params)
+  puts "Updated User ID: #{id} to referral count => #{referral_count}" if response.code == 200
 end
 
 def set_notification_settings type, action
