@@ -34,12 +34,6 @@ def update_sender id, referral_count
   response = HTTParty.patch(url, query: params)
 end
 
-def update_recipient id
-  url = "#{SWEEP_API}/api/v1/users/#{id}"
-  params = { :user => { :referred => true, :mulligan_count => 1 } }
-  response = HTTParty.patch(url, query: params)
-end
-
 def set_notification_settings type, action
   url = "#{SWEEP_API}/api/v1/users/#{user.id}"
   params = { :user => { type => action } }

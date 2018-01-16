@@ -9,10 +9,8 @@ module Commands
     if postback.referral
       puts "Referrer Id: #{postback.referral.ref}"
       referral_count = user["referral_data"]["referral_count"]
-      referred = user["referral_data"]["referred"]
-      if @new_user && !referred
+      if @new_user
         update_sender(postback.referral.ref, referral_count)
-        update_recipient user["facebook_uuid"]
       end
     end
     stop_thread
