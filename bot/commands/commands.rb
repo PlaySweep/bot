@@ -7,11 +7,12 @@ module Commands
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
     if postback.referral
-      puts "Referrer Id: #{postback.referral.ref}"
+      referrer_id = postback.referral.ref
+      puts "Referrer Id: #{referrer_id}"
       referral_count = user["referral_data"]["referral_count"]
       if @new_user
         puts "New user being updated..."
-        update_sender(postback.referral.ref, referral_count.to_i)
+        update_sender(postback.referral.ref, referral_count.to_i) unless referrer_id.to_i == 0
       end
     end
     stop_thread
