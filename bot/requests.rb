@@ -29,10 +29,11 @@ end
 
 def update_sender id, referral_count
   url = "#{SWEEP_API}/api/v1/users/#{id}"
-  referral_count = referral_count += 1
-  params = { :user => { :referral_count => referral_count } }
+  puts "User referral count was: #{referral_count}"
+  new_referral_count = referral_count + 1
+  params = { :user => { :referral_count => new_referral_count } }
   response = HTTParty.patch(url, query: params)
-  puts "Updated User ID: #{id} to referral count => #{referral_count}" if response.code == 200
+  puts "Updated User ID: #{id} to referral count => #{new_referral_count}" if response.code == 200
 end
 
 def set_notification_settings type, action
