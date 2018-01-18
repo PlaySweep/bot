@@ -7,12 +7,12 @@ module Commands
     text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
     say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
     if postback.referral
-      puts "Referrer Id: #{postback.referral.ref}"
+      referrer_id = postback.referral.ref
+      puts "Referrer Id: #{referrer_id}"
       referral_count = user["referral_data"]["referral_count"]
-      referred = user["referral_data"]["referred"]
-      if @new_user && !referred
-        update_sender(postback.referral.ref, referral_count)
-        update_recipient user["facebook_uuid"]
+      if @new_user
+        puts "New user being updated..."
+        update_sender(postback.referral.ref, referral_count.to_i) unless referrer_id.to_i == 0
       end
     end
     stop_thread
@@ -300,7 +300,7 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: %w[NFL]
+    say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
     stop_thread
   end
 
@@ -362,7 +362,13 @@ module Commands
       next_command :manage_updates
     when 'Select picks'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: %w[NFL]
+      say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+      stop_thread
+    when 'NFL'
+      show_button_template('NFL')
+      stop_thread
+    when 'NBA'
+      show_button_template('NBA')
       stop_thread
     when 'Wins'
       user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  

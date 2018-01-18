@@ -55,6 +55,7 @@ Rubotnik.route :message do |request|
   bind 'get', 'more', 'picks', all: true, to: :more_picks
   bind 'how', 'to', 'play', to: :how_to_play
   bind 'select', 'picks', all: true, to: :select_picks
+  bind 'play', to: :select_picks
   bind 'update', 'picks', all: true, to: :select_picks
   # bind 'use', 'mulligan', all: true, to: :use_mulligan, reply_with: {
   #   text: "Alright #{@graph_user["first_name"]}, you have 1 mulligan to use. Do you want to use it now to keep your streak alive?",
@@ -66,9 +67,9 @@ Rubotnik.route :message do |request|
   # bind 'ncaaf' do
   #   show_button_template('NCAAF')
   # end
-  # bind 'nba' do
-  #   show_button_template('NBA')
-  # end
+  bind 'nba' do
+    show_button_template('NBA')
+  end
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
