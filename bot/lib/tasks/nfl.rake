@@ -26,7 +26,7 @@ task :send_reminder do
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
       message: {
-        text: "Hey #{user["user"]["first_name"]} 👋, don't forget to select your picks for todays games!",
+        text: "Hey #{user["user"]["first_name"]} 👋, select your picks for the upcoming games! (We have NBA now, 😉...and fyi, try to make picks with the Messenger app while Facebook works to fix some desktop bugs 🐞)",
         quick_replies: menu
       }
     }
