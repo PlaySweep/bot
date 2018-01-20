@@ -80,7 +80,7 @@ task :test_recap do
   win_gifs = [{id: 1186125711517480, title: "Keanu Reeves Thumbs Up"}, {id: 1186125928184125, title: "Sean Connery Fist Pump"}]
   media_options = {
     messaging_type: "UPDATE",
-    recipient: { 1328837993906209 },
+    recipient: { id: 1328837993906209 },
     message: {
       attachment: {
         type: 'image',
