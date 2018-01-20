@@ -77,36 +77,20 @@ task :test_recap do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  win_gifs = [{id: 1186125711517480, title: "Keanu Reeves Thumbs Up"}, {id: 1186125928184125, title: "Sean Connery Fist Pump"}]
+  loss_gifs = [{id: 1186129364850448, title: "Ryan Goslin Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
   media_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1328837993906209 },
+    recipient: { id: pick["user"]["facebook_uuid"] },
     message: {
       attachment: {
         type: 'image',
         payload: {
-          attachment_id: win_gifs.sample[:id]
+          attachment_id: loss_gifs.sample[:id]
         }
       },
       quick_replies: menu
     }
   }
   Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-
-  # loss_gifs = [{id: 1186129364850448, title: "Ryan Goslin Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
-  # media_options = {
-  #   messaging_type: "UPDATE",
-  #   recipient: { id: pick["user"]["facebook_uuid"] },
-  #   message: {
-  #     attachment: {
-  #       type: 'image',
-  #       payload: {
-  #         attachment_id: loss_gifs.sample[:id]
-  #       }
-  #     },
-  #     quick_replies: menu
-  #   }
-  # }
-  # Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
 
 end
