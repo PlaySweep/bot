@@ -21,7 +21,7 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users[1..-1].each_with_index do |user, index|
+  @users[66..-1].each_with_index do |user, index|
     message_options = {
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
