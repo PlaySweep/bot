@@ -80,7 +80,7 @@ task :test_recap do
   loss_gifs = [{id: 1186129364850448, title: "Ryan Goslin Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
   media_options = {
     messaging_type: "UPDATE",
-    recipient: { id: pick["user"]["facebook_uuid"] },
+    recipient: { 1328837993906209 },
     message: {
       attachment: {
         type: 'image',
