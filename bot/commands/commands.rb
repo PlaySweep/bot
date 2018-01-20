@@ -378,6 +378,9 @@ module Commands
     when 'Earn mulligans'
       show_invite
       stop_thread
+    when 'Invite friends'
+      show_invite
+      stop_thread
     when 'Up next'
       if user.session[:upcoming].nil? || user.session[:upcoming].empty?
         say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]

@@ -32,7 +32,6 @@ task :send_reminder do
     }
     Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
     sleep 1
-    reminder_gifs = [{id: 1517413058307731, title: "Jennifer Lawrence Thumbs Up"}]
     media_options = {
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
@@ -40,7 +39,7 @@ task :send_reminder do
         attachment: {
           type: 'image',
           payload: {
-            attachment_id: reminder_gifs.sample[:id]
+            attachment_id: 1517926024923101
           }
         },
         quick_replies: menu
@@ -61,8 +60,8 @@ task :send_notification do
       menu = [
         {
           content_type: 'text',
-          title: 'Earn mulligans',
-          payload: 'Earn mulligans'
+          title: 'Invite friends',
+          payload: 'Invite friends'
         },
         {
           content_type: 'text',
@@ -75,7 +74,8 @@ task :send_notification do
           payload: 'Manage updates'
         }
       ]
-      if pick["user"]["notification_settings"]["recap_all"]
+
+      if pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 != 0
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
         symbol = pick["spread"] > 0 ? "+" : ""
@@ -90,7 +90,6 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
-        win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -98,7 +97,7 @@ task :send_notification do
             attachment: {
               type: 'image',
               payload: {
-                attachment_id: win_gifs.sample[:id]
+                attachment_id: 1517896908259346
               }
             },
             quick_replies: menu
@@ -106,6 +105,33 @@ task :send_notification do
         }
         Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
         puts "** Message sent for game recap (W) **"
+      elsif pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 == 0
+        symbol = pick["spread"] > 0 ? "+" : ""
+        text = "You hit a Sweep 🎉\n\nThe #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} (#{pick["matchup"]["winner_score"]} - #{pick["matchup"]["loser_score"]})!"
+        message_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: pick["user"]["facebook_uuid"] },
+          message: {
+            text: "#{text}\n\nYou now have #{pick["user"]["current_streak"]} in a row, go spread the word 🎙️👍",
+            quick_replies: menu
+          }
+        }
+        Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        sleep 1
+        media_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: pick["user"]["facebook_uuid"] },
+          message: {
+            attachment: {
+              type: 'image',
+              payload: {
+                attachment_id: 1517972664918437
+              }
+            },
+            quick_replies: menu
+          }
+        }
+        Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
       end
       set_notified pick["id"]
       puts "** Set notified to true **"
@@ -145,7 +171,6 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
-        loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -153,7 +178,7 @@ task :send_notification do
             attachment: {
               type: 'image',
               payload: {
-                attachment_id: loss_gifs.sample[:id]
+                attachment_id: 1517902454925458
               }
             },
             quick_replies: menu
