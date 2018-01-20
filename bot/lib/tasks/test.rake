@@ -29,7 +29,7 @@ task :test_reminder do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  reminder_gifs = [{id: 1517413058307731, title: "Jennifer Lawrence Thumbs Up"}]
+  reminder_gifs = [{id: 1517926024923101, title: "Jennifer Lawrence Thumbs Up"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
