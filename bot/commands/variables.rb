@@ -38,6 +38,11 @@ module Commands
   #   }
   # ].freeze
 
+  def show_media(id)
+    media = UI::MediaAttachment.new(id)
+    show(media)
+  end
+
   def show_button_template sport
     payload = [
       {

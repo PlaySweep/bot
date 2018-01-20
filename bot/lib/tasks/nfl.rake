@@ -21,17 +21,34 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users.each do |user|
+  @users.each_with_index do |user, index|
     message_options = {
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
       message: {
-        text: "Hey #{user["user"]["first_name"]} 👋, select your picks for the upcoming games! (We have NBA now, 😉...and fyi, try to make picks with the Messenger app while Facebook works to fix some desktop bugs 🐞)",
+        text: "Hey #{user["user"]["first_name"]} 👋, select your picks for the upcoming games!",
         quick_replies: menu
       }
     }
     Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+    sleep 1
+    reminder_gifs = [{id: 1517413058307731, title: "Jennifer Lawrence Thumbs Up"}]
+    media_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: user["user"]["facebook_uuid"] },
+      message: {
+        attachment: {
+          type: 'image',
+          payload: {
+            attachment_id: reminder_gifs.sample[:id]
+          }
+        },
+        quick_replies: menu
+      }
+    }
+    Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
     puts "** Message sent for reminders to #{user["name"]} **"
+    sleep 300 if index % 20 == 0
   end
 end
 
@@ -72,6 +89,22 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        sleep 1
+        win_gifs = [{id: 1186125711517480, title: "Keanu Reeves Thumbs Up"}, {id: 1186125928184125, title: "Sean Connery Fist Pump"}]
+        media_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: pick["user"]["facebook_uuid"] },
+          message: {
+            attachment: {
+              type: 'image',
+              payload: {
+                attachment_id: win_gifs.sample[:id]
+              }
+            },
+            quick_replies: menu
+          }
+        }
+        Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
         puts "** Message sent for game recap (W) **"
       end
       set_notified pick["id"]
@@ -111,6 +144,22 @@ task :send_notification do
           }
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+        sleep 1
+        loss_gifs = [{id: 1186129364850448, title: "Ryan Gosling Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
+        media_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: pick["user"]["facebook_uuid"] },
+          message: {
+            attachment: {
+              type: 'image',
+              payload: {
+                attachment_id: loss_gifs.sample[:id]
+              }
+            },
+            quick_replies: menu
+          }
+        }
+        Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
         puts "** Message sent for game recap (L) **"
       end
       set_notified pick["id"]
