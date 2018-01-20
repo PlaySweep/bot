@@ -90,7 +90,7 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
-        win_gifs = [{id: 1186125711517480, title: "Keanu Reeves Thumbs Up"}, {id: 1186125928184125, title: "Sean Connery Fist Pump"}]
+        win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -145,7 +145,7 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
-        loss_gifs = [{id: 1186129364850448, title: "Ryan Gosling Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
+        loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },

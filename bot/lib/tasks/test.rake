@@ -77,10 +77,26 @@ task :test_recap do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  loss_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}]
+  win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
+    message: {
+      attachment: {
+        type: 'image',
+        payload: {
+          attachment_id: win_gifs.sample[:id]
+        }
+      },
+      quick_replies: menu
+    }
+  }
+  Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+  sleep 1
+  loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
+  media_options = {
+    messaging_type: "UPDATE",
+    recipient: { id: pick["user"]["facebook_uuid"] },
     message: {
       attachment: {
         type: 'image',
@@ -92,5 +108,4 @@ task :test_recap do
     }
   }
   Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-
 end
