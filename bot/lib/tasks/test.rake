@@ -77,7 +77,7 @@ task :test_recap do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  loss_gifs = [{id: 1186129364850448, title: "Ryan Goslin Face Palm"}, {id: 1186129728183745, title: "Harry Potter Eye Roll"}, {id: 1186130348183683, title: "Michael Scott This Is The Worst"}, {id: 1186131988183519, title: "Michael Scott Im Fine/No Im not"}]
+  loss_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
