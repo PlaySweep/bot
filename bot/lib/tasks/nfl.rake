@@ -21,7 +21,7 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users[96..-1].each_with_index do |user, index|
+  @users.each_with_index do |user, index|
     message_options = {
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
@@ -47,7 +47,7 @@ task :send_reminder do
     }
     Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
     puts "** Message sent for reminders to #{user["name"]} **"
-    # sleep 300 if index % 20 == 0
+    sleep 300 if index % 20 == 0
   end
 end
 
