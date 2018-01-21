@@ -47,7 +47,7 @@ task :send_reminder do
     }
     Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
     puts "** Message sent for reminders to #{user["name"]} **"
-    sleep 300 if index % 20 == 0
+    sleep 120 if index % 20 == 0
   end
 end
 
@@ -90,6 +90,7 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
+        win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}, {id: 1517919341590436, title: "Nicolas Cage Con Air"}, {id: 1517920478256989, title: "Beard Man Happy Approval"}, {id: 1517922411590129, title: "Black Guy On Pier Dusting Hands Off"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -97,7 +98,7 @@ task :send_notification do
             attachment: {
               type: 'image',
               payload: {
-                attachment_id: 1517896908259346
+                attachment_id: win_gifs.sample[:id]
               }
             },
             quick_replies: menu
@@ -171,6 +172,7 @@ task :send_notification do
         }
         Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         sleep 1
+        loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
         media_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -178,7 +180,7 @@ task :send_notification do
             attachment: {
               type: 'image',
               payload: {
-                attachment_id: 1517902454925458
+                attachment_id: loss_gifs.sample[:id]
               }
             },
             quick_replies: menu
