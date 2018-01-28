@@ -38,13 +38,12 @@ module Commands
   #   }
   # ].freeze
 
+  def show_media(id)
+    media = UI::MediaAttachment.new(id)
+    show(media)
+  end
+
   def show_button_template sport
-    case sport
-    when 'NFL'
-      image_url = "https://i.imgur.com/ke2hFzp.png"
-    # when 'NCAAF'
-    #   image_url = "https://i.imgur.com/mveSwHJ.png"
-    end
     payload = [
       {
         type: :web_url,
@@ -56,17 +55,17 @@ module Commands
     ]
     case sport
     when 'NFL'
-      quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
+      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
       show(button_template)
     # when 'NCAAF'
     #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
     #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
     #   show(button_template)
-    # when 'NBA'
-    #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "NCAAF", payload: "NCAAF" }]
-    #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
-    #   show(button_template)
+    when 'NBA'
+      quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
+      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
+      show(button_template)
     end
   end
 
@@ -108,6 +107,10 @@ module Commands
                        "title": "Predict 4 games in a row and win Amazon Cash!",
                        "subtitle": "Make your picks now and you might walk away with an Amazon gift card by putting your knowledge up to the test.",
                        "image_url": "https://i.imgur.com/sjnqRyd.png",
+                       "default_action": {
+                         "type": "web_url",
+                         "url": "http://www.playsweep.com?ref=#{@graph_user["id"]}"
+                       },
                        "buttons": [
                          {
                            "type": "web_url",
