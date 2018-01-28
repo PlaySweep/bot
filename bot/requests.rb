@@ -33,8 +33,9 @@ def get_user_friends user_id, access_token
   response = Net::HTTP.get_response(uri)
   response = JSON.parse(response.body)
   @user_friends = response
+end
 
-def update_sender id, referral_count
+def update_sender id
   url = "#{SWEEP_API}/api/v1/users/#{id}"
   response = HTTParty.get(url)
   response = JSON.parse(response.body)
