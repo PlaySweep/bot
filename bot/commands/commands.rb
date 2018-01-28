@@ -4,15 +4,18 @@ module Commands
 
   def start
     user = get_or_set_user["user"]
-    text = "Welcome to Sweep #{user["first_name"]}!\n\nWe’re giving away $50 worth of Amazon gift cards every game day. Predict 4 games in a row and win your piece of the pie!"
-    say text, quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"]]
+    welcome_message = "Welcome to Sweep #{user["first_name"]} 🎉"
+    say welcome_message
+    postback.typing_on
+    sleep 1
+    text = "Let's get right to it..."
+    show_double_button_template text
     if postback.referral
       referrer_id = postback.referral.ref
       puts "Referrer Id: #{referrer_id}"
-      referral_count = user["referral_data"]["referral_count"]
       if @new_user
         puts "New user being updated..."
-        update_sender(postback.referral.ref, referral_count.to_i) unless referrer_id.to_i == 0
+        update_sender(postback.referral.ref) unless referrer_id.to_i == 0
       end
     end
     stop_thread
@@ -316,150 +319,63 @@ module Commands
     stop_thread
   end
 
-  def more_action
-    user = get_or_set_user["user"]
-    text = "We'll have more action for you soon #{user["first_name"]}! Stay tuned"
-    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+  def show_status_details
+    if user.session[:history].nil? || user.session[:history].empty?
+      streak_text = "You look new 👀\n\nGet started by making some picks!"
+    else
+      streak = user.session[:history]["current_streak"]
+      if streak == 1
+        wins = "win"
+      else
+        wins = "wins"
+      end
+      streak_text = "( #{user.session[:history]["current_streak"]} ) #{wins} in a row..."
+    end
+    if user.session[:upcoming].nil? || user.session[:upcoming].empty?
+      upcoming_text = "You have no games coming up..."
+    else
+      next_up = user.session[:upcoming].first
+      symbol = next_up["spread"] > 0 ? "+" : ""
+      spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
+      upcoming_text = "👉 You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}..."
+    end
+    say "#{streak_text}\n\n#{upcoming_text}"
+  end
+
+  def status_for_message
+    get_status
+    message.typing_on
+    show_status_details
+    text = "Tap the button below to see more details in your Dashboard"
+    quick_replies = [{ content_type: 'text', title: "Select picks", payload: "Select picks"}]
+    sleep 3
+    message.typing_on
+    show_action_button(text, quick_replies)
+    message.typing_off
     stop_thread
   end
 
-  # def in_game
-  #   text = "It doesn't look like we have any live plays for you yet 😕\n\nBut make sure you have your preferences updated in order to receive our in-game notifications"
-  #   say text, quick_replies: [["Status", "Status"], ["Manage updates", "Manage updates"], ["Make more picks", "Select picks"]]
-  #   stop_thread
-  # end
-
-  # def games
-  #   user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].nil?
-  #   user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].nil?
-  #   if user.session[:upcoming].nil? && user.session[:current].nil? && user.session[:current].nil?
-  #     text = "You have nothing in flight for the day! Get started below 👇"
-  #     quick_replies = ["Select picks"]
-  #     stop_thread
-  #   else
-  #     text = "You have #{user.session[:history]["current_streak"]} #{wins} in a row #{emoji}\n\nTap the options below to check your game status or find out ways to increase your chances of winning 🙌"
-  #     quick_replies = [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-  #   end
-  #   say text, quick_replies: quick_replies
-  #   next_command :status
-  # end
-
-  def status
+  def status_for_postback
     get_status
-    message.typing_on
-    case message.quick_reply
-    when 'Status'
-      if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
-        status_text = "You have nothing in flight for the day! Get started below 👇"
-        status_quick_replies = [["Select picks", "Select picks"]]
-        stop_thread
-      else
-        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
-        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
-        messages = ["Let's get to the important stuff..."]
-        status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
-        status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-      end
-      say status_text, quick_replies: status_quick_replies
-      next_command :status
-    when 'Manage updates'
-      text = "Tap the options below to manage your preferences 👇"
-      say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
-      next_command :manage_updates
-    when 'Select picks'
-      text = "Choose from the sports below 👇"
-      say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
-      stop_thread
-    when 'NFL'
-      show_button_template('NFL')
-      stop_thread
-    when 'NBA'
-      show_button_template('NBA')
-      stop_thread
-    when 'Wins'
-      user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  
-      text = "#{messages.sample}\n\nTake a look at our other options below for more details on upcoming, in-progress, or completed picks 👍"
-      say text, quick_replies: [["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-      next_command :status
-    when 'Earn mulligans'
-      show_invite
-      stop_thread
-    when 'Invite friends'
-      show_invite
-      stop_thread
-    when 'Up next'
-      if user.session[:upcoming].nil? || user.session[:upcoming].empty?
-        say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-        next_command :status
-      else
-        next_up = user.session[:upcoming].first
-        symbol = next_up["spread"] > 0 ? "+" : ""
-        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
-        teams = ""
-        upcoming = user.session[:upcoming][1..-1]
-        upcoming.each_with_index do |team, index|
-          teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
-        end
-        text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
-        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-        next_command :status
-      end
-    when 'Live'
-      if user.session[:in_progress].nil? || user.session[:in_progress].empty?
-        say "You have no games in progress...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-        next_command :status
-      else
-        teams = ""
-        in_progress = user.session[:in_progress]
-        in_progress.each_with_index do |team, index|
-          symbol = team["spread"] > 0 ? "+" : ""
-          teams.concat("#{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if in_progress.length == 1
-          teams.concat("#{in_progress[0]["team_abbrev"]} (#{symbol}#{in_progress[0]["spread"]}) and #{in_progress[1]["team_abbrev"]} (#{symbol}#{in_progress[1]["spread"]})") and break if in_progress.length == 2
-          teams.concat("and #{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if index == in_progress.length - 1
-          teams.concat("#{team["team_abbrev"]} (#{symbol}#{team["spread"]}), ")
-        end
-        text = "The #{teams} are in progress now..."
-        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-        next_command :status
-      end
-    when 'Completed'
-      if user.session[:current].nil? || user.session[:current].empty?
-        say "You have nothing completed for today...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
-        next_command :status
-      else
-        teams = ""
-        user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins"
-        user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = ""
-        completed = user.session[:current]
-        completed.each_with_index do |team, index|
-          team["result"] == "W" ? result = "👍" : result = "👎"
-          symbol = team["spread"] > 0 ? "+" : ""
-          teams.concat("#{result} #{team["team_abbrev"]} (#{symbol}#{team["spread"]})\n")
-        end
-        text = "Today's record 👇\n\n#{teams}"
-        say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
-        next_command :status
-      end
-    else
-      message.typing_off
-      say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
-      stop_thread
-    end
+    postback.typing_on
+    show_status_details
+    text = "Tap the button below to see more details in your Dashboard"
+    quick_replies = [{ content_type: 'text', title: "Select picks", payload: "Select picks"}]
+    sleep 3
+    postback.typing_on
+    show_action_button(text, quick_replies)
+    postback.typing_off
+    stop_thread
   end
 
   def how_to_play
-    message.typing_on
-    case message.text
-    when "How to play"
-      message.typing_off
+    case postback.payload
+    when "HOW TO PLAY"
+      postback.typing_on
       text = "✅ You will have at least one game to choose from each day.\n\n✅ You can select as many or as few games as you want, completely free.\n\n✅ Getting 4 wins in a row is considered a Sweep.\n\nTap below to get started making your picks 👇"
       say text, quick_replies: ["Select picks"]
+      postback.typing_off
       stop_thread
-    # when "What about prizes?"
-    #   message.typing_off
-    #   text = "We offer a $50 (Amazon) prize pool every day a game is played.\n\n✅ Take home the entire prize pool if you are the only one to hit a Sweep.\n\n✅ Share the prize pool with others if there are more winners.\n\n✅ The prize pool will rollover if no one hits a Sweep.\n\nNow get started by tapping below! 😁"
-    #   say text, quick_replies: ["Select picks", "Manage updates"]
-    #   stop_thread
     end
   end
 end

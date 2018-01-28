@@ -16,6 +16,32 @@ module Profile
     ]
   }
 
+  # SIMPLE_MENU = {
+  #   persistent_menu: [
+  #     {
+  #       locale: 'default',
+  #       composer_input_disabled: false,
+  #       call_to_actions: [
+  #         {
+  #           type: 'postback',
+  #           title: 'Invite friends',
+  #           payload: 'INVITE FRIENDS'
+  #         },
+  #         {
+  #           type: 'postback',
+  #           title: 'Send feedback',
+  #           payload: 'SEND FEEDBACK'
+  #         },
+  #         {
+  #           type: 'postback',
+  #           title: 'Manage updates',
+  #           payload: 'MANAGE UPDATES'
+  #         }
+  #       ]
+  #     }
+  #   ]
+  # }
+
   SIMPLE_MENU = {
     persistent_menu: [
       {
@@ -24,74 +50,41 @@ module Profile
         call_to_actions: [
           {
             type: 'nested',
-            title: 'My account',
+            title: '🤖 Profile',
             call_to_actions: [
               {
-                type: 'postback',
-                title: 'Profile',
-                payload: 'PROFILE'
+                title: 'Dashboard',
+                type: 'web_url',
+                messenger_extensions: true,
+                webview_height_ratio: 'full',
+                url: "#{ENV["WEBVIEW_URL"]}?id={{user_id}}&sport=nfl"
               },
               {
+                title: 'Invite friends',
                 type: 'postback',
-                title: 'Manage updates',
+                payload: 'INVITE FRIENDS'
+              },
+              {
+                title: 'Notifications & Alerts',
+                type: 'postback',
                 payload: 'MANAGE UPDATES'
-              },
-              {
-                type: 'postback',
-                title: 'Send feedback',
-                payload: 'SEND FEEDBACK'
               }
             ]
           },
           {
+            title: '🏅 Make picks',
+            type: 'web_url',
+            messenger_extensions: true,
+            webview_height_ratio: 'full',
+            url: "#{ENV["WEBVIEW_URL"]}?id={{user_id}}"
+          },
+          {
+            title: '📈 Check status',
             type: 'postback',
-            title: 'Invite friends',
-            payload: 'INVITE FRIENDS'
+            payload: 'STATUS'
           }
         ]
       }
     ]
   }
-
-  # SIMPLE_MENU = {
-  #   persistent_menu: [
-  #     {
-  #       locale: 'default',
-  #       composer_input_disabled: false,
-  #       call_to_actions: [
-  #         {
-  #           type: 'nested',
-  #           title: 'Actions',
-  #           call_to_actions: [
-  #             {
-  #               title: 'Leaderboard',
-  #               type: 'postback',
-  #               payload: 'Leaderboard'
-  #             },
-  #             {
-  #               title: 'Select picks',
-  #               type: 'postback',
-  #               payload: 'Select picks'
-  #             },
-  #             {
-  #               title: 'Status',
-  #               type: 'postback',
-  #               payload: 'Status'
-  #             }
-  #           ]
-  #         },
-  #         {
-  #           type: 'postback',
-  #           title: 'Help',
-  #           payload: 'HELP'
-  #         },
-  #         {
-  #           type: 'postback',
-  #           title: 'How To Play',
-  #           payload: 'HOW TO PLAY'
-  #         }
-  #       ]
-  #     }
-  #   ]
-  # }
 end

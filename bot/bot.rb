@@ -18,30 +18,13 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |request|
-  get_status if (request.message.text || request.message.quick_reply) == 'Status'
+  # get_status if ['current', 'status'].include?(request.message.text.downcase || request.message.quick_reply.downcase)
   get_fb_user unless @graph_user
 
   bind 'login', 'facebook' do
     show_login
   end
-
-  if (user.session[:upcoming].nil? || user.session[:upcoming].empty?) && (user.session[:in_progress].nil? || user.session[:in_progress].empty?) && (user.session[:current].nil? || user.session[:current].empty?) 
-    
-    status_text = "You have nothing in flight for the day! Get started below 👇"
-    status_quick_replies = [["Select picks", "Select picks"]]
-    stop_thread
-  else
-    
-    user.session[:history]["current_streak"] == 1 ? wins = "win" : wins = "wins" unless user.session[:history].empty?
-    user.session[:history]["current_streak"] > 0 ? emoji = "🔥" : emoji = "" unless user.session[:history].empty?
-    messages = ["Here is where the rubber meets the road #{@graph_user["first_name"]}", "We always like to know where we stand, so here is where you stand so far today"]
-    status_text = "#{messages.sample}.\n\nTap and scroll through the options below to get the latest updates on your picks 🙌"
-    status_quick_replies = [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
-  end
-  bind 'current', 'status', to: :status, reply_with: {
-    text: status_text,
-    quick_replies: status_quick_replies
-  }
+  bind 'current', 'status', to: :status_for_message
   bind "'i'm", "good", "eh", "nevermind", to: :reset
   bind 'invite', 'earn', 'mulligans' do
     show_invite
@@ -59,10 +42,6 @@ Rubotnik.route :message do |request|
   bind 'select', 'picks', all: true, to: :select_picks
   bind 'play', to: :select_picks
   bind 'update', 'picks', all: true, to: :select_picks
-  # bind 'use', 'mulligan', all: true, to: :use_mulligan, reply_with: {
-  #   text: "Alright #{@graph_user["first_name"]}, you have 1 mulligan to use. Do you want to use it now to keep your streak alive?",
-  #   quick_replies: [["Yes", "Use Mulligan Yes"], ["No, not now", "Use Mulligan No"]]
-  # }
   bind 'nfl' do
     show_button_template('NFL')
   end
@@ -94,14 +73,18 @@ end
 
 ####################### HANDLE INCOMING POSTBACKS ##############################
 
-Rubotnik.route :postback do
+Rubotnik.route :postback do |request|
+  # get_status if ['status'].include?(request.postback.payload.downcase)
+  get_fb_user unless @graph_user
+
   bind 'START', to: :start 
-  bind 'HOW TO PLAY', to: :how_to_play # fix how to play for postback 
+  bind 'HOW TO PLAY', to: :how_to_play # fix for message
   bind 'SEND FEEDBACK' do
     text = "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉"
     say text, quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
     stop_thread
   end
+  bind 'STATUS', to: :status_for_postback
   bind 'INVITE FRIENDS' do
     text = "We're giving away a mulligan for every 3 friends that play Sweep from your referral, while your friends earn one immediately 🎉\n\nSpread the word and earn some mulligans! 😉"
     say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["I'm good", "I'm good"]]
@@ -114,11 +97,6 @@ Rubotnik.route :postback do
     text = "Tap the options below to manage your preferences 👇"
     say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
-  end
-  bind 'More action' do
-    text = "We'll have more action for you soon #{@graph_user["first_name"]}! Stay tuned"
-    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
-    stop_thread
   end
   bind 'MORE SPORTS', to: :select_picks
   bind 'PROFILE', to: :profile

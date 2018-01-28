@@ -36,6 +36,9 @@ def get_user_friends user_id, access_token
 
 def update_sender id, referral_count
   url = "#{SWEEP_API}/api/v1/users/#{id}"
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  referral_count = response["user"]["current_streak"]
   puts "User referral count was: #{referral_count}"
   new_referral_count = referral_count + 1
   params = { :user => { :referral_count => new_referral_count } }
@@ -50,6 +53,7 @@ def set_notification_settings type, action
 end
 
 def get_status
+  puts "get_status " * 50
   url = "#{SWEEP_API}/api/v1/users/#{user.id}/picks" 
   response = HTTParty.get(url)
   response = JSON.parse(response.body)

@@ -8,8 +8,8 @@ module Commands
   #     image_url: 'https://unsplash.it/760/400?random',
   #     subtitle: "That's a first card in a carousel",
   #     default_action: {
-  #       type: 'web_url',
-  #       url: 'https://unsplash.it'
+        # type: 'web_url',
+        # url: 'https://unsplash.it'
   #     },
   #     buttons: [
   #       {
@@ -43,6 +43,39 @@ module Commands
     show(media)
   end
 
+  def show_action_button text, quick_replies
+    payload = [
+      {
+        type: :web_url,
+        messenger_extensions: true,
+        url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}",
+        title: "Open Dashboard",
+        webview_height_ratio: 'full'
+      }
+    ]
+    button_template = UI::FBButtonTemplate.new(text, payload, quick_replies)
+    show(button_template)
+  end
+
+  def show_double_button_template text
+    payload = [
+      {
+        type: :postback,
+        payload: 'HOW TO PLAY',
+        title: "How to play"
+      },
+      {
+        type: :web_url,
+        messenger_extensions: true,
+        url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}",
+        title: "Make picks",
+        webview_height_ratio: 'full'
+      }
+    ]
+    button_template = UI::FBButtonTemplate.new(text, payload)
+    show(button_template)
+  end
+
   def show_button_template sport
     payload = [
       {
@@ -50,7 +83,7 @@ module Commands
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
         title: "Pick now 🙌",
-        webview_height_ratio: 'tall'
+        webview_height_ratio: 'full'
       }
     ]
     case sport
@@ -76,7 +109,7 @@ module Commands
         messenger_extensions: true,
         url: "#{ENV["BOT_URL"]}/request",
         title: "Log in with Facebook",
-        webview_height_ratio: 'tall'
+        webview_height_ratio: 'full'
       }
     ]
     button_template = UI::FBButtonTemplate.new("Get access to our leaderboard 👍", payload)
@@ -117,7 +150,7 @@ module Commands
                            "messenger_extensions": true,
                            "url": "https://m.me/PlaySweep?ref=#{@graph_user["id"]}", 
                            "title": "Play Sweep Now",
-                           "webview_height_ratio": 'tall'
+                           "webview_height_ratio": 'full'
                          }
                        ]
                      }
