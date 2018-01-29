@@ -1,42 +1,42 @@
 module Commands
   # Format of hashes follows JSON format from Messenger Platform documentation:
   # https://developers.facebook.com/docs/messenger-platform/send-messages/templates
-  # CAROUSEL = [
-  #   {
-  #     title: 'Random image',
-  #     # Horizontal image should have 1.91:1 ratio
-  #     image_url: 'https://unsplash.it/760/400?random',
-  #     subtitle: "That's a first card in a carousel",
-  #     default_action: {
-        # type: 'web_url',
-        # url: 'https://unsplash.it'
-  #     },
-  #     buttons: [
-  #       {
-  #         type: :web_url,
-  #         url: 'https://unsplash.it',
-  #         title: 'Website'
-  #       }
-  #     ]
-  #   },
-  #   {
-  #     title: 'Another random image',
-  #     # Horizontal image should have 1.91:1 ratio
-  #     image_url: 'https://unsplash.it/600/315?random',
-  #     subtitle: "And here's a second card. You can add up to 10!",
-  #     default_action: {
-  #       type: 'web_url',
-  #       url: 'https://unsplash.it'
-  #     },
-  #     buttons: [
-  #       {
-  #         type: :web_url,
-  #         url: 'https://unsplash.it',
-  #         title: 'Website'
-  #       }
-  #     ]
-  #   }
-  # ].freeze
+  CAROUSEL = [
+    {
+      title: 'Random image',
+      # Horizontal image should have 1.91:1 ratio
+      image_url: 'https://unsplash.it/760/400?random',
+      subtitle: "That's a first card in a carousel",
+      default_action: {
+        type: 'web_url',
+        url: 'https://unsplash.it'
+      },
+      buttons: [
+        {
+          type: :web_url,
+          url: 'https://unsplash.it',
+          title: 'Website'
+        }
+      ]
+    },
+    {
+      title: 'Another random image',
+      # Horizontal image should have 1.91:1 ratio
+      image_url: 'https://unsplash.it/600/315?random',
+      subtitle: "And here's a second card. You can add up to 10!",
+      default_action: {
+        type: 'web_url',
+        url: 'https://unsplash.it'
+      },
+      buttons: [
+        {
+          type: :web_url,
+          url: 'https://unsplash.it',
+          title: 'Website'
+        }
+      ]
+    }
+  ].freeze
 
   def show_media(id)
     media = UI::MediaAttachment.new(id)
@@ -49,7 +49,7 @@ module Commands
         type: :web_url,
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}",
-        title: "Open Dashboard",
+        title: "Open Dashboard 📊",
         webview_height_ratio: 'full'
       }
     ]
@@ -62,13 +62,13 @@ module Commands
       {
         type: :postback,
         payload: 'HOW TO PLAY',
-        title: "How to play"
+        title: "How to Play 🤷"
       },
       {
         type: :web_url,
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}",
-        title: "Make picks",
+        title: "Make Picks 🙌",
         webview_height_ratio: 'full'
       }
     ]
@@ -82,22 +82,18 @@ module Commands
         type: :web_url,
         messenger_extensions: true,
         url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
-        title: "Pick now 🙌",
+        title: "Pick Now 🙌",
         webview_height_ratio: 'full'
       }
     ]
     case sport
     when 'NFL'
       quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "Status", payload: "Status" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NFL?", payload, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Make your picks for the NFL!", payload, quick_replies)
       show(button_template)
-    # when 'NCAAF'
-    #   quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
-    #   button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAF?", payload, quick_replies)
-    #   show(button_template)
     when 'NBA'
       quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
+      button_template = UI::FBButtonTemplate.new("Make your picks for the NBA!", payload, quick_replies)
       show(button_template)
     end
   end
@@ -117,40 +113,38 @@ module Commands
   end
 
   def show_carousel
-    show(UI::FBCarousel.new(CAROUSEL))
+    quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
+    show(UI::FBCarousel.new(CAROUSEL, quick_replies))
   end
 
   def show_invite
      get_fb_user unless @graph_user 
      friends = [
        {
-         "title":"Refer your friends and earn mulligans #{@graph_user["first_name"]}!",
-         "subtitle":"For every 3 friends who plays Sweep, you'll get to erase a loss.",
-         "image_url":"https://i.imgur.com/GB28b5L.png",
-         "buttons": [
+         title: "Earn some Sweep coins #{@graph_user["first_name"]} 🤑",
+         buttons: [
            {
-             "type": "element_share",
-             "share_contents": { 
-               "attachment": {
-                 "type": "template",
-                 "payload": {
-                   "template_type": "generic",
-                   "elements": [
+             type: "element_share",
+             share_contents: { 
+               attachment: {
+                 type: "template",
+                 payload: {
+                   template_type: "generic",
+                   elements: [
                      {
-                       "title": "Predict 4 games in a row and win Amazon Cash!",
-                       "subtitle": "Make your picks now and you might walk away with an Amazon gift card by putting your knowledge up to the test.",
-                       "image_url": "https://i.imgur.com/sjnqRyd.png",
-                       "default_action": {
-                         "type": "web_url",
-                         "url": "http://www.playsweep.com?ref=#{@graph_user["id"]}"
+                       title: "Predict sports games, free. Hit a streak of 4. Win some cash.",
+                       subtitle: "It's real, you should say something 🤐",
+                       default_action: {
+                         type: "web_url",
+                         url: "http://www.playsweep.com?ref=#{@graph_user["id"]}"
                        },
-                       "buttons": [
+                       buttons: [
                          {
-                           "type": "web_url",
-                           "messenger_extensions": true,
-                           "url": "https://m.me/PlaySweep?ref=#{@graph_user["id"]}", 
-                           "title": "Play Sweep Now",
-                           "webview_height_ratio": 'full'
+                           type: "web_url",
+                           messenger_extensions: true,
+                           url: "https://m.me/PlaySweep?ref=#{@graph_user["id"]}", 
+                           title: "The Time Has Come",
+                           webview_height_ratio: 'full'
                          }
                        ]
                      }

@@ -1,6 +1,4 @@
 module Commands
-  # If the command is bound with reply_with specified,
-  # you have to deal with user response to the last message and react on it.
 
   def start
     user = get_or_set_user["user"]
@@ -21,31 +19,10 @@ module Commands
     stop_thread
   end
 
-  def profile
-    user = get_or_set_user["user"]
-    text = "Check out your stats #{@graph_user["first_name"]}...\n\nReferral count: 2\nSweep coins: 10\n\nFor a more detailed view, check out the dashboard in the web view!"
-    say text, quick_replies: [["Dashboard", "Dashboard"], ["Status", 'Status'], ["Select picks", "Select picks"]]
-    stop_thread
-  end
-  # def use_mulligan
-  #   user = get_or_set_user["user"]
-  #   message.typing_on
-  #   case message.quick_reply
-  #   when 'Use Mulligan Yes'
-  #     # make a call to the api to decrement mulligan count by 1 and reset the current_streak to the previous_streak
-  #     text = "Nice! Your streak is now back to 3!\n\nYou have 0 mulligans left. Remember, if you can find 3 of your friends to join you on Sweep we will send you another mulligan!"
-  #     say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
-  #   when 'Use Mulligan No'
-  #     text = "I like where your heads at #{user["first_name"]}, save those bail outs for later 👍\n\nGet back to it below 👇"
-  #     say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
-  #   end
-  #   stop_thread
-  # end
-
   def reset
     user = get_or_set_user["user"]
     text = "Welcome back to the flow, #{user["first_name"]}! Get back on track with the options below 🙌"
-    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"], ["Earn mulligans", "Earn mulligans"]]
+    say text, quick_replies: [["Status", "Status"], ["Select picks", "Select picks"]]
     stop_thread
   end
 
@@ -94,10 +71,17 @@ module Commands
     end
   end
 
+  def referrals
+    user = get_or_set_user["user"]
+    referral_count = user["referral_data"]["referral_count"]
+    say "Referral count is #{referral_count}"
+    stop_thread
+  end
+
   def send_feedback
     user = get_or_set_user["user"]
     message.typing_on
-    quick_replies = [["Select picks", "Select picks"], ["Status", "Status"], ["Earn mulligans", "Earn mulligans"]]
+    quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     if message.text != "Eh, nevermind"
       full_name = "#{user["name"]}"
       say "Thanks for the feedback! We'll reach out to you soon...", quick_replies: quick_replies
@@ -329,7 +313,7 @@ module Commands
       else
         wins = "wins"
       end
-      streak_text = "( #{user.session[:history]["current_streak"]} ) #{wins} in a row..."
+      streak_text = "🔥 You have #{user.session[:history]["current_streak"]} #{wins} in a row."
     end
     if user.session[:upcoming].nil? || user.session[:upcoming].empty?
       upcoming_text = "You have no games coming up..."
@@ -337,34 +321,26 @@ module Commands
       next_up = user.session[:upcoming].first
       symbol = next_up["spread"] > 0 ? "+" : ""
       spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
-      upcoming_text = "👉 You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}..."
+      upcoming_text = "👉 Next up is your pick of the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} at (#{symbol}#{next_up["spread"]}) point #{spread_text}."
     end
-    say "#{streak_text}\n\n#{upcoming_text}"
+    say "#{streak_text}\n#{upcoming_text}"
   end
 
   def status_for_message
     get_status
-    message.typing_on
     show_status_details
-    text = "Tap the button below to see more details in your Dashboard"
+    text = "You can see more pick details by viewing your Dashboard"
     quick_replies = [{ content_type: 'text', title: "Select picks", payload: "Select picks"}]
-    sleep 3
-    message.typing_on
     show_action_button(text, quick_replies)
-    message.typing_off
     stop_thread
   end
 
   def status_for_postback
     get_status
-    postback.typing_on
     show_status_details
-    text = "Tap the button below to see more details in your Dashboard"
+    text = "You can see more pick details by viewing your Dashboard"
     quick_replies = [{ content_type: 'text', title: "Select picks", payload: "Select picks"}]
-    sleep 3
-    postback.typing_on
     show_action_button(text, quick_replies)
-    postback.typing_off
     stop_thread
   end
 

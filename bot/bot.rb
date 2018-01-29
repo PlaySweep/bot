@@ -86,12 +86,10 @@ Rubotnik.route :postback do |request|
   end
   bind 'STATUS', to: :status_for_postback
   bind 'INVITE FRIENDS' do
-    text = "We're giving away a mulligan for every 3 friends that play Sweep from your referral, while your friends earn one immediately 🎉\n\nSpread the word and earn some mulligans! 😉"
-    say text, quick_replies: [["Earn mulligans", "Earn mulligans"], ["I'm good", "I'm good"]]
-    stop_thread
-  end
-  bind 'UNLOCK GAME' do
+    text = "One way to earn Sweep coins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
+    say text
     show_invite
+    stop_thread
   end
   bind 'MANAGE UPDATES' do
     text = "Tap the options below to manage your preferences 👇"
@@ -100,7 +98,7 @@ Rubotnik.route :postback do |request|
   end
   bind 'MORE SPORTS', to: :select_picks
   bind 'PROFILE', to: :profile
-  bind 'Select picks', to: :select_picks
+  bind 'REFERRALS', to: :referrals
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################

@@ -79,10 +79,21 @@ module Profile
             url: "#{ENV["WEBVIEW_URL"]}?id={{user_id}}"
           },
           {
-            title: '📈 Check status',
-            type: 'postback',
-            payload: 'STATUS'
-          }
+            type: 'nested',
+            title: '📈 Status',
+            call_to_actions: [
+              {
+                title: 'Current',
+                type: 'postback',
+                payload: 'STATUS'
+              },
+              {
+                title: 'Referrals',
+                type: 'postback',
+                payload: 'REFERRALS'
+              }
+            ]
+          },
         ]
       }
     ]
