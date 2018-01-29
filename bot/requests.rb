@@ -31,7 +31,7 @@ def update_sender id
   url = "#{SWEEP_API}/api/v1/users/#{id}"
   response = HTTParty.get(url)
   response = JSON.parse(response.body)
-  referral_count = response["user"]["current_streak"]
+  referral_count = response["user"]["referral_data"]["referral_count"]
   puts "User referral count was: #{referral_count}"
   new_referral_count = referral_count + 1
   params = { :user => { :referral_count => new_referral_count } }
