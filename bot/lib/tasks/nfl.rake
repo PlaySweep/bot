@@ -79,7 +79,7 @@ task :send_notification do
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["winner_score"]} to #{pick["matchup"]["loser_score"]}."
+        text = "#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -108,7 +108,7 @@ task :send_notification do
         puts "** Message sent for game recap (W) **"
       elsif pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 == 0
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "You hit a Sweep 🎉\n\nThe #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} (#{pick["matchup"]["winner_score"]} - #{pick["matchup"]["loser_score"]})!"
+        text = "You hit a Sweep 🎉\n\n#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -166,7 +166,7 @@ task :send_notification do
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
           message: {
-            text: "#{custom_text}\n\n#{emoji} Your current streak has been set back to #{pick["user"]["current_streak"]}.",
+            text: "#{pick["selection"]} lost.\n\nYour current streak has been set back to #{pick["user"]["current_streak"]}.",
             quick_replies: menu
           }
         }
