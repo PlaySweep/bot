@@ -21,33 +21,37 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users[1..-1].each_with_index do |user, index|
-    message_options = {
-      messaging_type: "UPDATE",
-      recipient: { id: user["user"]["facebook_uuid"] },
-      message: {
-        text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Select picks now!",
-        quick_replies: menu
+  @users[25..-1].each_with_index do |user, index|
+    begin
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: user["user"]["facebook_uuid"] },
+        message: {
+          text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Select picks now!",
+          quick_replies: menu
+        }
       }
-    }
-    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-    sleep 1
-    media_options = {
-      messaging_type: "UPDATE",
-      recipient: { id: user["user"]["facebook_uuid"] },
-      message: {
-        attachment: {
-          type: 'image',
-          payload: {
-            attachment_id: 1517926024923101
-          }
-        },
-        quick_replies: menu
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      sleep 1
+      media_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: user["user"]["facebook_uuid"] },
+        message: {
+          attachment: {
+            type: 'image',
+            payload: {
+              attachment_id: 1517926024923101
+            }
+          },
+          quick_replies: menu
+        }
       }
-    }
-    Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-    puts "** Message sent for reminders to #{user["name"]} **"
-    sleep 120 if index % 20 == 0
+      Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+      puts "** Message sent for reminders to #{user["name"]} **"
+      sleep 120 if index % 20 == 0
+    rescue
+      puts "User (id: #{user.id}) => #{user.first_name} #{user.last_name} can not be reached..." and next
+    end
   end
 end
 
