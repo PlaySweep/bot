@@ -49,8 +49,9 @@ task :send_reminder do
       Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
       puts "** Message sent for reminders to #{user["name"]} **"
       sleep 120 if index % 20 == 0
-    rescue
-      puts "User (id: #{user.id}) => #{user.first_name} #{user.last_name} can not be reached..." and next
+    rescue Facebook::Messenger::FacebookError => e
+      puts "User: #{user['first_name']} #{user['last_name']} can not be reached..."
+      next
     end
   end
 end
