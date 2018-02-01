@@ -26,7 +26,7 @@ task :send_reminder do
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
       message: {
-        text: "Hey #{user["user"]["first_name"]} 👋, select your picks for the upcoming games!",
+        text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Get it on the action now!",
         quick_replies: menu
       }
     }
