@@ -21,12 +21,12 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users.each_with_index do |user, index|
+  @users[1..-1].each_with_index do |user, index|
     message_options = {
       messaging_type: "UPDATE",
       recipient: { id: user["user"]["facebook_uuid"] },
       message: {
-        text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Get it on the action now!",
+        text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Select picks now!",
         quick_replies: menu
       }
     }
