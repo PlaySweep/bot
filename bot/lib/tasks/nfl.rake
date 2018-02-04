@@ -21,33 +21,38 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users.each_with_index do |user, index|
-    message_options = {
-      messaging_type: "UPDATE",
-      recipient: { id: user["user"]["facebook_uuid"] },
-      message: {
-        text: "Hey #{user["user"]["first_name"]} 👋, select your picks for the upcoming games!",
-        quick_replies: menu
+  @users[25..-1].each_with_index do |user, index|
+    begin
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: user["user"]["facebook_uuid"] },
+        message: {
+          text: "Alright #{user["user"]["first_name"]}, the Super Bowl props are here 🏈! Select picks now!",
+          quick_replies: menu
+        }
       }
-    }
-    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-    sleep 1
-    media_options = {
-      messaging_type: "UPDATE",
-      recipient: { id: user["user"]["facebook_uuid"] },
-      message: {
-        attachment: {
-          type: 'image',
-          payload: {
-            attachment_id: 1517926024923101
-          }
-        },
-        quick_replies: menu
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      sleep 1
+      media_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: user["user"]["facebook_uuid"] },
+        message: {
+          attachment: {
+            type: 'image',
+            payload: {
+              attachment_id: 1517926024923101
+            }
+          },
+          quick_replies: menu
+        }
       }
-    }
-    Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-    puts "** Message sent for reminders to #{user["name"]} **"
-    sleep 120 if index % 20 == 0
+      Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+      puts "** Message sent for reminders to #{user["name"]} **"
+      sleep 120 if index % 20 == 0
+    rescue Facebook::Messenger::FacebookError => e
+      puts "User: #{user['first_name']} #{user['last_name']} can not be reached..."
+      next
+    end
   end
 end
 
@@ -79,7 +84,7 @@ task :send_notification do
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["winner_score"]} to #{pick["matchup"]["loser_score"]}."
+        text = "#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -108,7 +113,7 @@ task :send_notification do
         puts "** Message sent for game recap (W) **"
       elsif pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 == 0
         symbol = pick["spread"] > 0 ? "+" : ""
-        text = "You hit a Sweep 🎉\n\nThe #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) covered the spread against the #{pick["opponent_abbrev"]} (#{pick["matchup"]["winner_score"]} - #{pick["matchup"]["loser_score"]})!"
+        text = "You hit a Sweep 🎉\n\n#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
@@ -166,7 +171,7 @@ task :send_notification do
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
           message: {
-            text: "#{custom_text}\n\n#{emoji} Your current streak has been set back to #{pick["user"]["current_streak"]}.",
+            text: "#{pick["selection"]} lost.\n\nYour current streak has been set back to #{pick["user"]["current_streak"]}.",
             quick_replies: menu
           }
         }
