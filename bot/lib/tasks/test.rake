@@ -93,7 +93,8 @@ task :test_recap do
   }
   Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
+  # loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
+  loss_gifs = [{id: 1531717616877275, title: "Dumb and Dumber"}, {id: 1531717936877243, title: "True Detective"}, {id: 1531718323543871, title: "Leo Dicaprio/Titanic"}, {id: 1531718760210494, title: "Bill Murray"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
