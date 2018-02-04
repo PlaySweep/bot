@@ -390,11 +390,11 @@ module Commands
         symbol = next_up["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
         spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
         teams = ""
-        upcoming = user.session[:upcoming][1..-1]
+        upcoming = user.session[:upcoming]
         upcoming.each_with_index do |team, index|
-          teams.concat("👉 #{team["team_abbrev"]} vs. #{team["opponent_abbrev"]}\n")
+          teams.concat("👉 #{team["selection"]} vs. #{team["opponent"]}\n")
         end
-        text = "You have the #{next_up["team_abbrev"]} against the #{next_up["opponent_abbrev"]} next at (#{symbol}#{next_up["spread"]}) point #{spread_text}\n\n#{teams}"
+        text = "#{teams}"
         say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       end
