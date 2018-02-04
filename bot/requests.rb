@@ -89,6 +89,13 @@ def get_user_picks id
   response["upcoming"]
 end
 
+def get_users
+  url = "#{SWEEP_API}/api/v1/users" 
+  response = HTTParty.get(url)
+  response = JSON.parse(response.body)
+  @users = response["users"]
+end
+
 def get_users_with_reminders
   url = "#{SWEEP_API}/api/v1/users?reminders=true" 
   response = HTTParty.get(url)

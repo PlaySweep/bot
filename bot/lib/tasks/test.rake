@@ -1,4 +1,24 @@
 desc "Test Reminder"
+task :test_all do
+  get_users
+  puts "Users..."
+  puts @users.inspect
+  @users[0..5].each_with_index do |user|
+    puts user["user"]["facebook_uuid"]
+    puts user["user"]["first_name"]
+  end
+  message_options = {
+    messaging_type: "UPDATE",
+    recipient: { id: 1328837993906209 },
+    message: {
+      text: "The time of refreshing the price of Bitcoin is over Ryan, Super Bowl LII is upon us 🏈!",
+      quick_replies: menu
+    }
+  }
+  Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+end
+
+desc "Test Reminder"
 task :test_reminder do
   
   menu = [
