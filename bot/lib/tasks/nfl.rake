@@ -21,7 +21,7 @@ task :send_reminder do
       payload: 'Manage updates'
     }
   ]
-  @users[25..-1].each_with_index do |user, index|
+  @users.each_with_index do |user, index|
     begin
       message_options = {
         messaging_type: "UPDATE",
@@ -33,6 +33,7 @@ task :send_reminder do
       }
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
       sleep 1
+      reminder_gifs = []
       media_options = {
         messaging_type: "UPDATE",
         recipient: { id: user["user"]["facebook_uuid"] },
@@ -50,7 +51,7 @@ task :send_reminder do
       puts "** Message sent for reminders to #{user["name"]} **"
       sleep 120 if index % 20 == 0
     rescue Facebook::Messenger::FacebookError => e
-      puts "User: #{user['first_name']} #{user['last_name']} can not be reached..."
+      puts "User: #{user["user"]['first_name']} #{user["user"]['last_name']} can not be reached..."
       next
     end
   end
