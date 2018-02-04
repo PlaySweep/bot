@@ -7,6 +7,28 @@ task :test_all do
     puts user["user"]["facebook_uuid"]
     puts user["user"]["first_name"]
   end
+  menu = [
+    {
+      content_type: 'text',
+      title: 'Select picks',
+      payload: 'Select picks'
+    },
+    {
+      content_type: 'text',
+      title: 'Status',
+      payload: 'Status'
+    },
+    {
+      content_type: 'text',
+      title: 'Manage updates',
+      payload: 'Manage updates'
+    },
+    {
+      content_type: 'text',
+      title: 'Invite friends',
+      payload: 'Invite friends'
+    }
+  ]
   message_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
