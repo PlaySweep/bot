@@ -386,9 +386,9 @@ module Commands
         say "You have no games coming up...", quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
         next_command :status
       else
-        next_up = user.session[:upcoming].first
-        symbol = next_up["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
-        spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
+        # next_up = user.session[:upcoming].first
+        # symbol = next_up["spread"] > 0 ? "+" : ""
+        # spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
         teams = ""
         upcoming = user.session[:upcoming]
         upcoming.each_with_index do |team, index|
@@ -406,11 +406,11 @@ module Commands
         teams = ""
         in_progress = user.session[:in_progress]
         in_progress.each_with_index do |team, index|
-          symbol = team["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
-          teams.concat("#{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if in_progress.length == 1
-          teams.concat("#{in_progress[0]["team_abbrev"]} (#{symbol}#{in_progress[0]["spread"]}) and #{in_progress[1]["team_abbrev"]} (#{symbol}#{in_progress[1]["spread"]})") and break if in_progress.length == 2
-          teams.concat("and #{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if index == in_progress.length - 1
-          teams.concat("#{team["team_abbrev"]} (#{symbol}#{team["spread"]}), ")
+          # symbol = team["spread"] > 0 ? "+" : ""
+          teams.concat("#{team["team_abbrev"]}") and break if in_progress.length == 1
+          teams.concat("#{in_progress[0]["team_abbrev"]} and #{in_progress[1]["team_abbrev"]}") and break if in_progress.length == 2
+          teams.concat("and #{team["team_abbrev"]}") and break if index == in_progress.length - 1
+          teams.concat("#{team["team_abbrev"]}, ")
         end
         text = "The #{teams} are in progress now..."
         say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Completed (#{user.session[:current].count})", "Completed"], ["Select Picks", "Select picks"]]
@@ -427,8 +427,8 @@ module Commands
         completed = user.session[:current]
         completed.each_with_index do |team, index|
           team["result"] == "W" ? result = "👍" : result = "👎"
-          symbol = team["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
-          teams.concat("#{result} #{team["team_abbrev"]} (#{symbol}#{team["spread"]})\n")
+          # symbol = team["spread"] > 0 ? "+" : ""
+          teams.concat("#{result} #{team["team_abbrev"]}\n")
         end
         text = "Today's record 👇\n\n#{teams}"
         say text, quick_replies: [["Wins (#{user.session[:history]["current_streak"]})", "Wins"], ["Up next (#{user.session[:upcoming].count})", "Up next"], ["Live (#{user.session[:in_progress].count})", "Live"], ["Select Picks", "Select picks"]]
