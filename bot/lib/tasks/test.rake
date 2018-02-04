@@ -29,7 +29,8 @@ task :test_reminder do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  reminder_gifs = [{id: 1517926024923101, title: "Jennifer Lawrence Thumbs Up"}]
+  # reminder_gifs = [{id: 1517926024923101, title: "Jennifer Lawrence Thumbs Up"}]
+  reminder_gifs = [{id: 1531725230209847, title: "Django/Dicaprio"}, {id: 1531725626876474, title: "Galaxy Quest"}, {id: 1531726016876435, title: "Ok lets ride"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
@@ -77,7 +78,8 @@ task :test_recap do
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   sleep 1
-  win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}, {id: 1517919341590436, title: "Nicolas Cage Con Air"}, {id: 1517920478256989, title: "Beard Man Happy Approval"}, {id: 1517922411590129, title: "Black Guy On Pier Dusting Hands Off"}]
+  # win_gifs = [{id: 1517896908259346, title: "Keanu Reeves Thumbs Up"}, {id: 1517900044925699, title: "Sean Connery Fist Pump"}, {id: 1517919341590436, title: "Nicolas Cage Con Air"}, {id: 1517920478256989, title: "Beard Man Happy Approval"}, {id: 1517922411590129, title: "Black Guy On Pier Dusting Hands Off"}]
+  win_gifs = [{id: 1531724076876629, title: "Nacho Libre"}, {id: 1531724233543280, title: "Brad Pitt"}, {id: 1531724490209921, title: "Antonio Banderas"}, {id: 1531724726876564, title: "Big Lebowski"}, {id: 1531725003543203, title: "Stranger Things"}]
   media_options = {
     messaging_type: "UPDATE",
     recipient: { id: 1328837993906209 },
