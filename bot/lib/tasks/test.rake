@@ -20,13 +20,13 @@ task :test_all do
     },
     {
       content_type: 'text',
-      title: 'Manage updates',
-      payload: 'Manage updates'
+      title: 'Invite friends',
+      payload: 'Invite friends'
     },
     {
       content_type: 'text',
-      title: 'Invite friends',
-      payload: 'Invite friends'
+      title: 'Manage updates',
+      payload: 'Manage updates'
     }
   ]
   message_options = {

@@ -15,13 +15,13 @@ task :to_all do
     },
     {
       content_type: 'text',
-      title: 'Manage updates',
-      payload: 'Manage updates'
+      title: 'Invite friends',
+      payload: 'Invite friends'
     },
     {
       content_type: 'text',
-      title: 'Invite friends',
-      payload: 'Invite friends'
+      title: 'Manage updates',
+      payload: 'Manage updates'
     }
   ]
   @users.each_with_index do |user, index|
@@ -51,7 +51,7 @@ task :to_all do
         }
       }
       Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-      puts "** Message sent for reminders to #{user["name"]} **"
+      puts "** Message sent for reminders to #{user["user"]['first_name']} #{user["user"]['last_name']} **"
       sleep 120 if index % 20 == 0
     rescue Facebook::Messenger::FacebookError => e
       puts "User: #{user["user"]['first_name']} #{user["user"]['last_name']} can not be reached..."
