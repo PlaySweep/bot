@@ -144,7 +144,7 @@ task :send_notification do
       if pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 != 0
         emoji = "🔥"
         wins = pick["user"]["current_streak"] == 1 ? "win" : "wins"
-        symbol = pick["spread"] > 0 ? "+" : ""
+        # symbol = pick["spread"] > 0 ? "+" : ""
         text = "#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
@@ -174,7 +174,7 @@ task :send_notification do
         Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
         puts "** Message sent for game recap (W) **"
       elsif pick["user"]["notification_settings"]["recap_all"] && pick["user"]["current_streak"] % 4 == 0
-        symbol = pick["spread"] > 0 ? "+" : ""
+        # symbol = pick["spread"] > 0 ? "+" : ""
         text = "You hit a Sweep 🎉\n\n#{pick["selection"]} won!"
         message_options = {
           messaging_type: "UPDATE",
@@ -227,9 +227,9 @@ task :send_notification do
       if pick["user"]["notification_settings"]["recap_loss"]
         your_score = pick["matchup"]["loser_score"]
         opponent_score = pick["matchup"]["winner_score"]
-        symbol = pick["spread"] > 0 ? "+" : ""
+        # symbol = pick["spread"] > 0 ? "+" : ""
         emoji = "😑"
-        custom_text = your_score > opponent_score ? "Although the #{pick["team_abbrev"]} won #{your_score} to #{opponent_score}, they did not cover the spread (#{symbol}#{pick["spread"]}) against the #{pick["opponent_abbrev"]}." : "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
+        # custom_text = your_score > opponent_score ? "Although the #{pick["team_abbrev"]} won #{your_score} to #{opponent_score}, they did not cover the spread (#{symbol}#{pick["spread"]}) against the #{pick["opponent_abbrev"]}." : "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
         message_options = {
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
