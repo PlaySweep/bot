@@ -387,7 +387,7 @@ module Commands
         next_command :status
       else
         next_up = user.session[:upcoming].first
-        symbol = next_up["spread"] > 0 ? "+" : ""
+        symbol = next_up["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
         spread_text = next_up["spread"] > 0 ? "underdogs" : "favorites"
         teams = ""
         upcoming = user.session[:upcoming][1..-1]
@@ -406,7 +406,7 @@ module Commands
         teams = ""
         in_progress = user.session[:in_progress]
         in_progress.each_with_index do |team, index|
-          symbol = team["spread"] > 0 ? "+" : ""
+          symbol = team["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
           teams.concat("#{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if in_progress.length == 1
           teams.concat("#{in_progress[0]["team_abbrev"]} (#{symbol}#{in_progress[0]["spread"]}) and #{in_progress[1]["team_abbrev"]} (#{symbol}#{in_progress[1]["spread"]})") and break if in_progress.length == 2
           teams.concat("and #{team["team_abbrev"]} (#{symbol}#{team["spread"]})") and break if index == in_progress.length - 1
@@ -427,7 +427,7 @@ module Commands
         completed = user.session[:current]
         completed.each_with_index do |team, index|
           team["result"] == "W" ? result = "👍" : result = "👎"
-          symbol = team["spread"] > 0 ? "+" : ""
+          symbol = team["spread"] > 0 ? "+" : "" if next_up["spread"].to_i != 0
           teams.concat("#{result} #{team["team_abbrev"]} (#{symbol}#{team["spread"]})\n")
         end
         text = "Today's record 👇\n\n#{teams}"
