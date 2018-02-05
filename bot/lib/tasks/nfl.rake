@@ -30,29 +30,29 @@ task :to_all do
         messaging_type: "UPDATE",
         recipient: { id: user["user"]["facebook_uuid"] },
         message: {
-          text: "The time of refreshing the price of Bitcoin is over #{user["user"]["first_name"]}, Super Bowl LII is upon us 🏈!",
+          text: "While you wait for Janet Jackson to show up, get in on some half time plays 🏈!",
           quick_replies: menu
         }
       }
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-      sleep 1
-      reminder_gifs = [{id: 1531726016876435, title: "Ok, Lets ride"}]
-      media_options = {
-        messaging_type: "UPDATE",
-        recipient: { id: user["user"]["facebook_uuid"] },
-        message: {
-          attachment: {
-            type: 'image',
-            payload: {
-              attachment_id: reminder_gifs.sample[:id]
-            }
-          },
-          quick_replies: menu
-        }
-      }
-      Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+      # sleep 1
+      # reminder_gifs = [{id: 1531726016876435, title: "Ok, Lets ride"}]
+      # media_options = {
+      #   messaging_type: "UPDATE",
+      #   recipient: { id: user["user"]["facebook_uuid"] },
+      #   message: {
+      #     attachment: {
+      #       type: 'image',
+      #       payload: {
+      #         attachment_id: reminder_gifs.sample[:id]
+      #       }
+      #     },
+      #     quick_replies: menu
+      #   }
+      # }
+      # Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
       puts "** Message sent for reminders to #{user["user"]['first_name']} #{user["user"]['last_name']} **"
-      sleep 120 if index % 20 == 0
+      sleep 30 if index % 50 == 0
     rescue Facebook::Messenger::FacebookError => e
       puts "User: #{user["user"]['first_name']} #{user["user"]['last_name']} can not be reached..."
       next
