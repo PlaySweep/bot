@@ -61,9 +61,9 @@ Rubotnik.route :message do |request|
   #   text: "Alright #{@graph_user["first_name"]}, you have 1 mulligan to use. Do you want to use it now to keep your streak alive?",
   #   quick_replies: [["Yes", "Use Mulligan Yes"], ["No, not now", "Use Mulligan No"]]
   # }
-  bind 'nfl' do
-    show_button_template('NFL')
-  end
+  # bind 'nfl' do
+  #   show_button_template('NFL')
+  # end
   # bind 'ncaaf' do
   #   show_button_template('NCAAF')
   # end
