@@ -23,35 +23,49 @@ Rubotnik.route :message do
   bind 'login', 'facebook' do
     show_login
   end
-  bind 'current', 'status', to: :status_for_message
-  bind "'i'm", "good", "eh", "nevermind", to: :reset
+
+  bind 'current', 'status', to: :status
+
+  bind 'upcoming', to: :upcoming_picks
+
+  bind 'live', 'in progress', to: :in_progress_picks
+
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
-  # bind 'send', 'feedback', all: true, to: :send_feedback, reply_with: {
-  #   text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings...\n\nType your message in the box below and one of our guys will reach out to you soon 🤝",
-  #   quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
-  # }
-  bind 'unlock', 'game' do
-    show_invite
+
+  bind 'feedback', to: :feedback do
+    feedback
   end
-  bind 'more', 'action', all: true, to: :more_action
-  # bind 'how', 'to', 'play', to: :how_to_play
-  # bind 'select', 'picks', all: true, to: :select_picks
-  # bind 'play', to: :select_picks
-  # bind 'update', 'picks', all: true, to: :select_picks
-  bind 'make', 'picks', 'games', to: :select_picks, reply_with: {
+
+  bind 'ok!', 'nah, I got this!', to: :walkthrough do
+    walkthrough
+  end
+
+  bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
+
+  bind 'matchups', all: true, to: :show_sports, reply_with: {
     text: "Sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
-  # bind 'ncaaf' do
-  #   show_button_template('NCAAF')
-  # end
-  # bind 'nba' do
-  #   show_button_template('NBA')
-  # end
+  bind 'make picks', all: true, to: :show_sports, reply_with: {
+    text: "Sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+  }
+  bind 'select picks', all: true, to: :show_sports, reply_with: {
+    text: "Sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+  }
+  bind 'select games', all: true, to: :show_sports, reply_with: {
+    text: "Sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+  }
+  bind 'games', all: true, to: :show_sports, reply_with: {
+    text: "Sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+  }
 
-  bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
+  bind 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
      quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
   }
@@ -66,7 +80,7 @@ Rubotnik.route :message do
   # bind 'image', to: :show_image
 
   default do
-    say "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉", quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
+    say "Help me help you, what is it that you're looking to do?", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
   end
 end
 
@@ -76,27 +90,45 @@ Rubotnik.route :postback do
   $api.find_fb_user(user.id) unless $api.fb_user
 
   bind 'START', to: :start 
-  bind 'HOW TO PLAY', to: :how_to_play # fix for message
+
   bind 'SEND FEEDBACK' do
     text = "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉"
     say text, quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
     stop_thread
   end
-  bind 'STATUS', to: :status_for_postback
+
+  bind 'STATUS' do
+    status
+  end
+
+  bind 'UPCOMING' do
+    upcoming_picks
+  end
+
+  bind 'IN PROGRESS' do
+    in_progress_picks
+  end
+
   bind 'INVITE FRIENDS' do
     text = "One way to earn Sweep coins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
     say text
     show_invite
     stop_thread
   end
+
   bind 'MANAGE UPDATES' do
     text = "Tap the options below to manage your preferences 👇"
     say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
   end
-  bind 'SELECT PICKS', to: :select_picks
-  bind 'PROFILE', to: :profile
-  bind 'REFERRALS', to: :referrals
+
+  bind 'SELECT PICKS' do 
+    text = "Sports 👇"
+    say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    next_command :show_sports
+  end
+
+  bind 'DASHBOARD', to: :dashboard
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################

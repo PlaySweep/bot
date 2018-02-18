@@ -1,6 +1,3 @@
-GRAPH_URL = 'https://graph.facebook.com/v2.8'
-SWEEP_API = ENV["API_URL"]
-
 def update_sender id
   $api.find('users', id)
   @new_user = $api.user
@@ -43,44 +40,6 @@ def set_notification_settings type, action
   puts "#{$api.fb_user.first_name} #{$api.fb_user.last_name} set #{type} to #{action}"
 end
 
-def get_status
-  $api.for_picks('upcoming')
-  $api.for_picks('in_progress')
-  $api.for_picks('completed')
-end
-
-def get_picks
-  url = "#{SWEEP_API}/api/v1/picks" 
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  @picks = response["picks"]
-end
-
-def get_recently_completed
-  url = "#{SWEEP_API}/api/v1/picks?recently_completed=true" 
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  @recently_completed = response["picks"]
-end
-
-def graph_api options
-  url = "#{GRAPH_URL}/#{user.id}?access_token=#{ENV["ACCESS_TOKEN"]}"
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  puts response.inspect
-  response
-end
-
-def test_api
-  puts "Running in the rake file..."
-end
-
-def get_user_picks id
-  url = "#{SWEEP_API}/api/v1/users/#{id}/picks" 
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  response["upcoming"]
-end
 
 def get_users_with_reminders
   url = "#{SWEEP_API}/api/v1/users?reminders=true" 

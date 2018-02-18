@@ -86,9 +86,14 @@ module Profile
                 payload: 'STATUS'
               },
               {
-                title: 'Referrals',
+                title: 'Upcoming picks',
                 type: 'postback',
-                payload: 'REFERRALS'
+                payload: 'UPCOMING'
+              },
+              {
+                title: 'Live picks',
+                type: 'postback',
+                payload: 'IN PROGRESS'
               }
             ]
           },
