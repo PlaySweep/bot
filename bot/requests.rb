@@ -1,68 +1,52 @@
 GRAPH_URL = 'https://graph.facebook.com/v2.8'
 SWEEP_API = ENV["API_URL"]
 
-def get_fb_user
-  url = "#{GRAPH_URL}/#{user.id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}"
-  uri = URI(url)
-  response = Net::HTTP.get_response(uri)
-  response = JSON.parse(response.body)
-  @graph_user = response
-end
-
-def get_or_set_user
-  @new_user = false
-  get_fb_user unless @graph_user
-  puts "Graph user...#{@graph_user.inspect}"
-  url = "#{SWEEP_API}/api/v1/users/#{@graph_user['id']}"
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  if response["user"].empty?
-    url = "#{SWEEP_API}/api/v1/users"
-    params = { :user => { :facebook_uuid => @graph_user["id"], :first_name => @graph_user["first_name"], :last_name => @graph_user["last_name"] } }
-    response = HTTParty.post(url, query: params)
-    if response.code == 200
-      @new_user = true
-    end
-  end
-  response
-end
-
-def get_user_friends user_id, access_token
-  url = "#{GRAPH_URL}/#{user_id}/friends?access_token=#{access_token}"
-  uri = URI(url)
-  response = Net::HTTP.get_response(uri)
-  response = JSON.parse(response.body)
-  @user_friends = response
-end
-
 def update_sender id
-  url = "#{SWEEP_API}/api/v1/users/#{id}"
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  referral_count = response["user"]["current_streak"]
-  puts "User referral count was: #{referral_count}"
+  $api.find('users', id)
+  @new_user = $api.user
+  referral_count = $api.user.data.referral_count
   new_referral_count = referral_count + 1
   params = { :user => { :referral_count => new_referral_count } }
-  response = HTTParty.patch(url, query: params)
-  puts "Updated User ID: #{id} to referral count => #{new_referral_count}" if response.code == 200
+  response = $api.conn.patch("users/#{id}", params)
+  puts "Updated referrals for #{$api.user.first_name} #{$api.fb_user.last_name}"
+  $api.find('users', $api.fb_user.id)
+  send_confirmation
+end
+
+def send_confirmation
+  menu = [
+    {
+      content_type: 'text',
+      title: 'Invite friends',
+      payload: 'Invite friends'
+    },
+    {
+      content_type: 'text',
+      title: 'Select picks',
+      payload: 'Select picks'
+    }
+  ]
+  message_options = {
+    messaging_type: "UPDATE",
+    recipient: { id: $api.fb_user.id },
+    message: {
+      text: "Your friend #{@new_user.first_name} #{@new_user.last_name} just signed up! Your referral count is now at #{$api.user.data.referral_count}.",
+      quick_replies: menu
+    }
+  }
+  Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
 end
 
 def set_notification_settings type, action
-  url = "#{SWEEP_API}/api/v1/users/#{user.id}"
   params = { :user => { type => action } }
-  response = HTTParty.patch(url, query: params)
+  response = $api.conn.patch("users/#{$api.fb_user.id}", params)
+  puts "#{$api.fb_user.first_name} #{$api.fb_user.last_name} set #{type} to #{action}"
 end
 
 def get_status
-  puts "get_status " * 50
-  url = "#{SWEEP_API}/api/v1/users/#{user.id}/picks" 
-  response = HTTParty.get(url)
-  response = JSON.parse(response.body)
-  user.session[:history] = response["history"]
-  user.session[:upcoming] = response["upcoming"]
-  user.session[:in_progress] = response["in_progress"]
-  user.session[:current] = response["current"]
-  user.session[:completed] = response["completed"]
+  $api.for_picks('upcoming')
+  $api.for_picks('in_progress')
+  $api.for_picks('completed')
 end
 
 def get_picks

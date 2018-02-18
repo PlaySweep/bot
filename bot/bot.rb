@@ -17,9 +17,8 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
-Rubotnik.route :message do |request|
-  # get_status if ['current', 'status'].include?(request.message.text.downcase || request.message.quick_reply.downcase)
-  get_fb_user unless @graph_user
+Rubotnik.route :message do
+  $api.find_fb_user(user.id) unless $api.fb_user
 
   bind 'login', 'facebook' do
     show_login
@@ -29,28 +28,28 @@ Rubotnik.route :message do |request|
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
-  bind 'send', 'feedback', all: true, to: :send_feedback, reply_with: {
-    text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings...\n\nType your message in the box below and one of our guys will reach out to you soon 🤝",
-    quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
-  }
+  # bind 'send', 'feedback', all: true, to: :send_feedback, reply_with: {
+  #   text: "We already like you, #{@graph_user["first_name"]}. There's (almost) nothing that'll hurt our feelings...\n\nType your message in the box below and one of our guys will reach out to you soon 🤝",
+  #   quick_replies: [["Eh, nevermind", "Eh, nevermind"]]
+  # }
   bind 'unlock', 'game' do
     show_invite
   end
   bind 'more', 'action', all: true, to: :more_action
-  bind 'get', 'more', 'picks', all: true, to: :more_picks
-  bind 'how', 'to', 'play', to: :how_to_play
-  bind 'select', 'picks', all: true, to: :select_picks
-  bind 'play', to: :select_picks
-  bind 'update', 'picks', all: true, to: :select_picks
-  bind 'nfl' do
-    show_button_template('NFL')
-  end
+  # bind 'how', 'to', 'play', to: :how_to_play
+  # bind 'select', 'picks', all: true, to: :select_picks
+  # bind 'play', to: :select_picks
+  # bind 'update', 'picks', all: true, to: :select_picks
+  bind 'make', 'picks', 'games', to: :select_picks, reply_with: {
+    text: "Sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+  }
   # bind 'ncaaf' do
   #   show_button_template('NCAAF')
   # end
-  bind 'nba' do
-    show_button_template('NBA')
-  end
+  # bind 'nba' do
+  #   show_button_template('NBA')
+  # end
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
@@ -73,9 +72,8 @@ end
 
 ####################### HANDLE INCOMING POSTBACKS ##############################
 
-Rubotnik.route :postback do |request|
-  # get_status if ['status'].include?(request.postback.payload.downcase)
-  get_fb_user unless @graph_user
+Rubotnik.route :postback do
+  $api.find_fb_user(user.id) unless $api.fb_user
 
   bind 'START', to: :start 
   bind 'HOW TO PLAY', to: :how_to_play # fix for message
@@ -96,7 +94,7 @@ Rubotnik.route :postback do |request|
     say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
   end
-  bind 'MORE SPORTS', to: :select_picks
+  bind 'SELECT PICKS', to: :select_picks
   bind 'PROFILE', to: :profile
   bind 'REFERRALS', to: :referrals
 end

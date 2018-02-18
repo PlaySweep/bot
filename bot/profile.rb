@@ -73,10 +73,8 @@ module Profile
           },
           {
             title: '🏅 Make picks',
-            type: 'web_url',
-            messenger_extensions: true,
-            webview_height_ratio: 'full',
-            url: "#{ENV["WEBVIEW_URL"]}?id={{user_id}}"
+            type: 'postback',
+            payload: 'SELECT PICKS' 
           },
           {
             type: 'nested',

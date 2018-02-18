@@ -7,9 +7,13 @@ GEM
     facebook-messenger (1.0.0)
       httparty (~> 0.13, >= 0.13.7)
       rack (>= 1.6.4)
+    faraday (0.14.0)
+      multipart-post (>= 1.2, < 3)
+    hash_dot (2.4.0)
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
     multi_xml (0.6.0)
+    multipart-post (2.0.0)
     mustermann (1.0.1)
     public_suffix (3.0.1)
     puma (3.11.0)
@@ -37,8 +41,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  faraday
+  hash_dot
   rake
   rubotnik
+  sinatra
 
 BUNDLED WITH
    1.16.0
