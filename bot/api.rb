@@ -58,6 +58,14 @@ class Api
     end
   end
 
+  def update model, id, params
+    case model
+    when 'matchups'
+      response = @conn.patch("#{model}/#{id}", params)
+      puts response.body if response.status == 200
+    end
+  end
+
   def for_picks scope
     case scope
     when 'upcoming'

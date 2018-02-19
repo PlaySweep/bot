@@ -53,18 +53,3 @@ def set_notified pick_id
   params = { :pick => { :notified => true } }
   response = HTTParty.patch(url, query: params)
 end
-
-# def get_fb_friends
-#   url = "#{GRAPH_URL}/#{user.id}/friends?access_token=#{ENV["ACCESS_TOKEN"]}"
-#   response = HTTParty.get(url)
-#   response = JSON.parse(response.body)
-#   puts response.inspect
-#   response
-# end
-
-# def revoke_permissions
-#   url = "#{GRAPH_URL}/#{user.id}/permissions?access_token=#{ENV["ACCESS_TOKEN"]}"
-#   response = HTTParty.delete(url)
-#   puts response.inspect
-#   response
-# end

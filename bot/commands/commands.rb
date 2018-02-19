@@ -156,9 +156,28 @@ module Commands
     end
   end
 
+  def skip
+    $api.find_or_create('users', $api.fb_user.id) # unless $api.user
+    sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
+    # make api call to set skipped flag on matchup
+    $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
+    $api.all('matchups', sport: sport)
+    if $api.matchups.empty?
+      say "No new picks yet for the #{sport.upcase}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Select picks"]]
+      stop_thread
+    else
+      status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
+      dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
+      text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
+      say text, quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
+      next_command :handle_pick
+    end
+  end
+
   def handle_pick
     $api.find_or_create('users', $api.fb_user.id) # unless $api.user
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
+    skip and return if message.quick_reply.split(' ')[0] == "Skip"
     if matchup_id && selected_id
       params = { :pick => {:user_id => $api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       $api.create('picks', params)
@@ -174,19 +193,19 @@ module Commands
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
         text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
-        say text, quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', 'Skip']]
+        say text, quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
         next_command :handle_pick
       end
     else
       $api.all('matchups', sport: sport.downcase) unless sport.nil?
       if $api.matchups.empty?
-        say "No new picks yet for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Other sports"]]
+        say "No new picks yet for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Select picks"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
         text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
-        say text, quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', 'Skip']]
+        say text, quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
         next_command :handle_pick
       end
     end
