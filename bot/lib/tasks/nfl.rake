@@ -30,7 +30,7 @@ task :to_all do
         messaging_type: "UPDATE",
         recipient: { id: user["user"]["facebook_uuid"] },
         message: {
-          text: "While you wait for Janet Jackson to show up, get in on some half time plays 🏈!",
+          text: "New games available for Olympics 🇺🇸!",
           quick_replies: menu
         }
       }
