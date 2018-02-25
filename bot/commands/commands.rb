@@ -300,7 +300,7 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['Olympics', 'Olympics']]
+    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB']]
     stop_thread
   end
 
@@ -362,7 +362,7 @@ module Commands
       next_command :manage_updates
     when 'Select picks'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['Olympics', 'Olympics']]
+      say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB']]
       stop_thread
     # when 'NFL'
     #   show_button_template('NFL')

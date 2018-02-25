@@ -64,9 +64,6 @@ Rubotnik.route :message do |request|
   bind 'ncaab' do
     show_button_template('NCAAB')
   end
-  bind 'olympics' do
-    show_button_template('Olympics')
-  end
   bind 'nba' do
     show_button_template('NBA')
   end

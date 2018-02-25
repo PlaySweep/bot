@@ -55,15 +55,11 @@ module Commands
     ]
     case sport
     when 'NCAAB'
-      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "Olympics", payload: "Olympics" }, { content_type: 'text', title: "Status", payload: "Status" }]
+      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAB?", payload, quick_replies)
       show(button_template)
-    when 'Olympics'
-      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "NCAAB", payload: "NCAAB" }, { content_type: 'text', title: "Status", payload: "Status" }]
-      button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the Olympics?", payload, quick_replies)
-      show(button_template)
     when 'NBA'
-      quick_replies = [{ content_type: 'text', title: "NCAAB", payload: "NCAAB" }, { content_type: 'text', title: "Olympics", payload: "Olympics" }, { content_type: 'text', title: "Status", payload: "Status" }]
+      quick_replies = [{ content_type: 'text', title: "NCAAB", payload: "NCAAB" }, { content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
       show(button_template)
     end
