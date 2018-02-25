@@ -5,7 +5,7 @@ require 'hash_dot'
 class Api
   Hash.use_dot_syntax = true
 
-  attr_reader :conn, :fb_conn, :fb_user, :user, :pick, :matchups, :upcoming_picks, :in_progress_picks, :completed_picks
+  attr_accessor :conn, :fb_conn, :fb_user, :user, :pick, :matchups, :upcoming_picks, :in_progress_picks, :completed_picks
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
@@ -19,6 +19,11 @@ class Api
     when 'matchups'
       response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
       @matchups = JSON.parse(response.body)['matchups']
+      # base_64_to_image(@matchups.first.base_64_image) # return @image
+      # send @image to aws hosted service
+      # return url for image as @url
+      # $fb_api.message_attachment(@url) # returns attachment_id
+      # call show_media($fb_api.attachment_id) to display image
     end
   end
 
@@ -32,6 +37,7 @@ class Api
   def find_or_create model, id
     case model
     when 'users'
+      puts "Running find_or_create for Users model..."
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
       if @user.empty?

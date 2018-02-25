@@ -6,6 +6,7 @@ preload_app!
 
 on_worker_boot do
   $api = Api.new
+  $fb_api = FacebookApi.new
 end
 
 rackup      DefaultRackup

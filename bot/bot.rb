@@ -18,7 +18,7 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do
-  $api.find_fb_user(user.id) unless $api.fb_user
+  # $api.find_fb_user(user.id)
 
   bind 'login', 'facebook' do
     show_login
@@ -33,6 +33,8 @@ Rubotnik.route :message do
   bind 'invite', 'earn', 'mulligans' do
     show_invite
   end
+
+  bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports
 
   bind 'feedback', to: :feedback do
     feedback
@@ -87,7 +89,7 @@ end
 ####################### HANDLE INCOMING POSTBACKS ##############################
 
 Rubotnik.route :postback do
-  $api.find_fb_user(user.id) unless $api.fb_user
+  # $api.find_fb_user(user.id)
 
   bind 'START', to: :start 
 
