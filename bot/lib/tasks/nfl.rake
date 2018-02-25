@@ -180,7 +180,7 @@ task :send_notification do
           messaging_type: "UPDATE",
           recipient: { id: pick["user"]["facebook_uuid"] },
           message: {
-            text: "#{text}\n\nYou now have #{pick["user"]["current_streak"]} in a row, go spread the word 🎙️👍",
+            text: "#{text}\n\nYou now have #{pick["user"]["current_streak"]} in a row. Keep a look out for your gift card in the next 24 hours! 💸",
             quick_replies: menu
           }
         }
@@ -227,36 +227,69 @@ task :send_notification do
       if pick["user"]["notification_settings"]["recap_loss"]
         your_score = pick["matchup"]["loser_score"]
         opponent_score = pick["matchup"]["winner_score"]
-        # symbol = pick["spread"] > 0 ? "+" : ""
-        emoji = "😑"
-        # custom_text = your_score > opponent_score ? "Although the #{pick["team_abbrev"]} won #{your_score} to #{opponent_score}, they did not cover the spread (#{symbol}#{pick["spread"]}) against the #{pick["opponent_abbrev"]}." : "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
-        message_options = {
-          messaging_type: "UPDATE",
-          recipient: { id: pick["user"]["facebook_uuid"] },
-          message: {
-            text: "#{pick["selection"]} lost.\n\nYour current streak has been set back to #{pick["user"]["current_streak"]}.",
-            quick_replies: menu
+        if your_score > opponent_score
+          symbol = pick["spread"] > 0 ? "+" : ""
+          emoji = "😑"
+          # custom_text = your_score > opponent_score ? "Although the #{pick["team_abbrev"]} won #{your_score} to #{opponent_score}, they did not cover the spread (#{symbol}#{pick["spread"]}) against the #{pick["opponent_abbrev"]}." : "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
+          message_options = {
+            messaging_type: "UPDATE",
+            recipient: { id: pick["user"]["facebook_uuid"] },
+            message: {
+              text: "Although they won #{your_score} to #{opponent_score}, #{pick["selection"]} did not cover the (#{symbol}#{pick["spread"]}) spread.\n\nYour current streak has been set back to #{pick["user"]["current_streak"]}.",
+              quick_replies: menu
+            }
           }
-        }
-        Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-        sleep 1
-        # loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
-        loss_gifs = [{id: 1531717616877275, title: "Dumb and Dumber"}, {id: 1531717936877243, title: "True Detective"}, {id: 1531718323543871, title: "Leo Dicaprio/Titanic"}, {id: 1531718760210494, title: "Bill Murray"}, {id: 1531737016875335, title: "500 Days of Summer/Elevator"}, {id: 1531737290208641, title: "Zooey Deschanel"}]
-        media_options = {
-          messaging_type: "UPDATE",
-          recipient: { id: pick["user"]["facebook_uuid"] },
-          message: {
-            attachment: {
-              type: 'image',
-              payload: {
-                attachment_id: loss_gifs.sample[:id]
-              }
-            },
-            quick_replies: menu
+          Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+          sleep 1
+          # loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
+          loss_gifs = [{id: 1531717616877275, title: "Dumb and Dumber"}, {id: 1531717936877243, title: "True Detective"}, {id: 1531718323543871, title: "Leo Dicaprio/Titanic"}, {id: 1531718760210494, title: "Bill Murray"}, {id: 1531737016875335, title: "500 Days of Summer/Elevator"}, {id: 1531737290208641, title: "Zooey Deschanel"}]
+          media_options = {
+            messaging_type: "UPDATE",
+            recipient: { id: pick["user"]["facebook_uuid"] },
+            message: {
+              attachment: {
+                type: 'image',
+                payload: {
+                  attachment_id: loss_gifs.sample[:id]
+                }
+              },
+              quick_replies: menu
+            }
           }
-        }
-        Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-        puts "** Message sent for game recap (L) **"
+          Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+          puts "** Message sent for game recap (L) **"
+        else
+          symbol = pick["spread"] > 0 ? "+" : ""
+          emoji = "😑"
+          # custom_text = your_score > opponent_score ? "Although the #{pick["team_abbrev"]} won #{your_score} to #{opponent_score}, they did not cover the spread (#{symbol}#{pick["spread"]}) against the #{pick["opponent_abbrev"]}." : "The #{pick["team_abbrev"]} (#{symbol}#{pick["spread"]}) did not cover the spread against the #{pick["opponent_abbrev"]} with the final score of #{pick["matchup"]["loser_score"]}-#{pick["matchup"]["winner_score"]}."
+          message_options = {
+            messaging_type: "UPDATE",
+            recipient: { id: pick["user"]["facebook_uuid"] },
+            message: {
+              text: "#{pick["selection"]} lost #{your_score} to #{opponent_score} and did not cover the (#{symbol}#{pick["spread"]}) spread.\n\nYour current streak has been set back to #{pick["user"]["current_streak"]}.",
+              quick_replies: menu
+            }
+          }
+          Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+          sleep 1
+          # loss_gifs = [{id: 1517902454925458, title: "Ryan Gosling Face Palm"}, {id: 1517903024925401, title: "Harry Potter Eye Roll"}, {id: 1517906254925078, title: "Michael Scott Im Fine/No Im not"}]
+          loss_gifs = [{id: 1531717616877275, title: "Dumb and Dumber"}, {id: 1531717936877243, title: "True Detective"}, {id: 1531718323543871, title: "Leo Dicaprio/Titanic"}, {id: 1531718760210494, title: "Bill Murray"}, {id: 1531737016875335, title: "500 Days of Summer/Elevator"}, {id: 1531737290208641, title: "Zooey Deschanel"}]
+          media_options = {
+            messaging_type: "UPDATE",
+            recipient: { id: pick["user"]["facebook_uuid"] },
+            message: {
+              attachment: {
+                type: 'image',
+                payload: {
+                  attachment_id: loss_gifs.sample[:id]
+                }
+              },
+              quick_replies: menu
+            }
+          }
+          Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
+          puts "** Message sent for game recap (L) **"
+        end
       end
       set_notified pick["id"]
       puts "** Set notification to true **"
