@@ -16,7 +16,7 @@ module Commands
       puts "Referrer Id: #{referrer_id}"
       update_sender(referrer_id) unless referrer_id.to_i == 0
     end
-    message = "Every day, I curate a list of games for you to choose from. When you make a pick, I'll track your wins and losses.\n\nWhen you hit 4 games in a row, you win!"
+    message = "Every day, I curate a list of games for you to choose from. When you make a pick, I'll track your wins and losses.\n\nWhen you hit 4 games in a row, you win an Amazon gift card!"
     postback.typing_on
     sleep 2
     say message, quick_replies: [["I'm ready to play!", "I got this"], ["Try a walkthrough", "Walkthrough"]]
@@ -47,14 +47,14 @@ module Commands
       sleep 1
       say game, quick_replies: [["Let's get started!", "Ready"], ["Prizes?", "Prizes"]]
     when 'Prizes'
-      prizes = "At the end of the day, I send out $25 worth of Amazon gift cards to those who have hit a Sweep.\n\nIf there is more than 1 winner for the day, they split the prize.\n\nIf I don't see any winners, the $25 prize will rollover to the following day (making the pot $50)!"
+      prizes = "At the end of the day, I send out $25 worth of Amazon gift cards to those who have hit a Sweep.\n\nIf there is more than 1 winner for the day, they split the prize.\n\nIf I don't see any winners, the $25 prize will rollover to the following day (making the prize pool $50)!"
       message.typing_on
       sleep 2
       say prizes
-      sleep 7
+      sleep 6
       message.typing_on
       sleep 3
-      average = "On average, I send out roughly $8-12 worth to our winners on a daily basis, with the occasional rollover.\n\nBut the faster we've grown, the higher that number has become!"
+      average = "On average, I send out roughly $8-12 worth to our winners on a daily basis, with the occasional rollover.\n\nBut the faster we grow, the higher the prize pool becomes!"
       say average, quick_replies: [["I'm ready!", "Ready"]]
     when 'Ready'
       intro = "Start making your picks #{$api.user.first_name}!"
