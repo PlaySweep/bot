@@ -18,8 +18,6 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do
-  # $api.find_fb_user(user.id)
-
   bind 'login', 'facebook' do
     show_login
   end
@@ -40,30 +38,30 @@ Rubotnik.route :message do
     feedback
   end
 
-  bind 'ok!', 'nah, I got this!', to: :walkthrough do
+  bind 'confused', 'walkthrough', to: :walkthrough do
     walkthrough
   end
 
   bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
 
   bind 'matchups', all: true, to: :show_sports, reply_with: {
-    text: "Sports 👇",
+    text: "Choose from the available sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
   bind 'make picks', all: true, to: :show_sports, reply_with: {
-    text: "Sports 👇",
+    text: "Choose from the available sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
   bind 'select picks', all: true, to: :show_sports, reply_with: {
-    text: "Sports 👇",
+    text: "Choose from the available sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
   bind 'select games', all: true, to: :show_sports, reply_with: {
-    text: "Sports 👇",
+    text: "Choose from the available sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
   bind 'games', all: true, to: :show_sports, reply_with: {
-    text: "Sports 👇",
+    text: "Choose from the available sports 👇",
     quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
   }
 
@@ -89,8 +87,6 @@ end
 ####################### HANDLE INCOMING POSTBACKS ##############################
 
 Rubotnik.route :postback do
-  # $api.find_fb_user(user.id)
-
   bind 'START', to: :start 
 
   bind 'SEND FEEDBACK' do
@@ -125,7 +121,7 @@ Rubotnik.route :postback do
   end
 
   bind 'SELECT PICKS' do 
-    text = "Sports 👇"
+    text = "Choose from the available sports 👇"
     say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
     next_command :show_sports
   end

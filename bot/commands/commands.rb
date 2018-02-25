@@ -5,57 +5,68 @@ module Commands
   KEYWORDS_FOR_UNAVAILABLE_SPORTS = ['baseball', 'soccer', 'boxing', 'mma', 'golf', 'tennis']
 
   def start
-    puts "User ID: #{user.id}"
     $api.find_fb_user(user.id)
-    $api.find_or_create('users', $api.fb_user.id)
-    greeting = "Hey #{$api.fb_user.first_name}, my name is Emma 👋"
+    $api.find_or_create('users', user.id)
+    # user.session[:current_user] = $api.user # refactor to use session rather than call api for every request
+    greeting = "Hey #{$api.user.first_name}, I'm Emma 👋..."
+    postback.typing_on
     say greeting
     if postback.referral
       referrer_id = postback.referral.ref
       puts "Referrer Id: #{referrer_id}"
       update_sender(referrer_id) unless referrer_id.to_i == 0
     end
+    message = "Every day, I curate a list of games for you to choose from. When you make a pick, I'll track your wins and losses.\n\nWhen you hit 4 games in a row, you win!"
     postback.typing_on
     sleep 2
-    message = "You can ask me to show you things like current matchups, my picks, stats, whatever you can think of..."
-    say message
-    postback.typing_on
-    sleep 2
-    message = "Let's try a walkthrough to show you how I operate (beep boop bleep)"
-    say message, quick_replies: [["Ok!", "Ok!"], ["Nah, I got this!", "I got this"]]
+    say message, quick_replies: [["I'm ready to play!", "I got this"], ["Try a walkthrough", "Walkthrough"]]
     stop_thread
   end
 
   def walkthrough
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     case message.quick_reply
-    when 'Ok!'
-      message = "I'm so flattered that you would press my buttons ☺️\n\nButtons are a quick and easy way to get what you want, that way you don't have to go typing things out."
-      quick_replies = [["I think I got this", "Ready"], ["What else?", "What else?"]]
-      say message, quick_replies: quick_replies
+    when 'Walkthrough'
+      walkthrough = "Go ahead and practice selecting between the two teams below..."
+      message.typing_on
+      say walkthrough
+      sleep 2
+      message.typing_on
+      sleep 1
+      matchup = "The Philadelphia Eagles (+4.5) against the New England Patriots (-4.5)"
+      say matchup, quick_replies: [["Eagles (+4.5)", "Eagles"], ["Patriots (-4.5)", "Patriots"]]
       next_command :walkthrough
-    when 'I got this'
-      message = "Who are we kidding, you're ready #{$api.fb_user.first_name}!\n\nIf you have any questions on what to do, I'll be right here waiting for you (yup, I just quoted Richard Marx)"
-      quick_replies = [["Select picks", "Select picks"]]
-      say message, quick_replies: quick_replies
-      stop_thread
+    when 'Eagles'
+      game = "Nice! You picked the Eagles (+4.5)...so what's that number mean? Thats called the spread.\n\nIn this example, the Eagles would need to win or not lose by more than 4.5 points for you to win this play."
+      message.typing_on
+      sleep 1
+      say game, quick_replies: [["Let's get started!", "Ready"], ["Prizes?", "Prizes"]]
+    when 'Patriots'
+      game = "Nice! You picked the Patriots (-4.5)...so what's that number mean? Thats called the spread.\n\nIn this example, the Patriots would need to not just win, but win by more than 4.5 points for you to win this play."
+      message.typing_on
+      sleep 1
+      say game, quick_replies: [["Let's get started!", "Ready"], ["Prizes?", "Prizes"]]
+    when 'Prizes'
+      prizes = "At the end of the day, I send out $25 worth of Amazon gift cards to those who have hit a Sweep.\n\nIf there is more than 1 winner for the day, they split the prize.\n\nIf I don't see any winners, the $25 prize will rollover to the following day (making the pot $50)!"
+      message.typing_on
+      sleep 2
+      say prizes
+      sleep 7
+      message.typing_on
+      sleep 3
+      average = "On average, I send out roughly $8-12 worth to our winners on a daily basis, with the occasional rollover.\n\nBut the faster we've grown, the higher that number has become!"
+      say average, quick_replies: [["I'm ready!", "Ready"]]
     when 'Ready'
-      message = "Let's get started #{$api.fb_user.first_name}!"
+      intro = "Start making your picks #{$api.user.first_name}!"
       quick_replies = [["Select picks", "Select picks"]]
-      say message, quick_replies: quick_replies
-      stop_thread
-    when 'What else?'
-      message = "I also know a lot about sports, so you can ask me questions about what you think you should pick..."
-      quick_replies = [["Select picks", "Select picks"]]
-      say message, quick_replies: quick_replies
+      message.typing_on
+      say intro, quick_replies: quick_replies
       stop_thread
     end
   end
 
   def manage_updates
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -68,8 +79,7 @@ module Commands
   end
 
   def handle_notifications
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     case message.quick_reply
     when 'Reminders On'
       set_notification_settings(:reminders, true)
@@ -83,8 +93,7 @@ module Commands
   end
 
   def dashboard
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
     current_streak = "#{$api.user.current_streak} wins in a row\n"
     sweep_count = "#{$api.user.sweep_count} total sweeps\n"
@@ -95,17 +104,15 @@ module Commands
   end
 
   def feedback
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
-    text = "Type your message below #{$api.fb_user.first_name} and one of our guys will reach out to you soon 🤝"
+    $api.find_or_create('users', user.id)
+    text = "Type your message below #{$api.user.first_name} and one of our guys will reach out to you soon 🤝"
     quick_replies = [["Eh, nevermind", "Eh, nevermind"]]
     say text, quick_replies: quick_replies
     next_command :send_feedback
   end
 
   def send_feedback
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     message.typing_on
     if message.text != "Eh, nevermind"
@@ -129,45 +136,37 @@ module Commands
   end
 
   def set_reminders
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user   
+    $api.find_or_create('users', user.id)   
   end
 
   def set_props
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user   
+    $api.find_or_create('users', user.id)   
   end
 
   def set_recaps
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user   
+    $api.find_or_create('users', user.id)   
   end
 
   def set_recap_wins
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user  
+    $api.find_or_create('users', user.id)  
   end
 
   def set_recap_losses
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user   
+    $api.find_or_create('users', user.id)   
   end
 
   def set_recap_sweep
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user   
+    $api.find_or_create('users', user.id)   
   end
 
   def unavailable_sports
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     say "We don't have #{message.text} yet, but we will let you know when we add more sports...", quick_replies: quick_replies
   end
 
   def show_sports
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     case message.text
     when "NFL"
       handle_pick
@@ -180,8 +179,7 @@ module Commands
   end
 
   def skip
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     # make api call to set skipped flag on matchup
     $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
@@ -199,10 +197,7 @@ module Commands
   end
 
   def handle_pick
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
-    puts "FB user id => #{$api.fb_user.id}"
-    puts "User id => #{$api.user.id}"
+    $api.find_or_create('users', user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     if matchup_id && selected_id
@@ -239,8 +234,7 @@ module Commands
   end
 
   def upcoming_picks
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     $api.for_picks('upcoming')
     upcoming_text = ""
     $api.upcoming_picks.each do |pick, index|
@@ -254,8 +248,7 @@ module Commands
   end
 
   def in_progress_picks
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     $api.for_picks('in_progress')
     in_progress_text = ""
     $api.in_progress_picks.each do |pick, index|
@@ -269,8 +262,7 @@ module Commands
   end
 
   def status
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
     # show current streak info | very next game up | last 4 results
     next_up = ""
     last_4 = ""
@@ -297,7 +289,6 @@ module Commands
   end
 
   def how_to_play
-    $api.find_fb_user(user.id)
-    $api.find_or_create('users', user.id) # unless $api.user
+    $api.find_or_create('users', user.id)
   end
 end

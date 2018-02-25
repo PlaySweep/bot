@@ -5,7 +5,9 @@ require 'hash_dot'
 class Api
   Hash.use_dot_syntax = true
 
-  attr_accessor :conn, :fb_conn, :fb_user, :user, :pick, :matchups, :upcoming_picks, :in_progress_picks, :completed_picks
+  attr_accessor :conn, :fb_conn, :fb_user, :user, 
+                :pick, :matchups, :upcoming_picks, 
+                :in_progress_picks, :completed_picks
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
