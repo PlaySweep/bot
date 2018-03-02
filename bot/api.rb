@@ -61,7 +61,7 @@ class Api
   def create model, params
     case model
     when 'picks'
-      response = @conn.post("users/#{@fb_user.id}/#{model}", params)
+      response = @conn.post("users/#{@user.facebook_uuid}/#{model}", params)
       @pick = JSON.parse(response.body)['pick']
     end
   end
@@ -77,13 +77,13 @@ class Api
   def for_picks scope
     case scope
     when 'upcoming'
-      response = @conn.get("users/#{@fb_user.id}/upcoming_picks")
+      response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
       @upcoming_picks = JSON.parse(response.body)['picks']
     when 'in_progress'
-      response = @conn.get("users/#{@fb_user.id}/in_progress_picks")
+      response = @conn.get("users/#{@user.facebook_uuid}/in_progress_picks")
       @in_progress_picks = JSON.parse(response.body)['picks']
     when 'completed'
-      response = @conn.get("users/#{@fb_user.id}/completed_picks")
+      response = @conn.get("users/#{@user.facebook_uuid}/completed_picks")
       @completed_picks = JSON.parse(response.body)['picks']
     end
   end
