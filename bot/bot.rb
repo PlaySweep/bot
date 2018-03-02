@@ -67,6 +67,9 @@ Rubotnik.route :message do |request|
   bind 'nba' do
     show_button_template('NBA')
   end
+  bind 'nhl' do
+    show_button_template('NHL')
+  end
 
   bind 'manage', 'updates', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",

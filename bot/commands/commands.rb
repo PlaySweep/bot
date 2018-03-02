@@ -300,7 +300,7 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB']]
+    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['NHL', 'NHL']]
     stop_thread
   end
 
@@ -362,13 +362,16 @@ module Commands
       next_command :manage_updates
     when 'Select picks'
       text = "Choose from the sports below 👇"
-      say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB']]
+      say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['NHL', 'NHL']]
       stop_thread
-    # when 'NFL'
-    #   show_button_template('NFL')
-    #   stop_thread
+    when 'NCAAB'
+      show_button_template('NCAAB')
+      stop_thread
     when 'NBA'
       show_button_template('NBA')
+      stop_thread
+    when 'NHL'
+      show_button_template('NHL')
       stop_thread
     when 'Wins'
       user.session[:history]["current_streak"] > 0 ? messages = ["Look at you over there with a streak of #{user.session[:history]["current_streak"]} 👏"] : messages = ["You have a current streak of #{user.session[:history]["current_streak"]}."]  

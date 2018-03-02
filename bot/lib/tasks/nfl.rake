@@ -1,17 +1,12 @@
 namespace :nfl do
 desc "Send Reminder to all"
 task :to_all do
-  get_users
+  get_users_with_reminders
   menu = [
     {
       content_type: 'text',
       title: 'Select picks',
       payload: 'Select picks'
-    },
-    {
-      content_type: 'text',
-      title: 'Status',
-      payload: 'Status'
     },
     {
       content_type: 'text',
@@ -30,7 +25,7 @@ task :to_all do
         messaging_type: "UPDATE",
         recipient: { id: user["user"]["facebook_uuid"] },
         message: {
-          text: "New games available!",
+          text: "New games (and NHL 🏒) available!",
           quick_replies: menu
         }
       }
@@ -51,10 +46,10 @@ task :to_all do
       #   }
       # }
       # Bot.deliver(media_options, access_token: ENV['ACCESS_TOKEN'])
-      puts "** Message sent for reminders to #{user["user"]['first_name']} #{user["user"]['last_name']} **"
+      puts "Message sent for reminders to #{user["user"]['first_name']}"
       sleep 30 if index % 50 == 0
     rescue Facebook::Messenger::FacebookError => e
-      puts "User: #{user["user"]['first_name']} #{user["user"]['last_name']} can not be reached..."
+      puts "User (id:#{user["user"]['id']}) #{user["user"]['first_name']} can not be reached..."
       next
     end
   end
