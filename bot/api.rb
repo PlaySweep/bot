@@ -1,6 +1,8 @@
 require 'faraday'
 require 'json'
 require 'hash_dot'
+require 'base64'
+require 'open-uri'
 
 class Api
   Hash.use_dot_syntax = true
@@ -21,9 +23,9 @@ class Api
     when 'matchups'
       response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
       @matchups = JSON.parse(response.body)['matchups']
-      # base_64_to_image(@matchups.first.base_64_image) # return @image
-      # send @image to aws hosted service
-      # return url for image as @url
+      image = Base64.decode64(@matchups.first.base64_image)
+      # send image to aws hosted service
+      # return url for image
       # $fb_api.message_attachment(@url) # returns attachment_id
       # call show_media($fb_api.attachment_id) to display image
     end
@@ -42,6 +44,11 @@ class Api
       puts "Running find_or_create for Users model..."
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
+      image = Base64.decode64(@user.base64.status_image)
+      # send image to aws hosted service
+      # return url for image
+      # $fb_api.message_attachment(@url) # returns attachment_id
+      # call show_media($fb_api.attachment_id) to display image
       if @user.empty?
         params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
         response = @conn.post("#{model}", params)
