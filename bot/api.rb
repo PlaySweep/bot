@@ -23,11 +23,12 @@ class Api
     when 'matchups'
       response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
       @matchups = JSON.parse(response.body)['matchups']
-      image = Base64.decode64(@matchups.first.base64_image)
-      # send image to aws hosted service
-      # return url for image
-      # $fb_api.message_attachment(@url) # returns attachment_id
-      # call show_media($fb_api.attachment_id) to display image
+      unless @matchups.empty?
+        image = Base64.decode64(@matchups.first.base64_image)
+        # send image to s3 aws
+        # return url for image
+        # $fb_api.message_attachment(@url) # returns attachment_id
+      end
     end
   end
 
@@ -44,11 +45,6 @@ class Api
       puts "Running find_or_create for Users model..."
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
-      image = Base64.decode64(@user.base64.status_image)
-      # send image to aws hosted service
-      # return url for image
-      # $fb_api.message_attachment(@url) # returns attachment_id
-      # call show_media($fb_api.attachment_id) to display image
       if @user.empty?
         params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
         response = @conn.post("#{model}", params)
@@ -83,6 +79,19 @@ class Api
 
   def for_picks scope
     case scope
+    when 'current'
+      response = @conn.get("users/#{@user.facebook_uuid}/status")
+      @status_image = JSON.parse(response.body)['status_image']
+      unless @status_image.empty?
+        image = Base64.decode64(@status_image)
+        File.open('tmp/test.png', 'wb') do|f|
+          f.write(image)
+        end
+        # send image to aws hosted service
+        # return url for image
+        # $fb_api.message_attachment(@url) # returns attachment_id
+        # call show_media($fb_api.attachment_id) to display image
+      end
     when 'upcoming'
       response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
       @upcoming_picks = JSON.parse(response.body)['picks']

@@ -233,58 +233,43 @@ module Commands
     end
   end
 
-  def upcoming_picks
-    $api.find_or_create('users', user.id)
-    $api.for_picks('upcoming')
-    upcoming_text = ""
-    $api.upcoming_picks.each do |pick, index|
-      text = "#{pick.selected} "
-      upcoming_text.concat(text)
-    end
-    quick_replies = [["Select picks", "Select picks"]]
-    say "You don't have anything coming up at the moment", quick_replies: quick_replies and return if upcoming_text.empty?
-    say upcoming_text, quick_replies: quick_replies
-    stop_thread
-  end
+  # def upcoming_picks
+  #   $api.find_or_create('users', user.id)
+  #   $api.for_picks('upcoming')
+  #   upcoming_text = ""
+  #   $api.upcoming_picks.each do |pick, index|
+  #     text = "#{pick.selected} "
+  #     upcoming_text.concat(text)
+  #   end
+  #   quick_replies = [["Select picks", "Select picks"]]
+  #   say "You don't have anything coming up at the moment", quick_replies: quick_replies and return if upcoming_text.empty?
+  #   say upcoming_text, quick_replies: quick_replies
+  #   stop_thread
+  # end
 
-  def in_progress_picks
-    $api.find_or_create('users', user.id)
-    $api.for_picks('in_progress')
-    in_progress_text = ""
-    $api.in_progress_picks.each do |pick, index|
-      text = "#{pick.selected} "
-      in_progress_text.concat(text)
-    end
-    quick_replies = [["Select picks", "Select picks"]]
-    say "You don't have anything in progress at the moment", quick_replies: quick_replies and return if in_progress_text.empty?
-    say in_progress_text, quick_replies: quick_replies
-    stop_thread
-  end
+  # def in_progress_picks
+  #   $api.find_or_create('users', user.id)
+  #   $api.for_picks('in_progress')
+  #   in_progress_text = ""
+  #   $api.in_progress_picks.each do |pick, index|
+  #     text = "#{pick.selected} "
+  #     in_progress_text.concat(text)
+  #   end
+  #   quick_replies = [["Select picks", "Select picks"]]
+  #   say "You don't have anything in progress at the moment", quick_replies: quick_replies and return if in_progress_text.empty?
+  #   say in_progress_text, quick_replies: quick_replies
+  #   stop_thread
+  # end
 
   def status
     $api.find_or_create('users', user.id)
-    # show current streak info | very next game up | last 4 results
-    next_up = ""
-    last_4 = ""
-    $api.for_picks('upcoming')
-    $api.for_picks('completed')
-
-    if $api.upcoming_picks.any?
-      next_up = "Next up #{$api.upcoming_picks[0].selected} against #{$api.upcoming_picks[0].opponent}\n"
-    else
-      last_4 = "You have nothing completed yet."
-    end
-
-    if $api.completed_picks.any?
-      $api.completed_picks.each { |pick| last_4.concat("#{pick.result} - #{pick.selected}\n") }
-    else
-      last_4 = "You have nothing completed yet."
-    end
+    $api.for_picks('current')
+    # call show_media($fb_api.attachment_id) to display image
 
     current_streak = "Streak of #{$api.user.current_streak}\n"
-    status_message = current_streak + next_up + last_4
+    # status_message = current_streak + next_up + last_4
     quick_replies = [["Select picks", "Select picks"]]
-    say status_message, quick_replies: quick_replies
+    say current_streak, quick_replies: quick_replies
     stop_thread
   end
 
