@@ -99,14 +99,6 @@ Rubotnik.route :postback do
     status
   end
 
-  bind 'UPCOMING' do
-    upcoming_picks
-  end
-
-  bind 'IN PROGRESS' do
-    in_progress_picks
-  end
-
   bind 'INVITE FRIENDS' do
     text = "One way to earn Sweep coins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
     say text

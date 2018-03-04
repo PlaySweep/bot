@@ -16,32 +16,6 @@ module Profile
     ]
   }
 
-  # SIMPLE_MENU = {
-  #   persistent_menu: [
-  #     {
-  #       locale: 'default',
-  #       composer_input_disabled: false,
-  #       call_to_actions: [
-  #         {
-  #           type: 'postback',
-  #           title: 'Invite friends',
-  #           payload: 'INVITE FRIENDS'
-  #         },
-  #         {
-  #           type: 'postback',
-  #           title: 'Send feedback',
-  #           payload: 'SEND FEEDBACK'
-  #         },
-  #         {
-  #           type: 'postback',
-  #           title: 'Manage updates',
-  #           payload: 'MANAGE UPDATES'
-  #         }
-  #       ]
-  #     }
-  #   ]
-  # }
-
   SIMPLE_MENU = {
     persistent_menu: [
       {
@@ -77,26 +51,10 @@ module Profile
             payload: 'SELECT PICKS' 
           },
           {
-            type: 'nested',
             title: '📈 Status',
-            call_to_actions: [
-              {
-                title: 'Current',
-                type: 'postback',
-                payload: 'STATUS'
-              },
-              {
-                title: 'Upcoming picks',
-                type: 'postback',
-                payload: 'UPCOMING'
-              },
-              {
-                title: 'Live picks',
-                type: 'postback',
-                payload: 'IN PROGRESS'
-              }
-            ]
-          },
+            type: 'postback',
+            payload: 'STATUS' 
+          }
         ]
       }
     ]

@@ -23,11 +23,14 @@ class Api
     when 'matchups'
       response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
       @matchups = JSON.parse(response.body)['matchups']
-      unless @matchups.empty?
+      unless @matchups.nil? || @matchups.empty?
         image = Base64.decode64(@matchups.first.base64_image)
-        # send image to s3 aws
+        File.open("tmp/matchup_#{@matchups.first.id}.png", 'wb') do|f|
+          f.write(image)
+        end
+        # send image to s3 aws (fog)
         # return url for image
-        # $fb_api.message_attachment(@url) # returns attachment_id
+        # $fb_api.message_attachment(url) # returns attachment_id
       end
     end
   end
@@ -84,13 +87,12 @@ class Api
       @status_image = JSON.parse(response.body)['status_image']
       unless @status_image.empty?
         image = Base64.decode64(@status_image)
-        File.open('tmp/test.png', 'wb') do|f|
+        File.open("tmp/user_#{@user.id}_status.png", 'wb') do|f|
           f.write(image)
         end
-        # send image to aws hosted service
+        # send image to s3 aws (fog)
         # return url for image
-        # $fb_api.message_attachment(@url) # returns attachment_id
-        # call show_media($fb_api.attachment_id) to display image
+        # $fb_api.message_attachment(url) # returns attachment_id
       end
     when 'upcoming'
       response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
