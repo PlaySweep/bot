@@ -3,6 +3,7 @@ require 'json'
 require 'hash_dot'
 require 'base64'
 require 'open-uri'
+require 'fog'
 
 class Api
   Hash.use_dot_syntax = true
@@ -23,15 +24,6 @@ class Api
     when 'matchups'
       response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
       @matchups = JSON.parse(response.body)['matchups']
-      unless @matchups.nil? || @matchups.empty?
-        image = Base64.decode64(@matchups.first.base64_image)
-        File.open("tmp/matchup_#{@matchups.first.id}.png", 'wb') do|f|
-          f.write(image)
-        end
-        # send image to s3 aws (fog)
-        # return url for image
-        # $fb_api.message_attachment(url) # returns attachment_id
-      end
     end
   end
 
@@ -90,9 +82,13 @@ class Api
         File.open("tmp/user_#{@user.id}_status.png", 'wb') do|f|
           f.write(image)
         end
-        # send image to s3 aws (fog)
-        # return url for image
-        # $fb_api.message_attachment(url) # returns attachment_id
+        # directory = $aws.directories.get('sweep-bot-picks')
+        # file = directory.files.get("matchup_#{@matchups.first.id}.png")
+        # if file
+        #   url = file.public_url
+        #   puts "Sending #{url} to message attachments..."
+        #   $fb_api.message_attachment(url)
+        # end
       end
     when 'upcoming'
       response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
