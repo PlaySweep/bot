@@ -74,22 +74,6 @@ class Api
 
   def for_picks scope
     case scope
-    when 'current'
-      response = @conn.get("users/#{@user.facebook_uuid}/status")
-      @status_image = JSON.parse(response.body)['status_image']
-      unless @status_image.empty?
-        image = Base64.decode64(@status_image)
-        File.open("tmp/user_#{@user.id}_status.png", 'wb') do|f|
-          f.write(image)
-        end
-        # directory = $aws.directories.get('sweep-bot-picks')
-        # file = directory.files.get("matchup_#{@matchups.first.id}.png")
-        # if file
-        #   url = file.public_url
-        #   puts "Sending #{url} to message attachments..."
-        #   $fb_api.message_attachment(url)
-        # end
-      end
     when 'upcoming'
       response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
       @upcoming_picks = JSON.parse(response.body)['picks']

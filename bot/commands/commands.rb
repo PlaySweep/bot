@@ -7,7 +7,6 @@ module Commands
   def start
     $api.find_fb_user(user.id)
     $api.find_or_create('users', user.id)
-    user.session[:current_user] = $api.user
     greeting = "Hey #{$api.user.first_name}, I'm Emma 👋..."
     postback.typing_on
     say greeting
@@ -19,12 +18,12 @@ module Commands
     message = "Every day, I curate a list of games for you to choose from. When you make a pick, I'll track your wins and losses.\n\nWhen you hit 4 games in a row, you win an Amazon gift card!"
     postback.typing_on
     sleep 2
-    say message, quick_replies: [["I'm ready to play!", "I got this"], ["Try a walkthrough", "Walkthrough"]]
+    say message, quick_replies: [["I'm ready to play!", "Ready"], ["Try a walkthrough", "Walkthrough"]]
     stop_thread
   end
 
   def walkthrough
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     case message.quick_reply
     when 'Walkthrough'
       walkthrough = "Go ahead and practice selecting between the two teams below..."
@@ -66,7 +65,7 @@ module Commands
   end
 
   def manage_updates
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -79,7 +78,7 @@ module Commands
   end
 
   def handle_notifications
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     case message.quick_reply
     when 'Reminders On'
       set_notification_settings(:reminders, true)
@@ -93,7 +92,7 @@ module Commands
   end
 
   def dashboard
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
     current_streak = "#{$api.user.current_streak} wins in a row\n"
     sweep_count = "#{$api.user.sweep_count} total sweeps\n"
@@ -104,7 +103,7 @@ module Commands
   end
 
   def feedback
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     text = "Type your message below #{$api.user.first_name} and one of our guys will reach out to you soon 🤝"
     quick_replies = [["Eh, nevermind", "Eh, nevermind"]]
     say text, quick_replies: quick_replies
@@ -112,7 +111,7 @@ module Commands
   end
 
   def send_feedback
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     message.typing_on
     if message.text != "Eh, nevermind"
@@ -160,17 +159,17 @@ module Commands
   end
 
   def unavailable_sports
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     say "We don't have #{message.text} yet, but we will let you know when we add more sports...", quick_replies: quick_replies
   end
 
   def show_sports
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     case message.text
     when "NFL"
       handle_pick
-    when "NBA"
+    when "NCAAB"
       handle_pick
     else
       unavailable_sports and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_UNAVAILABLE_SPORTS.include?(keyword) }
@@ -179,9 +178,7 @@ module Commands
   end
 
   def skip
-    # $api.find_or_create('users', user.id)
-    puts "Current user..."
-    puts user.session[:current_user].inspect
+    $api.find_or_create('users', user.id)
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
     $api.all('matchups', sport: sport)
@@ -191,17 +188,21 @@ module Commands
     else
       status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
       dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-      # text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
-      show_media($api.matchups.first.attachment_id)
-      say "Who do you got?", quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
+      matchup = $api.matchups.first
+      away = $api.matchups.first.away_side
+      home = $api.matchups.first.home_side
+      quick_replies = [
+        { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+        { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+        { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
+      ]
+      show_media($api.matchups.first.attachment_id, quick_replies)
       next_command :handle_pick
     end
   end
 
   def handle_pick
-    # $api.find_or_create('users', user.id)
-    puts "Current user..."
-    puts user.session[:current_user].inspect
+    $api.find_or_create('users', user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     if matchup_id && selected_id
@@ -213,14 +214,20 @@ module Commands
       message.typing_off
       $api.all('matchups', sport: sport.downcase) unless sport.nil?
       if $api.matchups.empty?
-        say "No more picks for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Status", "Status"]]
+        say "No more picks for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-        # text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
-        show_media($api.matchups.first.attachment_id)
-        say "Who do you got?", quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
+        matchup = $api.matchups.first
+        away = $api.matchups.first.away_side
+        home = $api.matchups.first.home_side
+        quick_replies = [
+          { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+          { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+          { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
+        ]
+        show_media($api.matchups.first.attachment_id, quick_replies)
         next_command :handle_pick
       end
     else
@@ -231,9 +238,15 @@ module Commands
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-        # text = "Next up is the #{$api.matchups.first.away_side.name} vs the #{$api.matchups.first.home_side.name}"
-        show_media($api.matchups.first.attachment_id)
-        say "Who do you got?", quick_replies: [["#{$api.matchups.first.away_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.away_side.id}"], ["#{$api.matchups.first.home_side.abbreviation}", "#{$api.matchups.first.sport} #{$api.matchups.first.id} #{$api.matchups.first.home_side.id}"], ['Skip', "Skip #{$api.matchups.first.sport} #{$api.matchups.first.id}"]]
+        matchup = $api.matchups.first
+        away = $api.matchups.first.away_side
+        home = $api.matchups.first.home_side
+        quick_replies = [
+          { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+          { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+          { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
+        ]
+        show_media($api.matchups.first.attachment_id, quick_replies)
         next_command :handle_pick
       end
     end
@@ -268,7 +281,7 @@ module Commands
   # end
 
   def status
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     $api.for_picks('current')
     # call show_media($fb_api.attachment_id) to display image
 

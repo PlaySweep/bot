@@ -46,23 +46,31 @@ Rubotnik.route :message do
 
   bind 'matchups', all: true, to: :show_sports, reply_with: {
     text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'make picks', all: true, to: :show_sports, reply_with: {
     text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'select picks', all: true, to: :show_sports, reply_with: {
     text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'select games', all: true, to: :show_sports, reply_with: {
     text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'games', all: true, to: :show_sports, reply_with: {
     text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+  }
+  bind 'other', 'sports', all: true, to: :show_sports, reply_with: {
+    text: "Choose from the available sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+  }
+  bind 'ready', 'to', 'play', to: :show_sports, reply_with: {
+    text: "Choose from the available sports 👇",
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
 
   bind 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
@@ -114,7 +122,7 @@ Rubotnik.route :postback do
 
   bind 'SELECT PICKS' do 
     text = "Choose from the available sports 👇"
-    say text, quick_replies: [['NFL', 'NFL'], ['NBA', 'NBA']]
+    say text, quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
     next_command :show_sports
   end
 

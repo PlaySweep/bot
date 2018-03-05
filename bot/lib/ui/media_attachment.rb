@@ -1,7 +1,7 @@
 module UI
   # https://developers.facebook.com/docs/messenger-platform/send-api-reference/image-attachment
   class MediaAttachment
-    def initialize(id)
+    def initialize(id, quick_replies)
       @template = {
         recipient: {
           id: nil
@@ -12,7 +12,8 @@ module UI
             payload: {
               attachment_id: id
             }
-          }
+          },
+          quick_replies: quick_replies
         }
       }
     end

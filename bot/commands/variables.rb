@@ -38,8 +38,8 @@ module Commands
     }
   ].freeze
 
-  def show_media(id)
-    media = UI::MediaAttachment.new(id)
+  def show_media(id, quick_replies)
+    media = UI::MediaAttachment.new(id, quick_replies)
     show(media)
   end
 
@@ -88,10 +88,10 @@ module Commands
     ]
     case sport
     when 'NFL'
-      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "Status", payload: "Status" }]
+      quick_replies = [{ content_type: 'text', title: "NBA", payload: "NCAAB" }, { content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Make your picks for the NFL!", payload, quick_replies)
       show(button_template)
-    when 'NBA'
+    when 'NCAAB'
       quick_replies = [{ content_type: 'text', title: "NFL", payload: "NFL" }, { content_type: 'text', title: "Status", payload: "Status" }]
       button_template = UI::FBButtonTemplate.new("Make your picks for the NBA!", payload, quick_replies)
       show(button_template)
