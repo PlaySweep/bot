@@ -172,8 +172,16 @@ module Commands
     when "NCAAB"
       handle_pick
     else
-      unavailable_sports and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_UNAVAILABLE_SPORTS.include?(keyword) }
+      redirect(message.text)
       stop_thread
+    end
+  end
+
+  def redirect message
+    if message.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_UNAVAILABLE_SPORTS.include?(keyword) }
+      unavailable_sports
+    else
+      say "Help me help you, what is it that you're looking to do?", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
     end
   end
 
@@ -192,11 +200,13 @@ module Commands
       away = $api.matchups.first.away_side
       home = $api.matchups.first.home_side
       quick_replies = [
-        { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
-        { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+        { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+        { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
+      message.typing_on
       show_media($api.matchups.first.attachment_id, quick_replies)
+      message.typing_off
       next_command :handle_pick
     end
   end
@@ -204,13 +214,14 @@ module Commands
   def handle_pick
     $api.find_or_create('users', user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
+    # refactor to handle unexpected messages
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       $api.create('picks', params)
       say "Nice pick with the #{$api.pick.selected}!" unless $api.pick.nil?
       message.typing_on
-      sleep 2
+      sleep 1
       message.typing_off
       $api.all('matchups', sport: sport.downcase) unless sport.nil?
       if $api.matchups.empty?
@@ -223,11 +234,13 @@ module Commands
         away = $api.matchups.first.away_side
         home = $api.matchups.first.home_side
         quick_replies = [
-          { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
-          { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+          { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+          { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
+        message.typing_on
         show_media($api.matchups.first.attachment_id, quick_replies)
+        message.typing_off
         next_command :handle_pick
       end
     else
@@ -242,11 +255,13 @@ module Commands
         away = $api.matchups.first.away_side
         home = $api.matchups.first.home_side
         quick_replies = [
-          { content_type: 'text', title: "#{away.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
-          { content_type: 'text', title: "#{home.abbreviation}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+          { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+          { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
+        message.typing_on
         show_media($api.matchups.first.attachment_id, quick_replies)
+        message.typing_off
         next_command :handle_pick
       end
     end
@@ -281,14 +296,26 @@ module Commands
   # end
 
   def status
+    message.typing_on
     $api.find_or_create('users', user.id)
-    $api.for_picks('current')
-    # call show_media($fb_api.attachment_id) to display image
+    $api.for_picks('status')
+    quick_replies = [
+      { content_type: 'text', title: "Select picks", payload: "Select picks" }
+    ] 
+    show_media($api.user.images.for_status, quick_replies)
+    message.typing_off
+    stop_thread
+  end
 
-    current_streak = "Streak of #{$api.user.current_streak}\n"
-    # status_message = current_streak + next_up + last_4
-    quick_replies = [["Select picks", "Select picks"]]
-    say current_streak, quick_replies: quick_replies
+  def status_for_postback
+    postback.typing_on
+    $api.find_or_create('users', user.id)
+    $api.for_picks('status')
+    quick_replies = [
+      { content_type: 'text', title: "Select picks", payload: "Select picks" }
+    ] 
+    show_media($api.user.images.for_status, quick_replies)
+    postback.typing_off
     stop_thread
   end
 

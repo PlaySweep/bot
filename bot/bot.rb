@@ -104,7 +104,7 @@ Rubotnik.route :postback do
   end
 
   bind 'STATUS' do
-    status
+    status_for_postback
   end
 
   bind 'INVITE FRIENDS' do

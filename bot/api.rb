@@ -68,12 +68,16 @@ class Api
     case model
     when 'matchups'
       response = @conn.patch("#{model}/#{id}", params)
-      puts response.body if response.status == 200
+      puts "👍" if response.status == 200
     end
   end
 
   def for_picks scope
     case scope
+    when 'status'
+      response = @conn.get("users/#{@user.facebook_uuid}/status")
+      @user = JSON.parse(response.body)['user']
+      puts "👍" if response.status == 200
     when 'upcoming'
       response = @conn.get("users/#{@user.facebook_uuid}/upcoming_picks")
       @upcoming_picks = JSON.parse(response.body)['picks']
