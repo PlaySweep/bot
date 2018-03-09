@@ -216,6 +216,8 @@ module Commands
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     # refactor to handle unexpected messages
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
+    $api.all('matchups', sport: sport.downcase) unless sport.nil?
+    say "We have #{$api.matchups.count} #{sport} games on deck..." unless (matchup_id && selected_id || $api.matchups.empty?)
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       $api.create('picks', params)
@@ -246,7 +248,7 @@ module Commands
     else
       $api.all('matchups', sport: sport.downcase) unless sport.nil?
       if $api.matchups.empty?
-        say "No new picks yet for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Select picks"]]
+        say "No more picks for the #{sport}. We'll let you know when we add more games...", quick_replies: [["Other sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
@@ -260,6 +262,7 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
+        sleep 3
         show_media($api.matchups.first.attachment_id, quick_replies)
         message.typing_off
         next_command :handle_pick
