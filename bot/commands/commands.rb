@@ -219,7 +219,7 @@ module Commands
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       $api.create('picks', params)
-      say "Nice pick with the #{$api.pick.selected}!" unless $api.pick.nil?
+      say "#{$api.pick.selected} (#{$api.pick.action}) ✅" unless $api.pick.nil?
       message.typing_on
       sleep 1
       message.typing_off
