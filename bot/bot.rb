@@ -15,6 +15,8 @@ Rubotnik.set_profile(
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
 
+RANDOM_FACTS = ["Banging your head against the wall burns 150 calories an hour.", "Organized people are simply too lazy to search for stuff."]
+
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do
@@ -22,60 +24,71 @@ Rubotnik.route :message do
     show_login
   end
 
+  bind "eh, i'm good", "i'm good", "i'm fine", to: :catch
+
+  bind 'cool', 'thanks', 'nice', 'awesome', 'thank you', to: :emoji_response
+
   bind 'current', 'status', to: :status
 
-  bind 'upcoming', to: :upcoming_picks
+  bind 'my picks', all: true, to: :my_picks
 
-  bind 'live', 'in progress', to: :in_progress_picks
+  bind 'sweepcoins', all: true, to: :sweepcoins
 
-  bind 'invite', 'earn', 'mulligans' do
+  bind 'earn more sweepcoins', 'earn sweepcoins', 'get sweepcoins', all: true, to: :handle_sweepcoins
+
+  bind 'use a lifeline', all: true, to: :handle_sweepback, reply_with: {
+    text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
+    quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
+  }
+
+  bind 'invite' do
     show_invite
   end
 
-  bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports
+  bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports, reply_with: {
+    text: "Tap the sports below 👇",
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+  }
 
-  bind 'feedback', to: :feedback do
-    feedback
-  end
-
-  bind 'confused', 'walkthrough', to: :walkthrough do
+  bind 'hi, emma', 'confused', 'walkthrough', to: :walkthrough do
     walkthrough
   end
 
   bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
 
+  bind '🏈', '🏀', '🏒', '⚾', to: :show_sports, reply_with: {
+    text: "Tap the sports below 👇",
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+  }
+
   bind 'matchups', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'make picks', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'select picks', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'select games', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
-  bind 'games', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
-  }
-  bind 'other', 'sports', all: true, to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+  bind 'more', 'sports', all: true, to: :show_sports, reply_with: {
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
   bind 'ready', 'to', 'play', to: :show_sports, reply_with: {
-    text: "Choose from the available sports 👇",
+    text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
 
   bind 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "Tap the options below to manage your preferences 👇",
-     quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
+     quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
   }
 
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {
@@ -88,7 +101,8 @@ Rubotnik.route :message do
   # bind 'image', to: :show_image
 
   default do
-    say "Help me help you, what is it that you're looking to do?", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+    options = ["Help me help you, what are you wanting to do?", "Sorry I don't understand everything humans say yet. Try starting with the options below 👇", "I'm programmed to help with all issues, what can I help with?"]
+    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
   end
 end
 
@@ -108,7 +122,7 @@ Rubotnik.route :postback do
   end
 
   bind 'INVITE FRIENDS' do
-    text = "One way to earn Sweep coins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
+    text = "One way to earn Sweepcoins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
     say text
     show_invite
     stop_thread
@@ -116,12 +130,12 @@ Rubotnik.route :postback do
 
   bind 'MANAGE UPDATES' do
     text = "Tap the options below to manage your preferences 👇"
-    say text, quick_replies: ["Reminders", "In-game", "Game recaps", ["I'm done", 'Status']]
+    say text, quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
     next_command :manage_updates
   end
 
   bind 'SELECT PICKS' do 
-    text = "Choose from the available sports 👇"
+    text = "Tap the sports below 👇"
     say text, quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
     next_command :show_sports
   end

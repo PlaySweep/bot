@@ -118,10 +118,9 @@ module Commands
   end
 
   def show_invite
-     get_fb_user unless @graph_user 
      friends = [
        {
-         title: "Earn some Sweep coins #{@graph_user["first_name"]} 🤑",
+         title: "Earn some Sweepcoins 🤑",
          buttons: [
            {
              type: "element_share",
@@ -136,13 +135,13 @@ module Commands
                        subtitle: "It's real, you should say something 🤐",
                        default_action: {
                          type: "web_url",
-                         url: "http://www.playsweep.com?ref=#{@graph_user["id"]}"
+                         url: "http://www.playsweep.com?ref=#{user.id}"
                        },
                        buttons: [
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/PlaySweep?ref=#{@graph_user["id"]}", 
+                           url: "https://m.me/PlaySweep?ref=#{user.id}", 
                            title: "The Time Has Come",
                            webview_height_ratio: 'full'
                          }

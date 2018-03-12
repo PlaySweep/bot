@@ -1,3 +1,14 @@
+# [1566539433429514, 1827403637334265].each do |sweep_user_id|
+#   message_options = {
+#     messaging_type: "UPDATE",
+#     recipient: { id: sweep_user_id },
+#     message: {
+#       text: "Feedback from #{full_name}\n\n#{message.text}"
+#     }
+#   }
+#   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+# end
+
 desc "Test Reminder"
 task :test_reminder do
   

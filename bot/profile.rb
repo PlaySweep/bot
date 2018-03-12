@@ -11,7 +11,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "Hey {{user_first_name}}, we're Sweep 👋\n\nGet 4 wins in a row and win up to $50 worth of Amazon gift cards every game day!"
+        text: "We're goin' streaking, {{user_first_name}}!\n\nGet 4 straight wins in a row and win Amazon 💰"
       }
     ]
   }
@@ -23,30 +23,7 @@ module Profile
         composer_input_disabled: false,
         call_to_actions: [
           {
-            type: 'nested',
-            title: '🤖 Profile',
-            call_to_actions: [
-              {
-                title: 'Dashboard',
-                type: 'web_url',
-                messenger_extensions: true,
-                webview_height_ratio: 'full',
-                url: "#{ENV["WEBVIEW_URL"]}?id={{user_id}}&sport=nfl"
-              },
-              {
-                title: 'Invite friends',
-                type: 'postback',
-                payload: 'INVITE FRIENDS'
-              },
-              {
-                title: 'Notifications & Alerts',
-                type: 'postback',
-                payload: 'MANAGE UPDATES'
-              }
-            ]
-          },
-          {
-            title: '🏅 Make picks',
+            title: '🏅 Select picks',
             type: 'postback',
             payload: 'SELECT PICKS' 
           },
@@ -54,6 +31,32 @@ module Profile
             title: '📈 Status',
             type: 'postback',
             payload: 'STATUS' 
+          },
+          {
+            type: 'nested',
+            title: '🤖 Quick Actions',
+            call_to_actions: [
+              {
+                title: '👯 Invite friends',
+                type: 'postback',
+                payload: 'INVITE FRIENDS'
+              },
+              {
+                title: '💰 Sweepcoins',
+                type: 'postback',
+                payload: 'SWEEPCOINS'
+              },
+              {
+                title: '📚 Record',
+                type: 'postback',
+                payload: 'RECORD'
+              },
+              {
+                title: '👋 Notifications',
+                type: 'postback',
+                payload: 'MANAGE UPDATES'
+              }
+            ]
           }
         ]
       }
