@@ -417,6 +417,11 @@ module Commands
       show_media($api.user.images.for_status, quick_replies)
       stop_thread
     end
+  end
+
+  def select_picks
+    text = "Choose from the sports below 👇"
+    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['NHL', 'NHL']]
     stop_thread
   end
 
