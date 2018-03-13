@@ -382,6 +382,9 @@ module Commands
 
   def my_picks
     $api.find_or_create('users', user.id)
+    begin
+
+
     if $api.user.images.any?
       if $api.user.data.status_changed
         set('status changed', user.id)
@@ -429,6 +432,13 @@ module Commands
         stop_thread
       end
     end
+
+    rescue Facebook::Messenger::FacebookError => e
+      say "Whoops, I screwed up. Gimme a sec, I'll try again..."
+      # send an alert message
+      stop_thread
+    end
+
   end
 
   def select_picks
