@@ -3,7 +3,6 @@ require 'json'
 require 'hash_dot'
 require 'base64'
 require 'open-uri'
-require 'fog'
 
 class Api
   Hash.use_dot_syntax = true
