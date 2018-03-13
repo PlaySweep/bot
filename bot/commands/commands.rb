@@ -63,7 +63,7 @@ module Commands
       say "Amazon Prime here we come!", quick_replies: [["Start Sweeping 🎉", "Select picks"]]
       stop_thread
     else
-      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NFL", "NFL"], ["NBA", "NBA"], ["NCAAB", "NCAAB"]]
+      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NCAAB", "NCAAB"], ["NBA", "NBA"], ["NHL", "NHL"]]
       stop_thread
     end
   end
@@ -125,9 +125,11 @@ module Commands
   def show_sports
     $api.find_or_create('users', user.id)
     case message.text
-    when "NFL"
-      handle_pick
     when "NCAAB"
+      handle_pick
+    when "NBA"
+      handle_pick
+    when "NHL"
       handle_pick
     else
       # redirect(message.text)

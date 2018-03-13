@@ -56,7 +56,7 @@ Rubotnik.route :message do
 
   bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
 
   bind 'hi, emma', 'confused', 'walkthrough', to: :walkthrough do
@@ -67,35 +67,35 @@ Rubotnik.route :message do
 
   bind '🏈', '🏀', '🏒', '⚾', to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'start sweeping', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'matchups', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'make picks', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'select picks', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'select games', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'more', 'sports', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
   bind 'ready', 'to', 'play', to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
-    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
 
   bind 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
@@ -156,7 +156,7 @@ Rubotnik.route :postback do
 
   bind 'SELECT PICKS' do 
     text = "Tap the sports below 👇"
-    say text, quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+    say text, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
     next_command :show_sports
   end
 
