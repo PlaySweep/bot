@@ -16,13 +16,13 @@ def send_confirmation
   menu = [
     {
       content_type: 'text',
-      title: 'Invite friends',
-      payload: 'Invite friends'
+      title: '🎉 Share',
+      payload: 'INVITE FRIENDS'
     },
     {
       content_type: 'text',
       title: 'Select picks',
-      payload: 'Select picks'
+      payload: 'SELECT PICKS'
     }
   ]
   message_options = {
@@ -44,6 +44,9 @@ def set field, id
   when 'status changed'
     params = { :user => { :status_changed => false } }
     puts "Status flow changed"
+  when 'store touched'
+    params = { :user => { :store_touched => true } }
+    puts "Store flow changed"
   end
   $api.conn.patch("users/#{id}", params)
   $api.find_or_create('users', id)

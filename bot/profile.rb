@@ -11,7 +11,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "We're goin' streaking, {{user_first_name}}!\n\nGet 4 straight wins in a row and win Amazon 💰"
+        text: "We're goin' streaking, {{user_first_name}}!\n\nGet 4 games in a row and win Amazon 💰\n\n100% Free. 100% Fun. Forever. "
       }
     ]
   }
@@ -37,7 +37,7 @@ module Profile
             title: '🤖 Quick Actions',
             call_to_actions: [
               {
-                title: '👯 Invite friends',
+                title: '🎉 Share & Earn',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'
               },
@@ -46,11 +46,11 @@ module Profile
                 type: 'postback',
                 payload: 'SWEEPCOINS'
               },
-              {
-                title: '📚 Record',
-                type: 'postback',
-                payload: 'RECORD'
-              },
+              # {
+              #   title: '📚 Record',
+              #   type: 'postback',
+              #   payload: 'RECORD'
+              # },
               {
                 title: '👋 Notifications',
                 type: 'postback',

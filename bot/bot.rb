@@ -34,15 +34,24 @@ Rubotnik.route :message do
 
   bind 'sweepcoins', all: true, to: :sweepcoins
 
-  bind 'earn more sweepcoins', 'earn sweepcoins', 'get sweepcoins', all: true, to: :handle_sweepcoins
+  bind 'earn more coins', 'earn coins', to: :earn_coins
 
-  bind 'use a lifeline', all: true, to: :handle_sweepback, reply_with: {
+  bind 'sweep store', 'store', all: true, to: :sweep_store
+
+  bind 'lifeline', 'use lifeline', 'use a lifeline', to: :handle_lifeline, reply_with: {
     text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
     quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
   }
 
-  bind 'invite' do
+  bind 'invite', 'share' do
+    options = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring others to play with you 🎉"]
+    message.typing_on
+    sleep 1.5
+    say options.sample
+    message.typing_on
+    sleep 1
     show_invite
+    stop_thread
   end
 
   bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports, reply_with: {
@@ -60,7 +69,10 @@ Rubotnik.route :message do
     text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
   }
-
+  bind 'start sweeping', all: true, to: :show_sports, reply_with: {
+    text: "Tap the sports below 👇",
+    quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
+  }
   bind 'matchups', all: true, to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
     quick_replies: [['NFL', 'NFL'], ['NCAAB', 'NCAAB']]
@@ -121,9 +133,17 @@ Rubotnik.route :postback do
     status_for_postback
   end
 
+  bind 'SWEEPCOINS' do
+    sweepcoins_for_postback
+  end
+
   bind 'INVITE FRIENDS' do
-    text = "One way to earn Sweepcoins is by referring others to play with you!\nYour friends will get some too when they play 🎉"
-    say text
+    options = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring others to play with you 🎉"]
+    postback.typing_on
+    sleep 1.5
+    say options.sample
+    postback.typing_on
+    sleep 1
     show_invite
     stop_thread
   end
