@@ -382,41 +382,42 @@ module Commands
 
   def my_picks
     $api.find_or_create('users', user.id)
-    if $api.user.images.any?
-      if $api.user.data.status_changed
-        set('status changed', user.id)
-        message.typing_on
-        say "Brb, fetching the rest of your picks ⏳"
-        message.typing_on
-        $api.for_picks('status')
-        quick_replies = [
-          { content_type: 'text', title: "Select picks", payload: "Select picks" },
-          { content_type: 'text', title: "Status", payload: "Status" }
-        ]
-        show_media($api.user.images.for_status, quick_replies)
-        stop_thread
-      else
-        message.typing_on
-        quick_replies = [
-          { content_type: 'text', title: "Select picks", payload: "Select picks" },
-          { content_type: 'text', title: "Status", payload: "Status" }
-        ]
-        show_media($api.user.images.for_status, quick_replies)
-        stop_thread
-      end
-    else
-      set('status changed', user.id)
-      message.typing_on
-      say "Brb, fetching the rest of your picks ⏳"
-      message.typing_on
-      $api.for_picks('status')
-      quick_replies = [
-        { content_type: 'text', title: "Select picks", payload: "Select picks" },
-        { content_type: 'text', title: "Status", payload: "Status" }
-      ]
-      show_media($api.user.images.for_status, quick_replies)
-      stop_thread
-    end
+    # if $api.user.images.any?
+    #   if $api.user.data.status_changed
+    #     set('status changed', user.id)
+    #     message.typing_on
+    #     say "Brb, fetching the rest of your picks ⏳"
+    #     message.typing_on
+    #     $api.for_picks('status')
+    #     quick_replies = [
+    #       { content_type: 'text', title: "Select picks", payload: "Select picks" },
+    #       { content_type: 'text', title: "Status", payload: "Status" }
+    #     ]
+    #     show_media($api.user.images.for_status, quick_replies)
+    #     stop_thread
+    #   else
+    #     message.typing_on
+    #     quick_replies = [
+    #       { content_type: 'text', title: "Select picks", payload: "Select picks" },
+    #       { content_type: 'text', title: "Status", payload: "Status" }
+    #     ]
+    #     show_media($api.user.images.for_status, quick_replies)
+    #     stop_thread
+    #   end
+    # else
+    #   set('status changed', user.id)
+    #   message.typing_on
+    #   say "Brb, fetching the rest of your picks ⏳"
+    #   message.typing_on
+    #   $api.for_picks('status')
+    #   quick_replies = [
+    #     { content_type: 'text', title: "Select picks", payload: "Select picks" },
+    #     { content_type: 'text', title: "Status", payload: "Status" }
+    #   ]
+    #   show_media($api.user.images.for_status, quick_replies)
+    #   stop_thread
+    # end
+    stop_thread
   end
 
   def select_picks
