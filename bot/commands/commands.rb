@@ -243,7 +243,7 @@ module Commands
   def sweep_store
     $api.find_or_create('users', user.id)
     if $api.user.data.store_touched
-      if $api.user.sweep_coins >= 30 && ($api.user.previous_streak > $api.user.current_streak)
+      if $api.user.data.sweep_coins >= 30 && ($api.user.previous_streak > $api.user.current_streak)
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
         message.typing_on
         sleep 1.5
@@ -253,9 +253,9 @@ module Commands
         sleep 1
         say "Use a lifeline to set your streak back to #{$api.user.previous_streak} for 30 Sweepcoins 🙏", quick_replies: [["Use lifeline", "Use lifeline"], ["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
-      elsif $api.user.sweep_coins < 30 && ($api.user.previous_streak > $api.user.current_streak)
+      elsif $api.user.data.sweep_coins < 30 && ($api.user.previous_streak > $api.user.current_streak)
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
-        coins_needed = (30 - $api.user.sweep_coins)
+        coins_needed = (30 - $api.user.data.sweep_coins)
         message.typing_on
         sleep 1.5
         say options.sample
@@ -294,8 +294,8 @@ module Commands
 
   def sweepcoins
     $api.find_or_create('users', user.id)
-    $api.user.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-    if $api.user.sweep_coins >= 30
+    $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+    if $api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
       $api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
       message.typing_on
@@ -303,7 +303,7 @@ module Commands
       sleep 1
       message.typing_on
       sleep 1.5
-      say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑"
+      say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
       sleep 1
       message.typing_on
       sleep 0.5
@@ -317,7 +317,7 @@ module Commands
         sleep 1
         message.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑"
+        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
         sleep 1
         message.typing_on
         sleep 0.5
@@ -330,7 +330,7 @@ module Commands
         sleep 1
         message.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       end
     end
@@ -338,8 +338,8 @@ module Commands
 
   def sweepcoins_for_postback
     $api.find_or_create('users', user.id)
-    $api.user.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-    if $api.user.sweep_coins >= 30
+    $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+    if $api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
       $api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
       postback.typing_on
@@ -347,7 +347,7 @@ module Commands
       sleep 1
       postback.typing_on
       sleep 1.5
-      say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑"
+      say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
       sleep 1
       postback.typing_on
       sleep 0.5
@@ -361,7 +361,7 @@ module Commands
         sleep 1
         postback.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑"
+        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
         sleep 1
         postback.typing_on
         sleep 0.5
@@ -374,7 +374,7 @@ module Commands
         sleep 1
         postback.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       end
     end
@@ -448,7 +448,7 @@ module Commands
         sleep 1.5
         message.typing_on
         sleep 2
-        say "Your new Sweepcoin balance is #{$api.user.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+        say "Your new Sweepcoin balance is #{$api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       end
     when 'No Lifeline'
@@ -473,7 +473,7 @@ module Commands
     else
       if !$api.user.data.status_touched # if hasnt been touched yet
         set('status touched', user.id)
-        if $api.user.sweep_coins >= 30
+        if $api.user.data.sweep_coins >= 30
           quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -491,7 +491,7 @@ module Commands
             sleep 0.5
             message.typing_on
             sleep 2
-            say "But I have good news, you have #{$api.user.sweep_coins} Sweepcoins 🤑"
+            say "But I have good news, you have #{$api.user.data.sweep_coins} Sweepcoins 🤑"
             sleep 0.5
             message.typing_on
             sleep 3
@@ -500,7 +500,7 @@ module Commands
           end
         else
           quick_replies = [["Earn more coins", "Earn more coins"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
-          coins_needed = (30 - $api.user.sweep_coins)
+          coins_needed = (30 - $api.user.data.sweep_coins)
           say "Goose 🥚"
           sleep 0.5
           message.typing_on
@@ -508,7 +508,7 @@ module Commands
           say "You're currently at a streak of zero."
           sleep 0.5
           message.typing_on
-          $api.user.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+          $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
           sleep 2
           say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{$api.user.previous_streak} 👌"
           message.typing_on
@@ -517,7 +517,7 @@ module Commands
           stop_thread
         end
       else
-        if $api.user.sweep_coins >= 30
+        if $api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -555,7 +555,7 @@ module Commands
     else
       if !$api.user.data.status_touched # if hasnt been touched yet
         set('status touched', user.id)
-        if $api.user.sweep_coins >= 30
+        if $api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -565,7 +565,7 @@ module Commands
           sleep 0.5
           postback.typing_on
           sleep 2
-          say "But I have good news, you have #{$api.user.sweep_coins} Sweepcoins 🤑"
+          say "But I have good news, you have #{$api.user.data.sweep_coins} Sweepcoins 🤑"
           sleep 0.5
           postback.typing_on
           sleep 3
@@ -581,14 +581,14 @@ module Commands
           sleep 0.5
           postback.typing_on
           sleep 2
-          say "You have #{$api.user.sweep_coins} Sweepcoins...not quite enough to buy a lifeline (30 coins) yet 🙄"
+          say "You have #{$api.user.data.sweep_coins} Sweepcoins...not quite enough to buy a lifeline (30 coins) yet 🙄"
           postback.typing_on
           sleep 1.5
           say "Did you wanna check for anything else?", quick_replies: quick_replies
           stop_thread
         end
       else
-        if $api.user.sweep_coins >= 30
+        if $api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
