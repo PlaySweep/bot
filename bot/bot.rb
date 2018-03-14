@@ -24,10 +24,6 @@ Rubotnik.route :message do
     show_login
   end
 
-  bind 'error check', to: :error_check, reply_with: {
-    text: "Errr 😤...still unable to talk to Facebook.\n\nI promise to make it up to you once we get back up and running 🤗"
-  }
-
   bind "eh, i'm good", "i'm good", "i'm fine", to: :catch
 
   bind 'cool', 'thanks', 'nice', 'awesome', 'thank you', to: :emoji_response
