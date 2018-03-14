@@ -191,7 +191,7 @@ module Commands
     $api.find_or_create('users', user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     # refactor to handle unexpected messages
-    return if (message.text != "Skip" && !matchup_id && !selected_id)
+    # return if (message.text != "Skip" && !matchup_id && !selected_id)
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     $api.all('matchups', sport: sport.downcase) unless sport.nil?
     games = $api.matchups && $api.matchups.count > 1 || $api.matchups && $api.matchups.count == 0 ? "games" : "game"
