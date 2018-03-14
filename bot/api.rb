@@ -40,7 +40,7 @@ class Api
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
       if @user.empty?
-        params = { :user => { :facebook_uuid => @fb_user['id'], :first_name => @fb_user['first_name'], :last_name => @fb_user['last_name'] } }
+        params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
         response = @conn.post("#{model}", params)
         @user = JSON.parse(response.body)['user']
       end
@@ -59,7 +59,8 @@ class Api
     case model
     when 'picks'
       response = @conn.post("users/#{@user.facebook_uuid}/#{model}", params)
-      @pick = JSON.parse(response.body)['pick']
+      response = JSON.parse(response.body)
+      @pick = response['pick']
     end
   end
 
