@@ -143,9 +143,7 @@ module Commands
   end
 
   def show_sports
-    $api.find_or_create('users', user.id)
-    
-    case message.text
+    case message.quick_reply
     when "NCAAB"
       handle_pick
     when "NBA"
