@@ -587,7 +587,16 @@ module Commands
           quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
-          if $api.user.previous_streak <= $api.user.current_streak
+          if $api.user.previous_streak == $api.user.current_streak
+            message.typing_on
+            sleep 1.5
+            say "You're currently at a streak of zero..."
+            sleep 1
+            message.typing_on
+            sleep 1.5
+            say "Did you wanna check for anything else?", quick_replies: quick_replies
+            stop_thread
+          elsif $api.user.previous_streak <= $api.user.current_streak
             message.typing_on
             sleep 1.5
             say "You're currently at a streak of zero..."
