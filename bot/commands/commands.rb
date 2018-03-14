@@ -48,7 +48,7 @@ module Commands
 
   def walkthrough
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     case message.quick_reply
     when 'Welcome'
       message.typing_on
@@ -86,7 +86,7 @@ module Commands
 
   def manage_updates
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -102,7 +102,7 @@ module Commands
 
   def handle_notifications
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     case message.quick_reply
     when 'Reminders On'
       set_notification_settings(:reminders, true)
@@ -125,7 +125,7 @@ module Commands
 
   def dashboard
     # $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     # stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
     # current_streak = "#{$api.user.current_streak} wins in a row\n"
     # sweep_count = "#{$api.user.sweep_count} total sweeps\n"
@@ -137,14 +137,14 @@ module Commands
 
   def unavailable_sports
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     say "We don't have #{message.text} yet, but we will let you know when we add more sports...", quick_replies: quick_replies
   end
 
   def show_sports
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     case message.text
     when "NCAAB"
       handle_pick
@@ -164,7 +164,7 @@ module Commands
 
   def skip
     $api.find_or_create('users', user.id)
-    $api.find_fb_user(user.id)
+    
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
     $api.all('matchups', sport: sport)
