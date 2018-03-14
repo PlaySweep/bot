@@ -43,6 +43,7 @@ PLATFORMS
 DEPENDENCIES
   faraday
   hash_dot
+  httparty
   rake
   rubotnik
   sinatra

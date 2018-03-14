@@ -393,6 +393,7 @@ module Commands
         begin
           message.typing_on
           $api.for_picks('upcoming')
+          return if $api.upcoming_picks.nil?
           next_up = $api.upcoming_picks.first
           if next_up
             if next_up.type == 'Game'
@@ -428,6 +429,7 @@ module Commands
       else
         message.typing_on
         $api.for_picks('upcoming')
+        return if $api.upcoming_picks.nil?
         next_up = $api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
@@ -458,6 +460,7 @@ module Commands
       begin
         message.typing_on
         $api.for_picks('upcoming')
+        return if $api.upcoming_picks.nil?
         next_up = $api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
@@ -476,6 +479,7 @@ module Commands
           stop_thread
         end  
         $api.for_picks('upcoming')
+        return if $api.upcoming_picks.nil?
         next_up = $api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
