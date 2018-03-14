@@ -27,11 +27,7 @@ module Commands
         postback.typing_on
         sleep 0.5
         postback.typing_on
-        say "...I'm Emma btw 👋, we'll get to know each other better in a bit."
-        postback.typing_on
-        sleep 1
-        postback.typing_on
-        say "In the meantime, I'll keep a look out and let you know when we can get started 🎉"
+        say "...I'm Emma btw 👋, I'll keep a look out and let you know when we can get started 🎉"
         # send alert message
         stop_thread
     end
@@ -190,7 +186,7 @@ module Commands
     $api.find_or_create('users', user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     # refactor to handle unexpected messages
-    return if (!matchup_id && !selected_id && message.quick_reply.split(' ')[0] == "Skip")
+    return if (!matchup_id && !selected_id && message.text == "Skip")
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     $api.all('matchups', sport: sport.downcase) unless sport.nil?
     games = $api.matchups && $api.matchups.count > 1 || $api.matchups && $api.matchups.count == 0 ? "games" : "game"
