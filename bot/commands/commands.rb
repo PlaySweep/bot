@@ -6,17 +6,23 @@ module Commands
   STATUS_HOT = ["You are lit 🔥", "Nom nom 🍔", "You're ridin' hot 🤠", "We have lift off 🚀", "You're going off ⏰"]
 
   def start
-    $api.find_fb_user(user.id)
-    puts "Facebook user found => #{$api.fb_user}"
-    $api.find_or_create('users', user.id)
-    postback.typing_on
-    say "Hey #{$api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
-    if postback.referral
-      referrer_id = postback.referral.ref
-      puts "Referrer Id: #{referrer_id}"
-      update_sender(referrer_id) unless referrer_id.to_i == 0
+    begin
+      $api.find_fb_user(user.id)
+      puts "Facebook user found => #{$api.fb_user}"
+      $api.find_or_create('users', user.id)
+      postback.typing_on
+      say "Hey #{$api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
+      if postback.referral
+        referrer_id = postback.referral.ref
+        puts "Referrer Id: #{referrer_id}"
+        update_sender(referrer_id) unless referrer_id.to_i == 0
+      end
+      stop_thread
+      rescue NoMethodError => e
+        say "Whoops, Facebook seems to have issues giving me the information I need to do my job...we are looking into the issue and will get back to you when it has been resolved."
+        # send an alert message
+        stop_thread
     end
-    stop_thread
   end
 
   def catch
