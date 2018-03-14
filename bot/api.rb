@@ -34,16 +34,25 @@ class Api
   end
 
   def find_or_create model, id
-    case model
-    when 'users'
-      puts "Running find_or_create for Users model..."
-      response = @conn.get("#{model}/#{id}")
-      @user = JSON.parse(response.body)['user']
-      if @user.empty?
-        params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
-        response = @conn.post("#{model}", params)
+    begin
+      case model
+      when 'users'
+        puts "Running find_or_create for Users model..."
+        response = @conn.get("#{model}/#{id}")
         @user = JSON.parse(response.body)['user']
+        if @user.empty?
+          params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
+          response = @conn.post("#{model}", params)
+          @user = JSON.parse(response.body)['user']
+        end
       end
+    rescue NoMethodError => e
+       say "Errr 😤..."
+       message.typing_on
+       sleep 1
+       message.typing_on
+       say "I'm still unable to talk to Facebook...I promise to make it up to you once we get back up and running 🤗"
+       stop_thread
     end
   end
 

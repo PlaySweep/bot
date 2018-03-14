@@ -19,7 +19,19 @@ module Commands
       end
       stop_thread
       rescue NoMethodError => e
-        say "Whoops, Facebook seems to have issues giving me the information I need to do my job...we are looking into the issue and will get back to you when it has been resolved."
+        say "Hmm 🤔..."
+        message.typing_on
+        sleep 1.5
+        message.typing_on
+        say "So I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
+        message.typing_on
+        sleep 0.5
+        message.typing_on
+        say "...I'm Emma btw 👋, we'll get to know each other better in a bit."
+        message.typing_on
+        sleep 1
+        message.typing_on
+        say "In the meantime, I'll keep a look out and let you know when we can get started 🎉"
         # send an alert message
         stop_thread
     end
