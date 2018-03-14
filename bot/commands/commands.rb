@@ -20,17 +20,17 @@ module Commands
       stop_thread
       rescue NoMethodError => e
         say "Hmm 🤔..."
-        message.typing_on
+        postback.typing_on
         sleep 1.5
-        message.typing_on
+        postback.typing_on
         say "So I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
-        message.typing_on
+        postback.typing_on
         sleep 0.5
-        message.typing_on
+        postback.typing_on
         say "...I'm Emma btw 👋, we'll get to know each other better in a bit."
-        message.typing_on
+        postback.typing_on
         sleep 1
-        message.typing_on
+        postback.typing_on
         say "In the meantime, I'll keep a look out and let you know when we can get started 🎉"
         next_command :error_check
     end
@@ -41,19 +41,16 @@ module Commands
       $api.find_fb_user(user.id)
       puts "Facebook user found => #{$api.fb_user}"
       $api.find_or_create('users', user.id)
-      postback.typing_on
+      # postback.typing_on
       say "Hey #{$api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
-      if postback.referral
-        referrer_id = postback.referral.ref
-        puts "Referrer Id: #{referrer_id}"
-        update_sender(referrer_id) unless referrer_id.to_i == 0
-      end
+      # if postback.referral
+      #   referrer_id = postback.referral.ref
+      #   puts "Referrer Id: #{referrer_id}"
+      #   update_sender(referrer_id) unless referrer_id.to_i == 0
+      # end
       stop_thread    
     rescue NoMethodError => e
       say "Errr 😤..."
-      message.typing_on
-      sleep 1
-      message.typing_on
       say "I'm still unable to talk to Facebook...I promise to make it up to you once we get back up and running 🤗"
       next_command :error_check
     end
