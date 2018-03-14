@@ -7,6 +7,7 @@ module Commands
 
   def start
     $api.find_fb_user(user.id)
+    puts "Facebook user found => #{$api.fb_user}"
     $api.find_or_create('users', user.id)
     postback.typing_on
     say "Hey #{$api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
