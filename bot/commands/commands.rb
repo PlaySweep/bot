@@ -50,8 +50,6 @@ module Commands
       # end
       stop_thread    
     rescue NoMethodError => e
-      say "Errr 😤..."
-      say "I'm still unable to talk to Facebook...I promise to make it up to you once we get back up and running 🤗"
       next_command :error_check
     end
   end
