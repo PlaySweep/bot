@@ -48,6 +48,7 @@ module Commands
 
   def walkthrough
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     case message.quick_reply
     when 'Welcome'
       message.typing_on
@@ -85,6 +86,7 @@ module Commands
 
   def manage_updates
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -100,6 +102,7 @@ module Commands
 
   def handle_notifications
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     case message.quick_reply
     when 'Reminders On'
       set_notification_settings(:reminders, true)
@@ -122,6 +125,7 @@ module Commands
 
   def dashboard
     # $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     # stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
     # current_streak = "#{$api.user.current_streak} wins in a row\n"
     # sweep_count = "#{$api.user.sweep_count} total sweeps\n"
@@ -133,12 +137,14 @@ module Commands
 
   def unavailable_sports
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     say "We don't have #{message.text} yet, but we will let you know when we add more sports...", quick_replies: quick_replies
   end
 
   def show_sports
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     case message.text
     when "NCAAB"
       handle_pick
@@ -158,6 +164,7 @@ module Commands
 
   def skip
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
     $api.all('matchups', sport: sport)
@@ -184,9 +191,10 @@ module Commands
 
   def handle_pick
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     # refactor to handle unexpected messages
-    return if (!matchup_id && !selected_id && message.text == "Skip")
+    return if (message.text != "Skip" && !matchup_id && !selected_id)
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     $api.all('matchups', sport: sport.downcase) unless sport.nil?
     games = $api.matchups && $api.matchups.count > 1 || $api.matchups && $api.matchups.count == 0 ? "games" : "game"
@@ -260,6 +268,7 @@ module Commands
 
   def sweep_store
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     if $api.user.data.store_touched
       if $api.user.data.sweep_coins >= 30 && ($api.user.previous_streak > $api.user.current_streak)
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
@@ -312,6 +321,7 @@ module Commands
 
   def sweepcoins
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
     if $api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
@@ -356,6 +366,7 @@ module Commands
 
   def sweepcoins_for_postback
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
     if $api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
@@ -400,6 +411,7 @@ module Commands
 
   def my_picks
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     options = ["😏, I like where your heads at", "You got this ✊"]
     begin
     if $api.user.images.any?
@@ -545,6 +557,7 @@ module Commands
 
   def handle_lifeline
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     case message.quick_reply
     when 'Yes Lifeline'
       if $api.user.current_streak > 0 || ($api.user.previous_streak == 0 && $api.user.current_streak == 0)
@@ -579,6 +592,7 @@ module Commands
 
   def status
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     message.typing_on
     quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
     if $api.user.current_streak > 0
@@ -670,6 +684,7 @@ module Commands
 
   def status_for_postback
     $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
     postback.typing_on
     quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
     if $api.user.current_streak > 0
@@ -740,5 +755,6 @@ module Commands
 
   def how_to_play
     # $api.find_or_create('users', user.id)
+    $api.find_fb_user(user.id)
   end
 end
