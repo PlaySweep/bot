@@ -15,7 +15,7 @@ module Commands
       if postback.referral
         referrer_id = postback.referral.ref
         puts "Referrer Id: #{referrer_id}"
-        update_sender(referrer_id) unless referrer_id.to_i == 0
+        update_sender(user.id, referrer_id) unless referrer_id.to_i == 0
       end
       stop_thread
       rescue NoMethodError => e

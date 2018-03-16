@@ -1,18 +1,16 @@
-def update_sender id
-  $api.find('users', id)
-  @new_user = $api.user
+def update_sender current_user_id, referral_id
+  $api.find('users', referral_id)
   referral_count = $api.user.data.referral_count
   sweep_coin_balance = $api.user.data.sweep_coins
-  new_referral_count = referral_count + 1
-  new_sweep_coin_balance = sweep_coin_balance + 10
+  new_referral_count = referral_count += 1
+  new_sweep_coin_balance = sweep_coin_balance += 10
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
-  response = $api.conn.patch("users/#{id}", params)
-  puts "Updated referrals for #{$api.user.first_name} #{$api.fb_user.last_name}"
-  $api.find('users', $api.fb_user.id)
+  response = $api.conn.patch("users/#{referral_id}", params)
   send_confirmation
 end
 
-def send_confirmation
+def send_confirmation current_user_id, referral_id
+  $api.find('users', referral_id)
   menu = [
     {
       content_type: 'text',
@@ -27,9 +25,9 @@ def send_confirmation
   ]
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: $api.fb_user.id },
+    recipient: { id: current_user_id },
     message: {
-      text: "Your friend #{@new_user.first_name} #{@new_user.last_name} just signed up! Your referral count is now at #{$api.user.data.referral_count}.",
+      text: "Your friend #{$api.user.first_name} #{$api.user.last_name} just signed up!",
       quick_replies: menu
     }
   }
