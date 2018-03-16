@@ -103,13 +103,15 @@ Rubotnik.route :message do
      quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
   }
 
+  # bind 'stop', 'unsubscribe', to: :unsubscribe
+
+  # bind 'gift card', 'prizes', to: :prizes
+
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {
   #   text: 'Let me know your location',
   #   quick_replies: LOCATION_PROMPT
   # }
 
-  # Look for more UI examples in commands/ui_examples.rb
-  # Rubotnik currently supports Image, Button Template and Carousel
   # bind 'image', to: :show_image
 
   default do
@@ -158,6 +160,12 @@ Rubotnik.route :postback do
     text = "Tap the sports below 👇"
     say text, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
     next_command :show_sports
+  end
+
+  bind 'USE LIFELINE' do
+    text = "Are you sure you want me to deduct 30 Sweepcoins from your wallet?"
+    say text, quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
+    handle_lifeline_for_postback
   end
 
   bind 'DASHBOARD', to: :dashboard
