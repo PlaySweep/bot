@@ -173,15 +173,15 @@ module Commands
       status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
       dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
       matchup = $api.matchups.first
-      away = $api.matchups.first.away_side
-      home = $api.matchups.first.home_side
+      away = matchup.away_side
+      home = matchup.home_side
       quick_replies = [
         { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
         { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
       message.typing_on
-      show_media($api.matchups.first.attachment_id, quick_replies)
+      show_media(matchup.attachment_id, quick_replies)
       message.typing_off
       next_command :handle_pick
     end
@@ -211,15 +211,15 @@ module Commands
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
         matchup = $api.matchups.first
-        away = $api.matchups.first.away_side
-        home = $api.matchups.first.home_side
+        away = matchup.away_side
+        home = matchup.home_side
         quick_replies = [
           { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
           { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        show_media($api.matchups.first.attachment_id, quick_replies)
+        show_media(matchup.attachment_id, quick_replies)
         message.typing_off
         next_command :handle_pick
       end
@@ -232,8 +232,8 @@ module Commands
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
         matchup = $api.matchups.first
-        away = $api.matchups.first.away_side
-        home = $api.matchups.first.home_side
+        away = matchup.away_side
+        home = matchup.home_side
         quick_replies = [
           { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
           { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
@@ -241,7 +241,7 @@ module Commands
         ]
         message.typing_on
         sleep 3
-        show_media($api.matchups.first.attachment_id, quick_replies)
+        show_media(matchup.attachment_id, quick_replies)
         message.typing_off
         next_command :handle_pick
       end
