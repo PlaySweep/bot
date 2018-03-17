@@ -86,7 +86,7 @@ module Commands
 
   def manage_updates
     $api.find_or_create('users', user.id)
-    
+  
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -143,7 +143,7 @@ module Commands
   end
 
   def dashboard
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
     
     # stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
     # current_streak = "#{$api.user.current_streak} wins in a row\n"
@@ -180,10 +180,16 @@ module Commands
   end
 
   def skip
-    $api.find_or_create('users', user.id)
-    
+    $api.find_or_create('users', user.id)  
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
-    $api.update('matchups', matchup_id, { :matchup => {:skipped => true, :skipped_by => $api.user.id.to_i} })
+    $api.update('matchups', matchup_id, { :matchup => {:skipped_by => $api.user.id.to_i} })
+    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Okie dokie 👉"]
+    message.typing_on
+    sleep 0.5
+    say options.sample
+    sleep 0.5
+    message.typing_on
+    sleep 1
     $api.all('matchups', sport: sport)
     if ($api.matchups.nil? || $api.matchups.empty?)
       say "No more picks for the #{sport.upcase}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
@@ -218,6 +224,8 @@ module Commands
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       $api.create('picks', params)
+      message.typing_on
+      sleep 0.5
       say "#{$api.pick.selected} (#{$api.pick.action}) ✅" unless $api.pick.nil?
       message.typing_on
       sleep 1
@@ -799,6 +807,6 @@ module Commands
   end
 
   def how_to_play
-    # $api.find_or_create('users', user.id)
+    $api.find_or_create('users', user.id)
   end
 end
