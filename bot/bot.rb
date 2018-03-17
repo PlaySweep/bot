@@ -98,12 +98,10 @@ Rubotnik.route :message do
     quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
 
-  bind 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
-     text: "Tap the options below to manage your preferences 👇",
+  bind 'stop', 'unsubscribe', 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
+     text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you ☺️",
      quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
   }
-
-  # bind 'stop', 'unsubscribe', to: :unsubscribe
 
   # bind 'gift card', 'prizes', to: :prizes
 
@@ -116,7 +114,7 @@ Rubotnik.route :message do
 
   default do
     options = ["Help me help you, what are you wanting to do?", "Sorry I don't understand everything humans say yet. Try starting with the options below 👇", "I'm programmed to help with all issues, what can I help with?"]
-    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Manage notifications", "Manage notifications"]]
   end
 end
 

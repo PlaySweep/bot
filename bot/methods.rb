@@ -61,10 +61,10 @@ def use_lifeline id
   puts "💸"
 end
 
-def set_notification_settings type, action
+def set_notification_settings id, type, action
   params = { :user => { type => action } }
-  response = $api.conn.patch("users/#{$api.fb_user.id}", params)
-  puts "#{$api.fb_user.first_name} #{$api.fb_user.last_name} set #{type} to #{action}"
+  response = $api.conn.patch("users/#{id}", params)
+  puts "Set notifications 👍" if response.status == 200
 end
 
 
