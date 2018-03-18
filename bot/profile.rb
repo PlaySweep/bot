@@ -23,14 +23,25 @@ module Profile
         composer_input_disabled: false,
         call_to_actions: [
           {
-            title: '🏅 Select picks',
-            type: 'postback',
-            payload: 'SELECT PICKS' 
-          },
-          {
-            title: '📈 Status',
-            type: 'postback',
-            payload: 'STATUS' 
+            type: 'nested',
+            title: '📊 Dashboard',
+            call_to_actions: [
+              {
+                title: '🏅 Select picks',
+                type: 'postback',
+                payload: 'SELECT PICKS' 
+              },
+              {
+                title: '📈 Status',
+                type: 'postback',
+                payload: 'STATUS' 
+              },
+              {
+                title: '💰 Sweepcoins',
+                type: 'postback',
+                payload: 'SWEEPCOINS'
+              },
+            ]
           },
           {
             type: 'nested',
@@ -40,11 +51,6 @@ module Profile
                 title: '🎉 Share & Earn',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'
-              },
-              {
-                title: '💰 Sweepcoins',
-                type: 'postback',
-                payload: 'SWEEPCOINS'
               },
               # {
               #   title: '📚 Record',
