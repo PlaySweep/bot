@@ -166,7 +166,7 @@ Rubotnik.route :postback do
     handle_lifeline_for_postback
   end
 
-  bind 'DASHBOARD', to: :dashboard
+  # bind 'DASHBOARD', to: :dashboard
 end
 
 ####################### HANDLE OTHER REQUESTS (NON-FB) #########################

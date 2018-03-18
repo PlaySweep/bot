@@ -7,11 +7,12 @@ module Commands
 
   def start
     begin
-      $api.find_fb_user(user.id)
-      puts "Facebook user found => #{$api.fb_user}"
-      $api.find_or_create('users', user.id)
+      @api = Api.new
+      @api.find_fb_user(user.id)
+      puts "Facebook user found => #{@api.fb_user}"
+      @api.find_or_create('users', user.id)
       postback.typing_on
-      say "Hey #{$api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
+      say "Hey #{@api.user.first_name}, you finally found me!", quick_replies: [ ["Hi, Emma!", "Welcome"] ]
       if postback.referral
         referrer_id = postback.referral.ref
         puts "Referrer Id: #{referrer_id}"
@@ -47,8 +48,8 @@ module Commands
   end
 
   def walkthrough
-    $api.find_or_create('users', user.id)
-    
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     case message.quick_reply
     when 'Welcome'
       message.typing_on
@@ -85,8 +86,8 @@ module Commands
   end
 
   def manage_updates
-    $api.find_or_create('users', user.id)
-  
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     case message.text
     when 'Reminders'
       say "Reminder on or off?", quick_replies: [["On", "Reminders On"], ["Off", "Reminders Off"]]
@@ -110,7 +111,8 @@ module Commands
   end
 
   def handle_notifications
-    $api.find_or_create('users', user.id)    
+    @api = Api.new
+    @api.find_or_create('users', user.id)    
     case message.quick_reply
     when 'Reminders On'
       set_notification_settings(user.id, :new_games, true)
@@ -143,20 +145,19 @@ module Commands
   end
 
   def dashboard
-    $api.find_or_create('users', user.id)
-    
-    # stats = "#{$api.user.stats.wins} wins and #{$api.user.stats.wins} losses\n"
-    # current_streak = "#{$api.user.current_streak} wins in a row\n"
-    # sweep_count = "#{$api.user.sweep_count} total sweeps\n"
-    # referrals = "#{$api.user.data.referral_count} referrals"
-    # text = stats + current_streak + sweep_count + referrals
-    # say text, quick_replies: [["Select picks", "Select picks"]]
+    @api = Api.new
+    @api.find_or_create('users', user.id)
+    message.typing_on
+    say "I am cookin' up something special here 👩‍🍳"
+    sleep 0.5
+    message.typing_on
+    say "I'll be the first to let you know when it's ready for show and tell 😊"
     stop_thread
   end
 
   def unavailable_sports
-    $api.find_or_create('users', user.id)
-    
+    @api = Api.new
+    @api.find_or_create('users', user.id)   
     quick_replies = [["Select picks", "Select picks"], ["Status", "Status"]]
     say "We don't have #{message.text} yet, but we will let you know when we add more sports...", quick_replies: quick_replies
   end
@@ -180,9 +181,10 @@ module Commands
   end
 
   def skip
-    $api.find_or_create('users', user.id)  
+    @api = Api.new
+    @api.find_or_create('users', user.id)  
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
-    $api.update('matchups', matchup_id, { :matchup => {:skipped_by => $api.user.id.to_i} })
+    @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id.to_i} })
     options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Okie dokie 👉"]
     message.typing_on
     sleep 0.5
@@ -190,14 +192,14 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    $api.all('matchups', sport: sport)
-    if ($api.matchups.nil? || $api.matchups.empty?)
+    @api.all('matchups', sport: sport)
+    if (@api.matchups.nil? || @api.matchups.empty?)
       say "No more picks for the #{sport.upcase}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
       stop_thread
     else
       status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
       dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-      matchup = $api.matchups.first
+      matchup = @api.matchups.first
       away = matchup.away_side
       home = matchup.home_side
       quick_replies = [
@@ -213,31 +215,31 @@ module Commands
   end
 
   def handle_pick
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     say "Sorry didn't catch that...", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]] and stop_thread and return if (!message.quick_reply && message.text != "Skip")
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
-    # refactor to handle unexpected messages
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
-    $api.all('matchups', sport: sport.downcase) unless sport.nil?
-    games = $api.matchups && $api.matchups.count > 1 || $api.matchups && $api.matchups.count == 0 ? "games" : "game"
-    say "We have #{$api.matchups.count} #{sport} #{games} on deck..." unless (matchup_id && selected_id || ($api.matchups.nil? || $api.matchups.empty?))
+    @api.all('matchups', sport: sport.downcase) unless sport.nil?
+    games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
+    say "We have #{@api.matchups.count} #{sport} #{games} on deck..." unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
-      $api.create('picks', params)
+      @api.create('picks', params)
       message.typing_on
       sleep 0.5
-      say "#{$api.pick.selected} (#{$api.pick.action}) ✅" unless $api.pick.nil?
+      say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       message.typing_on
       sleep 1
       message.typing_off
-      $api.all('matchups', sport: sport.downcase) unless sport.nil?
-      if ($api.matchups.nil? || $api.matchups.empty?)
+      @api.all('matchups', sport: sport.downcase) unless sport.nil?
+      if (@api.matchups.nil? || @api.matchups.empty?)
         say "No more picks for the #{sport}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-        matchup = $api.matchups.first
+        matchup = @api.matchups.first
         away = matchup.away_side
         home = matchup.home_side
         quick_replies = [
@@ -251,14 +253,14 @@ module Commands
         next_command :handle_pick
       end
     else
-      $api.all('matchups', sport: sport.downcase) unless sport.nil?
-      if ($api.matchups.nil? || $api.matchups.empty?)
+      @api.all('matchups', sport: sport.downcase) unless sport.nil?
+      if (@api.matchups.nil? || @api.matchups.empty?)
         say "No more picks for the #{sport}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
         dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
-        matchup = $api.matchups.first
+        matchup = @api.matchups.first
         away = matchup.away_side
         home = matchup.home_side
         quick_replies = [
@@ -291,9 +293,10 @@ module Commands
   end
 
   def sweep_store
-    $api.find_or_create('users', user.id)
-    if $api.user.data.store_touched
-      if $api.user.data.sweep_coins >= 30 && ($api.user.previous_streak > $api.user.current_streak)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
+    if @api.user.data.store_touched
+      if @api.user.data.sweep_coins >= 30 && (@api.user.previous_streak > @api.user.current_streak)
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
         message.typing_on
         sleep 1.5
@@ -301,18 +304,18 @@ module Commands
         sleep 1
         message.typing_on
         sleep 1
-        say "Use a lifeline to set your streak back to #{$api.user.previous_streak} for 30 Sweepcoins 🙏", quick_replies: [["Use lifeline", "Use lifeline"], ["Select picks", "Select picks"], ["Status", "Status"]]
+        say "Use a lifeline to set your streak back to #{@api.user.previous_streak} for 30 Sweepcoins 🙏", quick_replies: [["Use lifeline", "Use lifeline"], ["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
-      elsif $api.user.data.sweep_coins < 30 && ($api.user.previous_streak > $api.user.current_streak)
+      elsif @api.user.data.sweep_coins < 30 && (@api.user.previous_streak > @api.user.current_streak)
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
-        coins_needed = (30 - $api.user.data.sweep_coins)
+        coins_needed = (30 - @api.user.data.sweep_coins)
         message.typing_on
         sleep 1.5
         say options.sample
         sleep 1
         message.typing_on
         sleep 1
-        say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{$api.user.previous_streak} 👌", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"], ["Status", "Status"]]
+        say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{@api.user.previous_streak} 👌", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         options = ["We are open 24/7 🏪", "Hold up, let me find the keys 🔑"]
@@ -343,35 +346,36 @@ module Commands
   end
 
   def sweepcoins
-    $api.find_or_create('users', user.id)
-    $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-    if $api.user.data.sweep_coins >= 30
+    @api = Api.new
+    @api.find_or_create('users', user.id)
+    @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+    if @api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
-      $api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
+      @api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
       message.typing_on
       say options.sample
       sleep 1
       message.typing_on
       sleep 1.5
-      say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
+      say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
       sleep 1
       message.typing_on
       sleep 0.5
       say "What else can I help you with?", quick_replies: quick_replies
       stop_thread
     else
-      if $api.user.previous_streak > $api.user.current_streak
+      if @api.user.previous_streak > @api.user.current_streak
         options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of low balance initial responses
         message.typing_on
         say options.sample
         sleep 1
         message.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
+        say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
         sleep 1
         message.typing_on
         sleep 0.5
-        say "To use a lifeline and reset your streak back to #{$api.user.previous_streak}, you'll need at least 30 Sweepcoins", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "To use a lifeline and reset your streak back to #{@api.user.previous_streak}, you'll need at least 30 Sweepcoins", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       else
         options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of low balance initial responses
@@ -380,42 +384,43 @@ module Commands
         sleep 1
         message.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       end
     end
   end
 
   def sweepcoins_for_postback
-    $api.find_or_create('users', user.id)
-    $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-    if $api.user.data.sweep_coins >= 30
+    @api = Api.new
+    @api.find_or_create('users', user.id)
+    @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+    if @api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses
-      $api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
+      @api.user.current_streak > 0 ? quick_replies = [["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]] : quick_replies = [["Use lifeline", "Use lifeline"], ["Earn coins", "Earn coins"], ["Eh, I'm good", "I'm good"]]
       postback.typing_on
       say options.sample
       sleep 1
       postback.typing_on
       sleep 1.5
-      say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
+      say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
       sleep 1
       postback.typing_on
       sleep 0.5
       say "What else can I help you with?", quick_replies: quick_replies
       stop_thread
     else
-      if $api.user.previous_streak > $api.user.current_streak
+      if @api.user.previous_streak > @api.user.current_streak
         options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of low balance initial responses
         postback.typing_on
         say options.sample
         sleep 1
         postback.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
+        say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑"
         sleep 1
         postback.typing_on
         sleep 0.5
-        say "To use a lifeline and reset your streak back to #{$api.user.previous_streak}, you'll need at least 30 Sweepcoins", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "To use a lifeline and reset your streak back to #{@api.user.previous_streak}, you'll need at least 30 Sweepcoins", quick_replies: [["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       else
         options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of low balance initial responses
@@ -424,24 +429,25 @@ module Commands
         sleep 1
         postback.typing_on
         sleep 1.5
-        say "I currently see #{$api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
+        say "I currently see #{@api.user.data.sweep_coins} #{sweepcoins} in your wallet 🤑", quick_replies: [["Sweep store", "Sweep store"], ["Earn more coins", "Earn more coins"], ["Select picks", "Select picks"]]
         stop_thread
       end
     end
   end
 
   def my_picks
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     options = ["😏, I like where your heads at", "You got this ✊"]
     begin
-    if $api.user.images.any?
-      if $api.user.data.status_changed
+    if @api.user.images.any?
+      if @api.user.data.status_changed
         set('status changed', user.id)
         begin
           message.typing_on
-          $api.for_picks('upcoming')
-          return if $api.upcoming_picks.nil?
-          next_up = $api.upcoming_picks.first
+          @api.for_picks('upcoming')
+          return if @api.upcoming_picks.nil?
+          next_up = @api.upcoming_picks.first
           if next_up
             if next_up.type == 'Game'
               say "I see here you've got the #{next_up.abbreviation} up next at #{next_up.action} against the #{next_up.opponent}..."
@@ -461,12 +467,12 @@ module Commands
           # holding off for template design
           # say "Brb, fetching the rest of your picks ⏳"
           # message.typing_on
-          # $api.for_picks('status')
+          # @api.for_picks('status')
           # quick_replies = [
           #   { content_type: 'text', title: "Select picks", payload: "Select picks" },
           #   { content_type: 'text', title: "Status", payload: "Status" }
           # ]
-          # show_media($api.user.images.for_status, quick_replies)
+          # show_media(@api.user.images.for_status, quick_replies)
           stop_thread
         rescue Facebook::Messenger::FacebookError => e
           say "Whoops, I screwed up. Gimme a sec, I'll try again..."
@@ -475,9 +481,9 @@ module Commands
         end
       else
         message.typing_on
-        $api.for_picks('upcoming')
-        return if $api.upcoming_picks.nil?
-        next_up = $api.upcoming_picks.first
+        @api.for_picks('upcoming')
+        return if @api.upcoming_picks.nil?
+        next_up = @api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
             say "I see here you've got the #{next_up.abbreviation} up next at #{next_up.action} against the #{next_up.opponent}..."
@@ -499,16 +505,16 @@ module Commands
         #   { content_type: 'text', title: "Select picks", payload: "Select picks" },
         #   { content_type: 'text', title: "Status", payload: "Status" }
         # ]
-        # show_media($api.user.images.for_status, quick_replies)
+        # show_media(@api.user.images.for_status, quick_replies)
         stop_thread
       end
     else
       set('status changed', user.id)
       begin
         message.typing_on
-        $api.for_picks('upcoming')
-        return if $api.upcoming_picks.nil?
-        next_up = $api.upcoming_picks.first
+        @api.for_picks('upcoming')
+        return if @api.upcoming_picks.nil?
+        next_up = @api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
             say "I see here you've got the #{next_up.abbreviation} up next at #{next_up.action} against the #{next_up.opponent}......"
@@ -525,9 +531,9 @@ module Commands
           say "I don't see any upcoming games for you yet", quick_replies: [["Select picks", "Select picks"]]
           stop_thread
         end  
-        $api.for_picks('upcoming')
-        return if $api.upcoming_picks.nil?
-        next_up = $api.upcoming_picks.first
+        @api.for_picks('upcoming')
+        return if @api.upcoming_picks.nil?
+        next_up = @api.upcoming_picks.first
         if next_up
           if next_up.type == 'Game'
             say "I see here you've got the #{next_up.abbreviation} up next at #{next_up.action} against the #{next_up.opponent}..."
@@ -547,12 +553,12 @@ module Commands
         # holding off for template design
         # say "Brb, fetching the rest of your picks ⏳"
         # message.typing_on
-        # $api.for_picks('status')
+        # @api.for_picks('status')
         # quick_replies = [
         #   { content_type: 'text', title: "Select picks", payload: "Select picks" },
         #   { content_type: 'text', title: "Status", payload: "Status" }
         # ]
-        # show_media($api.user.images.for_status, quick_replies)
+        # show_media(@api.user.images.for_status, quick_replies)
         stop_thread
       rescue Facebook::Messenger::FacebookError => e
         say "Whoops, I screwed up. Gimme a sec, I'll try again..."
@@ -576,12 +582,13 @@ module Commands
   end
 
   def handle_lifeline
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     case message.quick_reply
     when 'Yes Lifeline'
-      if $api.user.current_streak > 0 || ($api.user.previous_streak == 0 && $api.user.current_streak == 0)
+      if @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.current_streak == 0)
         message.typing_on
-        say "Hold up #{$api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{$api.user.current_streak}, did you? That's crazy talk."
+        say "Hold up #{@api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{@api.user.current_streak}, did you? That's crazy talk."
         sleep 1.5
         message.typing_on
         sleep 1.5
@@ -589,17 +596,17 @@ module Commands
         stop_thread
       else
         use_lifeline(user.id)
-        $api.find_or_create('users', user.id)
+        @api.find_or_create('users', user.id)
         message.typing_on
         say "Sweet! Let me go update that real quick..."
         sleep 1.5
         message.typing_on
         sleep 1.5
-        say "Great! Your streak has been set back to #{$api.user.current_streak} 🔥"
+        say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥"
         sleep 1.5
         message.typing_on
         sleep 2
-        say "Your new Sweepcoin balance is #{$api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+        say "Your new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       end
     when 'No Lifeline'
@@ -611,12 +618,13 @@ module Commands
   end
 
   def handle_lifeline_for_postback
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     case postback.quick_reply
     when 'Yes Lifeline'
-      if $api.user.current_streak > 0 || ($api.user.previous_streak == 0 && $api.user.current_streak == 0)
+      if @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.current_streak == 0)
         postback.typing_on
-        say "Hold up #{$api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{$api.user.current_streak}, did you? That's crazy talk."
+        say "Hold up #{@api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{@api.user.current_streak}, did you? That's crazy talk."
         sleep 1.5
         postback.typing_on
         sleep 1.5
@@ -624,17 +632,17 @@ module Commands
         stop_thread
       else
         use_lifeline(user.id)
-        $api.find_or_create('users', user.id)
+        @api.find_or_create('users', user.id)
         postback.typing_on
         say "Sweet! Let me go update that real quick..."
         sleep 1.5
         postback.typing_on
         sleep 1.5
-        say "Great! Your streak has been set back to #{$api.user.current_streak} 🔥"
+        say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥"
         sleep 1.5
         postback.typing_on
         sleep 2
-        say "Your new Sweepcoin balance is #{$api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+        say "Your new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       end
     when 'No Lifeline'
@@ -646,24 +654,25 @@ module Commands
   end
 
   def status
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     message.typing_on
     quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
-    if $api.user.current_streak > 0
+    if @api.user.current_streak > 0
       say STATUS_HOT.sample
       sleep 0.5
       message.typing_on
       sleep 1.5
-      say "Your current streak sits at #{$api.user.current_streak}", quick_replies: quick_replies
+      say "Your current streak sits at #{@api.user.current_streak}", quick_replies: quick_replies
       stop_thread
     else
-      if !$api.user.data.status_touched # if hasnt been touched yet
+      if !@api.user.data.status_touched # if hasnt been touched yet
         set('status touched', user.id)
-        if $api.user.data.sweep_coins >= 30
+        if @api.user.data.sweep_coins >= 30
           quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
-          if $api.user.previous_streak == $api.user.current_streak
+          if @api.user.previous_streak == @api.user.current_streak
             message.typing_on
             sleep 1.5
             say "You're currently at a streak of zero..."
@@ -672,7 +681,7 @@ module Commands
             sleep 1.5
             say "Did you wanna check for anything else?", quick_replies: quick_replies
             stop_thread
-          elsif $api.user.previous_streak <= $api.user.current_streak
+          elsif @api.user.previous_streak <= @api.user.current_streak
             message.typing_on
             sleep 1.5
             say "You're currently at a streak of zero..."
@@ -686,16 +695,16 @@ module Commands
             sleep 0.5
             message.typing_on
             sleep 2
-            say "But I have good news, you have #{$api.user.data.sweep_coins} Sweepcoins 🤑"
+            say "But I have good news, you have #{@api.user.data.sweep_coins} Sweepcoins 🤑"
             sleep 0.5
             message.typing_on
             sleep 3
-            say "Turn back the 🕗 to your previous streak of #{$api.user.previous_streak} by trading in 30 Sweepcoins for a lifeline", quick_replies: quick_replies
+            say "Turn back the 🕗 to your previous streak of #{@api.user.previous_streak} by trading in 30 Sweepcoins for a lifeline", quick_replies: quick_replies
             stop_thread
           end
         else
           quick_replies = [["Earn more coins", "Earn more coins"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
-          coins_needed = (30 - $api.user.data.sweep_coins)
+          coins_needed = (30 - @api.user.data.sweep_coins)
           say "Goose 🥚"
           sleep 0.5
           message.typing_on
@@ -703,16 +712,16 @@ module Commands
           say "You're currently at a streak of zero."
           sleep 0.5
           message.typing_on
-          $api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
+          @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
           sleep 2
-          say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{$api.user.previous_streak} 👌"
+          say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{@api.user.previous_streak} 👌"
           message.typing_on
           sleep 1.5
           say "Did you wanna check for anything else?", quick_replies: quick_replies
           stop_thread
         end
       else
-        if $api.user.data.sweep_coins >= 30
+        if @api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -737,20 +746,21 @@ module Commands
   end
 
   def status_for_postback
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     postback.typing_on
     quick_replies = [["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
-    if $api.user.current_streak > 0
+    if @api.user.current_streak > 0
       say STATUS_HOT.sample
       sleep 0.5
       postback.typing_on
       sleep 1.5
-      say "Your current streak sits at #{$api.user.current_streak}", quick_replies: quick_replies
+      say "Your current streak sits at #{@api.user.current_streak}", quick_replies: quick_replies
       stop_thread
     else
-      if !$api.user.data.status_touched # if hasnt been touched yet
+      if !@api.user.data.status_touched # if hasnt been touched yet
         set('status touched', user.id)
-        if $api.user.data.sweep_coins >= 30
+        if @api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -760,11 +770,11 @@ module Commands
           sleep 0.5
           postback.typing_on
           sleep 2
-          say "But I have good news, you have #{$api.user.data.sweep_coins} Sweepcoins 🤑"
+          say "But I have good news, you have #{@api.user.data.sweep_coins} Sweepcoins 🤑"
           sleep 0.5
           postback.typing_on
           sleep 3
-          say "Turn back the 🕗 to your previous streak of #{$api.user.previous_streak} by trading in 30 coins for a lifeline", quick_replies: quick_replies
+          say "Turn back the 🕗 to your previous streak of #{@api.user.previous_streak} by trading in 30 coins for a lifeline", quick_replies: quick_replies
           stop_thread
         else
           quick_replies = [["Earn coins", "Earn coins"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
@@ -776,14 +786,14 @@ module Commands
           sleep 0.5
           postback.typing_on
           sleep 2
-          say "You have #{$api.user.data.sweep_coins} Sweepcoins...not quite enough to buy a lifeline (30 coins) yet 🙄"
+          say "You have #{@api.user.data.sweep_coins} Sweepcoins...not quite enough to buy a lifeline (30 coins) yet 🙄"
           postback.typing_on
           sleep 1.5
           say "Did you wanna check for anything else?", quick_replies: quick_replies
           stop_thread
         end
       else
-        if $api.user.data.sweep_coins >= 30
+        if @api.user.data.sweep_coins >= 30
           quick_replies = [["Use lifeline", "Use lifeline"], ["My picks", "Upcoming"], ["Sweepcoins", "Sweepcoins"]]
           say "Goose 🥚"
           sleep 0.5
@@ -807,6 +817,7 @@ module Commands
   end
 
   def how_to_play
-    $api.find_or_create('users', user.id)
+    @api = Api.new
+    @api.find_or_create('users', user.id)
   end
 end

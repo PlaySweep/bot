@@ -1,12 +1,12 @@
 workers Integer(ENV['WEB_CONCURRENCY'] || 1)
-threads_count = Integer(ENV['MAX_THREADS'] || 5)
+threads_count = Integer(ENV['MAX_THREADS'] || 10)
 threads threads_count, threads_count
 
 preload_app!
 
 on_worker_boot do
-  $api = Api.new
-  $fb_api = FacebookApi.new
+  # $api = Api.new
+  # $fb_api = FacebookApi.new
   # $aws = Fog::Storage.new({
   #   :provider                 => 'AWS',
   #   :aws_access_key_id        => ENV['AWSAccessKeyId'],
