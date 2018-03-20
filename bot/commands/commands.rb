@@ -212,7 +212,7 @@ module Commands
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
       message.typing_on
-      sleep 1.5
+      sleep 0.5
       say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
       sleep 1.5
       message.typing_on
@@ -255,7 +255,7 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        sleep 1.5
+        sleep 0.5
         say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
         sleep 1.5
         message.typing_on
@@ -279,7 +279,7 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        sleep 1.5
+        sleep 0.5
         say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
         sleep 1.5
         message.typing_on
