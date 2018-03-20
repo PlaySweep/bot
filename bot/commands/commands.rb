@@ -212,6 +212,10 @@ module Commands
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
       message.typing_on
+      sleep 0.5
+      say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
+      sleep 0.5
+      message.typing_on
       show_media(matchup.attachment_id, quick_replies)
       message.typing_off
       next_command :handle_pick
@@ -235,7 +239,6 @@ module Commands
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       message.typing_on
       sleep 1
-      message.typing_off
       @api.all('matchups', sport: sport.downcase) unless sport.nil?
       if (@api.matchups.nil? || @api.matchups.empty?)
         say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
@@ -252,12 +255,11 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        sleep 1
+        sleep 0.5
         say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
-        sleep 1
+        sleep 0.5
         message.typing_on
         show_media(matchup.attachment_id, quick_replies)
-        message.typing_off
         next_command :handle_pick
       end
     else
@@ -277,12 +279,11 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        sleep 1
+        sleep 0.5
         say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
-        sleep 1
+        sleep 0.5
         message.typing_on
         show_media(matchup.attachment_id, quick_replies)
-        message.typing_off
         next_command :handle_pick
       end
     end
