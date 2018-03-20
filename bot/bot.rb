@@ -24,7 +24,7 @@ Rubotnik.route :message do
     show_login
   end
 
-  bind "eh, i'm good", "i'm good", "i'm fine", to: :catch
+  bind "eh, i'm good", "i'm good", "i'm fine", 'got it', to: :catch
 
   bind 'cool', 'thanks', 'nice', 'awesome', 'thank you', to: :emoji_response
 
@@ -65,6 +65,10 @@ Rubotnik.route :message do
 
   bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
 
+  bind 'picking games', to: :help_picking_games
+
+  bind 'spread?', to: :help_with_spread
+
   bind '🏈', '🏀', '🏒', '⚾', to: :show_sports, reply_with: {
     text: "Tap the sports below 👇",
     quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
@@ -93,17 +97,17 @@ Rubotnik.route :message do
     text: "Tap the sports below 👇",
     quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
   }
-  bind 'ready', 'to', 'play', to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['NHL', 'NHL']]
-  }
 
   bind 'stop', 'unsubscribe', 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
      text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you ☺️",
      quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
   }
 
-  # bind 'gift card', 'prizes', to: :prizes
+  bind 'how to play', 'help', to: :how_to_play
+
+  bind 'prizes', 'gift card', 'money', 'amazon', to: :help_prizes
+
+  # bind 'gift card', 'amazon', to: :gift_card
 
   # bind 'where', 'can', 'i', 'watch', to: :lookup_location, reply_with: {
   #   text: 'Let me know your location',
@@ -165,6 +169,8 @@ Rubotnik.route :postback do
     say text, quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
     handle_lifeline_for_postback
   end
+
+  bind 'HOW TO PLAY', to: :how_to_play_for_postback
 
   # bind 'DASHBOARD', to: :dashboard
 end

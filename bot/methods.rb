@@ -48,6 +48,9 @@ def set field, id
   when 'store touched'
     params = { :user => { :store_touched => true } }
     puts "Store flow changed"
+  when 'how to play touched'
+    params = { :user => { :how_to_play_touched => true } }
+    puts "How to play flow touched"
   end
   @api.conn.patch("users/#{id}", params)
   @api.find_or_create('users', id)

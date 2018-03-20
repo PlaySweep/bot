@@ -61,6 +61,11 @@ module Profile
                 title: '👋 Notifications',
                 type: 'postback',
                 payload: 'MANAGE UPDATES'
+              },
+              {
+                title: '🤔 How to Play',
+                type: 'postback',
+                payload: 'HOW TO PLAY'
               }
             ]
           }

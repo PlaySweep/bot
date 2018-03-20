@@ -35,13 +35,14 @@ module Commands
   end
 
   def catch
+    emojis = %w[😏 🤑 😇 👌 🤗 👍 😉 😎]
     message.typing_on
-    say "Ok 😉", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+    say emojis.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
     stop_thread
   end
 
   def emoji_response
-    emojis = %w[👍 😉 😎]
+    emojis = %w[😏 🤑 😇 👌 🤗 👍 😉 😎]
     message.typing_on
     say emojis.sample
     stop_thread
@@ -171,13 +172,16 @@ module Commands
     when "NHL"
       handle_pick
     else
-      # redirect(message.text)
+      redirect(message.text)
       stop_thread
     end
   end
 
-  def redirect message
-
+  def redirect msg
+    # send data (msg) to get smarter
+    message.typing_on
+    say "Hmm 💭...I must have dozed off 😴", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+    stop_thread
   end
 
   def skip
@@ -192,9 +196,9 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    @api.all('matchups', sport: sport)
+    @api.all('matchups', sport: sport) unless sport.nil?
     if (@api.matchups.nil? || @api.matchups.empty?)
-      say "No more picks for the #{sport.upcase}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
+      say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
       stop_thread
     else
       status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
@@ -217,24 +221,24 @@ module Commands
   def handle_pick
     @api = Api.new
     @api.find_or_create('users', user.id)
-    say "Sorry didn't catch that...", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]] and stop_thread and return if (!message.quick_reply && message.text != "Skip")
+    say "🤔 Not sure how to make picks?", quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"], ["Status", "Status"]] and stop_thread and return if (!message.quick_reply && message.text)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     @api.all('matchups', sport: sport.downcase) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
-    say "We have #{@api.matchups.count} #{sport} #{games} on deck..." unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
+    say "We have #{@api.matchups.count} #{sport} #{games} on available" unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', params)
       message.typing_on
-      sleep 0.5
+      sleep 1
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       message.typing_on
       sleep 1
       message.typing_off
       @api.all('matchups', sport: sport.downcase) unless sport.nil?
       if (@api.matchups.nil? || @api.matchups.empty?)
-        say "No more picks for the #{sport}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
+        say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
@@ -247,6 +251,10 @@ module Commands
           { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
+        message.typing_on
+        sleep 1
+        say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
+        sleep 1
         message.typing_on
         show_media(matchup.attachment_id, quick_replies)
         message.typing_off
@@ -255,7 +263,7 @@ module Commands
     else
       @api.all('matchups', sport: sport.downcase) unless sport.nil?
       if (@api.matchups.nil? || @api.matchups.empty?)
-        say "No more picks for the #{sport}. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
+        say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
         status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
@@ -269,7 +277,10 @@ module Commands
           { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
         ]
         message.typing_on
-        sleep 3
+        sleep 1
+        say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
+        sleep 1
+        message.typing_on
         show_media(matchup.attachment_id, quick_replies)
         message.typing_off
         next_command :handle_pick
@@ -816,8 +827,120 @@ module Commands
     stop_thread
   end
 
+  def help_prizes
+    message.typing_on
+    sleep 1.5
+    say "💔 I split up the $25 Amazon gift card amongst the winners for the day and send them out within 24 hours."
+    sleep 2
+    message.typing_on
+    sleep 0.5
+    say "🏆 I know, poor Emma, only offering $25 a day..."
+    sleep 2
+    message.typing_on
+    sleep 1.5
+    say "But hey, I'm growing super fast, thanks to you 😍"
+    sleep 1
+    message.typing_on
+    sleep 1
+    say "So the quicker we get put on the map, the more money & prizes I'll be able to offer 🙌", quick_replies: [["Got it!", "Got it!"]]
+    stop_thread
+  end
+
+  def help_with_spread
+    message.typing_on
+    sleep 0.5
+    say "🔢 When you see a number like (-3.5) or (+3.5), that's called the spread."
+    sleep 1.5
+    message.typing_on
+    sleep 1
+    say "➖ A negative number means the favorite needs to win by MORE than the number to cover the spread."
+    sleep 2
+    message.typing_on
+    sleep 1
+    say "➕ A positive number means the underdog needs to keep it close and either win or not lose by MORE than the number.", quick_replies: [['Got it!', 'Got it!']]
+    stop_thread
+  end
+
+  def help_picking_games
+    message.typing_on
+    sleep 0.5
+    say "☝️  Make your picks against the spread."
+    sleep 1
+    message.typing_on
+    sleep 1.5
+    say "👉 You can always skip games, they'll be there waiting for you until gametime."
+    sleep 1
+    message.typing_on
+    sleep 1.5
+    say "🤞 Hit a streak of 4 and win your share of a $25 Amazon gift card!", quick_replies: [['Spread?', 'Spread?'], ['Prizes', 'Prizes'], ['Got it!', 'Got it!']]
+    stop_thread
+  end
+
   def how_to_play
     @api = Api.new
     @api.find_or_create('users', user.id)
+    if @api.user.data.how_to_play_touched
+      message.typing_on
+      say "If you say 'Make picks', 'Status' or 'Help', I will respond accordingly 💁"
+      sleep 2
+      message.typing_on
+      sleep 1
+      say "I've also put some helpful buttons at the bottom of the screen and inside the menu for speediness 😉", quick_replies: [['Picking games', 'Picking games'], ['Prizes', 'Prizes']]
+      stop_thread
+    else
+      set('how to play touched', user.id)
+      message.typing_on
+      sleep 0.5
+      say "Hey #{@api.user.first_name} 👋"
+      sleep 0.5
+      message.typing_on
+      sleep 0.5
+      say "One of the best ways to get unstuck is to simply write to me ✍️"
+      sleep 1.5
+      say "For example..."
+      sleep 0.5
+      message.typing_on
+      sleep 0.5
+      say "If you say 'Make picks', 'Status' or 'Help', I will respond accordingly 💁"
+      sleep 2
+      message.typing_on
+      sleep 1
+      say "I've also put some helpful buttons at the bottom of the screen and inside the menu for speediness 😉", quick_replies: [['Picking games', 'Picking games'], ['Prizes', 'Prizes']]
+      stop_thread
+    end
+  end
+
+  def how_to_play_for_postback
+    @api = Api.new
+    @api.find_or_create('users', user.id)
+    if @api.user.data.how_to_play_touched
+      postback.typing_on
+      say "If you say 'Make picks', 'Status' or 'Help', I will respond accordingly 💁"
+      sleep 2
+      postback.typing_on
+      sleep 1
+      say "I've also put some helpful buttons at the bottom of the screen and inside the menu for speediness 😉", quick_replies: [['Picking games', 'Picking games'], ['Prizes', 'Prizes']]
+      stop_thread
+    else
+      set('how to play touched', user.id)
+      postback.typing_on
+      sleep 0.5
+      say "Hey #{@api.user.first_name} 👋"
+      sleep 0.5
+      postback.typing_on
+      sleep 0.5
+      say "One of the best ways to get unstuck is to simply write to me ✍️"
+      sleep 1.5
+      say "For example..."
+      sleep 0.5
+      postback.typing_on
+      sleep 0.5
+      say "If you say 'Make picks', 'Status' or 'Help', I will respond accordingly 💁"
+      sleep 2
+      postback.typing_on
+      sleep 1
+      say "I've also put some helpful buttons at the bottom of the screen and inside the menu for speediness 😉", quick_replies: [['Picking games', 'Picking games'], ['Prizes', 'Prizes']]
+      stop_thread
+    end
   end
 end
