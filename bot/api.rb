@@ -28,7 +28,7 @@ class Api
 
   def find_fb_user user_id
     puts "Getting facebook user..."
-    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.8/#{user_id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}")
+    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.11/#{user_id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}")
     response = @fb_conn.get
     @fb_user = JSON.parse(response.body)
   end

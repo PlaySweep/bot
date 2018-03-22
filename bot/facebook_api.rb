@@ -8,7 +8,7 @@ class FacebookApi
   attr_accessor :conn, :attachment_id
 
   def initialize
-    @conn = Faraday.new(:url => "https://graph.facebook.com/v2.6/me/")
+    @conn = Faraday.new(:url => "https://graph.facebook.com/v2.11/me/")
   end
 
   def message_attachment url

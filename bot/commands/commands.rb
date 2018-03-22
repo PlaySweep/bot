@@ -164,6 +164,8 @@ module Commands
   end
 
   def show_sports
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     case message.quick_reply
     when "NCAAB"
       handle_pick
