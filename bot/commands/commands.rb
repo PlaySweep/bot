@@ -180,6 +180,8 @@ module Commands
   end
 
   def redirect msg
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     # send data (msg) to get smarter
     message.typing_on
     say "Hmm 💭...I must have dozed off 😴", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
