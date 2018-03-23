@@ -100,8 +100,8 @@ Rubotnik.route :message do
   }
 
   bind 'stop', 'unsubscribe', 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
-     text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you ☺️",
-     quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
+     text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you altogether ☺️",
+     quick_replies: ["Reminders", "Game recaps", ["I'm good", 'Status']]
   }
 
   bind 'how to play', 'help', to: :how_to_play
@@ -157,7 +157,7 @@ Rubotnik.route :postback do
 
   bind 'MANAGE UPDATES' do
     text = "Tap the options below to manage your preferences 👇"
-    say text, quick_replies: ["Reminders", "Game recaps", ["I'm done", 'Status']]
+    say text, quick_replies: ["Reminders", "Game recaps", ["I'm good", 'Status']]
     next_command :manage_updates
   end
 

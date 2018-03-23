@@ -105,6 +105,9 @@ module Commands
     when 'Unsubscribe'
       say "Turn off all notifications?", quick_replies: [["Yes", "All Off Yes"], ["Off", "All Off No"]]
       next_command :handle_notifications
+    when "I'm good"
+      say "Ok 😊", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Sweepcoins", "Sweepcoins"]]
+      stop_thread
     else
       status and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_STATUS.include?(keyword) }
       dashboard and return if message.text.downcase.split(' ').any? { |keyword| KEYWORDS_FOR_DASHBOARD.include?(keyword) }
