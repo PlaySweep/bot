@@ -3,7 +3,8 @@ require 'rubotnik'
 Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
-Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
+# Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
+HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
 
 # Set welcome screen, "get started" button and a menu (all optional)
 # Edit profile.rb before uncommenting the following lines:
