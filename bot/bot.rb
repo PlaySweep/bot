@@ -118,6 +118,8 @@ Rubotnik.route :message do
   # bind 'image', to: :show_image
 
   default do
+    @api = Api.new
+    @api.find_or_create('users', user.id)
     options = ["Help me help you, what are you wanting to do?", "Sorry I don't understand everything humans say yet. Try starting with the options below 👇", "I'm programmed to help with all issues, what can I help with?"]
     say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Manage notifications", "Manage notifications"]]
   end
