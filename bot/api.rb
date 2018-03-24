@@ -42,7 +42,7 @@ class Api
       if @user.empty?
         find_fb_user(id)
         if @fb_user
-          params = { :user => { :facebook_uuid => @fb_user['id'], :first_name => @fb_user['first_name'], :last_name => @fb_user['last_name'] } }
+          params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
           response = @conn.post("#{model}", params)
           @user = JSON.parse(response.body)['user']
         end

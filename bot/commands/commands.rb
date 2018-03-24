@@ -81,7 +81,7 @@ module Commands
       say "Amazon Prime here we come!", quick_replies: [["Start Sweeping 🎉", "Select picks"]]
       stop_thread
     else
-      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NCAAB", "NCAAB"], ["NBA", "NBA"], ["NHL", "NHL"]]
+      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NCAAB", "NCAAB"], ["NBA", "NBA"], ['MLB', 'MLB'] ["NHL", "NHL"]]
       stop_thread
     end
   end
@@ -173,6 +173,8 @@ module Commands
     when "NCAAB"
       handle_pick
     when "NBA"
+      handle_pick
+    when "MLB"
       handle_pick
     when "NHL"
       handle_pick
@@ -596,7 +598,7 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: [['NBA', 'NBA'], ['NCAAB', 'NCAAB'], ['NHL', 'NHL']]
+    say text, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
     stop_thread
   end
 
