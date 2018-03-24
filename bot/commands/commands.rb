@@ -239,7 +239,7 @@ module Commands
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     @api.all('matchups', sport: sport.downcase) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
-    say "We have #{@api.matchups.count} #{sport} #{games} on available" unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
+    say "We have #{@api.matchups.count} #{sport} #{games} available" unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
       params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', params)
