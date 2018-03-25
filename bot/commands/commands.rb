@@ -51,6 +51,7 @@ module Commands
   def walkthrough
     @api = Api.new
     @api.find_or_create('users', user.id)
+    stop_thread and return if message.quick_reply.nil?
     case message.quick_reply
     when 'Welcome'
       message.typing_on
