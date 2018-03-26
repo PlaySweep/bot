@@ -6,17 +6,12 @@ Rubotnik::Autoloader.load('bot')
 # Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
 
-# Set welcome screen, "get started" button and a menu (all optional)
-# Edit profile.rb before uncommenting the following lines:
-
 Rubotnik.set_profile(
   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
 )
 
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
-
-RANDOM_FACTS = ["Banging your head against the wall burns 150 calories an hour.", "Organized people are simply too lazy to search for stuff."]
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 

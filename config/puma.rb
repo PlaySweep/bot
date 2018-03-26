@@ -4,15 +4,9 @@ threads threads_count, threads_count
 
 preload_app!
 
-on_worker_boot do
-  # $api = Api.new
-  # $fb_api = FacebookApi.new
-  # $aws = Fog::Storage.new({
-  #   :provider                 => 'AWS',
-  #   :aws_access_key_id        => ENV['AWSAccessKeyId'],
-  #   :aws_secret_access_key    => ENV['AWSSecretKey']
-  # })
-end
+# on_worker_boot do
+  
+# end
 
 rackup      DefaultRackup
 port        ENV['PORT']     || 5000

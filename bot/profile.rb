@@ -1,5 +1,4 @@
 module Profile
-  # Configure profile for your bot (Start Button, Greeting, Menu)
 
   START_BUTTON = {
     get_started: {
