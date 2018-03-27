@@ -107,7 +107,7 @@ task :test_recap do
     {
       content_type: 'text',
       title: 'Earn another game',
-      payload: 'INVITE FRIENDS'
+      payload: 'invite friends'
     },
     {
       content_type: 'text',

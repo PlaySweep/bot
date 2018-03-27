@@ -23,39 +23,65 @@ module Profile
         call_to_actions: [
           {
             type: 'nested',
-            title: '📊 Dashboard',
+            title: '⚡️ Actions',
             call_to_actions: [
               {
-                title: '🏅 Select picks',
-                type: 'postback',
-                payload: 'SELECT PICKS' 
-              },
-              {
-                title: '📈 Status',
+                title: '🙏 Status',
                 type: 'postback',
                 payload: 'STATUS' 
               },
               {
-                title: '💰 Sweepcoins',
+                title: '👆 Select picks',
                 type: 'postback',
-                payload: 'SWEEPCOINS'
+                payload: 'SELECT PICKS' 
               },
-            ]
-          },
-          {
-            type: 'nested',
-            title: '🤖 Quick Actions',
-            call_to_actions: [
+              {
+                title: '🙌 My picks',
+                type: 'postback',
+                payload: 'MY PICKS' 
+              },
+              {
+                title: '👯 Friends',
+                type: 'postback',
+                payload: 'FRIENDS'
+              },
               {
                 title: '🎉 Share & Earn',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'
+              }
+            ]
+          },
+          {
+            type: 'nested',
+            title: '📊 Dashboard',
+            call_to_actions: [
+              {
+                title: '📚 Stats',
+                type: 'postback',
+                payload: 'STATS'
               },
-              # {
-              #   title: '📚 Record',
-              #   type: 'postback',
-              #   payload: 'RECORD'
-              # },
+              {
+                title: '📈 Leaderboard',
+                type: 'postback',
+                payload: 'LEADERBOARD' 
+              }
+            ]
+          },
+          {
+            type: 'nested',
+            title: '👻 Extra',
+            call_to_actions: [
+              {
+                title: '🛍 Sweepstore',
+                type: 'postback',
+                payload: 'SWEEPSTORE'
+              },
+              {
+                title: '💰 Wallet',
+                type: 'postback',
+                payload: 'SWEEPCOINS'
+              },
               {
                 title: '👋 Notifications',
                 type: 'postback',
@@ -65,7 +91,7 @@ module Profile
                 title: '🤔 How to Play',
                 type: 'postback',
                 payload: 'HOW TO PLAY'
-              }
+              },
             ]
           }
         ]

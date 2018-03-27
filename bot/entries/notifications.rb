@@ -1,5 +1,3 @@
-require_relative '../constants/status'
-
 module Commands
   def manage_updates
     @api = Api.new

@@ -16,92 +16,49 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do
-  bind 'login', 'facebook' do
-    show_login
-  end
+  # listen_for_login
+  listen_for_select_picks
+  listen_for_misc
+  listen_for_status
+  listen_for_sweepcoins
+  listen_for_my_picks
 
-  bind "eh, i'm good", "i'm good", "i'm fine", 'got it', to: :catch
+  # bind 'my picks', all: true, to: :my_picks
 
-  bind 'cool', 'thanks', 'nice', 'awesome', 'thank you', to: :emoji_response
+  # bind 'earn more coins', 'earn coins', to: :earn_coins
 
-  bind 'current', 'status', to: :status
+  # bind 'sweep store', 'store', all: true, to: :sweep_store
 
-  bind 'my picks', all: true, to: :my_picks
+  # bind 'lifeline', 'use lifeline', 'use a lifeline', to: :handle_lifeline, reply_with: {
+  #   text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
+  #   quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
+  # }
 
-  bind 'sweepcoins', all: true, to: :sweepcoins
+  # bind 'invite', 'share' do
+  #   options = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring others to play with you 🎉"]
+  #   message.typing_on
+  #   sleep 1.5
+  #   say options.sample
+  #   message.typing_on
+  #   sleep 1
+  #   show_invite
+  #   stop_thread
+  # end
 
-  bind 'earn more coins', 'earn coins', to: :earn_coins
+  # bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
 
-  bind 'sweep store', 'store', all: true, to: :sweep_store
+  # bind 'picking games', to: :help_picking_games
 
-  bind 'lifeline', 'use lifeline', 'use a lifeline', to: :handle_lifeline, reply_with: {
-    text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
-    quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
-  }
+  # bind 'spread?', to: :help_with_spread
 
-  bind 'invite', 'share' do
-    options = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring others to play with you 🎉"]
-    message.typing_on
-    sleep 1.5
-    say options.sample
-    message.typing_on
-    sleep 1
-    show_invite
-    stop_thread
-  end
+  # bind 'stop', 'unsubscribe', 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
+  #    text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you altogether ☺️",
+  #    quick_replies: ["Reminders", "Game recaps", ["I'm good", 'Status']]
+  # }
 
-  bind 'nfl', 'nba', 'ncaab', 'ncaaf', 'olympics', 'football', 'basketball', to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
+  # bind 'how to play', 'help', to: :how_to_play
 
-  bind 'hi, emma', 'confused', 'walkthrough', to: :walkthrough do
-    walkthrough
-  end
-
-  bind 'dashboard', 'record', 'stats', 'history', 'referral', 'progress', to: :dashboard
-
-  bind 'picking games', to: :help_picking_games
-
-  bind 'spread?', to: :help_with_spread
-
-  bind '🏈', '🏀', '🏒', '⚾', to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'start sweeping', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'matchups', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'make picks', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'select picks', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'select games', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-  bind 'more', 'sports', all: true, to: :show_sports, reply_with: {
-    text: "Tap the sports below 👇",
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  }
-
-  bind 'stop', 'unsubscribe', 'notifications', 'preferences', 'alerts', to: :manage_updates, reply_with: {
-     text: "I can manage your notifications below, or just tell me to 'Stop' and I'll quit buggin' you altogether ☺️",
-     quick_replies: ["Reminders", "Game recaps", ["I'm good", 'Status']]
-  }
-
-  bind 'how to play', 'help', to: :how_to_play
-
-  bind 'prizes', 'gift card', 'money', 'amazon', to: :help_prizes
+  # bind 'prizes', 'gift card', 'money', 'amazon', to: :help_prizes
 
   # bind 'gift card', 'amazon', to: :gift_card
 
@@ -115,35 +72,50 @@ Rubotnik.route :message do
   default do
     @api = Api.new
     @api.find_or_create('users', user.id)
-    options = ["Help me help you, what are you wanting to do?", "Sorry I don't understand everything humans say yet. Try starting with the options below 👇", "I'm programmed to help with all issues, what can I help with?"]
-    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Manage notifications", "Manage notifications"]]
+    options = %w[😊 😄 😋 🤗 😎 🤓 😜 🤑]
+    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Notifications", "Notifications"]]
   end
 end
 
-####################### HANDLE INCOMING POSTBACKS ##############################
-
 Rubotnik.route :postback do
-  bind 'START', to: :start 
-
-  bind 'SEND FEEDBACK' do
-    text = "We're new. We know we got a lot to improve on 🔧\n\nBut if you're into this sort of thing, let us know how we can make your Sweep experience better 😉"
-    say text, quick_replies: [["Send feedback", "Send feedback"], ["I'm good", "I'm good"]]
-    stop_thread
+  bind 'START' do
+    begin
+      @api = Api.new
+      @api.find_or_create('users', user.id)
+      if postback.referral
+        referrer_id = postback.referral.ref
+        puts "Referrer Id: #{referrer_id}"
+        update_sender(user.id, referrer_id) unless referrer_id.to_i == 0
+      end
+      text = "Hey #{@api.user.first_name}, you finally found me!"
+      say text, quick_replies: [ ["Hi, Emma!", "Welcome"] ]
+      next_command :handle_walkthrough
+    rescue NoMethodError => e
+      say "Hmm 🤔..."
+      postback.typing_on
+      sleep 1.5
+      postback.typing_on
+      say "So I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
+      postback.typing_on
+      sleep 0.5
+      postback.typing_on
+      say "...I'm Emma btw 👋, I'll keep a look out and let you know when we can get started 🎉"
+      stop_thread
+    end
   end
+  bind 'STATUS', to: :entry_to_status_postback
+  bind 'SWEEPCOINS', to: :entry_to_sweepcoins_postback
+  bind 'HOW TO PLAY', to: :how_to_play_for_postback
 
-  bind 'STATUS' do
-    status_for_postback
-  end
-
-  bind 'SWEEPCOINS' do
-    sweepcoins_for_postback
+  bind 'SELECT PICKS' do 
+    say PICKS.sample, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
+    next_command :show_sports
   end
 
   bind 'INVITE FRIENDS' do
-    options = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring others to play with you 🎉"]
     postback.typing_on
-    sleep 1.5
-    say options.sample
+    sleep 1
+    say INVITE_FRIENDS.sample
     postback.typing_on
     sleep 1
     show_invite
@@ -156,19 +128,11 @@ Rubotnik.route :postback do
     next_command :manage_updates
   end
 
-  bind 'SELECT PICKS' do 
-    text = "Tap the sports below 👇"
-    say text, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-    next_command :show_sports
-  end
-
   bind 'USE LIFELINE' do
     text = "Are you sure you want me to deduct 30 Sweepcoins from your wallet?"
     say text, quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
     handle_lifeline_for_postback
   end
-
-  bind 'HOW TO PLAY', to: :how_to_play_for_postback
 
   # bind 'DASHBOARD', to: :dashboard
 end
@@ -192,60 +156,60 @@ before do
   @client_secret = ENV["APP_SECRET"]
 end
 
-get '/' do
+# get '/' do
   
-end
+# end
 
-get '/success' do
-  get_user_friends(1842184635853672, ENV['ACCESS_TOKEN'])
-  puts "Successful authentication!"
-  puts "Access token...#{session[:access_token]}"
-  menu = [
-    {
-      content_type: 'text',
-      title: 'Friends',
-      payload: 'Friends'
-    },
-    {
-      content_type: 'text',
-      title: 'Status',
-      payload: 'Status'
-    },
-    {
-      content_type: 'text',
-      title: 'Manage updates',
-      payload: 'Manage updates'
-    }
-  ]
+# get '/success' do
+#   get_user_friends(1842184635853672, ENV['ACCESS_TOKEN'])
+#   puts "Successful authentication!"
+#   puts "Access token...#{session[:access_token]}"
+#   menu = [
+#     {
+#       content_type: 'text',
+#       title: 'Friends',
+#       payload: 'Friends'
+#     },
+#     {
+#       content_type: 'text',
+#       title: 'Status',
+#       payload: 'Status'
+#     },
+#     {
+#       content_type: 'text',
+#       title: 'Manage updates',
+#       payload: 'Manage updates'
+#     }
+#   ]
 
-  message_options = {
-    messaging_type: "UPDATE",
-    recipient: { id: 1842184635853672 },
-    message: {
-      text: "You can now take a look at how your friends are doing! #{@user_friends.inspect}",
-      quick_replies: menu
-    }
-  }
-  Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-end
+#   message_options = {
+#     messaging_type: "UPDATE",
+#     recipient: { id: 1842184635853672 },
+#     message: {
+#       text: "You can now take a look at how your friends are doing! #{@user_friends.inspect}",
+#       quick_replies: menu
+#     }
+#   }
+#   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+# end
 
-get "/request" do
-  session[:access_token] = nil
-  redirect "https://www.facebook.com/v2.11/dialog/oauth?client_id=#{@client_id}&scope=user_friends,email&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback"
-end
+# get "/request" do
+#   session[:access_token] = nil
+#   redirect "https://www.facebook.com/v2.11/dialog/oauth?client_id=#{@client_id}&scope=user_friends,email&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback"
+# end
 
-get "/oauth/facebook/callback" do
-  http = Net::HTTP.new "graph.facebook.com", 443
-  request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{params[:code]}"
-  http.use_ssl = true
-  response = http.request request
-  body = JSON.parse(response.body)
-  puts "Response: #{body.inspect}"
-  # @auth_token = body["access_token"]
-  # session[:access_token] = "EAACaERT7YxUBACURzRJKUx8Nf2XotZCG30v8MrQmIWCJTqkxURma2tKpus55GRizwqC5ZB4vqEnnfjZCX4J5EQdCyOZBT2bOkcQeXOsVhQuMvGwXIs6vF701KWqNgnTZBtBgNZCyrHZCOEF8MiJ6JxQ9wHKZBa9LSjQnt5abyWZCubQZDZD"
-  session[:access_token] = body["access_token"]
-  redirect "/success"
-end
+# get "/oauth/facebook/callback" do
+#   http = Net::HTTP.new "graph.facebook.com", 443
+#   request = Net::HTTP::Get.new "/oauth/access_token?client_id=#{@client_id}&redirect_uri=#{ENV["BOT_URL"]}/oauth/facebook/callback&client_secret=#{@client_secret}&code=#{params[:code]}"
+#   http.use_ssl = true
+#   response = http.request request
+#   body = JSON.parse(response.body)
+#   puts "Response: #{body.inspect}"
+#   # @auth_token = body["access_token"]
+#   # session[:access_token] = "EAACaERT7YxUBACURzRJKUx8Nf2XotZCG30v8MrQmIWCJTqkxURma2tKpus55GRizwqC5ZB4vqEnnfjZCX4J5EQdCyOZBT2bOkcQeXOsVhQuMvGwXIs6vF701KWqNgnTZBtBgNZCyrHZCOEF8MiJ6JxQ9wHKZBa9LSjQnt5abyWZCubQZDZD"
+#   session[:access_token] = body["access_token"]
+#   redirect "/success"
+# end
 
 ############################ TEST ON LOCALHOST #################################
 
