@@ -106,7 +106,7 @@ Rubotnik.route :message do
 
   bind 'how to play', 'help', to: :how_to_play
 
-  bind 'prizes', 'gift card', 'money', 'amazon', to: :help_prizes
+  # bind 'prizes', 'gift card', 'money', 'amazon', to: :help_prizes
 
   # bind 'gift card', 'amazon', to: :gift_card
 

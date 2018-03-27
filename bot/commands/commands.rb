@@ -839,24 +839,24 @@ module Commands
     stop_thread
   end
 
-  def help_prizes
-    message.typing_on
-    sleep 1.5
-    say "💔 I split up the $25 Amazon gift card amongst the winners for the day and send them out within 24 hours."
-    sleep 2
-    message.typing_on
-    sleep 0.5
-    say "🏆 I know, poor Emma, only offering $25 a day..."
-    sleep 2
-    message.typing_on
-    sleep 1.5
-    say "But hey, I'm growing super fast, thanks to you 😍"
-    sleep 1
-    message.typing_on
-    sleep 1
-    say "So the quicker we get put on the map, the more money & prizes I'll be able to offer 🙌", quick_replies: [["Got it!", "Got it!"]]
-    stop_thread
-  end
+  # def help_prizes
+  #   message.typing_on
+  #   sleep 1.5
+  #   say "💔 I split up the $25 Amazon gift card amongst the winners for the day and send them out within 24 hours."
+  #   sleep 2
+  #   message.typing_on
+  #   sleep 0.5
+  #   say "🏆 I know, poor Emma, only offering $25 a day..."
+  #   sleep 2
+  #   message.typing_on
+  #   sleep 1.5
+  #   say "But hey, I'm growing super fast, thanks to you 😍"
+  #   sleep 1
+  #   message.typing_on
+  #   sleep 1
+  #   say "So the quicker we get put on the map, the more money & prizes I'll be able to offer 🙌", quick_replies: [["Got it!", "Got it!"]]
+  #   stop_thread
+  # end
 
   def help_with_spread
     message.typing_on
