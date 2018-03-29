@@ -7,7 +7,7 @@ require 'open-uri'
 class Api
   Hash.use_dot_syntax = true
 
-  attr_accessor :conn, :fb_conn, :fb_user, :user, 
+  attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
                 :pick, :matchups, :upcoming_picks, 
                 :in_progress_picks, :completed_picks
 
@@ -21,9 +21,18 @@ class Api
       response = @conn.get("#{model}")
       @users = JSON.parse(response.body)['users']
     when 'matchups'
-      response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
+      if sport
+        response = @conn.get("#{model}?user_id=#{@user.id}&sport=#{sport}")
+      else
+        response = @conn.get("#{model}?user_id=#{@user.id}")
+      end
       @matchups = JSON.parse(response.body)['matchups']
     end
+  end
+
+  def friend_lookup friend_name
+    response = @conn.get("users?friend_name=#{friend_name}")
+    @user_list = JSON.parse(response.body)['users']
   end
 
   def find_fb_user user_id

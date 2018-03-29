@@ -14,6 +14,12 @@ def handle_show_sports
   end
 end
 
+def handle_no_sports_available
+  message.typing_on
+  say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
+  stop_thread
+end
+
 def handle_pick
   @api = Api.new
   @api.find_or_create('users', user.id)
@@ -32,9 +38,9 @@ def handle_pick
     say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
     message.typing_on
     sleep 1
-    fetch_matchup(sport, @api)
+    fetch_matchup(sport, @api.matchups.first)
   else
-    fetch_matchup(sport, @api)
+    fetch_matchup(sport, @api.matchups.first)
   end
 end
 
@@ -51,16 +57,14 @@ def skip
   message.typing_on
   sleep 1
   @api.all('matchups', sport: sport.downcase) unless sport.nil?
-  fetch_matchup(sport, @api)
+  fetch_matchup(sport, @api.matchups.first)
 end
 
-def fetch_matchup sport, data
-  data.all('matchups', sport: sport.downcase) unless sport.nil?
-  if (data.matchups.nil? || data.matchups.empty?)
+def fetch_matchup sport, matchup
+  if (matchup.nil? || matchup.empty?)
     say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
     stop_thread
   else
-    matchup = data.matchups.first
     away = matchup.away_side
     home = matchup.home_side
     quick_replies = [

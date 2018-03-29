@@ -5,10 +5,11 @@ Rubotnik::Autoloader.load('bot')
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
 # Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
+HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
-Rubotnik.set_profile(
-  Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
-)
+# Rubotnik.set_profile(
+#   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
+# )
 
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
@@ -22,6 +23,7 @@ Rubotnik.route :message do
   listen_for_status
   listen_for_sweepcoins
   listen_for_my_picks
+  listen_for_friends
 
   # bind 'my picks', all: true, to: :my_picks
 
@@ -72,8 +74,8 @@ Rubotnik.route :message do
   default do
     @api = Api.new
     @api.find_or_create('users', user.id)
-    options = %w[😊 😄 😋 🤗 😎 🤓 😜 🤑]
-    say options.sample, quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Notifications", "Notifications"]]
+    options = %w[😊 😄 😋 🤗 😎 🤓 😜 🤑 ]
+    say options.sample, quick_replies: ["Select picks", "Status"]
   end
 end
 
@@ -106,11 +108,17 @@ Rubotnik.route :postback do
   bind 'STATUS', to: :entry_to_status_postback
   bind 'SWEEPCOINS', to: :entry_to_sweepcoins_postback
   bind 'HOW TO PLAY', to: :how_to_play_for_postback
-
-  bind 'SELECT PICKS' do 
-    say PICKS.sample, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-    next_command :show_sports
+  bind 'FRIENDS' do
+    say "Get your friends involved", quick_replies: ["Challenge a friend", "Find friends"]
+    next_command :entry_to_friends_postback
   end
+
+  listen_for_select_picks_postback
+
+  # bind 'SELECT PICKS' do 
+  #   say PICKS.sample, quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
+  #   next_command :entry_to_show_sports
+  # end
 
   bind 'INVITE FRIENDS' do
     postback.typing_on

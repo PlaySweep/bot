@@ -1,23 +1,61 @@
 def listen_for_select_picks
-  single_words || double_words
+  single_match || double_match
 end
 
-def single_words
+def listen_for_select_picks_postback
+  bind 'SELECT PICKS' do
+    if matchups_available?
+      sports = @matchups.map(&:sport).uniq
+      say PICKS.sample, quick_replies: sports
+      next_command :entry_to_show_sports
+    else
+      say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
+      stop_thread
+    end
+  end
+end
+
+def single_match
   keywords = ['games', 'matchups', 'nba', 'basketball', 'football', 'ncaab']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
-  bind keywords, all: true, to: :entry_to_show_sports, reply_with: {
-    text: PICKS.sample,
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  } if matched.any?
+  if matched.any?
+    if matchups_available?
+      data = {}
+      sports = @matchups.map(&:sport).uniq
+      data[:text] = PICKS.sample
+      data[:quick_replies] = sports
+      bind keywords, all: true, to: :entry_to_show_sports, reply_with: data
+    else
+      bind keywords, all: true, to: :entry_to_no_sports_available
+    end
+  end
 end
 
-def double_words
+def double_match
   keywords = ['start sweeping', 'make picks', 'select picks', 'more sports', 'college basketball']
   msg = message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase }
   matched = (keywords & msg)
-  bind keywords, all: true, to: :entry_to_show_sports, reply_with: {
-    text: PICKS.sample,
-    quick_replies: [['NCAAB', 'NCAAB'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
-  } if matched.any?
+  if matched.any?
+    if matchups_available?
+      data = {}
+      sports = @matchups.map(&:sport).uniq
+      data[:text] = PICKS.sample
+      data[:quick_replies] = sports
+      bind keywords, all: true, to: :entry_to_show_sports, reply_with: data
+    else
+      bind keywords, all: true, to: :entry_to_no_sports_available
+    end
+  end
+end
+
+def matchups_available?
+  @api = Api.new
+  @api.find_or_create('users', user.id)
+  @matchups = @api.all('matchups')
+  if (@matchups.nil? || @matchups.empty?)
+    return false
+  else
+    return true
+  end
 end

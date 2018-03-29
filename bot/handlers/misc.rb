@@ -29,7 +29,7 @@ end
 def handle_fun
   case message.quick_reply
   when 'Tell me something'
-    say "Did you know the human head weighs 8lbs?"
+    say TELL_ME_SOMETHING.sample, quick_replies: ["Select picks", "Status"]
     stop_thread
   else
     redirect(:catch)

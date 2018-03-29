@@ -41,11 +41,6 @@ module Profile
                 payload: 'MY PICKS' 
               },
               {
-                title: '👯 Friends',
-                type: 'postback',
-                payload: 'FRIENDS'
-              },
-              {
                 title: '🎉 Share & Earn',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'
@@ -65,6 +60,16 @@ module Profile
                 title: '📈 Leaderboard',
                 type: 'postback',
                 payload: 'LEADERBOARD' 
+              },
+              {
+                title: '👯 Friends',
+                type: 'postback',
+                payload: 'FRIENDS'
+              },
+              {
+                title: '💰 Wallet',
+                type: 'postback',
+                payload: 'SWEEPCOINS'
               }
             ]
           },
@@ -76,11 +81,6 @@ module Profile
                 title: '🛍 Sweepstore',
                 type: 'postback',
                 payload: 'SWEEPSTORE'
-              },
-              {
-                title: '💰 Wallet',
-                type: 'postback',
-                payload: 'SWEEPCOINS'
               },
               {
                 title: '👋 Notifications',
