@@ -19,6 +19,6 @@ def for_fun
   matched = (keywords & msg)
   bind keywords, all: true, to: :entry_to_fun, reply_with: {
     text: RANDOM_EMOJIS.sample,
-    quick_replies: [["Tell me something", "Tell me something"]]
+    quick_replies: ["Tell me something"]
   } if matched.any?
 end

@@ -1,8 +1,12 @@
 def handle_show_sports
-  case message.text.upcase || message.quick_reply
-  when "NCAAB"
+  case message.quick_reply
+  when "NFL"
+    handle_pick
+  when "NCAAF"
     handle_pick
   when "NBA"
+    handle_pick
+  when "NCAAB"
     handle_pick
   when "MLB"
     handle_pick

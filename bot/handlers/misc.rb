@@ -28,7 +28,7 @@ end
 
 def handle_fun
   case message.quick_reply
-  when 'Tell me something'
+  when 'TELL ME SOMETHING'
     say TELL_ME_SOMETHING.sample, quick_replies: ["Select picks", "Status"]
     stop_thread
   else
