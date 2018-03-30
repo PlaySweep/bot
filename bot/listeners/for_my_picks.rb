@@ -4,3 +4,7 @@ def listen_for_my_picks
  matched = (keywords & msg)
  bind 'current picks', 'my picks', 'upcoming picks', to: :entry_to_my_picks if matched.any?
 end
+
+def listen_for_my_picks_postback
+  bind 'MY PICKS', to: :entry_to_my_picks_postback
+end

@@ -1,6 +1,7 @@
 def listen_for_misc
   for_blow_steam
   for_fun
+  for_lifeline
 end
 
 def for_blow_steam
@@ -9,7 +10,7 @@ def for_blow_steam
   matched = (keywords & msg)
   bind keywords, all: true, to: :entry_to_blow_steam, reply_with: {
     text: ANGRY.sample,
-    quick_replies: [["I need to vent 😤", "Vent"], ["I'm ok...", "I'm ok..."]]
+    quick_replies: [["😤", "VENT"], ["I'm ok...", "I'M OK"]]
   } if matched.any?
 end
 

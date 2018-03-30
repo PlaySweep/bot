@@ -19,6 +19,22 @@ module Commands
     handle_my_picks
   end
 
+  def entry_to_my_picks_postback
+    handle_my_picks_for_postback
+  end
+
+  def entry_to_sweepcoins
+    handle_sweepcoins
+  end
+
+  def entry_to_sweepcoins_postback
+    handle_sweepcoins_for_postback
+  end
+
+  def entry_to_notifications
+    handle_manage_notifications
+  end
+
   def entry_to_friends
     handle_friends
   end
@@ -33,5 +49,9 @@ module Commands
 
   def entry_to_fun
     handle_fun
+  end
+
+  def entry_to_lifeline
+    handle_lifeline
   end
 end

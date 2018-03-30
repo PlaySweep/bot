@@ -7,3 +7,10 @@ def listen_for_friends
     quick_replies: ["Challenge a friend", "Find friends"]
   } if matched.any?
 end
+
+def listen_for_friends_postback
+  bind 'FRIENDS' do
+    say "Get your friends involved", quick_replies: ["Challenge a friend", "Find friends"]
+    next_command :entry_to_friends_postback
+  end
+end

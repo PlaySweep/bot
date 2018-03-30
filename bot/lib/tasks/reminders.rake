@@ -16,7 +16,7 @@ namespace :reminders do
       {
         content_type: 'text',
         title: 'Handle notifications',
-        payload: 'MANAGE UPDATES'
+        payload: 'MANAGE NOTIFICATIONS'
       }
     ]
     @users.each_with_index do |user, index|

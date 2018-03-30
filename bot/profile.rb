@@ -10,7 +10,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "We're goin' streaking, {{user_first_name}}!\n\nGet 4 games in a row and win Amazon 💰\n\n100% Free. 100% Fun. Forever. "
+        text: "This is a game of streaks, {{user_first_name}}!\n\nWhether it's 4 wins or 4 losses, we'll reward you with Amazon 💰\n\n100% Free. 100% Fun. Forever."
       }
     ]
   }
@@ -41,6 +41,11 @@ module Profile
                 payload: 'MY PICKS' 
               },
               {
+                title: '👯 Challenge friends',
+                type: 'postback',
+                payload: 'FRIENDS'
+              },
+              {
                 title: '🎉 Share & Earn',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'
@@ -62,11 +67,6 @@ module Profile
                 payload: 'LEADERBOARD' 
               },
               {
-                title: '👯 Friends',
-                type: 'postback',
-                payload: 'FRIENDS'
-              },
-              {
                 title: '💰 Wallet',
                 type: 'postback',
                 payload: 'SWEEPCOINS'
@@ -78,20 +78,22 @@ module Profile
             title: '👻 Extra',
             call_to_actions: [
               {
+                title: '🤔 How to play',
+                type: 'web_url',
+                url: ENV['WEBVIEW_URL'],
+                webview_height_ratio: 'full'
+              },
+              {
                 title: '🛍 Sweepstore',
-                type: 'postback',
-                payload: 'SWEEPSTORE'
+                type: 'web_url',
+                url: ENV['WEBVIEW_URL'],
+                webview_height_ratio: 'full'
               },
               {
                 title: '👋 Notifications',
                 type: 'postback',
-                payload: 'MANAGE UPDATES'
-              },
-              {
-                title: '🤔 How to Play',
-                type: 'postback',
-                payload: 'HOW TO PLAY'
-              },
+                payload: 'MANAGE NOTIFICATIONS'
+              }
             ]
           }
         ]
