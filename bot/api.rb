@@ -78,6 +78,9 @@ class Api
 
   def update model, id, params
     case model
+    when 'users'
+      response = @conn.patch("#{model}/#{id}", params)
+      puts "👍" if response.status == 200
     when 'matchups'
       response = @conn.patch("#{model}/#{id}", params)
       puts "👍" if response.status == 200

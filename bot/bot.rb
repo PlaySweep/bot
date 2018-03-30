@@ -85,10 +85,12 @@ Rubotnik.route :postback do
       @api.find_or_create('users', user.id)
       if postback.referral
         referrer_id = postback.referral.ref
+        puts "New User Id: #{user.id}"
         puts "Referrer Id: #{referrer_id}"
-        update_sender(user.id, referrer_id) unless referrer_id.to_i == 0
+        update_referrer(referrer_id) unless referrer_id.to_i == 0
       end
       text = "Hey #{@api.user.first_name}, you finally found me!"
+      postback.typing_on
       say text, quick_replies: [ ["Hi, Emma!", "Welcome"] ]
       next_command :handle_walkthrough
     rescue NoMethodError => e
