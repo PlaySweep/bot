@@ -1,1 +1,1 @@
-PICKS = ["Tap the sports below 👇", "Your Sweep awaits you 👇", "I wonder if I should add Curling...hmm"]
+PICKS = ["Tap the sports below 👇", "Your Sweep awaits you 👇"]

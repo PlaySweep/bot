@@ -27,10 +27,6 @@ module Commands
     handle_sweepcoins
   end
 
-  def entry_to_sweepcoins_postback
-    handle_sweepcoins_for_postback
-  end
-
   def entry_to_notifications
     handle_manage_notifications
   end

@@ -23,78 +23,62 @@ module Profile
         call_to_actions: [
           {
             type: 'nested',
-            title: '⚡️ Actions',
+            title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: '🙏 Status',
-                type: 'postback',
-                payload: 'STATUS' 
-              },
-              {
-                title: '👆 Select picks',
+                title: 'Select picks 👆',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
               },
               {
-                title: '🙌 My picks',
+                title: 'Status 🙏',
+                type: 'postback',
+                payload: 'STATUS' 
+              },
+              {
+                title: 'My picks 🙌',
                 type: 'postback',
                 payload: 'MY PICKS' 
               },
               {
-                title: '👯 Challenge friends',
+                title: 'Challenge friends 👯',
                 type: 'postback',
                 payload: 'FRIENDS'
               },
               {
-                title: '🎉 Share & Earn',
-                type: 'postback',
-                payload: 'INVITE FRIENDS'
-              }
-            ]
-          },
-          {
-            type: 'nested',
-            title: '📊 Dashboard',
-            call_to_actions: [
-              {
-                title: '📚 Stats',
+                title: 'Leaderboard & Stats 📚',
                 type: 'postback',
                 payload: 'STATS'
-              },
-              {
-                title: '📈 Leaderboard',
-                type: 'postback',
-                payload: 'LEADERBOARD' 
-              },
-              {
-                title: '💰 Wallet',
-                type: 'postback',
-                payload: 'SWEEPCOINS'
               }
             ]
           },
           {
             type: 'nested',
-            title: '👻 Extra',
+            title: 'Stuff 👻',
             call_to_actions: [
               {
-                title: '🤔 How to play',
+                title: 'How to play 🤔',
                 type: 'web_url',
                 url: ENV['WEBVIEW_URL'],
                 webview_height_ratio: 'full'
               },
               {
-                title: '🛍 Sweepstore',
+                title: 'Sweepstore 🛍',
                 type: 'web_url',
                 url: ENV['WEBVIEW_URL'],
                 webview_height_ratio: 'full'
               },
               {
-                title: '👋 Notifications',
+                title: 'Notifications 👋',
                 type: 'postback',
                 payload: 'MANAGE NOTIFICATIONS'
               }
             ]
+          },
+          {
+            title: 'Invite friends 🎉',
+            type: 'postback',
+            payload: 'INVITE FRIENDS'
           }
         ]
       }

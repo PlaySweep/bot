@@ -1,8 +1,5 @@
 def listen_for_invite_friends
-  bind 'invite', 'share' do
-    keywords = %w[invite share]
-    msg = message.text.split(' ').map(&:downcase)
-    matched = (keywords & msg)
+  bind 'invite friends', 'share', 'invite', 'share with friends', 'share friends' do
     say INVITE_FRIENDS.sample
     show_invite
     stop_thread
