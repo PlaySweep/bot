@@ -55,6 +55,10 @@ module Commands
     handle_lifeline
   end
 
+  def entry_to_not_enough_for_lifeline
+    handle_not_enough_for_lifeline
+  end
+
   def entry_to_how_to_play
     handle_how_to_play
   end

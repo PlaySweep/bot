@@ -13,7 +13,7 @@ module Commands
         say "Emma's got you. Tap the options below to get back to it 👇", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
-        use_lifeline(user.id)
+        use_lifeline
         @api.find_or_create('users', user.id)
         message.typing_on
         say "Sweet! Let me go update that real quick..."
@@ -31,6 +31,20 @@ module Commands
       message.typing_on
       say "Ok, I'll hold off for now 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
       message.typing_off
+      stop_thread
+    else
+      redirect(:lifeline)
+      stop_thread
+    end
+  end
+
+  def handle_not_enough_for_lifeline
+    case message.quick_reply
+    when 'INVITE FRIENDS'
+      say "Invite a friend"
+      stop_thread
+    when 'CHALLENGE A FRIEND'
+      say "Challenge a friend"
       stop_thread
     end
   end

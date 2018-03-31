@@ -1,7 +1,6 @@
 def listen_for_misc
   for_blow_steam
   for_fun
-  for_lifeline
 end
 
 def for_blow_steam

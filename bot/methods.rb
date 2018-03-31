@@ -54,15 +54,14 @@ def set field, id
   @api.find_or_create('users', id)
 end
 
-def use_lifeline id
+def use_lifeline
   @api = Api.new
-  @api.find('users', id)
+  @api.find_or_create('users', user.id)
   balance = @api.user.data.sweep_coins
   current_streak = @api.user.current_streak
   previous_streak = @api.user.previous_streak
   params = { :user => { :sweep_coins => balance -= 30, :current_streak => previous_streak, :previous_streak => current_streak } }
-  @api.conn.patch("users/#{id}", params)
-  @api.find_or_create('users', id)
+  @api.update('users', user.id, params)
   puts "💸"
 end
 

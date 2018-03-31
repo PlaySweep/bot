@@ -59,14 +59,6 @@ class Api
     end
   end
 
-  def find model, id
-    case model
-    when 'users'
-      response = @conn.get("#{model}/#{id}")
-      @user = JSON.parse(response.body)['user']
-    end
-  end
-
   def create model, params
     case model
     when 'picks'
