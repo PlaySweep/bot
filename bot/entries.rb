@@ -54,4 +54,13 @@ module Commands
   def entry_to_lifeline
     handle_lifeline
   end
+
+  def entry_to_how_to_play
+    handle_how_to_play
+  end
+
+  def entry_to_sweepstore
+    handle_sweepstore
+  end
+
 end

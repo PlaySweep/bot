@@ -1,14 +1,14 @@
 module Commands
   def handle_blow_steam
     case message.quick_reply
-    when "Vent"
+    when "VENT"
       say "UGHGHGHGHHH I DISLIKE SPORTS VERY MUCH!! 👿!!🙄!!!😡!!!👿!!😡!!!🙄!!"
       sleep 1
       message.typing_on
       sleep 1
       say "...Ok your turn, and then we can get back to work 👍 (staying positive, staying positive)"
       next_command :handle_let_it_out
-    when "I'm ok..."
+    when "I'M OK"
       say "Well look at you, channeling your inner calm. So proud of you 😊"
       sleep 1
       message.typing_on

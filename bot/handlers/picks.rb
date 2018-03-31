@@ -20,6 +20,7 @@ module Commands
   end
 
   def handle_no_sports_available
+    # possibly add a call to special list of matchups in exchange for sweepcoins
     message.typing_on
     say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
     stop_thread

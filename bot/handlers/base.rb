@@ -4,11 +4,11 @@ module Commands
     case type
     when :start
       message.typing_on
-      say "No time to waste, huh? I got you. Start making your picks by selecting a sport below 👇", quick_replies: ["Select picks", "Status"]
+      say "No time to waste, huh? 👍", quick_replies: ["Select picks"]
       stop_thread
     when :show_sports
       message.typing_on
-      say "Whoops, did you need help making picks?", quick_replies: ["Select picks", "Status"]
+      say "Whoops, did you need help making picks?", quick_replies: ["Select picks", "Status", "How to play"]
       stop_thread
     when :blow_steam
       message.typing_on

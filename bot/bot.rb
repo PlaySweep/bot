@@ -25,6 +25,8 @@ Rubotnik.route :message do
   listen_for_misc
   listen_for_actions
   listen_for_notifications
+  listen_for_how_to_play
+  listen_for_sweepstore
 
   default do
     options = %w[😊 😄 😋 🤗 😎 🤓 😜 🤑 ]
