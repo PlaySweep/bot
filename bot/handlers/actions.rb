@@ -13,19 +13,24 @@ module Commands
         say "Emma's got you. Tap the options below to get back to it 👇", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
-        use_lifeline
-        @api.find_or_create('users', user.id)
-        message.typing_on
-        say "Sweet! Let me go update that real quick..."
-        sleep 1.5
-        message.typing_on
-        sleep 1.5
-        say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥"
-        sleep 1.5
-        message.typing_on
-        sleep 2
-        say "Your new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
-        stop_thread
+        if @api.user.data.sweep_coins < 30
+          say "You do not have enough Sweepcoins for a lifeline. Keep playing to earn more, or invite some friends!", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Invite Friends", "Invite Friends"]]
+          stop_thread
+        else
+          use_lifeline
+          @api.find_or_create('users', user.id)
+          message.typing_on
+          say "Sweet! Let me go update that real quick..."
+          sleep 1.5
+          message.typing_on
+          sleep 1.5
+          say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥"
+          sleep 1.5
+          message.typing_on
+          sleep 2
+          say "Your new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+          stop_thread
+        end
       end
     when 'No Lifeline'
       message.typing_on
