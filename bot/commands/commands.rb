@@ -618,7 +618,7 @@ module Commands
         say "Emma's got you. Tap the options below to get back to it 👇", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
         stop_thread
       else
-        if @api.user.sweep_coins < 30
+        if @api.user.data.sweep_coins < 30
           say "You do not have enough Sweepcoins for a lifeline. Keep playing to earn more, or invite some friends!", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Invite Friends", "Invite Friends"]]
           stop_thread
         else
