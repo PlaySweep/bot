@@ -1,7 +1,7 @@
 module Commands
   def handle_my_picks
     @api = Api.new
-    @api.find_or_create('users', user.id)
+    @api.fetch_user(user.id)
     options = ["😏, I like where your heads at", "You got this ✊"]
     begin
     if @api.user.images.any?
@@ -9,7 +9,7 @@ module Commands
         set('status changed', user.id)
         begin
           message.typing_on
-          @api.for_picks('upcoming')
+          @api.for_picks('upcoming', user.id)
           return if @api.upcoming_picks.nil?
           next_up = @api.upcoming_picks.first
           if next_up
@@ -45,7 +45,7 @@ module Commands
         end
       else
         message.typing_on
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up
@@ -76,7 +76,7 @@ module Commands
       set('status changed', user.id)
       begin
         message.typing_on
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up
@@ -95,7 +95,7 @@ module Commands
           say "I don't see any upcoming games for you yet", quick_replies: [["Select picks", "Select picks"]]
           stop_thread
         end  
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up
@@ -139,7 +139,7 @@ module Commands
 
   def handle_my_picks_for_postback
     @api = Api.new
-    @api.find_or_create('users', user.id)
+    @api.fetch_user(user.id)
     options = ["😏, I like where your heads at", "You got this ✊"]
     begin
     if @api.user.images.any?
@@ -147,7 +147,7 @@ module Commands
         set('status changed', user.id)
         begin
           postback.typing_on
-          @api.for_picks('upcoming')
+          @api.for_picks('upcoming', user.id)
           return if @api.upcoming_picks.nil?
           next_up = @api.upcoming_picks.first
           if next_up
@@ -183,7 +183,7 @@ module Commands
         end
       else
         postback.typing_on
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up
@@ -214,7 +214,7 @@ module Commands
       set('status changed', user.id)
       begin
         postback.typing_on
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up
@@ -233,7 +233,7 @@ module Commands
           say "I don't see any upcoming games for you yet", quick_replies: [["Select picks", "Select picks"]]
           stop_thread
         end  
-        @api.for_picks('upcoming')
+        @api.for_picks('upcoming', user.id)
         return if @api.upcoming_picks.nil?
         next_up = @api.upcoming_picks.first
         if next_up

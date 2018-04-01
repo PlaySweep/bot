@@ -4,7 +4,7 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE A FRIEND'
       @api = Api.new
-      @api.find_or_create('users', user.id)
+      @api.fetch_user(user.id)
       quick_replies = @api.user.friends.map(&:full_name).first(3).push("Search friends?")
       message.typing_on
       say "👇", quick_replies: quick_replies
@@ -25,7 +25,7 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE A FRIEND'
       @api = Api.new
-      @api.find_or_create('users', user.id)
+      @api.fetch_user(user.id)
       quick_replies = @api.user.friends.map(&:full_name).first(3).push("Search friends?")
       message.typing_on
       say "👇", quick_replies: quick_replies
@@ -60,20 +60,20 @@ module Commands
   def handle_user_lookup
     say "Ok, carry on with your life" and stop_thread and return if (message.quick_reply && message.quick_reply == "NO THANKS")
     @api = Api.new
-    @api.find_or_create('users', user.id)
-    @api.friend_lookup(message.text)
+    @api.fetch_user(user.id)
+    @api.fetch_friends(message.text)
     quick_replies = @api.user_list.map(&:full_name)
-    store_ids = []
+    found_ids = []
     if @api.user_list.empty?
-      say FRIEND_LOOKUP.sample, quick_replies: ["Try again", "No thanks"]
+      say FRIEND_LOOKUP.sample, quick_replies: ["Invite friends", "Try again", "No thanks"]
       next_command :handle_try_again
     else
       if quick_replies.length > 1
         quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
           user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].id}")
-          store_ids.push(@api.user_list[index].id)
+          found_ids.push(@api.user_list[index].id)
         end
-        quick_replies.unshift(["Add everyone", "EVERYONE #{store_ids}"])
+        quick_replies.unshift(["Add everyone", "EVERYONE #{found_ids}"])
       else
         quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
           user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].id}")
@@ -104,7 +104,7 @@ module Commands
     end
   end
 
-  def handle_friend_lookup
+  def handle_fetch_friends
     message.typing_on
     say "Ok, type in the friend you're looking for 👇", quick_replies: ["Nevermind"]
     message.typing_off
@@ -115,21 +115,23 @@ module Commands
     say "Are you sure they accepted your request? Type 'Add friends' to send a friend request 👍", quick_replies: ["Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     # needs to search within friends only
     @api = Api.new
-    @api.find_or_create('users', user.id)
-    @api.friend_lookup(message.text)
-    quick_replies = @api.user_list.map(&:full_name).first(2).push("Nope")
+    @api.fetch_user(user.id)
+    @api.fetch_friends(message.text)
+    quick_replies = @api.user_list.map(&:full_name).first(2).concat(["Invite friends", "Try again", "Nevermind"])
     friend = message.text
-    say "Find em?", quick_replies: quick_replies
+    say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: quick_replies
     next_command :handle_challenge
   end
 
   def handle_challenge
+    say "Type 'Add friends' to send a friend request 👍", quick_replies: ["Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
+    show_invite and stop_thread and return if message.quick_reply == 'INVITE FRIENDS'
     say "#{message.text} huh? All good." and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'SEARCH FRIENDS?'
-      handle_friend_lookup
-    when 'NOPE'
-      handle_friend_lookup
+      handle_fetch_friends
+    when 'TRY AGAIN'
+      handle_fetch_friends
     else
       friend = message.text
       say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: ["Highest streak", "Most wins"]

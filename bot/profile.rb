@@ -41,11 +41,6 @@ module Profile
                 payload: 'MY PICKS' 
               },
               {
-                title: 'Challenge friends 👯',
-                type: 'postback',
-                payload: 'FRIENDS'
-              },
-              {
                 title: 'Leaderboard & Stats 📚',
                 type: 'postback',
                 payload: 'STATS'
@@ -53,9 +48,20 @@ module Profile
             ]
           },
           {
-            title: 'Invite friends 🎉',
-            type: 'postback',
-            payload: 'INVITE FRIENDS'
+            type: 'nested',
+            title: 'Share & Friends 🎉',
+            call_to_actions: [
+              {
+                title: 'Invite friends 💌',
+                type: 'postback',
+                payload: 'INVITE FRIENDS'
+              },
+              {
+                title: 'Challenge a friend 💪',
+                type: 'postback',
+                payload: 'FRIENDS'
+              }
+            ]
           },
           {
             type: 'nested',

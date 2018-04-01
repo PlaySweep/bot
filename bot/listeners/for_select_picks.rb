@@ -51,8 +51,8 @@ end
 
 def matchups_available?
   @api = Api.new
-  @api.find_or_create('users', user.id)
-  @matchups = @api.all('matchups')
+  @api.fetch_user(user.id)
+  @matchups = @api.fetch_all('matchups')
   if (@matchups.nil? || @matchups.empty?)
     return false
   else

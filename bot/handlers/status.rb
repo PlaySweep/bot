@@ -1,163 +1,82 @@
 module Commands
   def handle_status
     @api = Api.new
-    @api.find_or_create('users', user.id)
-    message.typing_on
-    quick_replies = ["My picks", "Sweepcoins"]
-    if @api.user.current_streak > 0
+    @api.fetch_user(user.id)
+    quick_replies = ["My picks", "Sweepcoins", "Challenge a friend"]
+    if user_is_hot?
       say STATUS_HOT.sample
-      sleep 0.5
-      message.typing_on
-      sleep 1.5
-      say "Your current streak sits at #{@api.user.current_streak}", quick_replies: quick_replies
+      short_wait(:message)
+      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
       stop_thread
     else
-      if !@api.user.data.status_touched # if hasnt been touched yet
-        set('status touched', user.id)
-        if @api.user.data.sweep_coins >= 30
-          quick_replies = ["My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          if @api.user.previous_streak == @api.user.current_streak
-            message.typing_on
-            sleep 1.5
-            say "You're currently at a streak of zero...", quick_replies: quick_replies
-            stop_thread
-          elsif @api.user.previous_streak <= @api.user.current_streak
-            message.typing_on
-            sleep 1.5
-            say "You're currently at a streak of zero...", quick_replies: quick_replies
-            stop_thread
-          else
-            quick_replies = ["Use lifeline", "My picks", "Sweepcoins"]
-            sleep 0.5
-            message.typing_on
-            sleep 2
-            say "But I have good news, you have #{@api.user.data.sweep_coins} Sweepcoins 🤑"
-            sleep 0.5
-            message.typing_on
-            sleep 3
-            say "Turn back the 🕗 to your previous streak of #{@api.user.previous_streak} by trading in 30 Sweepcoins for a lifeline", quick_replies: quick_replies
-            stop_thread
-          end
+      if user_should_use_lifeline?
+        if user_can_use_lifeline?
+          quick_replies = ["Use lifeline", "My picks", "Challenge a friend"]
+          short_wait(:message)
+          say "Your current streak is #{@api.user.current_streak}"
+          medium_wait(:message)
+          say "Wanna spend 30 Sweepcoins on a lifeline?\n\nI'll set your streak back to #{@api.user.previous_streak} 👍", quick_replies: quick_replies
+          stop_thread and return
         else
-          quick_replies = ["My picks", "Sweepcoins"]
-          coins_needed = (30 - @api.user.data.sweep_coins)
-          say "Goose 🥚"
-          sleep 0.5
-          message.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero."
-          sleep 0.5
-          message.typing_on
-          @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-          sleep 2
-          say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{@api.user.previous_streak} 👌", quick_replies: quick_replies
-          stop_thread
+          quick_replies = ["Invite friends", "Challenge a friend"]
+          short_wait(:message)
+          say "Your current streak is #{@api.user.current_streak}"
+          long_wait(:message)
+          say "You only need #{30 - @api.user.data.sweep_coins} more Sweepcoins to set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
+          stop_thread and return
         end
-      else
-        if @api.user.data.sweep_coins >= 30
-          quick_replies = ["Use lifeline", "My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          message.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero.", quick_replies: quick_replies
-          stop_thread
-        else
-          quick_replies = ["My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          message.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero.", quick_replies: quick_replies
-          stop_thread
-        end
-        stop_thread
       end
+      say STATUS_COLD.sample
+      short_wait(:message)
+      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
+      stop_thread
     end
-    message.typing_off
-    stop_thread
   end
 
   def handle_status_postback
     @api = Api.new
-    @api.find_or_create('users', user.id)
-    postback.typing_on
-    quick_replies = ["My picks", "Sweepcoins"]
-    if @api.user.current_streak > 0
+    @api.fetch_user(user.id)
+    quick_replies = ["My picks", "Sweepcoins", "Challenge a friend"]
+    if user_is_hot?
       say STATUS_HOT.sample
-      sleep 0.5
-      postback.typing_on
-      sleep 1.5
-      say "Your current streak sits at #{@api.user.current_streak}", quick_replies: quick_replies
+      short_wait(:postback)
+      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
       stop_thread
     else
-      if !@api.user.data.status_touched # if hasnt been touched yet
-        set('status touched', user.id)
-        if @api.user.data.sweep_coins >= 30
-          quick_replies = ["My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          if @api.user.previous_streak == @api.user.current_streak
-            postback.typing_on
-            sleep 1.5
-            say "You're currently at a streak of zero...", quick_replies: quick_replies
-            stop_thread
-          elsif @api.user.previous_streak <= @api.user.current_streak
-            postback.typing_on
-            sleep 1.5
-            say "You're currently at a streak of zero...", quick_replies: quick_replies
-            stop_thread
-          else
-            quick_replies = ["Use lifeline", "My picks", "Sweepcoins"]
-            sleep 0.5
-            postback.typing_on
-            sleep 2
-            say "But I have good news, you have #{@api.user.data.sweep_coins} Sweepcoins 🤑"
-            sleep 0.5
-            postback.typing_on
-            sleep 3
-            say "Turn back the 🕗 to your previous streak of #{@api.user.previous_streak} by trading in 30 Sweepcoins for a lifeline", quick_replies: quick_replies
-            stop_thread
-          end
+      if user_should_use_lifeline?
+        if user_can_use_lifeline?
+          quick_replies = ["Use lifeline", "My picks", "Challenge a friend"]
+          short_wait(:postback)
+          say "Your current streak is #{@api.user.current_streak}"
+          medium_wait(:postback)
+          say "Wanna spend 30 Sweepcoins on a lifeline?\n\nI'll set your streak back to #{@api.user.previous_streak} 👍", quick_replies: quick_replies
+          stop_thread and return
         else
-          quick_replies = ["My picks", "Sweepcoins"]
-          coins_needed = (30 - @api.user.data.sweep_coins)
-          say "Goose 🥚"
-          sleep 0.5
-          postback.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero."
-          sleep 0.5
-          postback.typing_on
-          @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
-          sleep 2
-          say "You only need #{coins_needed} more Sweepcoins to set your streak back to #{@api.user.previous_streak} 👌", quick_replies: quick_replies
-          stop_thread
+          quick_replies = ["Invite friends", "Challenge a friend"]
+          short_wait(:postback)
+          say "Your current streak is #{@api.user.current_streak}"
+          long_wait(:postback)
+          say "You only need #{30 - @api.user.data.sweep_coins} more Sweepcoins to set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
+          stop_thread and return
         end
-      else
-        if @api.user.data.sweep_coins >= 30
-          quick_replies = ["Use lifeline", "My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          postback.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero.", quick_replies: quick_replies
-          stop_thread
-        else
-          quick_replies = ["My picks", "Sweepcoins"]
-          say "Goose 🥚"
-          sleep 0.5
-          postback.typing_on
-          sleep 1.5
-          say "You're currently at a streak of zero.", quick_replies: quick_replies
-          stop_thread
-        end
-        stop_thread
       end
+      say STATUS_COLD.sample
+      short_wait(:postback)
+      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
+      stop_thread
     end
-    postback.typing_off
-    stop_thread
+  end
+
+  def user_is_hot?
+    @api.user.current_streak > 0
+  end
+
+  def user_can_use_lifeline?
+    @api.user.data.sweep_coins >= 30
+  end
+
+  def user_should_use_lifeline?
+    previous, current = @api.user.previous_streak, @api.user.current_streak
+    (previous != current && previous > current && previous % 4 != 0)
   end
 end

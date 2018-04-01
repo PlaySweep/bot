@@ -1,7 +1,7 @@
 module Commands
   def handle_lifeline
     @api = Api.new
-    @api.find_or_create('users', user.id)
+    @api.fetch_user(user.id)
     case message.quick_reply
     when 'Yes Lifeline'
       if @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.current_streak == 0)
@@ -18,7 +18,7 @@ module Commands
           stop_thread
         else
           use_lifeline
-          @api.find_or_create('users', user.id)
+          @api.fetch_user(user.id)
           message.typing_on
           say "Sweet! Let me go update that real quick..."
           sleep 1.5

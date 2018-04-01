@@ -1,6 +1,6 @@
 def update_referrer referral_id
   @api = Api.new
-  @api.find_or_create('users', referral_id)
+  @api.fetch_user(referral_id)
   new_referral_count = @api.user.data.referral_count += 1
   new_sweep_coin_balance = @api.user.data.sweep_coins += 10
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
@@ -11,7 +11,7 @@ end
 
 def send_confirmation referral_id
   @api = Api.new
-  @api.find_or_create('users', user.id)
+  @api.fetch_user(user.id)
   $tracker.track(@api.user.id, 'User Referred')
   menu = [
     {
@@ -52,13 +52,12 @@ def set field, id
     params = { :user => { :how_to_play_touched => true } }
     puts "How to play flow touched"
   end
-  @api.conn.patch("users/#{id}", params)
-  @api.find_or_create('users', id)
+  @api.update("users", id, params)
 end
 
 def use_lifeline
   @api = Api.new
-  @api.find_or_create('users', user.id)
+  @api.fetch_user(user.id)
   balance = @api.user.data.sweep_coins
   current_streak = @api.user.current_streak
   previous_streak = @api.user.previous_streak
@@ -70,6 +69,6 @@ end
 def set_notification_settings id, type, action
   @api = Api.new
   params = { :user => { type => action } }
-  response = @api.conn.patch("users/#{id}", params)
-  puts "Set notifications 👍" if response.status == 200
+  @api.update("users", id, params)
+  puts "Set notifications 👍" 
 end

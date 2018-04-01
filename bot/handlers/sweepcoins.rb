@@ -1,7 +1,7 @@
 module Commands
   def handle_sweepcoins
     @api = Api.new
-    @api.find_or_create('users', user.id)
+    @api.fetch_user(user.id)
     @api.user.data.sweep_coins == 1 ? sweepcoins = 'Sweepcoin' : sweepcoins = 'Sweepcoins'
     if @api.user.data.sweep_coins >= 30
       options = ["Let's see here 🤔", "One moment, I'm counting 💰", "Beep boop bleep 🤖"] # collection of high balance initial responses

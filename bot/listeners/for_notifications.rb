@@ -1,6 +1,6 @@
 def listen_for_notifications
   @api = Api.new
-  @api.find_or_create('users', user.id)
+  @api.fetch_user(user.id)
   keywords = ['stop', 'unsubscribe', 'quit', 'notifications', 'notification', 'alert', 'alerts']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
@@ -20,7 +20,7 @@ end
 
 def listen_for_notifications_postback
   @api = Api.new
-  @api.find_or_create('users', user.id)
+  @api.fetch_user(user.id)
   new_games, reminders, recaps = @api.user.notification_settings.new_games, @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
   if (!new_games && !reminders && !recaps)
     bind 'MANAGE NOTIFICATIONS' do

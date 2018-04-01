@@ -4,7 +4,7 @@ end
 
 def for_lifeline
   @api = Api.new
-  @api.find_or_create('users', user.id)
+  @api.fetch_user(user.id)
   keywords = %w[lifeline]
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)

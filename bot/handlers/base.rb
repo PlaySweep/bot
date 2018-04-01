@@ -24,4 +24,37 @@ module Commands
       stop_thread
     end
   end
+
+  def short_wait type
+    case type
+    when :message
+      m = message
+    when :postback
+      m = postback
+    end
+    m.typing_on
+    sleep 0.5
+  end
+
+  def medium_wait type
+    case type
+    when :message
+      m = message
+    when :postback
+      m = postback
+    end
+    m.typing_on
+    sleep 1
+  end
+
+  def long_wait type
+    case type
+    when :message
+      m = message
+    when :postback
+      m = postback
+    end
+    m.typing_on
+    sleep 2
+  end
 end

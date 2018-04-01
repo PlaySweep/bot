@@ -1,7 +1,5 @@
 module Commands
   def handle_manage_notifications
-    @api = Api.new
-    @api.find_or_create('users', user.id)
     case message.quick_reply
     when 'NEW GAMES'
       say "New games on or off?", quick_replies: [["On", "NEW GAMES ON"], ["Off", "NEW GAMES OFF"]]
@@ -35,9 +33,7 @@ module Commands
     end
   end
 
-  def handle_notification_change
-    @api = Api.new
-    @api.find_or_create('users', user.id)    
+  def handle_notification_change   
     case message.quick_reply
     when 'NEW GAMES ON'
       set_notification_settings(user.id, :new_games, true)
