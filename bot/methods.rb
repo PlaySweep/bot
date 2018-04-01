@@ -5,16 +5,18 @@ def update_referrer referral_id
   new_sweep_coin_balance = @api.user.data.sweep_coins += 10
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
   @api.update("users", referral_id, params)
+  $tracker.track(@api.user.id, 'User Made Referral')
   send_confirmation(referral_id)
 end
 
 def send_confirmation referral_id
   @api = Api.new
   @api.find_or_create('users', user.id)
+  $tracker.track(@api.user.id, 'User Referred')
   menu = [
     {
       content_type: 'text',
-      title: '🎉 Share',
+      title: 'Share 🎉',
       payload: 'INVITE FRIENDS'
     },
     {

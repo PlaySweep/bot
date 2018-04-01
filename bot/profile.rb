@@ -53,8 +53,13 @@ module Profile
             ]
           },
           {
+            title: 'Invite friends 🎉',
+            type: 'postback',
+            payload: 'INVITE FRIENDS'
+          },
+          {
             type: 'nested',
-            title: 'Stuff 👻',
+            title: 'Settings & Help 👻',
             call_to_actions: [
               {
                 title: 'How to play 🤔',
@@ -74,11 +79,6 @@ module Profile
                 payload: 'MANAGE NOTIFICATIONS'
               }
             ]
-          },
-          {
-            title: 'Invite friends 🎉',
-            type: 'postback',
-            payload: 'INVITE FRIENDS'
           }
         ]
       }

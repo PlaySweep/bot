@@ -1,3 +1,5 @@
+require 'mixpanel-ruby'
+
 def listen_for_start_postback
   bind 'START' do
     begin
@@ -14,6 +16,7 @@ def listen_for_start_postback
       say text, quick_replies: [["Hi, Emma!", "WELCOME"]]
       next_command :handle_walkthrough
     rescue NoMethodError => e
+      puts "Error: #{e.inspect}"
       say "Hmm 🤔..."
       postback.typing_on
       sleep 1.5
