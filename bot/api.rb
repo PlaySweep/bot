@@ -35,8 +35,8 @@ class Api
     @user = JSON.parse(response.body)['user']
   end
 
-  def fetch_friends query
-    response = @conn.get("users?friend_name=#{query}")
+  def query_users query
+    response = @conn.get("users?name=#{query}")
     @user_list = JSON.parse(response.body)['users']
   end
 

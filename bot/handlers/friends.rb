@@ -61,7 +61,7 @@ module Commands
     say "Ok, carry on with your life" and stop_thread and return if (message.quick_reply && message.quick_reply == "NO THANKS")
     @api = Api.new
     @api.fetch_user(user.id)
-    @api.fetch_friends(message.text)
+    @api.query_users(message.text)
     quick_replies = @api.user_list.map(&:full_name)
     found_ids = []
     if @api.user_list.empty?
@@ -103,7 +103,7 @@ module Commands
     end
   end
 
-  def handle_fetch_friends
+  def handle_query_users
     message.typing_on
     say "Ok, type in the friend you're looking for 👇", quick_replies: ["Nevermind"]
     message.typing_off
@@ -115,7 +115,7 @@ module Commands
     # needs to search within friends only
     @api = Api.new
     @api.fetch_user(user.id)
-    @api.fetch_friends(message.text)
+    @api.query_users(message.text)
     quick_replies = @api.user_list.map(&:full_name).first(2).concat(["Invite friends", "Try again", "Nevermind"])
     friend = message.text
     say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: quick_replies
@@ -128,9 +128,9 @@ module Commands
     say "#{message.text} huh? All good." and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'SEARCH FRIENDS?'
-      handle_fetch_friends
+      handle_query_users
     when 'TRY AGAIN'
-      handle_fetch_friends
+      handle_query_users
     else
       friend = message.text
       say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: ["Highest streak", "Most wins"]
