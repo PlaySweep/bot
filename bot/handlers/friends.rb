@@ -70,13 +70,13 @@ module Commands
     else
       if quick_replies.length > 1
         quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
-          user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].id}")
-          found_ids.push(@api.user_list[index].id)
+          user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].facebook_uuid}")
+          found_ids.push(@api.user_list[index].facebook_uuid)
         end
         quick_replies.unshift(["Add everyone", "EVERYONE #{found_ids}"])
       else
         quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
-          user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].id}")
+          user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].facebook_uuid}")
         end
       end
       puts "Quick replies => #{quick_replies.inspect}"
@@ -91,15 +91,14 @@ module Commands
     when 'EVERYONE'
       start = message.quick_reply.index('[')
       ids = eval(message.quick_reply[start..-1])
-      say "#{ids.inspect}"
-      # send_friend_request(ids)
-      say "Great! I've sent a friend request to all your friends. Let's hope things work out, or else this was awkward...", quick_replies: ["Friends", "Select picks", "Status"]
+      send_friend_request(user.id, ids)
+      say "Great! I've sent a friend request to all your friends. Let's hope things work out, or else this was awkward...", quick_replies: ["Challenge friends", "Select picks", "Status"]
       stop_thread
     else
       id = eval(message.quick_reply.split(' ')[-1])
-      # send_friend_request(ids)
+      send_friend_request(user.id, id)
       say "#{id.inspect}"
-      say "Great! I've sent a friend request to #{message.text}. Let's hope things work out, or else this was awkward...", quick_replies: ["Friends", "Select picks", "Status"]
+      say "Great! I've sent a friend request to #{message.text}. Let's hope things work out, or else this was awkward...", quick_replies: ["Challenge friends", "Select picks", "Status"]
       stop_thread
     end
   end

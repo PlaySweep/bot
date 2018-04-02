@@ -28,33 +28,30 @@ module Commands
   def short_wait type
     case type
     when :message
-      m = message
+      message.typing_on
     when :postback
-      m = postback
+      postback.typing_on
     end
-    m.typing_on
     sleep 0.5
   end
 
   def medium_wait type
     case type
     when :message
-      m = message
+      message.typing_on
     when :postback
-      m = postback
+      postback.typing_on
     end
-    m.typing_on
     sleep 1
   end
 
   def long_wait type
     case type
     when :message
-      m = message
+      message.typing_on
     when :postback
-      m = postback
+      postback.typing_on
     end
-    m.typing_on
     sleep 2
   end
 end

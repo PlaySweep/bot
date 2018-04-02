@@ -40,8 +40,8 @@ class Api
     @user_list = JSON.parse(response.body)['users']
   end
 
-  def fetch_fb_user
-    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.9/#{user.id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}")
+  def fetch_fb_user id
+    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.9/#{id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}")
     response = @fb_conn.get
     @fb_user = JSON.parse(response.body)
   end
@@ -53,7 +53,7 @@ class Api
       @user = JSON.parse(response.body)['user']
       if @user.empty?
         puts "Creating new user."
-        fetch_fb_user
+        fetch_fb_user(id)
         if @fb_user
           params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
           response = @conn.post("#{model}", params)

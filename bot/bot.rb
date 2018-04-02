@@ -42,6 +42,7 @@ Rubotnik.route :postback do
   listen_for_my_picks_postback
   listen_for_friends_postback
   listen_for_invite_friends_postback
+  listen_for_actions_postback
   listen_for_notifications_postback
 end
 

@@ -9,6 +9,48 @@ def update_referrer referral_id
   send_confirmation(referral_id)
 end
 
+def send_friend_request id, friend_ids
+  @api = Api.new
+  @api.update('users', id, { :user => {:friend_ids => friend_ids} })
+  # send message to friend_ids
+  sender = @api.fetch_user(user.id)
+  menu = [
+    {
+      content_type: 'text',
+      title: 'Accept 👍',
+      payload: 'ACCEPT FRIEND REQUEST'
+    },
+    {
+      content_type: 'text',
+      title: 'Deny 👎',
+      payload: 'DENY FRIEND REQUEST'
+    }
+  ]
+  if friend_ids.is_a?(Array)
+    friend_ids.each do |facebook_uuid|
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: facebook_uuid },
+        message: {
+          text: "#{sender.first_name} #{sender.last_name} just requested to be your friend!",
+          quick_replies: menu
+        }
+      }
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+    end
+  else
+    message_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: friend_ids },
+      message: {
+        text: "#{sender.first_name} #{sender.last_name} just requested to be your friend!",
+        quick_replies: menu
+      }
+    }
+    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+  end
+end
+
 def send_confirmation referral_id
   @api = Api.new
   @api.fetch_user(user.id)

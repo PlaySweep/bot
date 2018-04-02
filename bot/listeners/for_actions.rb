@@ -2,6 +2,11 @@ def listen_for_actions
   for_lifeline
 end
 
+def listen_for_actions_postback
+  for_accepting_friend_requests
+  for_denying_friend_requests
+end
+
 def for_lifeline
   @api = Api.new
   @api.fetch_user(user.id)
@@ -19,4 +24,12 @@ def for_lifeline
       quick_replies: ["Invite friends", "Challenge a friend"]
     } if matched.any?
   end
+end
+
+def for_accepting_friend_requests
+  bind 'ACCEPT FRIEND REQUEST', to: :entry_to_accept_friend_request
+end
+
+def for_denying_friend_requests
+  bind 'DENY FRIEND REQUEST', to: :entry_to_deny_friend_request
 end
