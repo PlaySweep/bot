@@ -33,11 +33,11 @@ module Commands
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
-    @api.fetch_all('matchups', sport: sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport: sport.downcase) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
     say "We have #{@api.matchups.count} #{sport} #{games} available" unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
-      params = { :pick => {:user_id => user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
+      params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
       message.typing_on
       sleep 1
@@ -54,7 +54,7 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)  
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
-    @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id.to_i} })
+    @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id} })
     options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Okie dokie 👉"]
     message.typing_on
     sleep 0.5
@@ -62,7 +62,7 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    @api.fetch_all('matchups', sport: sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport: sport.downcase) unless sport.nil?
     fetch_matchup(sport, @api.matchups.first)
   end
 

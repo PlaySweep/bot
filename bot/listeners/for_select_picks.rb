@@ -52,7 +52,7 @@ end
 def matchups_available?
   @api = Api.new
   @api.fetch_user(user.id)
-  @matchups = @api.fetch_all('matchups')
+  @matchups = @api.fetch_all('matchups', user.id)
   if (@matchups.nil? || @matchups.empty?)
     return false
   else

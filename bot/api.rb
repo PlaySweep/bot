@@ -15,16 +15,16 @@ class Api
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
   end
 
-  def fetch_all model, type: nil, sport: nil
+  def fetch_all model, facebook_uuid, type: nil, sport: nil
     case model
     when 'users'
       response = @conn.get("#{model}")
       @users = JSON.parse(response.body)['users']
     when 'matchups'
       if sport
-        response = @conn.get("#{model}?user_id=#{user.id}&sport=#{sport}")
+        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}&sport=#{sport}")
       else
-        response = @conn.get("#{model}?user_id=#{user.id}")
+        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
       end
       @matchups = JSON.parse(response.body)['matchups']
     end
@@ -69,6 +69,10 @@ class Api
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
       @pick = response['pick']
+    when 'challenges'
+      response = @conn.post("users/#{id}/#{model}", params)
+      response = JSON.parse(response.body)
+      @challenge = response['challenge']
     end
   end
 

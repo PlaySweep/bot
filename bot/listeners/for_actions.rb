@@ -3,8 +3,8 @@ def listen_for_actions
 end
 
 def listen_for_actions_postback
-  for_accepting_friend_requests
-  for_denying_friend_requests
+  for_accepting_challenge_requests
+  for_denying_challenge_requests
 end
 
 def for_lifeline
@@ -27,9 +27,9 @@ def for_lifeline
 end
 
 def for_accepting_friend_requests
-  bind 'ACCEPT FRIEND REQUEST', to: :entry_to_accept_friend_request
+  bind 'ACCEPT CHALLENGE REQUEST', to: :entry_to_accept_challenge_request
 end
 
 def for_denying_friend_requests
-  bind 'DENY FRIEND REQUEST', to: :entry_to_deny_friend_request
+  bind 'DENY CHALLENGE REQUEST', to: :entry_to_deny_challenge_request
 end

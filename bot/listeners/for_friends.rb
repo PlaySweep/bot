@@ -4,13 +4,13 @@ def listen_for_friends
   matched = (keywords & msg)
   bind keywords, all: true, to: :entry_to_friends, reply_with: {
     text: "Get your friends involved",
-    quick_replies: ["Challenge a friend", "Find friends"]
+    quick_replies: ["Challenge a friend"]
   } if matched.any?
 end
 
 def listen_for_friends_postback
   bind 'FRIENDS' do
-    say "Get your friends involved", quick_replies: ["Challenge a friend", "Find friends"]
+    say "Get your friends involved", quick_replies: ["Challenge a friend"]
     next_command :entry_to_friends_postback
   end
 end
