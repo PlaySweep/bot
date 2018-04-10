@@ -53,4 +53,21 @@ module Commands
       stop_thread
     end
   end
+
+  def handle_challenge_response
+    case message.quick_reply
+    when 'ACCEPT CHALLENGE REQUEST'
+      @api = Api.new
+      # need to send challenge id along with quick reply
+      @api.update('challenges', 15, { :accept => true }, user.id)
+      say "Accepted!", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+      stop_thread
+    when 'DENY CHALLENGE REQUEST'
+      #stuff
+    else
+      say "I don't see anything here to accept or deny, but while you're at it...challenge some friends!", quick_replies: ["Challenge a friend"]
+      stop_thread
+    end
+  end
+
 end

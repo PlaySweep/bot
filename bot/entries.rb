@@ -35,6 +35,10 @@ module Commands
     handle_friends
   end
 
+  def entry_to_challenge_response
+    handle_challenge_response
+  end
+
   def entry_to_friends_postback
     handle_friends_postback
   end

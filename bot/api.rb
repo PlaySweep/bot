@@ -80,13 +80,17 @@ class Api
     end
   end
 
-  def update model, id, params
+  def update model, id, params, user_id = nil
     case model
     when 'users'
       response = @conn.patch("#{model}/#{id}", params)
       puts "👍" if response.status == 200
     when 'matchups'
       response = @conn.patch("#{model}/#{id}", params)
+      puts "👍" if response.status == 200
+    when 'challenges'
+      response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
+      @challenge = response['challenge']
       puts "👍" if response.status == 200
     end
   end

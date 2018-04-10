@@ -27,50 +27,6 @@ module Commands
     end
   end
 
-  # def handle_try_again
-  #   say "Ok, carry on with your life" and stop_thread and return if (message.text.upcase != message.quick_reply)
-  #   case message.quick_reply
-  #   when 'TRY AGAIN'
-  #     message.typing_on
-  #     say "Let's try that one more time..."
-  #     message.typing_off
-  #     next_command :handle_user_lookup
-  #   when 'NO THANKS'
-  #     message.typing_on
-  #     say "Ok, carry on with your life"
-  #     message.typing_off
-  #     stop_thread
-  #   end
-  # end
-
-  # def handle_user_lookup
-  #   say "Ok, carry on with your life" and stop_thread and return if (message.quick_reply && message.quick_reply == "NO THANKS")
-  #   @api = Api.new
-  #   @api.fetch_user(user.id)
-  #   @api.query_users(message.text)
-  #   quick_replies = @api.user_list.map(&:full_name)
-  #   found_ids = []
-  #   if @api.user_list.empty?
-  #     say FRIEND_LOOKUP.sample, quick_replies: ["Invite friends", "Try again", "No thanks"]
-  #     next_command :handle_try_again
-  #   else
-  #     if quick_replies.length > 1
-  #       quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
-  #         user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].facebook_uuid}")
-  #         found_ids.push(@api.user_list[index].facebook_uuid)
-  #       end
-  #       quick_replies.unshift(["Add everyone", "EVERYONE #{found_ids}"])
-  #     else
-  #       quick_replies = quick_replies.each_slice(1).to_a.each_with_index do |user, index|
-  #         user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].facebook_uuid}")
-  #       end
-  #     end
-  #     puts "Quick replies => #{quick_replies.inspect}"
-  #     say "Tap on the name(s) below to send a friend request. Once they accept, you'll be able to challenge each other. Don't worry, I'll send you an update on the status of your friendship.", quick_replies: quick_replies
-  #     next_command :handle_challenge_request
-  #   end
-  # end
-
   def handle_challenge_request
     say "Cold feet, huh? All good." and stop_thread and return if !message.quick_reply.split(' ')[-1].is_a?(Integer)
     id = eval(message.quick_reply.split(' ')[-1])

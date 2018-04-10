@@ -27,6 +27,8 @@ def send_challenge_request id, params
     }
   ]
 
+  # use @api.challenge response to send more information in the message to the user
+
   message_options = {
     messaging_type: "UPDATE",
     recipient: { id: params[:challenge][:friend_id] },

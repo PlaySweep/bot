@@ -1,10 +1,10 @@
 def listen_for_actions
   for_lifeline
+  for_challenge_response
 end
 
 def listen_for_actions_postback
-  for_accepting_challenge_requests
-  for_denying_challenge_requests
+  
 end
 
 def for_lifeline
@@ -26,10 +26,6 @@ def for_lifeline
   end
 end
 
-def for_accepting_challenge_requests
-  bind 'ACCEPT CHALLENGE REQUEST', to: :entry_to_accept_challenge_request
-end
-
-def for_denying_challenge_requests
-  bind 'DENY CHALLENGE REQUEST', to: :entry_to_deny_challenge_request
+def for_challenge_response
+  bind 'accept', 'deny', to: :entry_to_challenge_response
 end
