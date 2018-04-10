@@ -26,10 +26,10 @@ def for_lifeline
   end
 end
 
-def for_accepting_friend_requests
+def for_accepting_challenge_requests
   bind 'ACCEPT CHALLENGE REQUEST', to: :entry_to_accept_challenge_request
 end
 
-def for_denying_friend_requests
+def for_denying_challenge_requests
   bind 'DENY CHALLENGE REQUEST', to: :entry_to_deny_challenge_request
 end

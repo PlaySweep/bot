@@ -21,11 +21,14 @@ def listen_for_start_postback
       postback.typing_on
       sleep 1.5
       postback.typing_on
-      say "So I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
+      say "I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
       postback.typing_on
       sleep 0.5
       postback.typing_on
-      say "...I'm Emma btw 👋, I'll keep a look out and let you know when we can get started 🎉"
+      say "...I'm Emma btw 👋"
+      sleep 0.5
+      postback.typing_on
+      say "While I take care of all that for you, go ahead and get started below by typing 'Select picks'"
       stop_thread
     end
   end

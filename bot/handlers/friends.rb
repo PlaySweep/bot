@@ -4,8 +4,8 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE A FRIEND'
       @api = Api.new
-      @api.fetch_user(user.id)
-      quick_replies = @api.user.friends.map(&:full_name).first(4).push("Search friends?")
+      @api.fetch_friends(user.id)
+      quick_replies = @api.friends.map(&:full_name).first(4).push("Search friends?")
       message.typing_on
       say "👇", quick_replies: quick_replies
       message.typing_off
@@ -18,8 +18,8 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE A FRIEND'
       @api = Api.new
-      @api.fetch_user(user.id)
-      quick_replies = @api.user.friends.map(&:full_name).first(4).push("Search friends?")
+      @api.fetch_friends(user.id)
+      quick_replies = @api.friends.map(&:full_name).first(4).push("Search friends?")
       message.typing_on
       say "👇", quick_replies: quick_replies
       message.typing_off
@@ -115,23 +115,51 @@ module Commands
     when 'TRY AGAIN'
       handle_query_users
     else
+      user.session[:challenge_details] = {}
       friend = message.text
+      user.session[:challenge_details][:full_name] = friend
       id = eval(message.quick_reply.split(' ')[-1])
-      say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: [["Highest streak", "HIGHEST STREAK #{id}"], ["Most wins", "MOST WINS #{id}"]]
+      user.session[:challenge_details][:user_id] = id
+      say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: ["Matchup", "Most wins"]
       next_command :handle_confirm_challenge
     end
   end
 
   def handle_confirm_challenge
-    case message.quick_reply.split(' ')[0...-1].join(' ')
-    when 'HIGHEST STREAK'
-      id = eval(message.quick_reply.split(' ')[-1])
-      puts "Send challenge to #{id}"
-      # send_challenge_request(user.id, id)
-      say "Here are the rules for highest streak..."
+    case message.quick_reply
+    when 'MATCHUP'
+      # card list of matchups carousel
+      show_carousel
       stop_thread
     when 'MOST WINS'
-      say "Here are the rules for most wins..."
+      say "What would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
+      next_command :handle_challenge_details
+    end
+  end
+
+  def handle_challenge_details
+    case message.quick_reply
+    when '3 DAYS'
+      full_name = user.session[:challenge_details][:full_name]
+      user.session[:challenge_details][:days] = 3
+      say "So you are challenging #{full_name} to the most wins in 3 days, you good?", quick_replies: ["Send it", "No, I screwed up"]
+      next_command :confirm_challenge_details
+    end
+  end
+
+  def confirm_challenge_details
+    case message.quick_reply
+    when 'SEND IT'
+      params = { 
+        :challenge => {
+          :friend_id => user.session[:challenge_details][:user_id], 
+          :challenge_type_id => 2, 
+          :days => user.session[:challenge_details][:days],
+          :coins => 15
+        } 
+      }
+      send_challenge_request(user.id, params)
+      say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
       stop_thread
     end
   end

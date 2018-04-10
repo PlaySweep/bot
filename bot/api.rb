@@ -8,8 +8,8 @@ class Api
   Hash.use_dot_syntax = true
 
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
-                :pick, :matchups, :upcoming_picks, 
-                :in_progress_picks, :completed_picks
+                :pick, :matchups, :upcoming_picks, :friend, :friends, 
+                :in_progress_picks, :completed_picks, :challenge
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
@@ -35,6 +35,11 @@ class Api
     @user = JSON.parse(response.body)['user']
   end
 
+  def fetch_friends id
+    response = @conn.get("users/#{id}/friends")
+    @friends = JSON.parse(response.body)['friends']
+  end
+
   def query_users query
     response = @conn.get("users?name=#{query}")
     @user_list = JSON.parse(response.body)['users']
@@ -52,7 +57,6 @@ class Api
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
       if @user.empty?
-        puts "Creating new user."
         fetch_fb_user(id)
         if @fb_user
           params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }

@@ -1,42 +1,34 @@
 module Commands
   # Format of hashes follows JSON format from Messenger Platform documentation:
   # https://developers.facebook.com/docs/messenger-platform/send-messages/templates
-  # CAROUSEL = [
-  #   {
-  #     title: 'Random image',
-  #     # Horizontal image should have 1.91:1 ratio
-  #     image_url: 'https://unsplash.it/760/400?random',
-  #     subtitle: "That's a first card in a carousel",
-  #     default_action: {
-  #       type: 'web_url',
-  #       url: 'https://unsplash.it'
-  #     },
-  #     buttons: [
-  #       {
-  #         type: :web_url,
-  #         url: 'https://unsplash.it',
-  #         title: 'Website'
-  #       }
-  #     ]
-  #   },
-  #   {
-  #     title: 'Another random image',
-  #     # Horizontal image should have 1.91:1 ratio
-  #     image_url: 'https://unsplash.it/600/315?random',
-  #     subtitle: "And here's a second card. You can add up to 10!",
-  #     default_action: {
-  #       type: 'web_url',
-  #       url: 'https://unsplash.it'
-  #     },
-  #     buttons: [
-  #       {
-  #         type: :web_url,
-  #         url: 'https://unsplash.it',
-  #         title: 'Website'
-  #       }
-  #     ]
-  #   }
-  # ].freeze
+  CAROUSEL = [
+    {
+      title: 'Random image',
+      # Horizontal image should have 1.91:1 ratio
+      image_url: 'https://unsplash.it/760/400?random',
+      subtitle: "That's a first card in a carousel",
+      buttons: [
+        {
+          type: :postback,
+          payload: 'TEST',
+          title: 'Website'
+        }
+      ]
+    },
+    {
+      title: 'Random image',
+      # Horizontal image should have 1.91:1 ratio
+      image_url: 'https://unsplash.it/760/400?random',
+      subtitle: "That's a first card in a carousel",
+      buttons: [
+        {
+          type: :postback,
+          payload: 'TEST',
+          title: 'Website'
+        }
+      ]
+    }
+  ]
 
   def show_media(id, quick_replies)
     media = UI::MediaAttachment.new(id, quick_replies)
@@ -101,10 +93,10 @@ module Commands
   #   end
   # end
 
-  # def show_carousel
-  #   quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
-  #   show(UI::FBCarousel.new(CAROUSEL, quick_replies))
-  # end
+  def show_carousel
+    quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
+    show(UI::FBCarousel.new(CAROUSEL, quick_replies))
+  end
 
   def show_invite
     titles = ["Predict the outcome of 4 games in a row and win Amazon Cash!", "Predict sports games, free. Hit a streak of 4. Win some cash."]

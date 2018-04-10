@@ -9,28 +9,27 @@ def update_referrer referral_id
   send_confirmation(referral_id)
 end
 
-def send_challenge_request id, friend_id, challenge_type_id, options
+def send_challenge_request id, params
   @api = Api.new
-  params = { :challenge => {:friend_id => friend_id, :challenge_type_id => challenge_type_id, :options => options} }
   @api.create('challenges', id, params)
 
-  sender = @api.fetch_user(user.id)
+  sender = @api.fetch_user(id)
   menu = [
     {
       content_type: 'text',
       title: 'Accept 👍',
-      payload: 'ACCEPT FRIEND REQUEST'
+      payload: 'ACCEPT CHALLENGE REQUEST'
     },
     {
       content_type: 'text',
       title: 'Deny 👎',
-      payload: 'DENY FRIEND REQUEST'
+      payload: 'DENY CHALLENGE REQUEST'
     }
   ]
 
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: friend_id },
+    recipient: { id: params[:challenge][:friend_id] },
     message: {
       text: "#{sender.first_name} #{sender.last_name} just challenged you!",
       quick_replies: menu
