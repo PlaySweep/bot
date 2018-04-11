@@ -55,15 +55,21 @@ module Commands
   end
 
   def handle_challenge_response
-    case message.quick_reply
+    payload = message.quick_reply.split(' ')[0...-1].join(' ') unless !message.quick_reply
+    id = message.quick_reply.split(' ')[-1] unless !message.quick_reply
+    case payload
     when 'ACCEPT CHALLENGE REQUEST'
       @api = Api.new
-      # need to send challenge id along with quick reply
-      @api.update('challenges', 15, { :accept => true }, user.id)
+      @api.update('challenges', id, { :accept => true }, user.id)
       say "Accepted!", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+      # send message to requestor
       stop_thread
     when 'DENY CHALLENGE REQUEST'
-      #stuff
+      @api = Api.new
+      @api.update('challenges', id, { :accept => true }, user.id)
+      say "Declined!", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+      # send message to requestor
+      stop_thread
     else
       say "I don't see anything here to accept or deny, but while you're at it...challenge some friends!", quick_replies: ["Challenge a friend"]
       stop_thread

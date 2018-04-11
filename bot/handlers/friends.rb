@@ -5,9 +5,9 @@ module Commands
     when 'CHALLENGE A FRIEND'
       @api = Api.new
       @api.fetch_friends(user.id)
-      quick_replies = @api.friends.map(&:full_name).first(4).push("Search friends?")
+      quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
-      say "👇", quick_replies: quick_replies
+      say "👇", quick_replies: quick_replies.push("Search friends?")
       message.typing_off
       next_command :handle_challenge
     end
@@ -19,9 +19,9 @@ module Commands
     when 'CHALLENGE A FRIEND'
       @api = Api.new
       @api.fetch_friends(user.id)
-      quick_replies = @api.friends.map(&:full_name).first(4).push("Search friends?")
+      quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
-      say "👇", quick_replies: quick_replies
+      say "👇", quick_replies: quick_replies.push("Search friends?")
       message.typing_off
       next_command :handle_challenge
     end
@@ -53,9 +53,7 @@ module Commands
       say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: quick_replies
       next_command :handle_challenge
     else
-      quick_replies = @api.user_list.map(&:full_name).first(3).each_slice(1).to_a.each_with_index do |user, index|
-        user.push("#{@api.user_list[index].full_name} #{@api.user_list[index].facebook_uuid}")
-      end
+      quick_replies = build_payload_for('users', @api.user_list)
       say "Tap on a friend to challenge them 👍", quick_replies: quick_replies
       next_command :handle_challenge
     end
@@ -83,13 +81,15 @@ module Commands
 
   def handle_confirm_challenge
     case message.quick_reply
+    when 'MOST WINS'
+      user.session[:challenge_details][:type_id] = 1
+      say "What would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
+      next_command :handle_challenge_details
     when 'MATCHUP'
+      user.session[:challenge_details][:type_id] = 2
       # card list of matchups carousel
       show_carousel
       stop_thread
-    when 'MOST WINS'
-      say "What would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
-      next_command :handle_challenge_details
     end
   end
 
@@ -109,7 +109,7 @@ module Commands
       params = { 
         :challenge => {
           :friend_id => user.session[:challenge_details][:user_id], 
-          :challenge_type_id => 2, 
+          :challenge_type_id => user.session[:challenge_details][:type_id], 
           :days => user.session[:challenge_details][:days],
           :coins => 15
         } 

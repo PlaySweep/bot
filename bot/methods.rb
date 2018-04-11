@@ -18,22 +18,22 @@ def send_challenge_request id, params
     {
       content_type: 'text',
       title: 'Accept 👍',
-      payload: 'ACCEPT CHALLENGE REQUEST'
+      payload: "ACCEPT CHALLENGE REQUEST #{@api.challenge.id}"
     },
     {
       content_type: 'text',
       title: 'Deny 👎',
-      payload: 'DENY CHALLENGE REQUEST'
+      payload: "DENY CHALLENGE REQUEST #{@api.challenge.id}"
     }
   ]
 
-  # use @api.challenge response to send more information in the message to the user
+  custom_message = build_custom_message(@api.challenge)
 
   message_options = {
     messaging_type: "UPDATE",
     recipient: { id: params[:challenge][:friend_id] },
     message: {
-      text: "#{sender.first_name} #{sender.last_name} just challenged you!",
+      text: "#{sender.first_name} #{sender.last_name} #{custom_message}",
       quick_replies: menu
     }
   }
