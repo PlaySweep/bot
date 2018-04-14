@@ -1,0 +1,1 @@
+CHALLENGE = ["Being Challenged In Life Is Inevitable, Being Defeated Is Optional"]

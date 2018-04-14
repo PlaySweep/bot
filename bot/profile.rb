@@ -59,7 +59,7 @@ module Profile
               {
                 title: 'Challenge a friend 💪',
                 type: 'postback',
-                payload: 'FRIENDS'
+                payload: 'CHALLENGE'
               }
             ]
           },

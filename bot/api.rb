@@ -8,14 +8,15 @@ class Api
   Hash.use_dot_syntax = true
 
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
-                :pick, :matchups, :upcoming_picks, :friend, :friends, 
-                :in_progress_picks, :completed_picks, :challenge
+                :pick, :matchup, :matchups, :challenge_matchups, 
+                :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
+                :challenge, :team
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
   end
 
-  def fetch_all model, facebook_uuid, type: nil, sport: nil
+  def fetch_all model, facebook_uuid: nil, type: nil, sport: nil
     case model
     when 'users'
       response = @conn.get("#{model}")
@@ -27,12 +28,26 @@ class Api
         response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
       end
       @matchups = JSON.parse(response.body)['matchups']
+    when 'challenge_matchups'
+      response = @conn.get("#{model}")
+      puts "RESPONSE: #{JSON.parse(response.body)}"
+      @challenge_matchups = JSON.parse(response.body)['matchups']
     end
   end
 
   def fetch_user id
     response = @conn.get("users/#{id}")
     @user = JSON.parse(response.body)['user']
+  end
+
+  def fetch_team id
+    response = @conn.get("teams/#{id}")
+    @team = JSON.parse(response.body)['team']
+  end
+
+  def fetch_matchup id
+    response = @conn.get("challenge_matchups/#{id}")
+    @matchup = JSON.parse(response.body)['matchup']
   end
 
   def fetch_friends id
@@ -43,6 +58,11 @@ class Api
   def query_users query
     response = @conn.get("users?name=#{query}")
     @user_list = JSON.parse(response.body)['users']
+  end
+
+  def query_matchups query
+    response = @conn.get("challenge_matchups?name=#{query}")
+    @matchup_list = JSON.parse(response.body)['matchups']
   end
 
   def fetch_fb_user id

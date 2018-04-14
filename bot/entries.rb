@@ -31,16 +31,16 @@ module Commands
     handle_manage_notifications
   end
 
-  def entry_to_friends
-    handle_friends
+  def entry_to_challenge
+    handle_challenge_intro
   end
 
   def entry_to_challenge_response
     handle_challenge_response
   end
 
-  def entry_to_friends_postback
-    handle_friends_postback
+  def entry_to_challenge_postback
+    handle_challenge_intro_postback
   end
 
   def entry_to_blow_steam

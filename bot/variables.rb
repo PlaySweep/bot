@@ -93,9 +93,9 @@ module Commands
   #   end
   # end
 
-  def show_carousel
+  def show_carousel resource
     quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
-    show(UI::FBCarousel.new(CAROUSEL, quick_replies))
+    show(UI::FBCarousel.new(resource, quick_replies))
   end
 
   def show_invite

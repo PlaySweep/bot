@@ -4,6 +4,8 @@ def build_payload_for resource, data
     data.map(&:full_name).first(4).each_slice(1).to_a.each_with_index do |user, index|
       user.push("#{data[index].full_name} #{data[index].facebook_uuid}")
     end
+  when 'matchup'
+    
   end
 end
 
