@@ -70,13 +70,13 @@ module Profile
               {
                 title: 'How to play 🤔',
                 type: 'web_url',
-                url: ENV['WEBVIEW_URL'],
+                url: "#{ENV['WEBVIEW_URL']}/help",
                 webview_height_ratio: 'full'
               },
               {
                 title: 'Sweepstore 🛍',
                 type: 'web_url',
-                url: ENV['WEBVIEW_URL'],
+                url: "#{ENV['WEBVIEW_URL']}/store",
                 webview_height_ratio: 'full'
               },
               {

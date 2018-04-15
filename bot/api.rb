@@ -66,7 +66,7 @@ class Api
   end
 
   def fetch_fb_user id
-    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.9/#{id}?fields=first_name,last_name&access_token=#{ENV['ACCESS_TOKEN']}")
+    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.9/#{id}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=#{ENV['ACCESS_TOKEN']}")
     response = @fb_conn.get
     @fb_user = JSON.parse(response.body)
   end
@@ -79,7 +79,8 @@ class Api
       if @user.empty?
         fetch_fb_user(id)
         if @fb_user
-          params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name } }
+          puts "Inspect response: #{@fb_user.inspect}"
+          params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name, :profile_pic => @fb_user.profile_pic, :gender => @fb_user.gender, :timezone => @fb_user.timezone } }
           response = @conn.post("#{model}", params)
           @user = JSON.parse(response.body)['user']
         end

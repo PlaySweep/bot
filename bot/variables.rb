@@ -98,6 +98,35 @@ module Commands
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
+  def show_option user_id
+    url = "#{ENV['WEBVIEW_URL']}/dashboard/1328837993906209"
+      option = {"message":{
+      "attachment": {
+        "type": "template",
+        "payload": {
+           "template_type": "media",
+           "elements": [
+              {
+                 "media_type": "image",
+                 "attachment_id": "1240293409434043",
+                 "buttons": [
+                   { type: "web_url", url: url, title: "See more", messenger_extensions: true }
+                 ]
+              }
+           ]
+        }
+      }    
+    }}
+
+    message_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: user_id },
+      message: option[:message]
+    }
+
+    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+  end
+
   def show_invite
     titles = ["Predict the outcome of 4 games in a row and win Amazon Cash!", "Predict sports games, free. Hit a streak of 4. Win some cash."]
     subtitles = ["Add some excitement to any game (even ⚾)"]

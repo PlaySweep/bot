@@ -28,7 +28,9 @@ module Commands
       end
       say STATUS_COLD.sample
       short_wait(:message)
-      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
+      say "Your current streak is #{@api.user.current_streak}"
+      short_wait(:message)
+      show_option(user.id)
       stop_thread
     end
   end
@@ -62,7 +64,9 @@ module Commands
       end
       say STATUS_COLD.sample
       short_wait(:postback)
-      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
+      say "Your current streak is #{@api.user.current_streak}"
+      short_wait(:postback)
+      show_option(user.id)
       stop_thread
     end
   end
