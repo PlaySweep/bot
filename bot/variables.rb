@@ -98,18 +98,18 @@ module Commands
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
-  def show_option user_id
-    url = "#{ENV['WEBVIEW_URL']}/dashboard/1328837993906209"
-      option = {"message":{
-      "attachment": {
-        "type": "template",
-        "payload": {
-           "template_type": "media",
-           "elements": [
+  def show_option user_id, endpoint
+    url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+      option = { message: {
+      attachment: {
+        type: "template",
+        payload: {
+           template_type: "media",
+           elements: [
               {
-                 "media_type": "image",
-                 "attachment_id": "1240293409434043",
-                 "buttons": [
+                 media_type: "image",
+                 attachment_id: "1240293409434043",
+                 buttons: [
                    { type: "web_url", url: url, title: "See more", messenger_extensions: true }
                  ]
               }
@@ -119,7 +119,7 @@ module Commands
     }}
 
     message_options = {
-      messaging_type: "UPDATE",
+      messaging_type: "RESPONSE",
       recipient: { id: user_id },
       message: option[:message]
     }

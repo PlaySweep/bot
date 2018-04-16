@@ -30,7 +30,7 @@ module Commands
       short_wait(:message)
       say "Your current streak is #{@api.user.current_streak}"
       short_wait(:message)
-      show_option(user.id)
+      show_option(user.id, 'status')
       stop_thread
     end
   end
@@ -66,7 +66,7 @@ module Commands
       short_wait(:postback)
       say "Your current streak is #{@api.user.current_streak}"
       short_wait(:postback)
-      show_option(user.id)
+      show_option(user.id, 'status')
       stop_thread
     end
   end
