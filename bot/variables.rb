@@ -98,7 +98,7 @@ module Commands
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
-  def show_option user_id, endpoint
+  def show_media_with_button user_id, endpoint
     url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
       option = { message: {
       attachment: {
