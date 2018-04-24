@@ -67,21 +67,18 @@ def send_confirmation referral_id
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
 end
 
-def set field, id
+def set field, id, option
   @api = Api.new
   case field
   when 'status touched'
-    params = { :user => { :status_touched => true } }
+    params = { :user => { :status_touched => option } }
     puts "Status flow touched"
   when 'status changed'
-    params = { :user => { :status_changed => false } }
+    params = { :user => { :status_changed => option } }
     puts "Status flow changed"
-  when 'store touched'
-    params = { :user => { :store_touched => true } }
-    puts "Store flow changed"
-  when 'how to play touched'
-    params = { :user => { :how_to_play_touched => true } }
-    puts "How to play flow touched"
+  when 'pick changed'
+    params = { :user => { :pick_changed => option } }
+    puts "Pick changed"
   end
   @api.update("users", id, params)
 end

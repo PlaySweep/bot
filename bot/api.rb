@@ -16,7 +16,7 @@ class Api
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
   end
 
-  def fetch_all model, facebook_uuid: nil, type: nil, sport: nil
+  def fetch_all model, facebook_uuid=nil, sport=nil
     case model
     when 'users'
       response = @conn.get("#{model}")
@@ -94,6 +94,9 @@ class Api
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
       @pick = response['pick']
+      if response.status == 200
+        set('pick changed', id, true)
+      end
     when 'challenges'
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
@@ -121,16 +124,9 @@ class Api
     when 'status'
       response = @conn.get("users/#{id}/status")
       @user = JSON.parse(response.body)['user']
-      puts "👍" if response.status == 200
-    when 'upcoming'
-      response = @conn.get("users/#{id}/upcoming_picks")
-      @upcoming_picks = JSON.parse(response.body)['picks']
-    when 'in_progress'
-      response = @conn.get("users/#{id}/in_progress_picks")
-      @in_progress_picks = JSON.parse(response.body)['picks']
-    when 'completed'
-      response = @conn.get("users/#{id}/completed_picks")
-      @completed_picks = JSON.parse(response.body)['picks']
+      if response.status == 200
+        set('pick changed', id, false)
+      end
     end
   end
 end

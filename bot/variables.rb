@@ -98,8 +98,13 @@ module Commands
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
-  def show_media_with_button user_id, endpoint
-    url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+  def show_media_with_button user_id, endpoint, message_attachment
+    case endpoint
+    when 'status'
+      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+    when 'picks'
+      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+    end
       option = { message: {
       attachment: {
         type: "template",
@@ -108,7 +113,7 @@ module Commands
            elements: [
               {
                  media_type: "image",
-                 attachment_id: "1240293409434043",
+                 attachment_id: message_attachment,
                  buttons: [
                    { type: "web_url", url: url, title: "See more", messenger_extensions: true }
                  ]

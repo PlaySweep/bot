@@ -33,7 +33,7 @@ module Commands
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
-    @api.fetch_all('matchups', user.id, sport: sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
     say "We have #{@api.matchups.count} #{sport} #{games} available" unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
@@ -62,7 +62,7 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    @api.fetch_all('matchups', user.id, sport: sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
     fetch_matchup(sport, @api.matchups.first)
   end
 
