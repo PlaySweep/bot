@@ -82,7 +82,7 @@ module Commands
       say "Amazon Prime here we come!", quick_replies: [["Start Sweeping 🎉", "Select picks"]]
       stop_thread
     else
-      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NFL Draft", "NFL Draft"], ["NBA", "NBA"], ['MLB', 'MLB'] ["NHL", "NHL"]]
+      say "Oh trying to be sneaky huh? It's all good, I got you. Make your picks below!", quick_replies: [["NBA", "NBA"], ['MLB', 'MLB'] ["NHL", "NHL"]]
       stop_thread
     end
   end
@@ -171,8 +171,6 @@ module Commands
     @api = Api.new
     @api.find_or_create('users', user.id)
     case message.quick_reply
-    when "NFL Draft"
-      handle_pick
     when "NBA"
       handle_pick
     when "MLB"
@@ -600,7 +598,7 @@ module Commands
 
   def select_picks
     text = "Choose from the sports below 👇"
-    say text, quick_replies: [['NFL Draft', 'NFL Draft'], ['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
+    say text, quick_replies: [['NBA', 'NBA'], ['MLB', 'MLB'], ['NHL', 'NHL']]
     stop_thread
   end
 
