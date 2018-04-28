@@ -99,10 +99,13 @@ module Commands
   end
 
   def show_media_with_button user_id, endpoint, message_attachment
+    quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }]
     case endpoint
     when 'status'
       url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
     when 'picks'
+      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+    when 'challenges'
       url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
     end
       option = { message: {
@@ -120,7 +123,8 @@ module Commands
               }
            ]
         }
-      }    
+      },
+      quick_replies: quick_replies
     }}
 
     message_options = {

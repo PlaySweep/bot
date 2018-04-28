@@ -11,8 +11,15 @@ module Commands
       message.typing_off
       next_command :handle_selected_challenge
     when 'MY CHALLENGES'
-      say "You do not have any challenges currently."
-      stop_thread
+      @api = Api.new
+      @api.fetch_user(user.id)
+      if @api.user.challenges.size > 0
+        show_media_with_button(user.id, 'challenges', '1244963358967048')
+        stop_thread
+      else
+        say "You do not have any challenges currently.", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+        next_command :handle_challenge_intro
+      end
     end
   end
 
@@ -28,8 +35,15 @@ module Commands
       message.typing_off
       next_command :handle_selected_challenge
     when 'MY CHALLENGES'
-      say "You do not have any challenges currently."
-      stop_thread
+      @api = Api.new
+      @api.fetch_user(user.id)
+      if @api.user.challenges.size > 0
+        show_media_with_button(user.id, 'challenges', '1244963358967048')
+        stop_thread
+      else
+        say "You do not have any challenges currently.", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+        next_command :handle_challenge_intro
+      end
     end
   end
 
@@ -71,17 +85,64 @@ module Commands
     matchups = @api.query_matchups(message.text)
     if matchups.size == 1
       matchup = matchups.first
-      say "Which side of #{matchup.description} do you want to pick?", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id}"]]
-      next_command :handle_select_side
+      say "Which side of #{matchup.description} do you want to pick?", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id} #{matchup.home_side.id}"]]
+      next_command :handle_wager_input
+    else
+      say "Couldn't find a matchup by that name, tap below to see a list of available options"
+      #TODO show matchup options
+      handle_query_matchups
     end
   end
 
-  def handle_select_side
-    selected_id = message.quick_reply.split(' ')[-1]
+  def type_wager_amount
+    say "Type in your wager amount below 🤑"
+    next_command :handle_wager_response
+  end
+
+  def handle_wager_input
     @api = Api.new
-    selection = @api.fetch_team(selected_id)
-    say "You selected #{selection.name}!"
-    stop_thread
+    @api.fetch_user(user.id)
+    matchup_id = message.quick_reply.split(' ')[0]
+    selected_team_id = message.quick_reply.split(' ')[-1]
+    selection = @api.fetch_team(selected_team_id)
+    user.session[:challenge_details][:matchup_id] = matchup_id
+    user.session[:challenge_details][:selected_team_id] = selected_team_id
+    friend = user.session[:challenge_details][:full_name]
+    say "Cool, you selected #{selection.name}!"
+    short_wait(:message)
+    say "You currently have a pending balance of #{@api.user.data.pending_balance}..."
+    short_wait(:message)
+    type_wager_amount
+  end
+
+  def handle_wager_input_for_duration
+    @api = Api.new
+    @api.fetch_user(user.id)
+    matchup_id = message.quick_reply.split(' ')[0]
+    selected_team_id = message.quick_reply.split(' ')[-1]
+    selection = @api.fetch_team(selected_team_id)
+    user.session[:challenge_details][:matchup_id] = matchup_id
+    friend = user.session[:challenge_details][:full_name]
+    say "You currently have a pending balance of #{@api.user.data.pending_balance}..."
+    short_wait(:message)
+    type_wager_amount
+  end
+
+  def handle_wager_response
+    @api = Api.new
+    @api.fetch_user(user.id)
+    friend = user.session[:challenge_details][:full_name]
+    if message.text.to_i == 0
+      say "You sure you want to wager #{friend} for 0 Sweepcoins?", quick_replies: ["Send it", "No, I screwed up"]
+      next_command :confirm_challenge_details
+    elsif @api.user.data.pending_balance >= message.text.to_i
+      user.session[:challenge_details][:coins] = message.text.to_i
+      say "Great! You ready to challenge #{friend} for #{message.text} Sweepcoins?", quick_replies: ["Send it", "No, I screwed up"]
+      next_command :confirm_challenge_details
+    else
+      say "You do not have enough Sweepcoins to wager that amount, try typing a new amount below", quick_replies: ["Earn coins", "Earn coins"]
+      type_wager_amount
+    end
   end
 
   def handle_selected_challenge
@@ -122,41 +183,41 @@ module Commands
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 3
       say "So you are challenging #{full_name} to the most wins in 3 days, you good?", quick_replies: ["Send it", "No, I screwed up"]
-      next_command :confirm_duration_challenge_details
+      next_command :confirm_challenge_details
     end
   end
 
-  def confirm_duration_challenge_details
+  def confirm_challenge_details
     case message.quick_reply
     when 'SEND IT'
-      params = { 
-        :challenge => {
-          :friend_id => user.session[:challenge_details][:user_id], 
-          :challenge_type_id => user.session[:challenge_details][:type_id], 
-          :days => user.session[:challenge_details][:days],
-          :coins => 15
-        } 
-      }
-      send_challenge_request(user.id, params)
-      say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
-      stop_thread
+      if user.session[:challenge_details][:days]
+        params = { 
+          :challenge => {
+            :friend_id => user.session[:challenge_details][:user_id], 
+            :challenge_type_id => user.session[:challenge_details][:type_id], 
+            :days => user.session[:challenge_details][:days],
+            :coins => user.session[:challenge_details][:coins]
+          } 
+        }
+        send_challenge_request(user.id, params)
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
+        user.session[:challenge_details] = {}
+        stop_thread
+      else
+        params = { 
+          :challenge => {
+            :friend_id => user.session[:challenge_details][:user_id], 
+            :challenge_type_id => user.session[:challenge_details][:type_id], 
+            :matchup_id => user.session[:challenge_details][:matchup_id],
+            :selected_team_id => user.session[:challenge_details][:selected_team_id],
+            :coins => user.session[:challenge_details][:coins]
+          } 
+        }
+        send_challenge_request(user.id, params)
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
+        user.session[:challenge_details] = {}
+        stop_thread
+      end
     end
-  end
-
-  def confirm_matchup_challenge_details
-    say "Sorry didnt catch that...", quick_replies: ["Select picks", "Status"] and stop_thread and return if !message.quick_reply
-    say "Cool got here so far"
-    stop_thread
-    # params = { 
-    #   :challenge => {
-    #     :friend_id => user.session[:challenge_details][:user_id], 
-    #     :challenge_type_id => user.session[:challenge_details][:type_id], 
-    #     :matchup_id => user.session[:challenge_details][:matchup_id],
-    #     :coins => 15
-    #   } 
-    # }
-    # send_challenge_request(user.id, params)
-    # say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
-    # stop_thread
   end
 end

@@ -26,11 +26,9 @@ module Commands
           stop_thread and return
         end
       end
-      say STATUS_COLD.sample
-      short_wait(:message)
       say "Your current streak is #{@api.user.current_streak}"
       short_wait(:message)
-      show_media_with_button(user.id, 'status')
+      show_media_with_button(user.id, 'status', "1240293409434043")
       stop_thread
     end
   end
@@ -62,11 +60,9 @@ module Commands
           stop_thread and return
         end
       end
-      say STATUS_COLD.sample
-      short_wait(:postback)
       say "Your current streak is #{@api.user.current_streak}"
       short_wait(:postback)
-      show_media_with_button(user.id, 'status')
+      show_media_with_button(user.id, 'status', "1240293409434043")
       stop_thread
     end
   end

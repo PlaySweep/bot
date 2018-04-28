@@ -20,7 +20,7 @@ module Commands
   end
 
   def handle_no_sports_available
-    # possibly add a call to special list of matchups in exchange for sweepcoins
+    #TODO possibly add a call to special list of matchups in exchange for sweepcoins
     message.typing_on
     say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
     stop_thread
@@ -29,7 +29,8 @@ module Commands
   def handle_pick
     @api = Api.new
     @api.fetch_user(user.id)
-    say "🤔 Not sure how to make picks?", quick_replies: [["How to play", "How to play"], ["Select picks", "Select picks"], ["Status", "Status"]] and stop_thread and return if (!message.quick_reply && message.text)
+    qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    show_button("🤔 How to play", "Not sure whats going on? Tap below to refresh yourself on the rules of the game 👍", qr) and stop_thread and return if (!message.quick_reply && message.text)
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
