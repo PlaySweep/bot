@@ -70,9 +70,6 @@ end
 def set field, id, option
   @api = Api.new
   case field
-  when 'status touched'
-    params = { :user => { :status_touched => option } }
-    puts "Status flow touched"
   when 'status changed'
     params = { :user => { :status_changed => option } }
     puts "Status flow changed"

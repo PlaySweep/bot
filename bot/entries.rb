@@ -1,4 +1,13 @@
 module Commands
+
+  def entry_to_dashboard
+    handle_dashboard
+  end 
+
+  def entry_to_dashboard_postback
+    handle_dashboard_postback
+  end
+
   def entry_to_show_sports
     handle_show_sports
   end

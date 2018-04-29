@@ -26,6 +26,11 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
+                title: 'Dashboard 📊',
+                type: 'postback',
+                payload: 'DASHBOARD'
+              },
+              {
                 title: 'Select picks 👆',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
@@ -39,11 +44,6 @@ module Profile
                 title: 'My picks 🙌',
                 type: 'postback',
                 payload: 'MY PICKS' 
-              },
-              {
-                title: 'Leaderboard & Stats 📚',
-                type: 'postback',
-                payload: 'STATS'
               }
             ]
           },

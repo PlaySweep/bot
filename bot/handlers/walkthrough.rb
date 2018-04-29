@@ -15,6 +15,7 @@ module Commands
       sleep 1
       message.typing_on
       sleep 1.5
+      #TODO refactor for wins and losing streaks
       say "And when you hit 4 wins in a row, I'll send you a digital Amazon gift card 💰", quick_replies: ["How much?"]
       next_command :handle_walkthrough
     when 'HOW MUCH?'
@@ -23,11 +24,7 @@ module Commands
       sleep 1.5
       message.typing_on
       sleep 2.5
-      say "On average, I send out about $8-12 per Sweep...it's hard work, but I love it ❤️"
-      sleep 1
-      message.typing_on
-      sleep 1
-      say "Amazon Prime here we come!", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
+      say "On average, I send out about $3-5 per Sweep won...it's hard work, but I love it ❤️", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
       stop_thread
     else
       redirect(:start)

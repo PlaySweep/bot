@@ -17,6 +17,7 @@ LOCATION_PROMPT = UI::QuickReplies.location
 
 Rubotnik.route :message do
   listen_for_select_picks
+  listen_for_dashboard
   listen_for_status
   listen_for_my_picks
   listen_for_challenge
@@ -37,6 +38,7 @@ end
 
 Rubotnik.route :postback do
   listen_for_start_postback
+  listen_for_dashboard_postback
   listen_for_select_picks_postback
   listen_for_status_postback
   listen_for_my_picks_postback

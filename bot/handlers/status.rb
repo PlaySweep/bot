@@ -2,73 +2,56 @@ module Commands
   def handle_status
     @api = Api.new
     @api.fetch_user(user.id)
-    quick_replies = ["My picks", "Sweepcoins", "Challenge a friend"]
-    if user_is_hot?
+    if user_has_win_streak?
+      quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+      short_wait(:message)
       say STATUS_HOT.sample
       short_wait(:message)
-      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
+      say "Your winning streak is #{@api.user.current_streak}"
+      short_wait(:message)
+      show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
       stop_thread
     else
-      if user_should_use_lifeline?
-        if user_can_use_lifeline?
-          quick_replies = ["Use lifeline", "My picks", "Challenge a friend"]
-          short_wait(:message)
-          say "Your current streak is #{@api.user.current_streak}"
-          medium_wait(:message)
-          say "Wanna spend 30 Sweepcoins on a lifeline?\n\nI'll set your streak back to #{@api.user.previous_streak} 👍", quick_replies: quick_replies
-          stop_thread and return
-        else
-          quick_replies = ["Invite friends", "Challenge a friend"]
-          short_wait(:message)
-          say "Your current streak is #{@api.user.current_streak}"
-          long_wait(:message)
-          say "You only need #{30 - @api.user.data.sweep_coins} more Sweepcoins to set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
-          stop_thread and return
-        end
+      if user_has_losing_streak? && user_should_use_lifeline? && user_can_use_lifeline?
+        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        short_wait(:message)
+        say "Your winning streak is #{@api.user.current_streak}"
+        medium_wait(:message)
+        say "Set yourself back to #{@api.user.previous_streak} with a lifeline\n\nOr travel the road to a Sweep starting with a losing streak of #{@api.user.current_losing_streak} 😝", quick_replies: quick_replies
+        long_wait(:message)
+        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        stop_thread
+      elsif user_has_losing_streak? && user_should_use_lifeline? && !user_can_use_lifeline?
+        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        short_wait(:message)
+        say "Your winning streak is #{@api.user.current_streak}, but your losing streak is at #{@api.user.current_losing_streak}\n\n#{30 - @api.user.data.sweep_coins} more Sweepcoins and you could set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
+        stop_thread
+      elsif user_has_losing_streak?
+        quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        short_wait(:message)
+        say STATUS_COLD.sample
+        short_wait(:message)
+        say "Your losing streak is #{@api.user.current_losing_streak}\n\nMaybe picking the opposite side works better hehe ☺️"
+        short_wait(:message)
+        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        stop_thread
+      else
+        say "Once you make some picks, you'll have a winning/losing streak of something...", quick_replies: ["Select picks"]
+        stop_thread
       end
-      say "Your current streak is #{@api.user.current_streak}"
-      short_wait(:message)
-      show_media_with_button(user.id, 'status', "1240293409434043")
-      stop_thread
     end
   end
 
   def handle_status_postback
-    @api = Api.new
-    @api.fetch_user(user.id)
-    quick_replies = ["My picks", "Sweepcoins", "Challenge a friend"]
-    if user_is_hot?
-      say STATUS_HOT.sample
-      short_wait(:postback)
-      say "Your current streak is #{@api.user.current_streak}", quick_replies: quick_replies
-      stop_thread
-    else
-      if user_should_use_lifeline?
-        if user_can_use_lifeline?
-          quick_replies = ["Use lifeline", "My picks", "Challenge a friend"]
-          short_wait(:postback)
-          say "Your current streak is #{@api.user.current_streak}"
-          medium_wait(:postback)
-          say "Wanna spend 30 Sweepcoins on a lifeline?\n\nI'll set your streak back to #{@api.user.previous_streak} 👍", quick_replies: quick_replies
-          stop_thread and return
-        else
-          quick_replies = ["Invite friends", "Challenge a friend"]
-          short_wait(:postback)
-          say "Your current streak is #{@api.user.current_streak}"
-          long_wait(:postback)
-          say "You only need #{30 - @api.user.data.sweep_coins} more Sweepcoins to set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
-          stop_thread and return
-        end
-      end
-      say "Your current streak is #{@api.user.current_streak}"
-      short_wait(:postback)
-      show_media_with_button(user.id, 'status', "1240293409434043")
-      stop_thread
-    end
+
   end
 
-  def user_is_hot?
-    @api.user.current_streak > 0
+  def user_has_win_streak?
+    @api.user.current_streak > 0 && @api.user.current_losing_streak < 1
+  end
+
+  def user_has_losing_streak?
+    @api.user.current_streak < 1 && @api.user.current_losing_streak >= 1
   end
 
   def user_can_use_lifeline?
@@ -76,7 +59,7 @@ module Commands
   end
 
   def user_should_use_lifeline?
-    previous, current = @api.user.previous_streak, @api.user.current_streak
-    (previous != current && previous > current && previous % 4 != 0)
+    previous, current, losing_streak = @api.user.previous_streak, @api.user.current_streak, @api.user.current_losing_streak
+    (previous != 1 && previous != current && previous > current && previous % 4 != 0 && previous > losing_streak)
   end
 end

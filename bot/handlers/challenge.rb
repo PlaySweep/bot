@@ -13,8 +13,9 @@ module Commands
     when 'MY CHALLENGES'
       @api = Api.new
       @api.fetch_user(user.id)
+      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       if @api.user.challenges.size > 0
-        show_media_with_button(user.id, 'challenges', '1244963358967048')
+        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
         stop_thread
       else
         say "You do not have any challenges currently.", quick_replies: ["Challenge a friend", "Select picks", "Status"]
@@ -37,8 +38,9 @@ module Commands
     when 'MY CHALLENGES'
       @api = Api.new
       @api.fetch_user(user.id)
+      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       if @api.user.challenges.size > 0
-        show_media_with_button(user.id, 'challenges', '1244963358967048')
+        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
         stop_thread
       else
         say "You do not have any challenges currently.", quick_replies: ["Challenge a friend", "Select picks", "Status"]
