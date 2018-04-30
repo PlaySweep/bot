@@ -4,12 +4,7 @@ def listen_for_start_postback
       @api = Api.new
       @api.find_or_create('users', user.id)
       #TODO test referral message
-      if postback.referral
-        referrer_id = postback.referral.ref
-        puts "New User Id: #{user.id}"
-        puts "Referrer Id: #{referrer_id}"
-        update_referrer(referrer_id) unless referrer_id.to_i == 0
-      end
+      update_referrer(postback.referral.ref) if postback.referral && postback.referral.ref.to_i != 0
       text = "Hey #{@api.user.first_name}, you finally found me!"
       postback.typing_on
       say text, quick_replies: [["Hi, Emma!", "WELCOME"]]

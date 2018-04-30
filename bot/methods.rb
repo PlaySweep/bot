@@ -1,9 +1,12 @@
 def update_referrer referral_id
   @api = Api.new
   @api.fetch_user(referral_id)
+  puts "*"*150
+  puts "REFERRAL 😁 😁 😁"
+  puts "*"*150
   new_referral_count = @api.user.data.referral_count += 1
   new_sweep_coin_balance = @api.user.data.sweep_coins += 10
-  params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
+  params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance }, :friend_uuid => user.id }
   @api.update("users", referral_id, params)
   #TODO test analytics connection to mixpanel
   $tracker.track(@api.user.id, 'User Made Referral')
@@ -43,8 +46,9 @@ end
 
 def send_confirmation referral_id
   @api = Api.new
-  @api.fetch_user(user.id)
-  $tracker.track(@api.user.id, 'User Referred')
+  new_user = @api.fetch_user(user.id)
+  referrer = @api.fetch_user(referral_id)
+  $tracker.track(@api.user.id, 'User Was Referred')
   menu = [
     {
       content_type: 'text',
@@ -55,13 +59,18 @@ def send_confirmation referral_id
       content_type: 'text',
       title: 'Select picks',
       payload: 'SELECT PICKS'
+    },
+    {
+      content_type: 'text',
+      title: 'Challenge a friend',
+      payload: 'CHALLENGE A FRIEND'
     }
   ]
   message_options = {
     messaging_type: "UPDATE",
     recipient: { id: referral_id },
     message: {
-      text: "Your friend #{@api.user.first_name} #{@api.user.last_name} just signed up!",
+      text: "#{new_user['first_name']} #{new_user['last_name']} just signed up through your referral!\n\nYour new Sweepcoin balance is #{referrer['data']['sweep_coins']}!",
       quick_replies: menu
     }
   }
