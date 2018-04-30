@@ -5,6 +5,7 @@ def update_referrer referral_id
   new_sweep_coin_balance = @api.user.data.sweep_coins += 10
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
   @api.update("users", referral_id, params)
+  #TODO test analytics connection to mixpanel
   $tracker.track(@api.user.id, 'User Made Referral')
   send_confirmation(referral_id)
 end
@@ -73,9 +74,6 @@ def set field, id, option
   when 'status changed'
     params = { :user => { :status_changed => option } }
     puts "Status flow changed"
-  when 'pick changed'
-    params = { :user => { :pick_changed => option } }
-    puts "Pick changed"
   end
   @api.update("users", id, params)
 end

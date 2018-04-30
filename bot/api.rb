@@ -94,9 +94,6 @@ class Api
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
       @pick = response['pick']
-      if response.status == 200
-        set('pick changed', id, true)
-      end
     when 'challenges'
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
@@ -124,9 +121,6 @@ class Api
     when 'status'
       response = @conn.get("users/#{id}/status")
       @user = JSON.parse(response.body)['user']
-      if response.status == 200
-        set('pick changed', id, false)
-      end
     end
   end
 end

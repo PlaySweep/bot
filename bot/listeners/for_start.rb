@@ -1,10 +1,9 @@
-require 'mixpanel-ruby'
-
 def listen_for_start_postback
   bind 'START' do
     begin
       @api = Api.new
       @api.find_or_create('users', user.id)
+      #TODO test referral message
       if postback.referral
         referrer_id = postback.referral.ref
         puts "New User Id: #{user.id}"
