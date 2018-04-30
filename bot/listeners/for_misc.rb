@@ -14,7 +14,7 @@ def for_blow_steam
 end
 
 def for_fun
-  keywords = %w[good thanks! thanks awesome! awesome thank you cool great great! wonderful sweet sweet!]
+  keywords = %w[good thanks! thanks awesome! awesome thank you cool great great! wonderful sweet sweet! hi whats what's up]
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   bind keywords, all: true, to: :entry_to_fun, reply_with: {
