@@ -7,12 +7,12 @@ def update_sender current_user_id, referral_id
   new_sweep_coin_balance = sweep_coin_balance += 10
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance } }
   response = @api.conn.patch("users/#{referral_id}", params)
-  send_confirmation
+  send_confirmation(user.id, referral_id)
 end
 
 def send_confirmation current_user_id, referral_id
   @api = Api.new
-  @api.find('users', referral_id)
+  @api.find('users', current_user_id)
   menu = [
     {
       content_type: 'text',
@@ -27,7 +27,7 @@ def send_confirmation current_user_id, referral_id
   ]
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: current_user_id },
+    recipient: { id: referral_id },
     message: {
       text: "Your friend #{@api.user.first_name} #{@api.user.last_name} just signed up!",
       quick_replies: menu
