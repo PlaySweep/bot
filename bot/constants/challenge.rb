@@ -1,1 +1,1 @@
-CHALLENGE = ["Being Challenged In Life Is Inevitable, Being Defeated Is Optional"]
+CHALLENGE = ["Tap below to challenge a friend or check on your current challenges 👇"]

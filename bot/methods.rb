@@ -26,8 +26,8 @@ def send_challenge_request id, params
     },
     {
       content_type: 'text',
-      title: 'Deny 👎',
-      payload: "DENY CHALLENGE REQUEST #{@api.challenge.id}"
+      title: 'Decline 👎',
+      payload: "DECLINE CHALLENGE REQUEST #{@api.challenge.id}"
     }
   ]
 
@@ -62,8 +62,8 @@ def send_confirmation referral_id
     },
     {
       content_type: 'text',
-      title: 'Challenge a friend',
-      payload: 'CHALLENGE A FRIEND'
+      title: 'Challenge friends',
+      payload: 'CHALLENGE'
     }
   ]
   message_options = {

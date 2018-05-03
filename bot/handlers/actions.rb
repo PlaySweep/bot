@@ -46,10 +46,13 @@ module Commands
   def handle_not_enough_for_lifeline
     case message.quick_reply
     when 'INVITE FRIENDS'
-      say "Invite a friend"
-      stop_thread
-    when 'CHALLENGE A FRIEND'
-      say "Challenge a friend"
+      @api = Api.new
+      @api.fetch_user(user.id)
+      $tracker.track(@api.user.id, 'User Intended Referral')
+      short_wait(:message)
+      say INVITE_FRIENDS.sample
+      medium_wait(:message)
+      show_invite
       stop_thread
     end
   end
@@ -61,17 +64,17 @@ module Commands
     when 'ACCEPT CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :accept => true }, user.id)
-      say "Accepted!", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+      say "Accepted!", quick_replies: ["Challenge friends", "Select picks", "Status"]
       # send message to requestor
       stop_thread
-    when 'DENY CHALLENGE REQUEST'
+    when 'DECLINE CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :accept => true }, user.id)
-      say "Declined!", quick_replies: ["Challenge a friend", "Select picks", "Status"]
+      say "Declined!", quick_replies: ["Challenge friends", "Select picks", "Status"]
       # send message to requestor
       stop_thread
     else
-      say "I don't see anything here to accept or deny, but while you're at it...challenge some friends!", quick_replies: ["Challenge a friend"]
+      say "If you missed your window to accept or decline, click below to act on any pending challenges!", quick_replies: ["Challenge friends"]
       stop_thread
     end
   end

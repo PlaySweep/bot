@@ -57,7 +57,7 @@ module Profile
                 payload: 'INVITE FRIENDS'
               },
               {
-                title: 'Challenge a friend 💪',
+                title: 'Challenge friends 💪',
                 type: 'postback',
                 payload: 'CHALLENGE'
               }

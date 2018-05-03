@@ -3,7 +3,7 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     if user_has_win_streak?
-      quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+      quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
       short_wait(:message)
       say STATUS_HOT.sample
       short_wait(:message)
@@ -13,7 +13,7 @@ module Commands
       stop_thread
     else
       if user_has_losing_streak? && user_should_use_lifeline? && user_can_use_lifeline?
-        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         short_wait(:message)
         say "Your winning streak is #{@api.user.current_streak}"
         medium_wait(:message)
@@ -22,12 +22,12 @@ module Commands
         show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
         stop_thread
       elsif user_has_losing_streak? && user_should_use_lifeline? && !user_can_use_lifeline?
-        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         short_wait(:message)
         say "Your winning streak is #{@api.user.current_streak}, but your losing streak is at #{@api.user.current_losing_streak}\n\n#{30 - @api.user.data.sweep_coins} more Sweepcoins and you could set your streak back to #{@api.user.previous_streak}\n\nInvite or challenge your friends for more!", quick_replies: quick_replies
         stop_thread
       elsif user_has_losing_streak?
-        quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge a friend", payload: "CHALLENGE A FRIEND" }]
+        quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         short_wait(:message)
         say STATUS_COLD.sample
         short_wait(:message)

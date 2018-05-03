@@ -1,7 +1,21 @@
 def listen_for_misc
   for_blow_steam
   for_fun
+  # how_do_i
 end
+
+# def how_do_i
+#   if message.text.downcase.split(' ').include?('how')
+#     msg = message.text.split(' ').map(&:downcase)
+#     condition = msg.permutation(3).to_a.any? {|p| p == ['how', 'do', 'i'] || p == ['how', 'can', 'i'] } 
+#     if condition
+#       if msg.include?('challenge')
+#         say "You want to know how to create a challenge?"
+#         stop_thread
+#       end
+#     end
+#   end
+# end
 
 def for_blow_steam
   keywords = %w[fuck shit bitch crap suck sucks ugh damn dammit ah no]
