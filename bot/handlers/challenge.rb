@@ -18,8 +18,8 @@ module Commands
         show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
         stop_thread
       else
-        say "You do not have any challenges currently.", quick_replies: ["Challenge friends", "Select picks", "Status"]
-        next_command :handle_challenge_intro
+        say "You do not have any challenges currently.", quick_replies: ["Challenges", "Select picks", "Status"]
+        stop_thread
       end
     end
   end
@@ -43,8 +43,8 @@ module Commands
         show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
         stop_thread
       else
-        say "You do not have any challenges currently.", quick_replies: ["Challenge friends", "Select picks", "Status"]
-        next_command :handle_challenge_intro
+        say "You do not have any challenges currently.", quick_replies: ["Challenges", "Select picks", "Status"]
+        stop_thread
       end
     end
   end
@@ -108,6 +108,7 @@ module Commands
   end
 
   def handle_wager_input
+    handle_query_matchups and return if !message.quick_reply
     @api = Api.new
     @api.fetch_user(user.id)
     matchup_id = message.quick_reply.split(' ')[0]
@@ -151,7 +152,7 @@ module Commands
   def handle_selected_challenge
     handle_query_users and return if !message.quick_reply
     show_invite and stop_thread and return if message.quick_reply == 'INVITE FRIENDS'
-    say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: ["Invite friends"] and stop_thread and return if message.quick_reply == "NEVERMIND"
+    say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == "NEVERMIND"
     case message.quick_reply
     when 'SEARCH FRIENDS?'
       handle_query_users
