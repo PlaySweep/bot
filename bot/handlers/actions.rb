@@ -74,7 +74,7 @@ module Commands
       # send message to requestor
       stop_thread
     else
-      say "If you missed your window to accept or decline, click below to act on any pending challenges!", quick_replies: ["Challenge friends"]
+      say "Tap below to act on any pending challenges you might have missed 👇", quick_replies: ["My challenges"]
       stop_thread
     end
   end

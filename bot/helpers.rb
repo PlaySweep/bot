@@ -10,10 +10,10 @@ def build_payload_for resource, data
 end
 
 def build_custom_message challenge
-  case challenge.name
+  case challenge.description
   when 'Most Wins'
     "wants to challenge you on who will have the most wins in the span of #{challenge.duration_details.days} days!\n\nThe challenge duration will begin once you hit accept 👍"
   when 'Matchup'
-    "wants to challenge you to take the Bills against the spread at (-4) against the Ravens (+4)\n\nTap select to accept 👍"
+    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected} against the spread (#{challenge.matchup_details.acceptor.spread}) against the #{challenge.matchup_details.requestor.selected} (#{challenge.matchup_details.requestor.spread})\n\nTap accept or decline below 👍"
   end
 end

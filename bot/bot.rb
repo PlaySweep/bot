@@ -16,7 +16,7 @@ LOCATION_PROMPT = UI::QuickReplies.location
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |msg|
-  say "Cool story bro" if msg.message.messaging['message']['attachments'] && msg.message.messaging['message']['attachments'].any?
+  say "🎥" if msg.message.messaging['message']['attachments'] && msg.message.messaging['message']['attachments'].any?
   listen_for_select_picks
   listen_for_dashboard
   listen_for_status

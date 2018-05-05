@@ -1,11 +1,12 @@
 def listen_for_challenge
   keywords = ['challenge friends', 'challenge', 'challenges', 'my challenges', 'challenge status', 'challenge a friend']
-  # msg = message.text.split(' ').map(&:downcase)
-  # matched = (keywords & msg)
+  msg = message.text.split(' ').map(&:downcase)
+  matched = (keywords & msg)
+  ignore_words = ['accept', 'decline', 'pending', 'confirm']
   bind keywords, all: true, to: :entry_to_challenge, reply_with: {
     text: CHALLENGE.sample,
     quick_replies: ["Challenge friends", "My challenges"]
-  } unless ['accept', 'accept challenge', 'decline', 'decline challenge'].include?(message.text.downcase)
+  } if matched.any? && !msg.any? { |w| ignore_words.include?(w) } 
 end
 
 def listen_for_challenge_postback

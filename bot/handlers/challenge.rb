@@ -58,7 +58,7 @@ module Commands
 
   def handle_query_users
     message.typing_on
-    say "Ok, type in the friend you're looking for 👇", quick_replies: ["Nevermind"]
+    say "Ok, type in your friends name below 👇", quick_replies: ["Nevermind"]
     message.typing_off
     next_command :handle_find_friend
   end
@@ -112,7 +112,7 @@ module Commands
     friend = user.session[:challenge_details][:full_name]
     say "Cool, you selected #{selection.name}!"
     short_wait(:message)
-    say "You currently have a pending balance of #{@api.user.data.pending_balance}..."
+    say "You currently have a pending balance of #{@api.user.data.pending_balance} Sweepcoins..."
     short_wait(:message)
     type_wager_amount
   end
@@ -120,12 +120,7 @@ module Commands
   def handle_wager_input_for_duration
     @api = Api.new
     @api.fetch_user(user.id)
-    matchup_id = message.quick_reply.split(' ')[0]
-    selected_team_id = message.quick_reply.split(' ')[-1]
-    selection = @api.fetch_team(selected_team_id)
-    user.session[:challenge_details][:matchup_id] = matchup_id
-    friend = user.session[:challenge_details][:full_name]
-    say "You currently have a pending balance of #{@api.user.data.pending_balance}..."
+    say "You currently have a pending balance of #{@api.user.data.pending_balance} Sweepcoins..."
     short_wait(:message)
     type_wager_amount
   end
@@ -148,7 +143,7 @@ module Commands
   end
 
   def handle_selected_challenge
-    say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: ["Invite friends"] and stop_thread and return if !message.quick_reply
+    handle_query_users and return if !message.quick_reply
     show_invite and stop_thread and return if message.quick_reply == 'INVITE FRIENDS'
     say "If your friend isn't showing up, they probably haven't started a conversation with us yet. Invite them to get started 👍", quick_replies: ["Invite friends"] and stop_thread and return if message.quick_reply == "NEVERMIND"
     case message.quick_reply
@@ -180,16 +175,31 @@ module Commands
   end
 
   def handle_duration_challenge_details
+    #TODO capture error messages
     case message.quick_reply
     when '3 DAYS'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 3
-      say "So you are challenging #{full_name} to the most wins in 3 days, you good?", quick_replies: ["Send it", "No, I screwed up"]
-      next_command :confirm_challenge_details
+      say "So you are challenging #{full_name} to the most wins within a 3 day span..."
+      short_wait(:message)
+      handle_wager_input_for_duration
+    when 'A WEEK'
+      full_name = user.session[:challenge_details][:full_name]
+      user.session[:challenge_details][:days] = 7
+      say "So you are challenging #{full_name} to the most wins within a 7 day span..."
+      short_wait(:message)
+      handle_wager_input_for_duration
+    when 'A MONTH'
+      full_name = user.session[:challenge_details][:full_name]
+      user.session[:challenge_details][:days] = 30
+      say "So you are challenging #{full_name} to the most wins for the span of a month..."
+      short_wait(:message)
+      handle_wager_input_for_duration
     end
   end
 
   def confirm_challenge_details
+    #TODO capture error responses
     case message.quick_reply
     when 'SEND IT'
       if user.session[:challenge_details][:days]
@@ -202,7 +212,7 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge friends", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       else
@@ -216,10 +226,13 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge more friends", "Select picks", "Status"]
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge friends", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       end
+    when 'NO, I SCREWED UP'
+      say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenge friends', 'Select picks']
+      stop_thread
     end
   end
 end

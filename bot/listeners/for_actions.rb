@@ -30,5 +30,8 @@ def for_lifeline
 end
 
 def for_challenge_response
-  bind 'accept', 'accept challenge', 'decline', 'decline challenge', to: :entry_to_challenge_response
+  keywords = ['accept', 'decline', 'confirm', 'pending']
+  msg = message.text.split(' ').map(&:downcase)
+  matched = (keywords & msg)
+  bind keywords, to: :entry_to_challenge_response if matched.any?
 end
