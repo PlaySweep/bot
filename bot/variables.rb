@@ -35,11 +35,11 @@ module Commands
     show(media)
   end
 
-  def show_button title, text, quick_replies
+  def show_button title, text, quick_replies, url=nil
     payload = [
       {
         type: :web_url,
-        url: "#{ENV["WEBVIEW_URL"]}",
+        url: url || "#{ENV["WEBVIEW_URL"]}",
         title: title,
         webview_height_ratio: 'full'
       }

@@ -51,7 +51,12 @@ module Commands
 
   def handle_query_matchups
     message.typing_on
-    say "You can type in the name of the team you're interested in challenging with 👇", quick_replies: ["Nevermind"]
+    #TODO text_button that shows list of available matchups to challenge
+    text = "Type out the team/prop you want to challenge with below 👇"
+    quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
+    url = "#{ENV['WEBVIEW_URL']}/matchups"
+    show_button("Show Matchups", text, quick_replies, url)
+    # say "You can type in the name of the team/prop you're interested in challenging with below 👇", quick_replies: ["Nevermind"]
     message.typing_off
     next_command :handle_find_matchup
   end
@@ -87,10 +92,11 @@ module Commands
     matchups = @api.query_matchups(message.text)
     if matchups.size == 1
       matchup = matchups.first
-      say "Which side of #{matchup.description} do you want to pick?", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id} #{matchup.home_side.id}"]]
+      say "Which side of #{matchup.description} do you want to pick?", quick_replies: [["#{matchup.away_side.abbreviation} (#{matchup.away_side.action})", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation} (#{matchup.home_side.action})", "#{matchup.id} #{matchup.home_side.id}"]]
       next_command :handle_wager_input
     else
-      say "Couldn't find a matchup by that name, tap below to see a list of available options"
+      say "Couldn't find a pending matchup based on that search..."
+      short_wait(:message)
       #TODO show matchup options
       handle_query_matchups
     end
@@ -110,7 +116,7 @@ module Commands
     user.session[:challenge_details][:matchup_id] = matchup_id
     user.session[:challenge_details][:selected_team_id] = selected_team_id
     friend = user.session[:challenge_details][:full_name]
-    say "Cool, you selected #{selection.name}!"
+    say "#{selection.name} ✅"
     short_wait(:message)
     say "You currently have a pending balance of #{@api.user.data.pending_balance} Sweepcoins..."
     short_wait(:message)
