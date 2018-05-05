@@ -64,14 +64,12 @@ module Commands
     when 'ACCEPT CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :accept => true }, user.id)
-      say "Accepted!", quick_replies: ["Challenge friends", "Select picks", "Status"]
-      # send message to requestor
+      say "Challenge accepted 👍", quick_replies: ["Select picks", "Status"]
       stop_thread
     when 'DECLINE CHALLENGE REQUEST'
       @api = Api.new
-      @api.update('challenges', id, { :accept => true }, user.id)
-      say "Declined!", quick_replies: ["Challenge friends", "Select picks", "Status"]
-      # send message to requestor
+      @api.update('challenges', id, { :decline => true }, user.id)
+      say "Challenge declined 👎", quick_replies: ["Select picks", "Status"]
       stop_thread
     else
       say "Tap below to act on any pending challenges you might have missed 👇", quick_replies: ["My challenges"]
