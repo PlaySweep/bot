@@ -8,7 +8,7 @@ class Api
   Hash.use_dot_syntax = true
 
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
-                :pick, :matchup, :matchups, :challenge_matchups, 
+                :pick, :picks, :matchup, :matchups, :challenge_matchups, 
                 :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
                 :challenge, :team
 
@@ -53,6 +53,20 @@ class Api
   def fetch_friends id
     response = @conn.get("users/#{id}/friends")
     @friends = JSON.parse(response.body)['friends']
+  end
+
+  def fetch_picks id, param=nil
+    case param
+    when :in_flight
+      response = @conn.get("users/#{id}/picks?in_flight=true")
+      @picks = JSON.parse(response.body)['picks']
+    when :pending
+      response = @conn.get("users/#{id}/picks?pending=true")
+      @picks = JSON.parse(response.body)['picks']
+    else
+      response = @conn.get("users/#{id}/picks")
+      @picks = JSON.parse(response.body)['picks']
+    end
   end
 
   def query_users query

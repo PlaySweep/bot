@@ -1,5 +1,5 @@
 def listen_for_dashboard
-  keywords = ['stats', 'dashboard', 'record', 'more']
+  keywords = ['stats', 'dashboard', 'record']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   bind keywords, all: true, to: :entry_to_dashboard if matched.any?

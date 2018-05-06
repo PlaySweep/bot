@@ -19,7 +19,7 @@ def listen_for_challenge_postback
     @api.fetch_user(user.id)
     quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     if @api.user.challenges.size > 0
-      show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+      show_media_with_button(user.id, 'challenges', CHALLENGE_IMAGE, quick_replies)
       stop_thread
     else
       say "You do not have any challenges currently.", quick_replies: ["Challenge friends", "Select picks", "Status"]

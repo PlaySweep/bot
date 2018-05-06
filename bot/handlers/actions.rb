@@ -64,12 +64,18 @@ module Commands
     when 'ACCEPT CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :accept => true }, user.id)
-      say "Challenge accepted 👍", quick_replies: ["Select picks", "Status"]
+      text = "Challenge accepted 👍\n\nView your current/pending challenges by tapping My Challenges below 👇"
+      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+      show_button("My Challenges", text, quick_replies, url)
       stop_thread
     when 'DECLINE CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :decline => true }, user.id)
-      say "Challenge declined 👎", quick_replies: ["Select picks", "Status"]
+      text = "Challenge declined 👎\n\nView your current/pending challenges by tapping My Challenges below 👇"
+      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+      show_button("My Challenges", text, quick_replies, url)
       stop_thread
     else
       say "Tap below to act on any pending challenges you might have missed 👇", quick_replies: ["My challenges"]

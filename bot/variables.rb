@@ -93,8 +93,7 @@ module Commands
   #   end
   # end
 
-  def show_carousel resource
-    quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }]
+  def show_carousel resource, quick_replies
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
@@ -103,6 +102,12 @@ module Commands
     when 'dashboard'
       url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
       title = "View Dashboard"
+    when 'challenges'
+      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+      title = "View Challenges"
+    when 'status'
+      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
+      title = "View Status"
     end
       option = { message: {
       attachment: {

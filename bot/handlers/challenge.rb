@@ -15,10 +15,14 @@ module Commands
       @api.fetch_user(user.id)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       if @api.user.challenges.size > 0
-        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        payload = build_card_for(:challenge, @api.user.challenges)
+        show_carousel(payload, quick_replies)
         stop_thread
       else
-        say "You do not have any challenges currently.", quick_replies: ["Challenges", "Select picks", "Status"]
+        text = "No challenges in flight 🛬\n\nTap below to view past challenges 👇"
+        quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+        show_button("Show Challenges", text, quick_replies, url)
         stop_thread
       end
     end
@@ -40,10 +44,14 @@ module Commands
       @api.fetch_user(user.id)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       if @api.user.challenges.size > 0
-        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        payload = build_card_for(:challenge, @api.user.challenges)
+        show_carousel(carousel, quick_replies)
         stop_thread
       else
-        say "You do not have any challenges currently.", quick_replies: ["Challenges", "Select picks", "Status"]
+        text = "No challenges in flight 🛬\n\nTap below to view past challenges 👇"
+        quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+        show_button("Show Challenges", text, quick_replies, url)
         stop_thread
       end
     end
@@ -219,7 +227,7 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge friends", "Select picks", "Status"]
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenges", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       else
@@ -233,12 +241,12 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenge friends", "Select picks", "Status"]
+        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenges", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       end
     when 'NO, I SCREWED UP'
-      say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenge friends', 'Select picks']
+      say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenges', 'Select picks']
       stop_thread
     end
   end

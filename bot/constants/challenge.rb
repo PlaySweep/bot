@@ -1,1 +1,1 @@
-CHALLENGE = ["Tap below to challenge a friend or check on your current/pending challenges 👇"]
+CHALLENGE = ["Bragging rights are just a few taps away 👇"]

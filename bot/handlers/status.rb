@@ -9,7 +9,7 @@ module Commands
       short_wait(:message)
       say "Your winning streak is #{@api.user.current_streak}"
       short_wait(:message)
-      show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+      show_media_with_button(user.id, 'status', STATUS_IMAGE, quick_replies)
       stop_thread
     else
       if user_has_losing_streak? && user_should_use_lifeline? && user_can_use_lifeline?
@@ -19,7 +19,7 @@ module Commands
         medium_wait(:message)
         say "Set yourself back to #{@api.user.previous_streak} with a lifeline\n\nOr travel the road to a Sweep starting with a losing streak of #{@api.user.current_losing_streak} 😝", quick_replies: quick_replies
         long_wait(:message)
-        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        show_media_with_button(user.id, 'status', STATUS_IMAGE, quick_replies)
         stop_thread
       elsif user_has_losing_streak? && user_should_use_lifeline? && !user_can_use_lifeline?
         quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
@@ -33,7 +33,7 @@ module Commands
         short_wait(:message)
         say "Your losing streak is #{@api.user.current_losing_streak}\n\nMaybe picking the opposite side works better hehe ☺️"
         short_wait(:message)
-        show_media_with_button(user.id, 'dashboard', DASHBOARD_IMAGE, quick_replies)
+        show_media_with_button(user.id, 'status', STATUS_IMAGE, quick_replies)
         stop_thread
       else
         say "Once you make some picks, you'll have a winning/losing streak of something...", quick_replies: ["Select picks"]
@@ -43,7 +43,7 @@ module Commands
   end
 
   def handle_status_postback
-
+    #TODO status 
   end
 
   def user_has_win_streak?
