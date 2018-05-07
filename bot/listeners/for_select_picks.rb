@@ -9,7 +9,7 @@ def listen_for_select_picks_postback
       say PICKS.sample, quick_replies: sports
       next_command :entry_to_show_sports
     else
-      say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
+      say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Challenges"]
       stop_thread
     end
   end

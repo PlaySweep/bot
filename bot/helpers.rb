@@ -23,7 +23,7 @@ end
 
 def for_upcoming picks
   picks.size == 1 ? games = "game" : games = "games"
-  text = "#{picks.size} upcoming #{games}...\n"
+  text = "#{picks.size} upcoming #{games} 🙌\n"
   picks.first(3).each do |pick|
     text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
   end
@@ -33,19 +33,20 @@ def for_upcoming picks
 end
 
 def for_in_flight upcoming, in_progress
-  text = ""
+  upcoming.size == 1 ? games = "game" : games = "games"
+  upcoming_text = "#{upcoming.size} upcoming #{games} 🙌\n"
   upcoming.first(2).each_with_index do |pick, index|
-    upcoming.size == 1 ? games = "game" : games = "games"
-    text = "#{upcoming.size} upcoming #{games}...\n"
-    text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
-    text.concat("...and more\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
+    upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
+    upcoming_text.concat("...plus more\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
   end
+  in_progress.size == 1 ? games = "game" : games = "games"
+  in_progress_text = "\n#{in_progress.size} #{games} in progress 🎥\n"
   in_progress.first(2).each_with_index do |pick, index|
-    in_progress.size == 1 ? games = "game" : games = "games"
-    text.concat("\n#{in_progress.size} #{games} in progress...\n#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
-    text.concat("...and more\n") if (index >= in_progress.first(2).size - 1) && in_progress.size > 2
+    in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
+    in_progress_text.concat("...and more\n") if (index >= in_progress.first(2).size - 1) && in_progress.size > 2
   end
-  additional_text = "\n...👇"
+  additional_text = "\n...and more 👇"
+  text = upcoming_text + in_progress_text
   text.concat(additional_text) if (upcoming.size + in_progress.size) >= 4
   text
 end

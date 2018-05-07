@@ -1,17 +1,9 @@
 module Commands
   def handle_show_sports
-    case message.quick_reply
-    when "NFL"
-      handle_pick
-    when "NCAAF"
-      handle_pick
-    when "NBA"
-      handle_pick
-    when "NCAAB"
-      handle_pick
-    when "MLB"
-      handle_pick
-    when "NHL"
+    @api = Api.new
+    @api.fetch_sports
+    # @api.sports.include?(message.quick_reply) ? handle_pick : redirect(:show_sports) and stop_thread
+    if @api.sports.include?(message.quick_reply)
       handle_pick
     else
       redirect(:show_sports)
@@ -22,7 +14,7 @@ module Commands
   def handle_no_sports_available
     #TODO possibly add a call to special list of matchups in exchange for sweepcoins
     message.typing_on
-    say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Friends"]
+    say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Challenges"]
     stop_thread
   end
 
@@ -44,9 +36,11 @@ module Commands
       sleep 1
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       message.typing_on
+      @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       sleep 1
       fetch_matchup(sport, @api.matchups.first)
     else
+      @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       fetch_matchup(sport, @api.matchups.first)
     end
   end

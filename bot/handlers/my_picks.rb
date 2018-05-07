@@ -2,7 +2,7 @@ module Commands
   def handle_my_picks
     @api = Api.new
     @api.fetch_picks(user.id, :in_flight)
-    short_wait(:message)
+    medium_wait(:message)
     if @api.picks.size != 0
       text = build_text_for(resource: :picks, data: @api.picks)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
@@ -19,7 +19,7 @@ module Commands
   def handle_my_picks_for_postback
     @api = Api.new
     @api.fetch_picks(user.id, :in_flight)
-    short_wait(:postback)
+    medium_wait(:postback)
     if @api.picks.size != 0
       text = build_text_for(resource: :picks, data: @api.picks)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
