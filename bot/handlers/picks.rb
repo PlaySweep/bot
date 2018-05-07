@@ -63,7 +63,7 @@ module Commands
 
   def fetch_matchup sport, matchup
     if (matchup.nil? || matchup.empty?)
-      say "All finished. I'll let you know when I find more games.", quick_replies: [["More sports", "Select picks"], ["Status", "Status"]]
+      say "All finished. I'll let you know when I find more games.", quick_replies: ["More sports", "Status"]
       stop_thread
     else
       away = matchup.away_side

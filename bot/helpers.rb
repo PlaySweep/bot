@@ -9,14 +9,25 @@ def build_payload_for resource, data
   end
 end
 
-def build_text_for resource:, data:
+def build_text_for resource:, object:, options: nil
   text = ""
   case resource
   when :picks
-    upcoming = data.select {|pick| pick.status == 'pending' }
-    in_progress = data.select {|pick| pick.status == 'in_progress' }
+    upcoming = object.select {|pick| pick.status == 'pending' }
+    in_progress = object.select {|pick| pick.status == 'in_progress' }
     text = for_in_flight(upcoming, in_progress) if in_progress.size > 0
-    text = for_upcoming(data) if in_progress.size == 0
+    text = for_upcoming(object) if in_progress.size == 0
+  when :status
+    case options
+    when :winning_streak
+      text = "#{STATUS_HOT.sample}\n\nWinning streak is #{object.current_streak}\n\nTap below for more details 👇"
+    when :should_use_lifeline
+      text = "Losing streak #{object.current_losing_streak} 👍\nWinning streak #{object.current_streak} 👎\n\nSet yourself back to a winning streak of #{object.previous_streak} with a lifeline...\nOr continue the losing road to a Sweep by picking the opposite side 🙌"
+    when :should_use_lifeline_but_cant
+      text = "Your losing streak is at #{object.current_losing_streak}, but all you need is #{30 - object.data.sweep_coins} more Sweepcoins to set your winning streak back to #{object.previous_streak}\n\nInvite or challenge your friends for more 🤝"
+    when :losing_streak
+      text = "#{STATUS_COLD.sample}\n\nYour losing streak is #{object.current_losing_streak}\n\nMaybe picking the opposite side is your thing 🤑"
+    end
   end
   text
 end
@@ -27,7 +38,7 @@ def for_upcoming picks
   picks.first(3).each do |pick|
     text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
   end
-  additional_text = "\n...and more 👇"
+  additional_text = "\n...tap to see more details 👇"
   text.concat(additional_text) if picks.size > 3
   text
 end
@@ -37,7 +48,7 @@ def for_in_flight upcoming, in_progress
   upcoming_text = "#{upcoming.size} upcoming #{games} 🙌\n"
   upcoming.first(2).each_with_index do |pick, index|
     upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
-    upcoming_text.concat("...plus more\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
+    upcoming_text.concat("...\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
   end
   in_progress.size == 1 ? games = "game" : games = "games"
   in_progress_text = "\n#{in_progress.size} #{games} in progress 🎥\n"
@@ -45,7 +56,7 @@ def for_in_flight upcoming, in_progress
     in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
     in_progress_text.concat("...and more\n") if (index >= in_progress.first(2).size - 1) && in_progress.size > 2
   end
-  additional_text = "\n...and more 👇"
+  additional_text = "\n...tap to see more details 👇"
   text = upcoming_text + in_progress_text
   text.concat(additional_text) if (upcoming.size + in_progress.size) >= 4
   text

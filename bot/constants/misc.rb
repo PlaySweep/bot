@@ -1,5 +1,5 @@
 RANDOM_EMOJIS = %w[😏 🤑 😇 👌 🤗 👍 😉 😎]
-ANGRY = ["Ughhhhh 😡"]
+ANGRY = ["Ughh 😡"]
 SAD = ["I need a hug too 😫"]
 FRUSTRATED = ["Sometimes I could just 😤"]
 TELL_ME_SOMETHING = [
@@ -15,4 +15,9 @@ TELL_ME_SOMETHING = [
   "There is only one way to avoid criticism: do nothing, say nothing, and be nothing ✊",
   "Trying to get ice cubes out of an ice tray really is an all or nothing endeavor 🙄"
 ]
-SPORT_EMOJIS = { NFL: '🏈', NCAA: '🏈', NBA: '🏀', NCAAB: '🏀', MLB: '⚾️', random: '🌼' }
+SPORT_EMOJIS = { 
+  NFL: '🏈', NCAA: '🏈', NBA: '🏀', NCAAB: '🏀', 
+  MLB: '⚾️', NHL: '🏒', Soccer: '⚽', PGA: '⛳️', Golf: '⛳️', 
+  ATP: '🎾', Tennis: '🎾', MMA: '🤼‍♀️', Boxing: '🥊', 
+  Olympics: '🌎', "Horse Racing": '🐎', random: '🎯' 
+}

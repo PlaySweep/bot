@@ -4,7 +4,7 @@ module Commands
     @api.fetch_picks(user.id, :in_flight)
     medium_wait(:message)
     if @api.picks.size != 0
-      text = build_text_for(resource: :picks, data: @api.picks)
+      text = build_text_for(resource: :picks, object: @api.picks)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       url = "#{ENV['WEBVIEW_URL']}/picks/#{user.id}"
       show_button("Show Picks", text, quick_replies, url)
@@ -21,7 +21,7 @@ module Commands
     @api.fetch_picks(user.id, :in_flight)
     medium_wait(:postback)
     if @api.picks.size != 0
-      text = build_text_for(resource: :picks, data: @api.picks)
+      text = build_text_for(resource: :picks, object: @api.picks)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       url = "#{ENV['WEBVIEW_URL']}/picks/#{user.id}"
       show_button("Show Picks", text, quick_replies, url)
