@@ -1,35 +1,4 @@
 module Commands
-  # Format of hashes follows JSON format from Messenger Platform documentation:
-  # https://developers.facebook.com/docs/messenger-platform/send-messages/templates
-  CAROUSEL = [
-    {
-      title: 'Random image',
-      # Horizontal image should have 1.91:1 ratio
-      image_url: 'https://unsplash.it/760/400?random',
-      subtitle: "That's a first card in a carousel",
-      buttons: [
-        {
-          type: :postback,
-          payload: 'TEST',
-          title: 'Website'
-        }
-      ]
-    },
-    {
-      title: 'Random image',
-      # Horizontal image should have 1.91:1 ratio
-      image_url: 'https://unsplash.it/760/400?random',
-      subtitle: "That's a first card in a carousel",
-      buttons: [
-        {
-          type: :postback,
-          payload: 'TEST',
-          title: 'Website'
-        }
-      ]
-    }
-  ]
-
   def show_media(id, quick_replies)
     media = UI::MediaAttachment.new(id, quick_replies)
     show(media)
@@ -41,57 +10,13 @@ module Commands
         type: :web_url,
         url: url || "#{ENV["WEBVIEW_URL"]}",
         title: title,
-        webview_height_ratio: 'full'
+        webview_height_ratio: 'full',
+        messenger_extensions: true
       }
     ]
     button_template = UI::FBButtonTemplate.new(text, payload, quick_replies)
     show(button_template)
   end
-
-  # def show_double_button_template text
-  #   payload = [
-  #     {
-  #       type: :postback,
-  #       payload: 'HOW TO PLAY',
-  #       title: "How to Play 🤷"
-  #     },
-  #     {
-  #       type: :web_url,
-  #       messenger_extensions: true,
-  #       url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}",
-  #       title: "Make Picks 🙌",
-  #       webview_height_ratio: 'full'
-  #     }
-  #   ]
-  #   button_template = UI::FBButtonTemplate.new(text, payload)
-  #   show(button_template)
-  # end
-
-  # def show_button_template sport
-  #   payload = [
-  #     {
-  #       type: :web_url,
-  #       messenger_extensions: true,
-  #       url: "#{ENV["WEBVIEW_URL"]}?id=#{user.id}&sport=#{sport.downcase}",
-  #       title: "Pick Now 🙌",
-  #       webview_height_ratio: 'full'
-  #     }
-  #   ]
-  #   case sport
-  #   when 'NCAAB'
-  #     quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "NHL", payload: "NHL" }, { content_type: 'text', title: "Status", payload: "Status" }]
-  #     button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NCAAB?", payload, quick_replies)
-  #     show(button_template)
-  #   when 'NHL'
-  #     quick_replies = [{ content_type: 'text', title: "NBA", payload: "NBA" }, { content_type: 'text', title: "NCAAB", payload: "NCAAB" }, { content_type: 'text', title: "Status", payload: "Status" }]
-  #     button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for NHL?", payload, quick_replies)
-  #     show(button_template)
-  #   when 'NBA'
-  #     quick_replies = [{ content_type: 'text', title: "NCAAB", payload: "NCAAB" }, { content_type: 'text', title: "NHL", payload: "NHL" }, { content_type: 'text', title: "Status", payload: "Status" }]
-  #     button_template = UI::FBButtonTemplate.new("Are you ready to make your picks for the NBA?", payload, quick_replies)
-  #     show(button_template)
-  #   end
-  # end
 
   def show_carousel resource, quick_replies
     show(UI::FBCarousel.new(resource, quick_replies))
@@ -183,10 +108,10 @@ module Commands
      show(UI::FBInvite.new(friends, quick_replies = [{ content_type: 'text', title: "Status", payload: "Status" }, { content_type: 'text', title: "Select picks", payload: "Select picks" }]))
    end
 
-  # def show_image
-  #   say "Wait a bit while I pick a nice random image for you"
-  #   img_url = 'https://unsplash.it/600/400?random'
-  #   image = UI::ImageAttachment.new(img_url)
-  #   show(image)
-  # end
+  def show_image
+    say "Wait a bit while I pick a nice random image for you"
+    img_url = 'https://unsplash.it/600/400?random'
+    image = UI::ImageAttachment.new(img_url)
+    show(image)
+  end
 end

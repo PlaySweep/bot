@@ -40,6 +40,11 @@ class Api
     @user = JSON.parse(response.body)['user']
   end
 
+  def fetch_challenge user_id, id
+    response = @conn.get("users/#{user_id}/challenges/#{id}")
+    @challenge = JSON.parse(response.body)['challenge']
+  end
+
   def fetch_team id
     response = @conn.get("teams/#{id}")
     @team = JSON.parse(response.body)['team']

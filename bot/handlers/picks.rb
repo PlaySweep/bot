@@ -2,7 +2,6 @@ module Commands
   def handle_show_sports
     @api = Api.new
     @api.fetch_sports
-    # @api.sports.include?(message.quick_reply) ? handle_pick : redirect(:show_sports) and stop_thread
     if @api.sports.include?(message.quick_reply)
       handle_pick
     else
@@ -50,7 +49,7 @@ module Commands
     @api.fetch_user(user.id)  
     sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id} })
-    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Okie dokie 👉"]
+    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Consider it done 🤝"]
     message.typing_on
     sleep 0.5
     say options.sample

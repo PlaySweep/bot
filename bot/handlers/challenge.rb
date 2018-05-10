@@ -7,7 +7,7 @@ module Commands
       @api.fetch_friends(user.id)
       quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
-      say "Tap your friend below 👇", quick_replies: quick_replies.unshift("Search friends?")
+      say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
       message.typing_off
       next_command :handle_selected_challenge
     when 'MY CHALLENGES'
@@ -19,7 +19,7 @@ module Commands
         show_carousel(payload, quick_replies)
         stop_thread
       else
-        text = "No challenges in flight 🛬\n\nTap below to view past challenges 👇"
+        text = "No challenges in flight 🛬\n\nTap below to view any pending challenges 👇"
         quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
         show_button("Show Challenges", text, quick_replies, url)
@@ -36,7 +36,7 @@ module Commands
       @api.fetch_friends(user.id)
       quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
-      say "Tap your friend below 👇", quick_replies: quick_replies.unshift("Search friends?")
+      say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
       message.typing_off
       next_command :handle_selected_challenge
     when 'MY CHALLENGES'
@@ -48,7 +48,7 @@ module Commands
         show_carousel(carousel, quick_replies)
         stop_thread
       else
-        text = "No challenges in flight 🛬\n\nTap below to view past challenges 👇"
+        text = "No challenges in flight 🛬\n\nTap below to view any pending challenges 👇"
         quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
         show_button("Show Challenges", text, quick_replies, url)
@@ -153,6 +153,7 @@ module Commands
       next_command :confirm_challenge_details
     else
       say "You do not have enough Sweepcoins to wager that amount, try typing a new amount below", quick_replies: ["Earn coins", "Earn coins"]
+      short_wait(:message)
       type_wager_amount
     end
   end
@@ -181,7 +182,7 @@ module Commands
     case message.quick_reply
     when 'MOST WINS'
       user.session[:challenge_details][:type_id] = 1
-      say "What would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
+      say "How long would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
       next_command :handle_duration_challenge_details
     when 'MATCHUP'
       user.session[:challenge_details][:type_id] = 2
@@ -195,19 +196,19 @@ module Commands
     when '3 DAYS'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 3
-      say "So you are challenging #{full_name} to the most wins within a 3 day span..."
+      say "You are challenging #{full_name} to the most wins within a 3 day span..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A WEEK'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 7
-      say "So you are challenging #{full_name} to the most wins within a 7 day span..."
+      say "You are challenging #{full_name} to the most wins within a 7 day span..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A MONTH'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 30
-      say "So you are challenging #{full_name} to the most wins for the span of a month..."
+      say "You are challenging #{full_name} to the most wins within a 30 day span..."
       short_wait(:message)
       handle_wager_input_for_duration
     end
