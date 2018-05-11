@@ -5,8 +5,19 @@ module Commands
     if @api.sports.include?(message.quick_reply)
       handle_pick
     else
-      redirect(:show_sports)
-      stop_thread
+      redirect(:show_sports) and stop_thread and return if !message.quick_reply
+      if message.quick_reply.split(' ')[0..1].join(' ') == 'ACCEPT CHALLENGE'
+        payload = message.quick_reply.split(' ')[0...-1].join(' ') unless !message.quick_reply
+        id = message.quick_reply.split(' ')[-1] unless !message.quick_reply
+        accept_challenge_action(id)
+      elsif message.quick_reply.split(' ')[0..1].join(' ') == 'DECLINE CHALLENGE'
+        payload = message.quick_reply.split(' ')[0...-1].join(' ') unless !message.quick_reply
+        id = message.quick_reply.split(' ')[-1] unless !message.quick_reply
+        decline_challenge_action(id)
+      else
+        redirect(:show_sports)
+        stop_thread
+      end
     end
   end
 
@@ -21,7 +32,9 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    #TODO Better button handling for unexpected requests
     show_button("🤔 How to play", "Not sure whats going on? Tap below to refresh yourself on the rules of the game 👍", qr) and stop_thread and return if (!message.quick_reply && message.text)
+    show_button("Show Challenges", "Sorry, I was too focused on making picks 🙈\n\nTap below to respond to any pending challenges 👇", qr, "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}") and stop_thread and return if (message.quick_reply.split(' ')[1] == 'CHALLENGE')
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"

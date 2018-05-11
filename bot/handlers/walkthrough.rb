@@ -19,6 +19,7 @@ module Commands
       say "And when you hit 4 wins in a row, I'll send you a digital Amazon gift card 💰", quick_replies: ["How much?"]
       next_command :handle_walkthrough
     when 'HOW MUCH?'
+      #TODO update copy
       message.typing_on
       say "At the end of the day, I send out $25 worth of Amazon gift cards to winners. If there's more than 1 winner, you'll split the prize 🤑"
       sleep 1.5

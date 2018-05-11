@@ -62,34 +62,42 @@ module Commands
     id = message.quick_reply.split(' ')[-1] unless !message.quick_reply
     case payload
     when 'ACCEPT CHALLENGE REQUEST'
-      @api = Api.new
-      @api.fetch_user(user.id)
-      @api.fetch_challenge(user.id, id)
-      sleep 1
-      if @api.user.data.pending_balance >= @api.challenge.wager.coins
-        @api.update('challenges', id, { :accept => true }, user.id)
-        text = "Challenge accepted 👍\n\nView your current/pending challenges below 👇"
-        quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-        show_button("My Challenges", text, quick_replies, url)
-        stop_thread
-      else
-        say "You do not have enough Sweepcoins to accept this challenge 😤\n\nInvite some friends or respond with a new wager amount 👍", quick_replies: ["Invite friends", "Challenges"]
-        @api.update('challenges', id, { :decline => true, :reason => :insufficient_funds }, user.id)
-        stop_thread
-      end
+      accept_challenge_action(id)
     when 'DECLINE CHALLENGE REQUEST'
-      @api = Api.new
-      @api.update('challenges', id, { :decline => true }, user.id)
-      text = "Challenge declined 👎\n\nView your current/pending challenges below 👇"
+      decline_challenge_action(id)
+    else
+      say "Tap below to act on any pending challenges you might have missed 👇", quick_replies: ["My challenges"]
+      stop_thread
+    end
+  end
+
+  def accept_challenge_action id
+    @api = Api.new
+    @api.fetch_user(user.id)
+    @api.fetch_challenge(user.id, id)
+    sleep 1
+    if @api.user.data.pending_balance >= @api.challenge.wager.coins
+      @api.update('challenges', id, { :accept => true }, user.id)
+      text = "Challenge accepted 👍\n\nView your current/pending challenges below 👇"
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
       show_button("My Challenges", text, quick_replies, url)
       stop_thread
     else
-      say "Tap below to act on any pending challenges you might have missed 👇", quick_replies: ["My challenges"]
+      say "You do not have enough Sweepcoins to accept this challenge 😤\n\nInvite some friends or respond with a new wager amount 👍", quick_replies: ["Invite friends", "Challenges"]
+      @api.update('challenges', id, { :decline => true, :reason => :insufficient_funds }, user.id)
       stop_thread
     end
+  end
+
+  def decline_challenge_action id
+    @api = Api.new
+    @api.update('challenges', id, { :decline => true }, user.id)
+    text = "Challenge declined 👎\n\nView your current/pending challenges below 👇"
+    quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+    show_button("My Challenges", text, quick_replies, url)
+    stop_thread
   end
 
 end
