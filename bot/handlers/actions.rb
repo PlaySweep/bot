@@ -62,14 +62,13 @@ module Commands
     id = message.quick_reply.split(' ')[-1] unless !message.quick_reply
     case payload
     when 'ACCEPT CHALLENGE REQUEST'
-      #TODO check if user has enough to accept
       @api = Api.new
       @api.fetch_user(user.id)
       @api.fetch_challenge(user.id, id)
       sleep 1
       if @api.user.data.pending_balance >= @api.challenge.wager.coins
         @api.update('challenges', id, { :accept => true }, user.id)
-        text = "Challenge accepted 👍\n\nView your current/pending challenges by tapping My Challenges below 👇"
+        text = "Challenge accepted 👍\n\nView your current/pending challenges below 👇"
         quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
         show_button("My Challenges", text, quick_replies, url)
@@ -82,7 +81,7 @@ module Commands
     when 'DECLINE CHALLENGE REQUEST'
       @api = Api.new
       @api.update('challenges', id, { :decline => true }, user.id)
-      text = "Challenge declined 👎\n\nView your current/pending challenges by tapping My Challenges below 👇"
+      text = "Challenge declined 👎\n\nView your current/pending challenges below 👇"
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
       show_button("My Challenges", text, quick_replies, url)

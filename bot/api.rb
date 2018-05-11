@@ -103,7 +103,7 @@ class Api
       if @user.empty?
         fetch_fb_user(id)
         if @fb_user
-          puts "Inspect response: #{@fb_user.inspect}"
+          puts "Facebook user: #{@fb_user.inspect}"
           params = { :user => { :facebook_uuid => @fb_user.id, :first_name => @fb_user.first_name, :last_name => @fb_user.last_name, :profile_pic => @fb_user.profile_pic, :gender => @fb_user.gender, :timezone => @fb_user.timezone } }
           response = @conn.post("#{model}", params)
           @user = JSON.parse(response.body)['user']

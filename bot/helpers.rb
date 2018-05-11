@@ -91,6 +91,7 @@ def build_custom_message challenge
   when 'Most Wins'
     "wants to challenge you to #{challenge.wager.coins} Sweepcoins on who will have the most wins in the span of #{challenge.duration_details.days} days!\n\nThe challenge duration will begin once you hit accept 👍"
   when 'Matchup'
-    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected} against the spread (#{challenge.matchup_details.acceptor.spread}) against the #{challenge.matchup_details.requestor.selected} (#{challenge.matchup_details.requestor.spread}) for #{challenge.wager.coins} Sweepcoins!\n\nTap accept or decline below 👍"
+    options = ["What say you?! 😶", "What you gonna do about it? 🤔", "You think you can take em' or what? 🙏"]
+    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected} against the spread (#{challenge.matchup_details.acceptor.spread}) against the #{challenge.matchup_details.requestor.selected} (#{challenge.matchup_details.requestor.spread}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
   end
 end

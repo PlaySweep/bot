@@ -31,6 +31,9 @@ module Commands
     if matchup_id && selected_id
       params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
+      @api.update('users', user.id, { :user => {:active => true} }) unless @api.user.active
+      #TODO temporary method 👇
+      update_user_info unless (@api.user.profile_pic && @api.user.gender && @api.user.timezone)
       message.typing_on
       sleep 1
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
@@ -62,7 +65,22 @@ module Commands
 
   def fetch_matchup sport, matchup
     if (matchup.nil? || matchup.empty?)
-      say "All finished. I'll let you know when I find more games.", quick_replies: ["More sports", "Status"]
+      options = [
+        { 
+          text: "You're all caught up on #{sport}! Good luck out there 😇", 
+          quick_replies: ["More sports", "Status"]
+        }, 
+        { 
+          text: "No more #{sport} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
+          quick_replies: ["More sports", "Status", "Notifications"]
+        },
+        { 
+          text: "All finished with #{sport}!\n\nWant more action? Make sure to challenge your friends for some Sweepcoins and bragging rights 🤑💪", 
+          quick_replies: ["More sports", "Status", "Challenges"]
+        }
+      ]
+      sample = options.sample
+      say sample.text, quick_replies: sample.quick_replies
       stop_thread
     else
       away = matchup.away_side
@@ -81,5 +99,13 @@ module Commands
       message.typing_off
       next_command :handle_pick
     end
+  end
+
+  def update_user_info
+    @api = Api.new
+    @api.fetch_fb_user(user.id)
+    params = { :user => { :profile_pic => @api.fb_user.profile_pic, :gender => @api.fb_user.gender, :timezone => @api.fb_user.timezone } }
+    @api.update('users', user.id, params)
+    puts "User updated 👍"
   end
 end

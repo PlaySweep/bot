@@ -59,12 +59,10 @@ module Commands
 
   def handle_query_matchups
     message.typing_on
-    #TODO text_button that shows list of available matchups to challenge
-    text = "Type out the team/prop you want to challenge with below 👇"
+    text = "Not sure what to select? Take a peek at the available games below 👇\n\nOtherwise, start typing the name of the team/prop and I'll find it for ya 😉"
     quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
     url = "#{ENV['WEBVIEW_URL']}/matchups"
-    show_button("Show Matchups", text, quick_replies, url)
-    # say "You can type in the name of the team/prop you're interested in challenging with below 👇", quick_replies: ["Nevermind"]
+    show_button("Available Games", text, quick_replies, url)
     message.typing_off
     next_command :handle_find_matchup
   end
