@@ -48,7 +48,7 @@ module Commands
     when 'INVITE FRIENDS'
       @api = Api.new
       @api.fetch_user(user.id)
-      $tracker.track(@api.user.id, 'User Intended Referral')
+      $tracker.track(@api.user.id, 'User Intended Referral', {'for' => 'Lifeline'})
       short_wait(:message)
       say INVITE_FRIENDS.sample
       medium_wait(:message)

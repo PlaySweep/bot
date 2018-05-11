@@ -1,5 +1,6 @@
 module Commands
   def handle_challenge_intro
+    #TODO update unexpected response messaging
     say "Ok, carry on with your life" and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
@@ -69,7 +70,7 @@ module Commands
 
   def handle_query_users
     message.typing_on
-    say "Ok, type in your friends name below 👇", quick_replies: ["Nevermind"]
+    say "Type your friends name below and I'll go find em' 👇", quick_replies: ["Nevermind"]
     message.typing_off
     next_command :handle_find_friend
   end
@@ -103,7 +104,6 @@ module Commands
     else
       say "Couldn't find a pending matchup based on that search..."
       short_wait(:message)
-      #TODO show matchup options
       handle_query_matchups
     end
   end
@@ -125,7 +125,7 @@ module Commands
     friend = user.session[:challenge_details][:full_name]
     say "#{selection.name} ✅"
     short_wait(:message)
-    say "You currently have a pending balance of #{@api.user.data.pending_balance} Sweepcoins..."
+    say "With a pending Sweepcoin balance of #{@api.user.data.pending_balance}"
     short_wait(:message)
     type_wager_amount
   end
@@ -133,7 +133,7 @@ module Commands
   def handle_wager_input_for_duration
     @api = Api.new
     @api.fetch_user(user.id)
-    say "You currently have a pending balance of #{@api.user.data.pending_balance} Sweepcoins..."
+    say "With a pending Sweepcoin balance of #{@api.user.data.pending_balance}"
     short_wait(:message)
     type_wager_amount
   end
@@ -167,6 +167,7 @@ module Commands
       handle_query_users
     else
       user.session[:challenge_details] = {}
+      user.session[:challenge_details][:attempts] = 0
       friend = message.text
       user.session[:challenge_details][:full_name] = friend
       id = eval(message.quick_reply.split(' ')[-1])
@@ -189,31 +190,58 @@ module Commands
   end
 
   def handle_duration_challenge_details
-    #TODO capture error messages
+    retry_duration_details if !message.quick_reply
     case message.quick_reply
     when '3 DAYS'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 3
-      say "You are challenging #{full_name} to the most wins within a 3 day span..."
+      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A WEEK'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 7
-      say "You are challenging #{full_name} to the most wins within a 7 day span..."
+      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A MONTH'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 30
-      say "You are challenging #{full_name} to the most wins within a 30 day span..."
+      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
       short_wait(:message)
       handle_wager_input_for_duration
     end
   end
 
+  def retry_duration_details
+    days = message.text.split(' ').map(&:to_i).sort.reverse.first
+    if days > 0
+      full_name = user.session[:challenge_details][:full_name]
+      user.session[:challenge_details][:days] = days
+      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
+      short_wait(:message)
+      handle_wager_input_for_duration
+    else
+      say "I'm not sure I'm pickin up what you're throwin down 🤔\n\nTry that one more time...", quick_replies: ["3 days", "A week", "A month"]
+      next_command :handle_duration_challenge_details
+    end
+  end
+
+  def retry_challenge_confirmation
+    user.session[:challenge_details][:attempts] += 1
+    say "Did you forget to tap the options below?\n\nConfirm your challenge with #{user.session[:challenge_details][:full_name]} by sending over a message ✉️", quick_replies: ["Send it", "No, I screwed up"]
+    next_command :confirm_challenge_details
+  end
+
+  def clear_challenge
+    say "Ok 😇", quick_replies: ['Select picks', 'Status']
+    user.session[:challenge_details] = {}
+    stop_thread
+  end
+
   def confirm_challenge_details
-    #TODO capture error responses
+    clear_challenge and return if !message.quick_reply && user.session[:challenge_details][:attempts] == 1
+    retry_challenge_confirmation if !message.quick_reply && user.session[:challenge_details][:attempts] == 0
     case message.quick_reply
     when 'SEND IT'
       if user.session[:challenge_details][:days]
@@ -246,6 +274,7 @@ module Commands
       end
     when 'NO, I SCREWED UP'
       say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenges', 'Select picks']
+      user.session[:challenge_details] = {}
       stop_thread
     end
   end
