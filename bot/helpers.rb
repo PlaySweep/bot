@@ -95,3 +95,19 @@ def build_custom_message challenge
     "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected} against the spread (#{challenge.matchup_details.acceptor.spread}) against the #{challenge.matchup_details.requestor.selected} (#{challenge.matchup_details.requestor.spread}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
   end
 end
+
+def capture_responses message
+  #TODO update facebook_uuids for prod 
+  [1594944847261256].each do |facebook_uuid|
+    message_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: facebook_uuid },
+      message: {
+        text: "Unrecognized response,\n\n#{message}",
+      }
+    }
+    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+  end
+  say RANDOM.sample, quick_replies: ["Send feedback"]
+  stop_thread
+end

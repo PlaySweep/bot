@@ -5,7 +5,7 @@ FRUSTRATED = ["Sometimes I could just 😤"]
 RANDOM = [
   "Queue is just Q followed by 4 silent letters 😲", 
   "Apparently Neil Armstrong used to tell unfunny jokes about the Moon, and follow them up with “Ah, I guess you had to be there” 😂", 
-  "King Kong has everything on you 😝",
+  "King Kong has everything on you 🦍",
   "Why was everybody in Mortal Kombat so upset with each other anyway? If its a stupid, boring story - never mind 🤔",
   "I swear medicine companies have no clue what fruit tastes like 😾",
   "Literally everything you have ever done has led to you reading this sentence 😯",
