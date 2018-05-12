@@ -1,5 +1,3 @@
-require 'popcorn'
-
 module Commands
   def handle_feedback
     @api = Api.new
@@ -19,9 +17,9 @@ module Commands
     end
     #TODO test popcorn
     # Popcorn.notify(['4805227771', '6025103385'], "Emma captured some feedback from #{full_name},\n\n#{feedback}")
-    #TODO more options
     say "Thank you 😇"
     short_wait(:message)
+    #TODO more options
     options = ["I'm already feeling more self aware 🤓"]
     say options.sample, quick_replies: ['Select picks', 'Status']
     stop_thread

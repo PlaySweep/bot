@@ -26,63 +26,51 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: 'Dashboard 📊',
+                title: 'Dashboard 🙌',
                 type: 'postback',
                 payload: 'DASHBOARD'
               },
               {
-                title: 'Select picks 👆',
+                title: 'Select Picks 👆',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
               },
               {
-                title: 'Status 🙏',
+                title: 'Status 🤔',
                 type: 'postback',
                 payload: 'STATUS' 
               },
               {
-                title: 'My picks 🙌',
+                title: 'Challenges 🤝',
+                type: 'postback',
+                payload: 'CHALLENGE'
+              },
+              {
+                title: 'My Picks 🤑',
                 type: 'postback',
                 payload: 'MY PICKS' 
               }
             ]
           },
           {
-            type: 'nested',
-            title: 'Share & Friends 🎉',
-            call_to_actions: [
-              {
-                title: 'Invite friends 💌',
-                type: 'postback',
-                payload: 'INVITE FRIENDS'
-              },
-              {
-                title: 'Challenge friends 💪',
-                type: 'postback',
-                payload: 'CHALLENGE'
-              }
-            ]
+            title: 'Invite friends 🎉',
+            type: 'postback',
+            payload: 'INVITE FRIENDS'
           },
           {
             type: 'nested',
-            title: 'Settings & Help 👻',
+            title: 'Notifications & Help 👾',
             call_to_actions: [
-              {
-                title: 'How to play 🤔',
-                type: 'web_url',
-                url: "#{ENV['WEBVIEW_URL']}/help",
-                webview_height_ratio: 'full'
-              },
-              {
-                title: 'Sweepstore 🛍',
-                type: 'web_url',
-                url: "#{ENV['WEBVIEW_URL']}/store",
-                webview_height_ratio: 'full'
-              },
               {
                 title: 'Notifications 👋',
                 type: 'postback',
                 payload: 'MANAGE NOTIFICATIONS'
+              },
+              {
+                title: 'How to Play 🤷‍♀️',
+                type: 'web_url',
+                url: "#{ENV['WEBVIEW_URL']}/help",
+                webview_height_ratio: 'full'
               }
             ]
           }

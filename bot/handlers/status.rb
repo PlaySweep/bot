@@ -7,7 +7,7 @@ module Commands
       text = build_text_for(resource: :status, object: @api.user, options: current_status)
       url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
       short_wait(:message)
-      show_button("Show Dashboard", text, quick_replies, url)
+      show_button("Show Status", text, quick_replies, url)
       stop_thread
     else
       if current_status == :should_use_lifeline
@@ -15,28 +15,28 @@ module Commands
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       elsif current_status == :should_use_lifeline_but_cant
         quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       elsif current_status == :losing_streak
         quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       else
         quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }]
-        text = "Once you make some picks, you'll have a winning/losing streak of something..."
+        text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       end
     end
@@ -50,7 +50,7 @@ module Commands
       text = build_text_for(resource: :status, object: @api.user, options: current_status)
       url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
       short_wait(:postback)
-      show_button("Show Dashboard", text, quick_replies, url)
+      show_button("Show Status", text, quick_replies, url)
       stop_thread
     else
       if current_status == :should_use_lifeline
@@ -58,28 +58,28 @@ module Commands
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       elsif current_status == :should_use_lifeline_but_cant
         quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       elsif current_status == :losing_streak
         quick_replies = [{ content_type: 'text', title: "My picks", payload: "MY PICKS" }, { content_type: 'text', title: "Challenge friends", payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       else
         quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }]
-        text = "Once you make some picks, you'll have a winning/losing streak of something..."
+        text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
-        show_button("Show Dashboard", text, quick_replies, url)
+        show_button("Show Status", text, quick_replies, url)
         stop_thread
       end
     end

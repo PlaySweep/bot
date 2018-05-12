@@ -1,4 +1,5 @@
 require 'rubotnik'
+require 'popcorn'
 # require_relative all files in "bot" folder or do it by hand
 Rubotnik::Autoloader.load('bot')
 
