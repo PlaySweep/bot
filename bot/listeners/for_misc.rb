@@ -28,11 +28,11 @@ def for_blow_steam
 end
 
 def for_fun
-  keywords = %w[good thanks! thanks awesome! awesome thank you cool great great! wonderful sweet sweet! hi whats what's up]
+  keywords = %w[thanks! thanks awesome! awesome cool! nice nice! go! great great! yeah! wonderful sweet sweet!]
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
-  bind keywords, all: true, to: :entry_to_fun, reply_with: {
-    text: RANDOM_EMOJIS.sample,
-    quick_replies: ["Tell me something"]
-  } if matched.any?
+  multiple_keywords, multiple_msg = ["let's go!", "let's go", "thank you!", "thank you"], message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase }
+  double_matched = (multiple_keywords & multiple_msg)
+  bind keywords, all: true, to: :entry_to_fun if matched.any?
+  bind multiple_keywords, all: true, to: :entry_to_fun if double_matched.any?
 end

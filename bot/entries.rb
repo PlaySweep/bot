@@ -52,6 +52,10 @@ module Commands
     handle_challenge_intro_postback
   end
 
+  def entry_to_feedback
+    handle_feedback
+  end
+
   def entry_to_blow_steam
     handle_blow_steam
   end

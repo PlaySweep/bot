@@ -2,7 +2,7 @@ RANDOM_EMOJIS = %w[😏 🤑 😇 👌 🤗 👍 😉 😎]
 ANGRY = ["Ughh 😡"]
 SAD = ["I need a hug too 😫"]
 FRUSTRATED = ["Sometimes I could just 😤"]
-TELL_ME_SOMETHING = [
+RANDOM = [
   "Queue is just Q followed by 4 silent letters 😲", 
   "Apparently Neil Armstrong used to tell unfunny jokes about the Moon, and follow them up with “Ah, I guess you had to be there” 😂", 
   "King Kong has everything on you 😝",
@@ -21,3 +21,4 @@ SPORT_EMOJIS = {
   ATP: '🎾', Tennis: '🎾', MMA: '🤼‍♀️', Boxing: '🥊', 
   Olympics: '🌎', "Horse Racing": '🐎', random: '🎯' 
 }
+FUN = ["You are a 💫", "You're happy, I can tell 😁", "Woot woot 🎉"]

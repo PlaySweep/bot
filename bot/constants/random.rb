@@ -1,1 +1,0 @@
-RANDOM_FACTS = ["Banging your head against the wall burns 150 calories an hour.", "Organized people are simply too lazy to search for stuff."]

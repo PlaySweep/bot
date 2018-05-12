@@ -26,13 +26,27 @@ Rubotnik.route :message do |msg|
   listen_for_invite_friends
   listen_for_misc
   listen_for_actions
+  listen_for_feedback
   listen_for_notifications
   listen_for_how_to_play
   listen_for_sweepstore
 
   default do
-    options = %w[😊 😄 😋 🤗 😎 🤓 😜 🤑 ]
-    say options.sample, quick_replies: ["Select picks", "My picks", "Status"]
+    #TODO Collect unrecognized commands 
+    feedback = message.text
+    #TODO update facebook_uuids for prod 
+    [1842184635853672].each do |facebook_uuid|
+      message_options = {
+        messaging_type: "UPDATE",
+        recipient: { id: facebook_uuid },
+        message: {
+          text: "Unrecognized response,\n\n#{feedback}",
+        }
+      }
+      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+    end
+    say RANDOM.sample, quick_replies: ["Select picks", "Status", "Send feedback"]
+    stop_thread
   end
 
 end
