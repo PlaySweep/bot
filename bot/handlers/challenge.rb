@@ -62,7 +62,7 @@ module Commands
     message.typing_on
     text = "Not sure what to select? Take a peek at the available games below 👇\n\nOtherwise, start typing the name of the team/prop and I'll find it for ya 😉"
     quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
-    url = "#{ENV['WEBVIEW_URL']}/matchups"
+    url = "#{ENV['WEBVIEW_URL']}/matchups?facebook_uuid=#{user.id}"
     show_button("Available Games", text, quick_replies, url)
     message.typing_off
     next_command :handle_find_matchup
