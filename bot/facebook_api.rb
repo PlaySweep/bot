@@ -16,5 +16,4 @@ class FacebookApi
     response = @conn.post("message_attachments?access_token=#{ENV['ACCESS_TOKEN']}", params)
     @attachment_id = JSON.parse(response.body)["attachment_id"]
   end
-
 end

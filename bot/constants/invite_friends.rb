@@ -1,1 +1,1 @@
-INVITE_FRIENDS = ["Save yourself with a lifeline by referring a friend 🙏", "Earn 10 Sweepcoins by referring your friends to play with you 🎉"]
+INVITE_FRIENDS = ["Save yourself with a lifeline by referring friends 🙏", "Earn 10 Sweepcoins by referring your friends to play with you 🎉"]

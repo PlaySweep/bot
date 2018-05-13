@@ -179,12 +179,17 @@ module Commands
 
   def handle_challenge_type
     case message.quick_reply
+      #TODO test api call to set challenge type id
     when 'MOST WINS'
-      user.session[:challenge_details][:type_id] = 1
+      @api = Api.new
+      @api.fetch_challenge_type(message.quick_reply.downcase)
+      user.session[:challenge_details][:type_id] = @api.challenge_type.id
       say "How long would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
       next_command :handle_duration_challenge_details
     when 'MATCHUP'
-      user.session[:challenge_details][:type_id] = 2
+      @api = Api.new
+      @api.fetch_challenge_type(message.quick_reply.downcase)
+      user.session[:challenge_details][:type_id] = @api.challenge_type.id
       handle_query_matchups
     end
   end
