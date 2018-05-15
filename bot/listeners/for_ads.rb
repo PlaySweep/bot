@@ -1,4 +1,8 @@
-# def listen_for_single_matchup_postback
+# def listen_for_ads_postback
+  # single_matchup
+# end
+
+# def single_matchup
 #   case postback.payload.split(' ')[0]
 #   when 'SINGLE_MATCHUP'
 #     side1, side2 = postback.payload.split(' ')[1].split('_').join(' '), postback.payload.split(' ')[2].split('_').join(' ')
@@ -10,7 +14,6 @@
 # end
 
 # def handle_matchup matchup
-#   puts "Matchup: #{matchup.inspect}"
 #   away = matchup.away_side
 #   home = matchup.home_side
 #   quick_replies = [

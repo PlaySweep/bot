@@ -40,7 +40,7 @@ end
 
 Rubotnik.route :postback do
   listen_for_start_postback
-  listen_for_single_matchup_postback
+  listen_for_ads_postback
   listen_for_dashboard_postback
   listen_for_select_picks_postback
   listen_for_status_postback
