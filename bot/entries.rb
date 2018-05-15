@@ -76,6 +76,10 @@ module Commands
     handle_how_to_play
   end
 
+  def entry_to_earn_coins
+    handle_earn_coins
+  end
+
   def entry_to_sweepstore
     handle_sweepstore
   end

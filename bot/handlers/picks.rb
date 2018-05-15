@@ -117,7 +117,13 @@ module Commands
   def update_user_info
     @api = Api.new
     @api.fetch_fb_user(user.id)
-    params = { :user => { :profile_pic => @api.fb_user.profile_pic, :gender => @api.fb_user.gender, :timezone => @api.fb_user.timezone } }
+    params = { :user => 
+      { 
+        :profile_pic => @api.fb_user.has_key?('profile_pic') ? @api.fb_user.profile_pic : nil, 
+        :gender => @api.fb_user.has_key?('gender') ? @api.fb_user.gender : nil, 
+        :timezone => @api.fb_user.has_key?('timezone') ? @api.fb_user.timezone : nil 
+      } 
+    }
     @api.update('users', user.id, params)
     puts "User updated 👍"
   end

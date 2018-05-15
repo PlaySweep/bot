@@ -46,7 +46,7 @@ module Commands
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       if @api.user.challenges.size > 0
         payload = build_card_for(:challenge, @api.user.challenges)
-        show_carousel(carousel, quick_replies)
+        show_carousel(payload, quick_replies)
         stop_thread
       else
         text = "No challenges in flight 🛬\n\nTap below to view any pending challenges 👇"
@@ -136,6 +136,22 @@ module Commands
     say "With a pending Sweepcoin balance of #{@api.user.data.pending_balance}"
     short_wait(:message)
     type_wager_amount
+  end
+
+  def retry_wager_input
+    say "Type in the wrong wager amount?", quick_replies: [['Yes', 'YES'], ['Changed my mind', 'NO']]
+    next_command :handle_retry_wager_input
+  end
+
+  def handle_retry_wager_input
+    say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenges', 'Select picks'] and stop_thread and return if !message.quick_reply
+    case message.quick_reply
+    when 'YES'
+      short_wait(:message)
+      type_wager_amount
+    when 'NO'
+      clear_challenge
+    end
   end
 
   def handle_wager_response
@@ -278,9 +294,7 @@ module Commands
         stop_thread
       end
     when 'NO, I SCREWED UP'
-      say "Ok no worries, you can come back later or start over 😉", quick_replies: ['Challenges', 'Select picks']
-      user.session[:challenge_details] = {}
-      stop_thread
+      retry_wager_input
     end
   end
 end

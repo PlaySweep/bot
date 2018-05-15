@@ -43,7 +43,7 @@ module Commands
       $tracker.track(user.id, 'Notification Changed', {'type' => 'New Games On'})
       stop_thread
     when 'NEW GAMES OFF'
-      set_notification_settings(user.id, :new_games, off)
+      set_notification_settings(user.id, :new_games, false)
       say "I turned new games off", quick_replies: ["Select picks"]
       $tracker.track(user.id, 'Notification Changed', {'type' => 'New Games Off'})
       stop_thread
