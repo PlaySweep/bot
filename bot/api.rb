@@ -55,10 +55,10 @@ class Api
     @team = JSON.parse(response.body)['team']
   end
 
-  # def fetch_matchup id
-  #   response = @conn.get("challenge_matchups/#{id}")
-  #   @matchup = JSON.parse(response.body)['matchup']
-  # end
+  def fetch_matchup_by_teams side1, side2
+    response = @conn.get("matchup/by_teams?away_side=#{side1}&home_side=#{side2}")
+    @matchup = JSON.parse(response.body)['matchup']
+  end
 
   def fetch_friends id
     response = @conn.get("users/#{id}/friends")

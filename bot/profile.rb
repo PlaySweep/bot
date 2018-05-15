@@ -66,10 +66,16 @@ module Profile
                 type: 'postback',
                 payload: 'MANAGE NOTIFICATIONS'
               },
+              # {
+              #   title: 'AD TEST',
+              #   type: 'postback',
+              #   payload: 'SINGLE_MATCHUP FALCONS CARDINALS'
+              # },
               {
                 title: 'How to Play 🤷‍♀️',
                 type: 'web_url',
                 url: "#{ENV['WEBVIEW_URL']}/help",
+                messenger_extensions: true,
                 webview_height_ratio: 'full'
               }
             ]
