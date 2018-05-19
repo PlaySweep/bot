@@ -88,13 +88,12 @@ def build_card_for resource, data
 end
 
 def build_custom_message challenge
-  #TODO test messages
   case challenge.type
   when 'Most Wins'
     "wants to challenge you to #{challenge.wager.coins} Sweepcoins on who will have the most wins in the span of #{challenge.duration_details.days} days!\n\nThe challenge duration will begin once you hit accept 👍"
   when 'Matchup'
     options = ["What say you?! 😶", "What you gonna do about it? 🤔", "You think you can take em' or what? 🙏"]
-    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected.team_name} against the spread (#{challenge.matchup_details.acceptor.selected.action}) against the #{challenge.matchup_details.requestor.selected.team_name} (#{challenge.matchup_details.requestor.action}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
+    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected.team_name} against the spread (#{challenge.matchup_details.acceptor.selected.action}) against the #{challenge.matchup_details.requestor.selected.team_name} (#{challenge.matchup_details.requestor.selected.action}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
   end
 end
 

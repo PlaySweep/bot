@@ -44,7 +44,7 @@ module Commands
                  media_type: "image",
                  attachment_id: message_attachment,
                  buttons: [
-                   { type: "web_url", url: url, title: title, messenger_extensions: true }
+                   { type: "web_url", url: url, title: title, messenger_extensions: true, webview_height_ratio: 'full' }
                  ]
               }
            ]
