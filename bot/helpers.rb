@@ -67,9 +67,10 @@ def build_card_for resource, data
   when :challenge
     pending_count, accepted_count = 0, 0
     status = data.map(&:status)
+    puts "STATUS: #{status}"
     status.each do |challenge_status|
-      pending_count += 1 if challenge_status == 'pending'
-      accepted_count += 1 if challenge_status == 'accepted'
+      pending_count += 1 if challenge_status == 'Pending'
+      accepted_count += 1 if challenge_status == 'Accepted'
     end
     card = [
       {
@@ -87,12 +88,13 @@ def build_card_for resource, data
 end
 
 def build_custom_message challenge
-  case challenge.description
+  #TODO test messages
+  case challenge.type
   when 'Most Wins'
     "wants to challenge you to #{challenge.wager.coins} Sweepcoins on who will have the most wins in the span of #{challenge.duration_details.days} days!\n\nThe challenge duration will begin once you hit accept 👍"
   when 'Matchup'
     options = ["What say you?! 😶", "What you gonna do about it? 🤔", "You think you can take em' or what? 🙏"]
-    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected} against the spread (#{challenge.matchup_details.acceptor.spread}) against the #{challenge.matchup_details.requestor.selected} (#{challenge.matchup_details.requestor.spread}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
+    "wants to challenge you to take the #{challenge.matchup_details.acceptor.selected.team_name} against the spread (#{challenge.matchup_details.acceptor.selected.action}) against the #{challenge.matchup_details.requestor.selected.team_name} (#{challenge.matchup_details.requestor.action}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
   end
 end
 

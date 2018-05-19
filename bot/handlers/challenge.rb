@@ -15,8 +15,9 @@ module Commands
       @api = Api.new
       @api.fetch_user(user.id)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      if @api.user.challenges.size > 0
-        payload = build_card_for(:challenge, @api.user.challenges)
+      if (@api.user.pending_challenges.size || @api.user.active_challenges.size) > 0
+        challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+        payload = build_card_for(:challenge, challenges)
         show_carousel(payload, quick_replies)
         stop_thread
       else
@@ -44,8 +45,9 @@ module Commands
       @api = Api.new
       @api.fetch_user(user.id)
       quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      if @api.user.challenges.size > 0
-        payload = build_card_for(:challenge, @api.user.challenges)
+      if (@api.user.pending_challenges.size || @api.user.active_challenges.size) > 0
+        challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+        payload = build_card_for(:challenge, challenges)
         show_carousel(payload, quick_replies)
         stop_thread
       else

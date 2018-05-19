@@ -18,7 +18,7 @@ def listen_for_challenge_postback
     @api = Api.new
     @api.fetch_user(user.id)
     quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-    if @api.user.challenges.size > 0
+    if (@api.user.pending_challenges.size || @api.user.active_challenges.size) > 0
       show_media_with_button(user.id, 'challenges', CHALLENGE_IMAGE, quick_replies)
       stop_thread
     else
