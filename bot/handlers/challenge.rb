@@ -64,7 +64,7 @@ module Commands
     message.typing_on
     text = "Not sure what to select? Take a peek at the available games below 👇\n\nOtherwise, start typing the name of the team/prop and I'll find it for ya 😉"
     quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
-    url = "#{ENV['WEBVIEW_URL']}/matchups?facebook_uuid=#{user.id}"
+    url = "#{ENV['WEBVIEW_URL']}/matchups/#{user.id}"
     show_button("Available Games", text, quick_replies, url)
     message.typing_off
     next_command :handle_find_matchup
@@ -99,10 +99,18 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     matchups = @api.query_matchups(message.text)
-    if matchups.size == 1
+    if matchups.size > 0
       matchup = matchups.first
-      say "Which side of #{matchup.description} do you want to pick?", quick_replies: [["#{matchup.away_side.abbreviation} (#{matchup.away_side.action})", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation} (#{matchup.home_side.action})", "#{matchup.id} #{matchup.home_side.id}"]]
-      next_command :handle_wager_input
+      case matchup.type
+      when 'Game'
+        say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation} (#{matchup.away_side.action})", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation} (#{matchup.home_side.action})", "#{matchup.id} #{matchup.home_side.id}"]]
+        user.session[:challenge_details][:selected_side_type] = :game
+        next_command :handle_wager_input
+      when 'Prop'
+        say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id} #{matchup.home_side.id}"]]
+        user.session[:challenge_details][:selected_side_type] = :prop
+        next_command :handle_wager_input
+      end
     else
       say "Couldn't find a pending matchup based on that search..."
       short_wait(:message)
@@ -121,7 +129,12 @@ module Commands
     @api.fetch_user(user.id)
     matchup_id = message.quick_reply.split(' ')[0]
     selected_team_id = message.quick_reply.split(' ')[-1]
-    selection = @api.fetch_team(selected_team_id)
+    case user.session[:challenge_details][:selected_side_type]
+    when :game
+      selection = @api.fetch_team(selected_team_id)
+    when :prop
+      selection = @api.fetch_prop(selected_team_id)
+    end
     user.session[:challenge_details][:matchup_id] = matchup_id
     user.session[:challenge_details][:selected_team_id] = selected_team_id
     friend = user.session[:challenge_details][:full_name]
