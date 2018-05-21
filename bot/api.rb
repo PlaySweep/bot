@@ -28,10 +28,9 @@ class Api
         response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
       end
       @matchups = JSON.parse(response.body)['matchups']
-    # when 'challenge_matchups'
-    #   response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
-    #   puts "RESPONSE: #{JSON.parse(response.body)}"
-    #   @challenge_matchups = JSON.parse(response.body)['matchups']
+    when 'challenge_matchups'
+      response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
+      @challenge_matchups = JSON.parse(response.body)['matchups']
     end
   end
 

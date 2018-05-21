@@ -1,6 +1,7 @@
 module Commands
   def handle_challenge_intro
     #TODO update unexpected response messaging
+    say "Ahh yep, sorry that was my bad...head back into challenges to accept or decline your friends request 👍", quick_replies: ['Challenges'] and stop_thread and return if (['accept', 'decline'].include?(message.text.downcase.split(' ')[0]))
     say "Ok, carry on with your life" and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
@@ -14,17 +15,17 @@ module Commands
     when 'MY CHALLENGES'
       @api = Api.new
       @api.fetch_user(user.id)
-      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      if (@api.user.pending_challenges.size || @api.user.active_challenges.size) > 0
+      if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
         challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        payload = build_card_for(:challenge, challenges)
-        show_carousel(payload, quick_replies)
+        text = build_text_for(resource: :challenges, object: challenges, options: :message)
+        quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+        short_wait(:message)
+        show_button("Show Challenges", text, quick_replies, url)
         stop_thread
       else
-        text = "No challenges in flight 🛬\n\nTap below to view any pending challenges 👇"
-        quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-        show_button("Show Challenges", text, quick_replies, url)
+        short_wait(:message)
+        say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
         stop_thread
       end
     end
@@ -44,30 +45,34 @@ module Commands
     when 'MY CHALLENGES'
       @api = Api.new
       @api.fetch_user(user.id)
-      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      if (@api.user.pending_challenges.size || @api.user.active_challenges.size) > 0
+      if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
         challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        payload = build_card_for(:challenge, challenges)
-        show_carousel(payload, quick_replies)
+        text = build_text_for(resource: :challenges, object: challenges, options: :postback)
+        quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+        short_wait(:postback)
+        show_button("Show Challenges", text, quick_replies, url)
         stop_thread
       else
-        text = "No challenges in flight 🛬\n\nTap below to view any pending challenges 👇"
-        quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-        show_button("Show Challenges", text, quick_replies, url)
+        short_wait(:postback)
+        say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
         stop_thread
       end
     end
   end
 
   def handle_query_matchups
-    message.typing_on
-    text = "Not sure what to select? Take a peek at the available games below 👇\n\nOtherwise, start typing the name of the team/prop and I'll find it for ya 😉"
-    quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
-    url = "#{ENV['WEBVIEW_URL']}/matchups/#{user.id}"
-    show_button("Available Games", text, quick_replies, url)
-    message.typing_off
-    next_command :handle_find_matchup
+    short_wait(:message)
+    if user.session[:matchup_searches] && user.session[:matchup_searches] > 0
+      quick_replies = [{ content_type: 'text', title: "Nevermind", payload: "NEVERMIND" }]
+      url = "#{ENV['WEBVIEW_URL']}/matchups/#{user.id}"
+      show_button("Available Games", "Need a sneak peek? Check the available games and then tell me what matchup you want and I'll select it for you 😉", quick_replies, url)
+      next_command :handle_find_matchup
+    else
+      example = ["Lakers or Tom Brady", "Yankees or Lebron James"]
+      say "Tell me what matchup you're looking for, like #{example.sample} and I'll find it for you 😉", quick_replies: ['Nevermind']
+      next_command :handle_find_matchup
+    end
   end
 
   def handle_query_users
@@ -78,6 +83,7 @@ module Commands
   end
 
   def handle_find_friend
+    #TODO some weird logic on getting out of this loop when wanting to quit before typing friends name
     say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     @api = Api.new
     @api.fetch_user(user.id)
@@ -98,20 +104,23 @@ module Commands
     say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     @api = Api.new
     @api.fetch_user(user.id)
-    matchups = @api.query_matchups(message.text)
+    matchups = @api.query_matchups(message.text.gsub!("'", ""))
     if matchups.size > 0
       matchup = matchups.first
       case matchup.type
       when 'Game'
         say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation} (#{matchup.away_side.action})", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation} (#{matchup.home_side.action})", "#{matchup.id} #{matchup.home_side.id}"]]
         user.session[:challenge_details][:selected_side_type] = :game
+        user.session[:matchup_searches] = 0
         next_command :handle_wager_input
       when 'Prop'
         say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id} #{matchup.home_side.id}"]]
         user.session[:challenge_details][:selected_side_type] = :prop
+        user.session[:matchup_searches] = 0
         next_command :handle_wager_input
       end
     else
+      user.session[:matchup_searches] = 1
       say "Couldn't find a pending matchup based on that search..."
       short_wait(:message)
       handle_query_matchups
@@ -209,8 +218,8 @@ module Commands
   end
 
   def handle_challenge_type
+    say "I don't recognize that type of challenge, try again?", quick_replies: ['Most Wins', 'Matchup', 'Nevermind'] and next_command :handle_challenge_type if !message.quick_reply
     case message.quick_reply
-      #TODO test api call to set challenge type id
     when 'MOST WINS'
       @api = Api.new
       @api.fetch_challenge_type(message.quick_reply.downcase)
@@ -222,6 +231,10 @@ module Commands
       @api.fetch_challenge_type(message.quick_reply.downcase)
       user.session[:challenge_details][:type_id] = @api.challenge_type.id
       handle_query_matchups
+    when 'NEVERMIND'
+      say "Ok 😇", quick_replies: ['Select picks', 'Status']
+      user.session[:challenge_details] = {}
+      stop_thread
     end
   end
 
