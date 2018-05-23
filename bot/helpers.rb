@@ -13,8 +13,7 @@ def build_text_for resource:, object:, options: nil
   text = ""
   case resource
   when :matchups
-    options == :message ? wait = medium_wait(:message) : wait = medium_wait(:postback)
-    wait
+    sleep 1
     object.each_with_index do |matchup, index|
       if matchup.type == 'Game'
         text.concat("#{index+1} #{matchup.away_side.abbreviation} vs #{matchup.home_side.abbreviation} #{SPORT_EMOJIS[matchup.sport.to_sym] || SPORT_EMOJIS[:random]}\n")
@@ -41,24 +40,23 @@ def build_text_for resource:, object:, options: nil
   when :challenges
     pending = object.select {|challenge| challenge.status == 'Pending'}
     accepted = object.select {|challenge| challenge.status == 'Accepted'}
-    options == :message ? wait = short_wait(:message) : wait = short_wait(:postback)
     if pending.size > 0 && accepted.size > 0
-      wait
+      short_wait(options)
       say "I see #{pending.size} pending and #{accepted.size} active challenges 😲"
-      wait
-      text = "You can respond or check your current status by tapping below 🤑"
+      short_wait(options)
+      say "You busy little 🐝"
     elsif (pending.size > 0)
       pending.size == 1 ? challenges = 'challenge' : challenges = 'challenges'
-      wait
+      short_wait(options)
       say "I got #{pending.size} pending #{challenges} for you ☺️"
-      wait
-      text = "Tap below to accept or decline 🤑"
+      short_wait(options)
+      say "You know, if my friends were just giving away Sweepcoins, I wouldn't wait around too long to accept 😜"
     elsif (accepted.size > 0)
       accepted.size == 1 ? challenges = 'challenge' : challenges = 'challenges'
-      wait
+      short_wait(options)
       say "I count #{accepted.size} active #{challenges} 😎"
-      wait
-      text = "Tap below to check your current status 🤑"
+      short_wait(options)
+      say "I hope you're winning 🏆"
     end
   end
   text
@@ -110,7 +108,7 @@ def build_card_for resource, data
         image_url: 'https://i.imgur.com/8F4EOpX.png',
         buttons: [
           {
-            type: "web_url", url: "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}", title: "Show Challenges", messenger_extensions: true
+            type: "web_url", url: "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}", title: "My Challenges", messenger_extensions: true
           }
         ]
       }

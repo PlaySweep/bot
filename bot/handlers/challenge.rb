@@ -17,11 +17,11 @@ module Commands
       @api.fetch_user(user.id)
       if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
         challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        text = build_text_for(resource: :challenges, object: challenges, options: :message)
-        quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
+        build_text_for(resource: :challenges, object: challenges, options: :message)
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         short_wait(:message)
-        show_button("Show Challenges", text, quick_replies, url)
+        #TODO make api call to populate random category gif
+        show_media_with_button(user.id, 'challenges', [1261118024018248, 1261118190684898, 1261118400684877].sample, quick_replies)
         stop_thread
       else
         short_wait(:message)
@@ -47,14 +47,13 @@ module Commands
       @api.fetch_user(user.id)
       if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
         challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        text = build_text_for(resource: :challenges, object: challenges, options: :postback)
-        quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-        url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-        short_wait(:postback)
-        show_button("Show Challenges", text, quick_replies, url)
+        build_text_for(resource: :challenges, object: challenges, options: :message)
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+        short_wait(:message)
+        #TODO make api call to populate random category gif
+        show_media_with_button(user.id, 'challenges', [1261118024018248, 1261118190684898, 1261118400684877].sample, quick_replies)
         stop_thread
       else
-        short_wait(:postback)
         say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
         stop_thread
       end

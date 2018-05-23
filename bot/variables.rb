@@ -24,12 +24,9 @@ module Commands
 
   def show_media_with_button user_id, endpoint, message_attachment, quick_replies
     case endpoint
-    when 'dashboard'
-      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
-      title = "View Dashboard"
     when 'challenges'
       url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
-      title = "View Challenges"
+      title = "My Challenges"
     when 'status'
       url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
       title = "View Status"

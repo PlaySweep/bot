@@ -8,7 +8,7 @@ module Commands
       stop_thread
     when :show_sports
       message.typing_on
-      say "Tap on the sport bubbles when you see them to begin making your picks 👍", quick_replies: ["Select picks", "Status", "How to play"]
+      say "Tap on the sport bubbles when you see them to begin making your picks 👍", quick_replies: ["Select picks", "Status"]
       stop_thread
     when :blow_steam
       message.typing_on

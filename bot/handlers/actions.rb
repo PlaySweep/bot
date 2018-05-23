@@ -5,37 +5,28 @@ module Commands
     case message.quick_reply
     when 'Yes Lifeline'
       if @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.current_streak == 0)
-        message.typing_on
+        short_wait(:message)
         say "Hold up #{@api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{@api.user.current_streak}, did you? That's crazy talk."
-        sleep 1.5
-        message.typing_on
-        sleep 1.5
-        say "Emma's got you. Tap the options below to get back to it 👇", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+        short_wait(:message)
+        say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
         stop_thread
       else
         if @api.user.data.sweep_coins < 30
-          say "You do not have enough Sweepcoins for a lifeline. Keep playing to earn more, or invite some friends!", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"], ["Invite Friends", "Invite Friends"]]
+          say "You do not have enough Sweepcoins for a lifeline. Keep playing to earn more, or invite some friends!", quick_replies: ["Select picks", "Status", "Invite Friends"]
           stop_thread
         else
           use_lifeline
           @api.fetch_user(user.id)
-          message.typing_on
+          short_wait(:message)
           say "Sweet! Let me go update that real quick..."
-          sleep 1.5
-          message.typing_on
-          sleep 1.5
-          say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥"
-          sleep 1.5
-          message.typing_on
-          sleep 2
-          say "Your new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
+          short_wait(:message)
+          say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
           stop_thread
         end
       end
     when 'No Lifeline'
-      message.typing_on
-      say "Ok, I'll hold off for now 👌", quick_replies: [["Select picks", "Select picks"], ["Status", "Status"]]
-      message.typing_off
+      short_wait(:message)
+      say "Ok, I'll hold off for now 👌", quick_replies: ["Select picks", "Status"]
       stop_thread
     else
       redirect(:lifeline)
@@ -78,10 +69,12 @@ module Commands
     sleep 1
     if @api.user.data.pending_balance >= @api.challenge.wager.coins
       @api.update('challenges', id, { :accept => true }, user.id)
-      text = "Challenge accepted 👍\n\nView your current/pending challenges below 👇"
-      quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-      show_button("My Challenges", text, quick_replies, url)
+      short_wait(:message)
+      say "Challenge accepted 👍"
+      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      short_wait(:message)
+      #TODO make api call to populate random category gif
+      show_media_with_button(user.id, 'challenges', 1261098830686834, quick_replies)
       stop_thread
     else
       say "You do not have enough Sweepcoins to accept this challenge 😤\n\nInvite some friends or respond with a new wager amount 👍", quick_replies: ["Invite friends", "Challenges"]
@@ -93,10 +86,12 @@ module Commands
   def decline_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :decline => true }, user.id)
-    text = "Challenge declined 👎\n\nView your current/pending challenges below 👇"
-    quick_replies = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-    url = "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}"
-    show_button("My Challenges", text, quick_replies, url)
+    short_wait(:message)
+    say "Challenge declined 👎"
+    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    short_wait(:message)
+    #TODO make api call to populate random category gif
+    show_media_with_button(user.id, 'challenges', 1261101310686586, quick_replies)
     stop_thread
   end
 

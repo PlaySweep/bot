@@ -3,10 +3,10 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     challenge_options = ["Challenges", "Challenge friends", "Challenge time?"]
-    select_picks_options = ["Select picks", "Make picks", "Start pickin'"]
     if current_status == :winning_streak
+      #TODO show gif button for winning streak
       show_my_picks(:message)
-      quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
       text = build_text_for(resource: :status, object: @api.user, options: current_status)
       url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
       short_wait(:message)
@@ -15,7 +15,7 @@ module Commands
     else
       if current_status == :should_use_lifeline
         show_my_picks(:message)
-        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
@@ -23,7 +23,7 @@ module Commands
         stop_thread
       elsif current_status == :should_use_lifeline_but_cant
         show_my_picks(:message)
-        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
@@ -31,7 +31,7 @@ module Commands
         stop_thread
       elsif current_status == :losing_streak
         show_my_picks(:message)
-        quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
@@ -39,7 +39,7 @@ module Commands
         stop_thread
       else
         show_my_picks(:message)
-        quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }]
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
         text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:message)
@@ -53,10 +53,10 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     challenge_options = ["Challenges", "Challenge friends", "Challenge time?"]
-    select_picks_options.sample = ["Pick em'", select_picks_options.sample, "Make picks", "Start pickin'"]
     if current_status == :winning_streak
+      #TODO show gif button for winning streak
       show_my_picks(:postback)
-      quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
       text = build_text_for(resource: :status, object: @api.user, options: current_status)
       url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
       short_wait(:postback)
@@ -65,7 +65,7 @@ module Commands
     else
       if current_status == :should_use_lifeline
         show_my_picks(:postback)
-        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
@@ -73,7 +73,7 @@ module Commands
         stop_thread
       elsif current_status == :should_use_lifeline_but_cant
         show_my_picks(:postback)
-        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
@@ -81,7 +81,7 @@ module Commands
         stop_thread
       elsif current_status == :losing_streak
         show_my_picks(:postback)
-        quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
         text = build_text_for(resource: :status, object: @api.user, options: current_status)
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
@@ -89,7 +89,7 @@ module Commands
         stop_thread
       else
         show_my_picks(:postback)
-        quick_replies = [{ content_type: 'text', title: select_picks_options.sample, payload: "SELECT PICKS" }]
+        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
         text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
         url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
         short_wait(:postback)
