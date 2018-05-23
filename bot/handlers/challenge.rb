@@ -76,9 +76,8 @@ module Commands
   end
 
   def handle_query_users
-    message.typing_on
+    short_wait(:message)
     say "Type your friends name below and I'll go find em' 👇", quick_replies: ["Nevermind"]
-    message.typing_off
     next_command :handle_find_friend
   end
 
@@ -87,7 +86,7 @@ module Commands
     say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     @api = Api.new
     @api.fetch_user(user.id)
-    @api.query_users(message.text)
+    @api.query_users(strip_emoji(message.text))
     if @api.user_list.map(&:full_name).empty?
       quick_replies = ["Invite friends", "Try again", "Nevermind"]
       friend = message.text
@@ -104,7 +103,7 @@ module Commands
     say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     @api = Api.new
     @api.fetch_user(user.id)
-    matchups = @api.query_matchups(message.text.gsub!("'", ""))
+    matchups = @api.query_matchups(strip_emoji(message.text))
     if matchups.size > 0
       matchup = matchups.first
       case matchup.type
@@ -206,14 +205,23 @@ module Commands
     when 'TRY AGAIN'
       handle_query_users
     else
-      user.session[:challenge_details] = {}
-      user.session[:challenge_details][:attempts] = 0
-      friend = message.text
-      user.session[:challenge_details][:full_name] = friend
       id = eval(message.quick_reply.split(' ')[-1])
-      user.session[:challenge_details][:user_id] = id
-      say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: ["Matchup", "Most wins"]
-      next_command :handle_challenge_type
+      if id.to_i == user.id.to_i
+        short_wait(:message)
+        say "Hehe ☺️"
+        medium_wait(:message)
+        say "I agree, challenging yourself really is the only way to grow...\n\nBut for today, you'll have to stick to friends 😉"
+        short_wait(:message)
+        handle_query_users
+      else
+        user.session[:challenge_details] = {}
+        user.session[:challenge_details][:attempts] = 0
+        friend = message.text
+        user.session[:challenge_details][:full_name] = friend
+        user.session[:challenge_details][:user_id] = id
+        say "What kind of challenge would you like to send #{friend.split(' ')[0]}?", quick_replies: ["Matchup", "Most wins"]
+        next_command :handle_challenge_type
+      end
     end
   end
 

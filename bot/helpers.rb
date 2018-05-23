@@ -146,6 +146,11 @@ def capture_responses message
     }
     Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   end
-  say RANDOM.sample, quick_replies: ["Send feedback"]
+  quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
+  say RANDOM.sample, quick_replies: [quick_reply_options.sample]
   stop_thread
+end
+
+def strip_emoji text
+  text.gsub(/[^\p{L}\s]+/, '').squeeze(' ').strip
 end

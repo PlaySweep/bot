@@ -10,7 +10,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "This is a game of streaks, {{user_first_name}}!\n\nWhether it's 4 wins or 4 losses, we'll reward you with Amazon 💰\n\n100% Free. 100% Fun. Forever."
+        text: "Welcome to Sweep {{user_first_name}}, a game of streaks 💫\n\nWhether it's 4 wins or 4 losses, I reward you with in-app prizes and Amazon cash 💰\n\n💯 percent free!"
       }
     ]
   }
@@ -26,11 +26,6 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: 'Dashboard 🙌',
-                type: 'postback',
-                payload: 'DASHBOARD'
-              },
-              {
                 title: 'Select Picks 👆',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
@@ -44,11 +39,6 @@ module Profile
                 title: 'Challenges 🤝',
                 type: 'postback',
                 payload: 'CHALLENGE'
-              },
-              {
-                title: 'My Picks 🤑',
-                type: 'postback',
-                payload: 'MY PICKS' 
               }
             ]
           },
@@ -58,28 +48,26 @@ module Profile
             payload: 'INVITE FRIENDS'
           },
           {
-            type: 'nested',
-            title: 'Notifications & Help 👾',
-            call_to_actions: [
-              {
-                title: 'Notifications 👋',
-                type: 'postback',
-                payload: 'MANAGE NOTIFICATIONS'
-              },
-              # {
-              #   title: 'AD TEST',
-              #   type: 'postback',
-              #   payload: 'SINGLE_MATCHUP FALCONS CARDINALS'
-              # },
-              {
-                title: 'How to Play 🤷‍♀️',
-                type: 'web_url',
-                url: "#{ENV['WEBVIEW_URL']}/help",
-                messenger_extensions: true,
-                webview_height_ratio: 'full'
-              }
-            ]
+            title: 'Notifications 👋',
+            type: 'postback',
+            payload: 'MANAGE NOTIFICATIONS'
           }
+          # {
+          #   type: 'nested',
+          #   title: 'Notifications & Help 👾',
+          #   call_to_actions: [
+          #     {
+          #       title: 'Notifications 👋',
+          #       type: 'postback',
+          #       payload: 'MANAGE NOTIFICATIONS'
+          #     },
+          #     {
+          #       title: 'AD TEST',
+          #       type: 'postback',
+          #       payload: 'SINGLE_MATCHUP FALCONS CARDINALS'
+          #     },
+          #   ]
+          # }
         ]
       }
     ]

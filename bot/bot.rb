@@ -13,15 +13,18 @@ HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { acc
 
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
+EMAIL_PROMPT = UI::QuickReplies.email
 
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |msg|
   say "🎥" if msg.message.messaging['message']['attachments'] && msg.message.messaging['message']['attachments'].any?
   listen_for_select_picks
-  listen_for_dashboard
+  # listen_for_location
+  listen_for_email
+  # listen_for_dashboard
   listen_for_status
-  listen_for_my_picks
+  # listen_for_my_picks
   listen_for_challenge
   listen_for_sweepcoins
   listen_for_invite_friends
@@ -29,8 +32,8 @@ Rubotnik.route :message do |msg|
   listen_for_actions
   listen_for_feedback
   listen_for_notifications
-  listen_for_how_to_play
-  listen_for_sweepstore
+  # listen_for_how_to_play
+  # listen_for_sweepstore
 
   default do
     capture_responses(message.text)
@@ -41,10 +44,10 @@ end
 Rubotnik.route :postback do
   listen_for_start_postback
   # listen_for_ads_postback
-  listen_for_dashboard_postback
+  # listen_for_dashboard_postback
   listen_for_select_picks_postback
   listen_for_status_postback
-  listen_for_my_picks_postback
+  # listen_for_my_picks_postback
   listen_for_challenge_postback
   listen_for_invite_friends_postback
   listen_for_actions_postback

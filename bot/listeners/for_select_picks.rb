@@ -9,14 +9,14 @@ def listen_for_select_picks_postback
       say PICKS.sample, quick_replies: sports
       next_command :entry_to_show_sports
     else
-      say "Nothing left to pick from. Check back later.", quick_replies: ["Status", "Challenges"]
-      stop_thread
+      entry_to_no_sports_available
     end
   end
 end
 
 def single_match
-  keywords = ['games', 'matchups', 'nba', 'basketball', 'football', 'ncaab']
+  #TODO add 'picks'
+  keywords = ['games', 'pick', 'picks', 'bet', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   if matched.any?
@@ -33,7 +33,7 @@ def single_match
 end
 
 def double_match
-  keywords = ['start sweeping', 'make picks', 'select picks', 'more sports', 'college basketball']
+  keywords = ['start sweeping', 'more sports', "start pickin'", ]
   msg = message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase }
   matched = (keywords & msg)
   if matched.any?
