@@ -68,7 +68,7 @@ module Commands
       show_button("Available Games", "Need a sneak peek? Check the available games and then tell me what matchup you want and I'll select it for you 😉", quick_replies, url)
       next_command :handle_find_matchup
     else
-      example = ["Lakers or Tom Brady", "Yankees or Lebron James"]
+      example = ["Lakers or Tom Brady", "Yankees or Lebron"]
       say "Tell me what matchup you're looking for, like #{example.sample} and I'll find it for you 😉", quick_replies: ['Nevermind']
       next_command :handle_find_matchup
     end
@@ -126,7 +126,11 @@ module Commands
   end
 
   def type_wager_amount
-    say "Type in your wager amount below 🤑"
+    @api = Api.new
+    @api.fetch_user(user.session[:challenge_details][:user_id])
+    friend_balance = @api.user.data.pending_balance
+    user.session[:challenge_details][:friend_balance] = friend_balance
+    say "Type in your wager amount below (max: #{friend_balance}) 🤑"
     next_command :handle_wager_response
   end
 
@@ -183,6 +187,10 @@ module Commands
     if message.text.to_i == 0
       say "You sure you want to wager #{friend} for 0 Sweepcoins?", quick_replies: ["Send it", "No, I screwed up"]
       next_command :confirm_challenge_details
+    elsif user.session[:challenge_details][:friend_balance] < message.text.to_i
+      say "You are over the wager limit for this particular friend..."
+      short_wait(:message)
+      type_wager_amount
     elsif @api.user.data.pending_balance >= message.text.to_i
       user.session[:challenge_details][:coins] = message.text.to_i
       say "Great! You ready to challenge #{friend} for #{message.text} Sweepcoins?", quick_replies: ["Send it", "No, I screwed up"]
