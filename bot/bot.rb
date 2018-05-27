@@ -22,9 +22,7 @@ Rubotnik.route :message do |msg|
   listen_for_select_picks
   # listen_for_location
   listen_for_email
-  # listen_for_dashboard
   listen_for_status
-  # listen_for_my_picks
   listen_for_challenge
   listen_for_sweepcoins
   listen_for_invite_friends
@@ -32,8 +30,6 @@ Rubotnik.route :message do |msg|
   listen_for_actions
   listen_for_feedback
   listen_for_notifications
-  # listen_for_how_to_play
-  # listen_for_sweepstore
 
   default do
     capture_responses(message.text)

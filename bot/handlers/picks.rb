@@ -122,7 +122,7 @@ module Commands
           quick_replies: ["More sports", "Status", "Invite friends"]
         },
         { 
-          text: "That's all she wrote for #{sport}. She as in me, Emma ☺️\n\nDon't forget to get out there and challenge your friends!", 
+          text: "That's all she wrote for #{sport}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
@@ -138,7 +138,7 @@ module Commands
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
-          text: "Do your fingers ever get tired? My brain does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
+          text: "Do your fingers ever get tired? My processor does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
           quick_replies: ["More sports", "Status"]
         },
       ]

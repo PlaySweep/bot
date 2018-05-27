@@ -130,7 +130,8 @@ module Commands
     @api.fetch_user(user.session[:challenge_details][:user_id])
     friend_balance = @api.user.data.pending_balance
     user.session[:challenge_details][:friend_balance] = friend_balance
-    say "Type in your wager amount below (max: #{friend_balance}) 🤑"
+    @api.fetch_user(user.id)
+    say "With a pending balance of #{@api.user.data.pending_balance}, type in your wager amount below (max: #{friend_balance}) 🤑"
     next_command :handle_wager_response
   end
 
@@ -151,15 +152,10 @@ module Commands
     friend = user.session[:challenge_details][:full_name]
     say "#{selection.name} ✅"
     short_wait(:message)
-    say "With a pending Sweepcoin balance of #{@api.user.data.pending_balance}"
-    short_wait(:message)
     type_wager_amount
   end
 
   def handle_wager_input_for_duration
-    @api = Api.new
-    @api.fetch_user(user.id)
-    say "With a pending Sweepcoin balance of #{@api.user.data.pending_balance}"
     short_wait(:message)
     type_wager_amount
   end
@@ -239,7 +235,7 @@ module Commands
       @api = Api.new
       @api.fetch_challenge_type(message.quick_reply.downcase)
       user.session[:challenge_details][:type_id] = @api.challenge_type.id
-      say "How long would you like the duration of this challenge to be?", quick_replies: ["3 days", "A week", "A month"]
+      say "I have some quick options below for you, but you can also type the number of days you would like this challenge to last ⌚️", quick_replies: ["3 days", "A week", "A month"]
       next_command :handle_duration_challenge_details
     when 'MATCHUP'
       @api = Api.new
@@ -259,19 +255,19 @@ module Commands
     when '3 DAYS'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 3
-      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
+      say "Ok 😇, I'll set the challenge for #{user.session[:challenge_details][:days]} days..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A WEEK'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 7
-      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
+      say "Ok 😇, I'll set the challenge for #{user.session[:challenge_details][:days]} days..."
       short_wait(:message)
       handle_wager_input_for_duration
     when 'A MONTH'
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = 30
-      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
+      say "Ok 😇, I'll set the challenge for #{user.session[:challenge_details][:days]} days..."
       short_wait(:message)
       handle_wager_input_for_duration
     end
@@ -282,7 +278,7 @@ module Commands
     if days > 0
       full_name = user.session[:challenge_details][:full_name]
       user.session[:challenge_details][:days] = days
-      say "I've got a #{user.session[:challenge_details][:days]} day challenge for the most wins against #{full_name}..."
+      say "Ok 😇, I'll set the challenge for #{user.session[:challenge_details][:days]} days..."
       short_wait(:message)
       handle_wager_input_for_duration
     else
