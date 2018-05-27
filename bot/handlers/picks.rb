@@ -22,24 +22,23 @@ module Commands
   end
 
   def handle_no_sports_available
+    @api = Api.new
+    @api.fetch_user(user.id)
     #TODO possibly add a call to special list of matchups in exchange for sweepcoins
+    #TODO make options dynamic based on users data
+
     options = [
       {
-        text: "No overtime here. That's it. I'll see you soon.\n\nBut hey, you can challenge your friends in the meantime? 👯💰",
+        text: "No overtime here...yet ⏳\n\nBut I bet one of your friends would ❤️ to try to take you in a challenge 🙊💰",
         quick_replies: ["More sports", "Status", "Challenges"]
       },
       {
-        text: "I've looked, but there's nothing else to predict. Well...ok, there is, but can we chill for a bit? \n\nI promise to bug you as soon as I find more 😉",
+        text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add some more 🐞",
         quick_replies: ["More sports", "Status", "Notifications"]
       },
-      {
-        text: "Nothing else to see here. Maybe call your Dad? Tell him about your picks...or your Mom. I'm pretty forward thinking too ya know ☎️",
-        quick_replies: ["More sports", "Status", "Notifications"]
-      },
-      { 
-        text: "Donezo. Kaput. Finito. I like your style...we should email sometime 🙂", 
-        quick_replies: ["More sports", "Status", "Email me 💌"]
-      }
+      @api.user.email.empty? ? 
+      { text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", quick_replies: ["More sports", "Status", "Email me 💌"]}, : 
+      { text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", quick_replies: ["More sports", "Status", "Invite friends"]},
     ]
     sample = options.sample
     say sample.text, quick_replies: sample.quick_replies

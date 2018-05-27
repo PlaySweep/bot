@@ -5,6 +5,7 @@ module Commands
     full_name = @api.user.full_name
     short_wait(:message)
     feedback = message.text
+    #TODO add prod ids
     [1594944847261256].each do |facebook_uuid|
       message_options = {
         messaging_type: "UPDATE",
@@ -20,7 +21,7 @@ module Commands
     say "Thank you 😇"
     short_wait(:message)
     #TODO more options
-    options = ["I'm already feeling more self aware 🤓"]
+    options = ["I'm already feeling more self aware 🤓", "That wasn't so hard 😌"]
     say options.sample, quick_replies: ['Select picks', 'Status']
     stop_thread
   end
