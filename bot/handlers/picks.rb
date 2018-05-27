@@ -33,12 +33,12 @@ module Commands
         quick_replies: ["More sports", "Status", "Challenges"]
       },
       {
-        text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add some more 🐞",
+        text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add more games 🐞",
         quick_replies: ["More sports", "Status", "Notifications"]
       },
-      @api.user.email.empty? ? 
-      { text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", quick_replies: ["More sports", "Status", "Email me 💌"]}, : 
-      { text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", quick_replies: ["More sports", "Status", "Invite friends"]},
+      @api.user.email.nil? ? 
+      { text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", quick_replies: ["More sports", "Status", "Email me 💌"]} : 
+      { text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", quick_replies: ["More sports", "Status", "Invite friends"]}
     ]
     sample = options.sample
     say sample.text, quick_replies: sample.quick_replies
@@ -49,6 +49,7 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     #TODO Better button handling for unexpected requests
+    qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     say "Make sure you tap the team bubbles when making your picks so I can track em' properly 😉", quick_replies: ["Select picks", "Status"] and stop_thread and return if (!message.quick_reply && message.text)
     show_button("Show Challenges", "Sorry, I was too focused on making picks 🙈\n\nTap below to respond to any pending challenges 👇", qr, "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}") and stop_thread and return if (message.quick_reply.split(' ')[1] == 'CHALLENGE')
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
@@ -68,24 +69,23 @@ module Commands
       "The #{sport} SAT starts now...think you can do better than you did back in high school 🤐",
       "Welcome to your own personal #{sport} Vegas 🤑"
     ]
+    short_wait(:message)
     say options.sample unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
     if matchup_id && selected_id
       params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
       @api.update('users', user.id, { :user => {:active => true} }) unless @api.user.active
       #TODO temporary method 👇
-      update_user_info unless (@api.user.profile_pic || @api.user.gender || @api.user.timezone)
-      message.typing_on
-      sleep 1
+      short_wait(:message)
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
-      message.typing_on
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
-      sleep 1
+      short_wait(:message)
       fetch_matchup(sport, @api.matchups.first)
     else
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       fetch_matchup(sport, @api.matchups.first)
     end
+    update_user_info unless @api.user.data.daily_picked
   end
 
   def skip
@@ -164,16 +164,17 @@ module Commands
   end
 
   def update_user_info
-    @api = Api.new
-    @api.fetch_fb_user(user.id)
+    conn = Faraday.new(:url => "https://graph.facebook.com/v2.9/#{user.id}?fields=profile_pic,gender,timezone&access_token=#{ENV['ACCESS_TOKEN']}")
+    response = conn.get
+    fb_user = JSON.parse(response.body)
     params = { :user => 
       { 
-        :profile_pic => @api.fb_user.has_key?('profile_pic') ? @api.fb_user.profile_pic : nil, 
-        :gender => @api.fb_user.has_key?('gender') ? @api.fb_user.gender : nil, 
-        :timezone => @api.fb_user.has_key?('timezone') ? @api.fb_user.timezone : nil 
+        :profile_pic => fb_user.has_key?('profile_pic') ? fb_user.profile_pic : nil, 
+        :gender => fb_user.has_key?('gender') ? fb_user.gender : nil, 
+        :timezone => fb_user.has_key?('timezone') ? fb_user.timezone : nil 
       } 
     }
+    @api = Api.new
     @api.update('users', user.id, params)
-    puts "User updated 👍"
   end
 end

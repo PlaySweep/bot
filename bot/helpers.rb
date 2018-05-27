@@ -1,7 +1,7 @@
 def build_payload_for resource, data
   case resource
   when 'users'
-    data.map(&:full_name).first(4).each_slice(1).to_a.each_with_index do |user, index|
+    data.map(&:full_name).first(5).each_slice(1).to_a.each_with_index do |user, index|
       user.push("#{data[index].full_name} #{data[index].facebook_uuid}")
     end
   when 'matchup'
@@ -49,14 +49,12 @@ def build_text_for resource:, object:, options: nil
       pending.size == 1 ? challenges = 'challenge' : challenges = 'challenges'
       short_wait(options)
       say "I got #{pending.size} pending #{challenges} for you ☺️"
-      short_wait(options)
-      say "You know, if my friends were just giving away Sweepcoins, I wouldn't wait around too long to accept 😜"
+      #TODO add more sayings
     elsif (accepted.size > 0)
       accepted.size == 1 ? challenges = 'challenge' : challenges = 'challenges'
       short_wait(options)
       say "I count #{accepted.size} active #{challenges} 😎"
-      short_wait(options)
-      say "I hope you're winning 🏆"
+      #TODO add more sayings
     end
   end
   text

@@ -64,23 +64,14 @@ module Commands
 
   def accept_challenge_action id
     @api = Api.new
-    @api.fetch_user(user.id)
-    @api.fetch_challenge(user.id, id)
-    sleep 1
-    if @api.user.data.pending_balance >= @api.challenge.wager.coins
-      @api.update('challenges', id, { :accept => true }, user.id)
-      short_wait(:message)
-      say "Challenge accepted 👍"
-      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      short_wait(:message)
-      #TODO make api call to populate random category gif
-      show_media_with_button(user.id, 'challenges', 1261098830686834, quick_replies)
-      stop_thread
-    else
-      say "You do not have enough Sweepcoins to accept this challenge 😤\n\nInvite some friends or respond with a new wager amount 👍", quick_replies: ["Invite friends", "Challenges"]
-      @api.update('challenges', id, { :decline => true, :reason => :insufficient_funds }, user.id)
-      stop_thread
-    end
+    @api.update('challenges', id, { :accept => true }, user.id)
+    short_wait(:message)
+    say "Challenge accepted 👍"
+    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    short_wait(:message)
+    #TODO make api call to populate random category gif
+    show_media_with_button(user.id, 'challenges', 1261098830686834, quick_replies)
+    stop_thread
   end
 
   def decline_challenge_action id

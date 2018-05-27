@@ -64,9 +64,15 @@ class Api
     @matchup = JSON.parse(response.body)['matchup']
   end
 
-  def fetch_friends id
-    response = @conn.get("users/#{id}/friends")
-    @friends = JSON.parse(response.body)['friends']
+  def fetch_friends id, param=nil
+    case param
+    when :most_popular
+      response = @conn.get("users/#{id}/friends?most_popular=true")
+      @friends = JSON.parse(response.body)['friends']
+    else
+      response = @conn.get("users/#{id}/friends")
+      @friends = JSON.parse(response.body)['friends']
+    end
   end
 
   def fetch_picks id, param=nil

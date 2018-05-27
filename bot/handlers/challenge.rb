@@ -6,7 +6,7 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
       @api = Api.new
-      @api.fetch_friends(user.id)
+      @api.fetch_friends(user.id, :most_popular)
       quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
       say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
@@ -21,7 +21,8 @@ module Commands
         quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         short_wait(:message)
         #TODO make api call to populate random category gif
-        show_media_with_button(user.id, 'challenges', [1261118024018248, 1261118190684898, 1261118400684877].sample, quick_replies)
+        challenge_gifs = [1261118024018248, 1261118190684898, 1261118400684877]
+        show_media_with_button(user.id, 'challenges', challenge_gifs.sample, quick_replies)
         stop_thread
       else
         short_wait(:message)
@@ -36,7 +37,7 @@ module Commands
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
       @api = Api.new
-      @api.fetch_friends(user.id)
+      @api.fetch_friends(user.id, :most_popular)
       quick_replies = build_payload_for('users', @api.friends)
       message.typing_on
       say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
@@ -51,7 +52,8 @@ module Commands
         quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         short_wait(:message)
         #TODO make api call to populate random category gif
-        show_media_with_button(user.id, 'challenges', [1261118024018248, 1261118190684898, 1261118400684877].sample, quick_replies)
+        challenge_gifs = [1261118024018248, 1261118190684898, 1261118400684877]
+        show_media_with_button(user.id, 'challenges', challenge_gifs.sample, quick_replies)
         stop_thread
       else
         say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
@@ -235,7 +237,7 @@ module Commands
       @api = Api.new
       @api.fetch_challenge_type(message.quick_reply.downcase)
       user.session[:challenge_details][:type_id] = @api.challenge_type.id
-      say "I have some quick options below for you, but you can also type the number of days you would like this challenge to last ⌚️", quick_replies: ["3 days", "A week", "A month"]
+      say "Tap the quick options below, or type the number of days you would like this challenge to last ⌚️", quick_replies: ["3 days", "A week", "A month"]
       next_command :handle_duration_challenge_details
     when 'MATCHUP'
       @api = Api.new
@@ -314,7 +316,8 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenges", "Select picks", "Status"]
+        friend = user.session[:challenge_details][:full_name].split(' ')[0]
+        say "Sent! I'll let you know when #{friend} responds 👍", quick_replies: ["Challenges", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       else
@@ -328,7 +331,8 @@ module Commands
           } 
         }
         send_challenge_request(user.id, params)
-        say "Sent! We'll let you know when they accept 👍", quick_replies: ["Challenges", "Select picks", "Status"]
+        friend = user.session[:challenge_details][:full_name].split(' ')[0]
+        say "Sent! I'll let you know when #{friend} responds 👍", quick_replies: ["Challenges", "Select picks", "Status"]
         user.session[:challenge_details] = {}
         stop_thread
       end

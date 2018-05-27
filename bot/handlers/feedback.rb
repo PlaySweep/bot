@@ -1,5 +1,7 @@
 module Commands
   def handle_feedback
+    qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    show_button("Show Challenges", "Sorry, I was too focused on sending feedback 🙈\n\nTap below to respond to any pending challenges 👇", qr, "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}") and stop_thread and return if (message.quick_reply.split(' ')[1] == 'CHALLENGE')
     @api = Api.new
     @api.fetch_user(user.id)
     full_name = @api.user.full_name
