@@ -46,6 +46,7 @@ def send_confirmation referral_id
   new_user = @api.fetch_user(user.id)
   referrer = @api.fetch_user(referral_id)
   $tracker.track(@api.user.id, 'User Was Referred')
+
   menu = [
     {
       content_type: 'text',
