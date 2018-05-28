@@ -75,17 +75,18 @@ module Commands
       params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
       @api.update('users', user.id, { :user => {:active => true} }) unless @api.user.active
-      #TODO temporary method 👇
+      short_wait(:message)
+      say "+1 Sweepcoin for your Daily Pick 💰!" unless @api.user.data.daily_picked
       short_wait(:message)
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       short_wait(:message)
       fetch_matchup(sport, @api.matchups.first)
+      update_user_info unless @api.user.data.daily_picked
     else
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       fetch_matchup(sport, @api.matchups.first)
     end
-    update_user_info unless @api.user.data.daily_picked
   end
 
   def skip
@@ -133,7 +134,7 @@ module Commands
           quick_replies: ["More sports", "Status", "Notifications"]
         },
         { 
-          text: "All finished with #{sport}!\n\nWant more action? Make sure to challenge your friends for some Sweepcoins and bragging rights 🤑💪", 
+          text: "All finished with #{sport}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
