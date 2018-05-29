@@ -2,7 +2,7 @@ module Commands
   def handle_challenge_intro
     #TODO update unexpected response messaging
     say "Ahh yep, sorry that was my bad...head back into challenges to accept or decline your friends request 👍", quick_replies: ['Challenges'] and stop_thread and return if (['accept', 'decline'].include?(message.text.downcase.split(' ')[0]))
-    say "Ok, carry on with your life" and stop_thread and return if (message.text.upcase != message.quick_reply)
+    say "Ok 😇" and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
       @api = Api.new
@@ -26,14 +26,14 @@ module Commands
         stop_thread
       else
         short_wait(:message)
-        say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
+        say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
         stop_thread
       end
     end
   end
 
   def handle_challenge_intro_postback
-    say "Ok, carry on with your life" and stop_thread and return if (message.text.upcase != message.quick_reply)
+    say "Ok 😇" and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply
     when 'CHALLENGE FRIENDS'
       @api = Api.new
@@ -56,7 +56,7 @@ module Commands
         show_media_with_button(user.id, 'challenges', challenge_gifs.sample, quick_replies)
         stop_thread
       else
-        say "No challenges in flight 🛬", quick_replies: ['Challenges', 'Select picks', 'Status']
+        say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
         stop_thread
       end
     end

@@ -91,27 +91,26 @@ def for_in_flight upcoming, in_progress
 end
 
 def build_card_for resource, data
-  case resource
-  when :challenge
-    pending_count, accepted_count = 0, 0
-    status = data.map(&:status)
-    status.each do |challenge_status|
-      pending_count += 1 if challenge_status == 'Pending'
-      accepted_count += 1 if challenge_status == 'Accepted'
-    end
-    card = [
-      {
-        title: "Pending: #{pending_count} | Active: #{accepted_count}",
-        # TODO challenge image
-        image_url: 'https://i.imgur.com/8F4EOpX.png',
-        buttons: [
-          {
-            type: "web_url", url: "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}", title: "My Challenges", messenger_extensions: true
-          }
-        ]
-      }
-    ]
-  end
+  # case resource
+  # when :challenge
+  #   pending_count, accepted_count = 0, 0
+  #   status = data.map(&:status)
+  #   status.each do |challenge_status|
+  #     pending_count += 1 if challenge_status == 'Pending'
+  #     accepted_count += 1 if challenge_status == 'Accepted'
+  #   end
+  #   card = [
+  #     {
+  #       title: "Pending: #{pending_count} | Active: #{accepted_count}",
+  #       image_url: 'https://i.imgur.com/8F4EOpX.png',
+  #       buttons: [
+  #         {
+  #           type: "web_url", url: "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}", title: "My Challenges", messenger_extensions: true
+  #         }
+  #       ]
+  #     }
+  #   ]
+  # end
 end
 
 def build_custom_message challenge
@@ -131,8 +130,7 @@ def build_custom_message challenge
 end
 
 def capture_responses message
-  #TODO update facebook_uuids for prod 
-  [1594944847261256].each do |facebook_uuid|
+  [1566539433429514].each do |facebook_uuid|
     message_options = {
       messaging_type: "UPDATE",
       recipient: { id: facebook_uuid },

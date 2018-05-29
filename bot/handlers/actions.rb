@@ -62,15 +62,16 @@ module Commands
     end
   end
 
+  #TODO test media call
   def accept_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :accept => true }, user.id)
     short_wait(:message)
     say "Challenge accepted 👍"
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    @api.fetch_media('challenge_accepted')
     short_wait(:message)
-    #TODO make api call to populate random category gif
-    show_media_with_button(user.id, 'challenges', 1261098830686834, quick_replies)
+    show_media_with_button(user.id, 'challenges', @api.media.last(10).sample.attachment_id, quick_replies)
     stop_thread
   end
 
@@ -80,9 +81,9 @@ module Commands
     short_wait(:message)
     say "Challenge declined 👎"
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    @api.fetch_media('challenge_declined')
     short_wait(:message)
-    #TODO make api call to populate random category gif
-    show_media_with_button(user.id, 'challenges', 1261101310686586, quick_replies)
+    show_media_with_button(user.id, 'challenges', @api.media.last(10).sample.attachment_id, quick_replies)
     stop_thread
   end
 

@@ -25,7 +25,6 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     #TODO possibly add a call to special list of matchups in exchange for sweepcoins
-    #TODO make options dynamic based on users data
 
     options = [
       {
@@ -48,7 +47,6 @@ module Commands
   def handle_pick
     @api = Api.new
     @api.fetch_user(user.id)
-    #TODO Better button handling for unexpected requests
     qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     say "Make sure you tap the team bubbles when making your picks so I can track em' properly 😉", quick_replies: ["Select picks", "Status"] and stop_thread and return if (!message.quick_reply && message.text)
     show_button("Show Challenges", "Sorry, I was too focused on making picks 🙈\n\nTap below to respond to any pending challenges 👇", qr, "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}") and stop_thread and return if (message.quick_reply.split(' ')[1] == 'CHALLENGE')
@@ -106,8 +104,7 @@ module Commands
   end
 
   def fetch_matchup sport, matchup
-    if (matchup.nil? || matchup.empty?)
-      #TODO potential opportunity to throw in phone number and email 
+    if (matchup.nil? || matchup.empty?) 
       options = [
         { 
           text: "You're all caught up on #{sport}! Good luck out there 😇", 
@@ -138,7 +135,7 @@ module Commands
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
-          text: "Do your fingers ever get tired? My processor does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
+          text: "Do your fingers ever get tired? My brain does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
           quick_replies: ["More sports", "Status"]
         },
       ]

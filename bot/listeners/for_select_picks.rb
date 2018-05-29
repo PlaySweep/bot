@@ -16,7 +16,7 @@ end
 
 def single_match
   #TODO add 'picks'
-  keywords = ['games', 'pick', 'picks', 'bet', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football']
+  keywords = ['games', 'pick', 'picks', 'bet', 'bets', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football', 'sports']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   if matched.any?

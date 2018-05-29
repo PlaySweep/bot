@@ -1,5 +1,5 @@
 def listen_for_challenge
-  keywords = ['challenge friends', 'challenge', 'challenges', 'my challenges', 'challenge status', 'challenge a friend', 'friends']
+  keywords = ['challenge friends', 'challenge', 'challenges', 'my challenges', 'challenge status', 'challenge a friend']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   ignore_words = ['accept', 'decline', 'pending', 'confirm']

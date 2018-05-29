@@ -4,7 +4,6 @@ module Commands
     @api.fetch_user(user.id)
     challenge_options = ["Challenges", "Challenge friends", "Challenge time?"]
     if current_status == :winning_streak
-      #TODO show gif button for winning streak
       show_my_picks(:message)
       quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
       text = build_text_for(resource: :status, object: @api.user, options: current_status)
@@ -54,7 +53,6 @@ module Commands
     @api.fetch_user(user.id)
     challenge_options = ["Challenges", "Challenge friends", "Challenge time?"]
     if current_status == :winning_streak
-      #TODO show gif button for winning streak
       show_my_picks(:postback)
       quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: challenge_options.sample, payload: "CHALLENGE" }]
       text = build_text_for(resource: :status, object: @api.user, options: current_status)

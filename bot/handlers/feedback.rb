@@ -7,8 +7,7 @@ module Commands
     full_name = @api.user.full_name
     short_wait(:message)
     feedback = message.text
-    #TODO add prod ids
-    [1594944847261256].each do |facebook_uuid|
+    [1566539433429514].each do |facebook_uuid|
       message_options = {
         messaging_type: "UPDATE",
         recipient: { id: facebook_uuid },

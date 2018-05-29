@@ -10,7 +10,7 @@ class Api
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
                 :pick, :picks, :matchup, :matchups, :challenge_matchups, 
                 :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
-                :challenge, :challenge_type, :team, :prop, :sports
+                :challenge, :challenge_type, :team, :prop, :sports, :media
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
@@ -57,6 +57,11 @@ class Api
   def fetch_prop id
     response = @conn.get("props/#{id}")
     @prop = JSON.parse(response.body)['prop']
+  end
+
+  def fetch_media category
+    response = @conn.get("media?category=#{category}")
+    @media = JSON.parse(response.body)['media']
   end
 
   def fetch_matchup_by_teams side1, side2

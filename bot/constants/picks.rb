@@ -1,4 +1,4 @@
-PICKS = ["Tap the sports below 👇", "Pick a sport, any sport 🎱️", "Just one tap away 👇", "Just taaap it in, give it a little tappy ⛳️", "No wrong choices, just tap below 👇", "I never know what you're gonna pick over there 🤔"]
+PICKS = ["Tap the sports below 👇", "Pick a sport, any sport 🎱️", "Just one tap away 👇", "Just taaap it in, give it a little tappy ⛳️", "No wrong choices, just tap below 👇"]
 SELECT_PICKS_OPTIONS = ["Select picks", "Make picks", "Start pickin'"]
 module Commands
   def test
