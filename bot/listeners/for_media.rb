@@ -1,7 +1,6 @@
 def listen_for_media
   if message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
-    # message.messaging['message']['attachments'][0]["type"]
-    stop_thread
+    say "📷" and stop_thread and return if message.messaging['message']['attachments'][0]["type"] == 'image'
+    say "🎥" and stop_thread and return if message.messaging['message']['attachments'][0]["type"] == 'video'
   end
-  stop_thread
 end

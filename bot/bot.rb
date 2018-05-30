@@ -18,7 +18,7 @@ EMAIL_PROMPT = UI::QuickReplies.email
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |msg|
-  say "🎥" if msg.message.messaging['message']['attachments'] && msg.message.messaging['message']['attachments'].any?
+  listen_for_media
   listen_for_select_picks
   # listen_for_location
   listen_for_email
