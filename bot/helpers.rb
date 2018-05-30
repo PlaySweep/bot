@@ -29,11 +29,33 @@ def build_text_for resource:, object:, options: nil
   when :status
     case options
     when :winning_streak
-      text = "#{STATUS_HOT.sample}\n\nWinning streak is #{object.current_streak}\n\nTap below for more details 👇"
+      responses = [
+        "I am so proud of you 🤗, let's keep that streak of #{object.current_streak} going!",
+        "You're in the green, sports fiend with #{object.current_streak} straight wins 🥑", 
+        "Hot dog 🌭 you've gotta be loving that winning streak of #{object.current_streak} right about now...",
+        "Nom nom nom 🍔 you just keep on crushin' it with #{object.current_streak} wins in a row!",
+        "Those #{object.current_streak} wins in a row got you ridin' dirty 🤠",
+        "#{object.current_streak} wins in a row? I see a Sweep deep in the horizon for you 😎"
+      ]
+      text = responses.sample
     when :should_use_lifeline
-      text = "Losing streak #{object.current_losing_streak} 👍\nWinning streak #{object.current_streak} 👎\n\nSet yourself back to a winning streak of #{object.previous_streak} with a lifeline...\nOr continue the losing road to a Sweep by picking the opposite side 🙌"
+      short_wait(:message)
+      say STATUS_COLD.sample
+      responses = [
+        "Just when you thought you were out, I found a lifeline for you! Set your winning streak back to #{object.previous_streak} for 30 Sweepcoins 💸",
+        "Emma says, Would you like to use a lifeline? #{object.current_losing_streak} loss ain't bad, but you can still set your winning streak back to #{object.previous_streak} for 30 Sweepcoins 💸",
+        "I found a lifeline! Roll with #{object.current_losing_streak} loss if you want, but a streak of #{object.previous_streak} for 30 Sweepcoins is a pretty good deal 🚑",
+        "Flip the script with a lifeline and set that streak back to #{object.previous_streak} 👈"
+      ]
+      text = responses.sample
     when :should_use_lifeline_but_cant
-      text = "Your losing streak is at #{object.current_losing_streak}, but all you need is #{30 - object.data.sweep_coins} more Sweepcoins to set your winning streak back to #{object.previous_streak}\n\nInvite or challenge your friends for more 🤝"
+      responses = [
+        "You may not be a winner right now, but #{object.current_losing_streak} loss in a row doesn't make you a loser either 😑",
+        "Eh, #{object.current_losing_streak} loss in a row isn't so hot, but you can call your mom. She'll build your self esteem right back up 😃",
+        "Umm, you need a redo maybe? Invite your friends to play to get you back to #{object.previous_streak} in a row...all you need is #{30 - object.data.sweep_coins} more Sweepcoins for a lifeline 🤑",
+        "You can’t do this alone. Invite your ride or dies to Sweep for a lifeline...you're #{30 - object.data.sweep_coins} Sweepcoins away from earning a lifeline 🚑"
+      ]
+      text = responses.sample
     when :losing_streak
       text = "#{STATUS_COLD.sample}\n\nYour losing streak is #{object.current_losing_streak}\n\nMaybe picking the opposite side is your thing 🤑"
     end

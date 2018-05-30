@@ -1,30 +1,20 @@
 module Commands
   def handle_walkthrough
+    @api = Api.new
+    @api.fetch_user(user.id)
     #TODO update copy and refactor for wins and losing streaks
     case message.quick_reply
     when 'WELCOME'
-      message.typing_on
-      say "😊"
-      sleep 0.5
-      message.typing_on
-      sleep 1
-      say "As you now know, I'm Emma! Your personal Sweep agent and the future of sports gaming 🤖"
-      sleep 1
-      message.typing_on
-      sleep 1.5
-      say "Every day from here on out, I'll send you a curated list of games to pick from, for free!"
-      sleep 1
-      message.typing_on
-      sleep 1.5
-      say "And when you hit 4 wins in a row, I'll send you a digital Amazon gift card 💰", quick_replies: ["How much?"]
+      medium_wait(:message)
+      say "So how does all this stuff work? Simple."
+      short_wait(:message)
+      say "I send you games to pick and you try to hit 4 in a row 🚣‍♀️\n\n4 wins? Yup. 4 losses? Count that too 😇\n\n4 in a row of anything deserves some Amazon 💰, imo 😎", quick_replies: ["How much?"]
       next_command :handle_walkthrough
     when 'HOW MUCH?'
       message.typing_on
-      say "At the end of the day, I send out $25 worth of Amazon gift cards to winners. If there's more than 1 winner, you'll split the prize 🤑"
-      sleep 1.5
-      message.typing_on
-      sleep 2.5
-      say "On average, I send out about $3-5 per Sweep won...it's hard work, but I love it ❤️", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
+      say "The winners of these 'Sweeps' will split a daily pot of $25 🤑"
+      short_wait(:message)
+      say "I usually send out about $2-5 to winners each day...it's hard work, but I love it ❤️\n\nYou ready #{@api.user.first_name}? Don't worry, I'm just a tap or text away in case you need me 👍", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
       stop_thread
     else
       redirect(:start)

@@ -5,9 +5,9 @@ def listen_for_start_postback
       @api.find_or_create('users', user.id)
       #TODO test referral message
       update_referrer(postback.referral.ref) if postback.referral && postback.referral.ref.to_i != 0
-      text = "Hey #{@api.user.first_name}, you finally found me!"
-      postback.typing_on
-      say text, quick_replies: [["Hi, Emma!", "WELCOME"]]
+      say "Welcome to Sweep #{@api.user.first_name}, my name is Emma 👋"
+      short_wait(:postback)
+      say "If you're here to pick winners, challenge your friends, and earn some 💰...then I'm your bot 😉", quick_replies: [["Heck yeah!", "WELCOME"]]
       next_command :handle_walkthrough
     rescue NoMethodError => e
       puts "Error: #{e.inspect}"
