@@ -120,7 +120,7 @@ module Commands
   end
 
   def user_has_losing_streak?
-    @api.user.current_streak < 1 && (@api.user.current_losing_streak >= 1 || @api.user.current_losing_streak == 0)
+    @api.user.current_streak < 1 && @api.user.current_losing_streak >= 1
   end
 
   def user_can_use_lifeline?
