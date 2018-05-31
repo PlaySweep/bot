@@ -24,7 +24,7 @@ Rubotnik.route :message do |msg|
   listen_for_email
   listen_for_status
   listen_for_challenge
-  listen_for_sweepcoins
+  # listen_for_sweepcoins
   listen_for_invite_friends
   listen_for_misc
   listen_for_actions
