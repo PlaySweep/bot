@@ -19,9 +19,8 @@ module Commands
         build_text_for(resource: :challenges, object: challenges, options: :message)
         quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         short_wait(:message)
-        #TODO make api call to populate random category gif
-        challenge_gifs = [1261118024018248, 1261118190684898, 1261118400684877]
-        show_media_with_button(user.id, 'challenges', challenge_gifs.sample, quick_replies)
+        @api.fetch_media('challenge')
+        show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
         stop_thread
       else
         short_wait(:message)
@@ -50,9 +49,8 @@ module Commands
         build_text_for(resource: :challenges, object: challenges, options: :message)
         quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
         short_wait(:message)
-        #TODO make api call to populate random category gif
-        challenge_gifs = [1261118024018248, 1261118190684898, 1261118400684877]
-        show_media_with_button(user.id, 'challenges', challenge_gifs.sample, quick_replies)
+        @api.fetch_media('challenge')
+        show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
         stop_thread
       else
         say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
