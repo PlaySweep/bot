@@ -22,6 +22,16 @@ def listen_for_start_postback
       sleep 0.5
       postback.typing_on
       say "While I take care of all that for you, go ahead and get started below by typing 'Select picks'"
+      [1827403637334265].each do |facebook_uuid|
+        message_options = {
+          messaging_type: "UPDATE",
+          recipient: { id: facebook_uuid },
+          message: {
+            text: "Get started error => \n\n#{e.inspect}",
+          }
+        }
+        Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+      end
       stop_thread
     end
   end
