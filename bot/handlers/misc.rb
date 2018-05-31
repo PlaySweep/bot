@@ -2,9 +2,8 @@ module Commands
   def handle_blow_steam
     case message.quick_reply
     when "VENT"
-      say "UGHGHGHGHHH 👿!!🙄!!!😡!!!👿!!😡!!!🙄!!"
       short_wait(:message)
-      say "...Ok your turn, and then we can get back to work 👍 (staying positive, staying positive)"
+      say "...Ok get it our of your system...(staying positive, staying positive)"
       next_command :handle_let_it_out
     when "I'M OK"
       say "Well look at you, channeling your inner calm. So proud of you 😊"
