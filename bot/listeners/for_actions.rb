@@ -1,4 +1,5 @@
 def listen_for_actions
+  stop_thread and return if message.text.nil?
   for_lifeline
   for_challenge_response
 end

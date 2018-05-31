@@ -1,4 +1,5 @@
 def listen_for_status
+  stop_thread and return if message.text.nil?
   keywords = ['status', 'streak', 'wins']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)

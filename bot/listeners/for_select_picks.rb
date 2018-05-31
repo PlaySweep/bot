@@ -1,5 +1,6 @@
 def listen_for_select_picks
-  single_match || double_match
+  stop_thread and return if message.text.nil?
+  (single_match || double_match)
 end
 
 def listen_for_select_picks_postback

@@ -1,4 +1,5 @@
 def listen_for_challenge
+  stop_thread and return if message.text.nil?
   keywords = ['challenge friends', 'challenge', 'challenges', 'my challenges', 'challenge status', 'challenge a friend']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)

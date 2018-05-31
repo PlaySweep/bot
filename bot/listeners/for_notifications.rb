@@ -1,4 +1,5 @@
 def listen_for_notifications
+  stop_thread and return if message.text.nil?
   keywords = ['stop', 'unsubscribe', 'quit', 'notifications', 'notification', 'alert', 'alerts']
   if keywords.any? {|keyword| keyword == message.text.downcase }
     @api = Api.new

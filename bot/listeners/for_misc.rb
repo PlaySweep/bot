@@ -1,4 +1,5 @@
 def listen_for_misc
+  stop_thread and return if message.text.nil?
   for_blow_steam
   for_fun
   # how_do_i

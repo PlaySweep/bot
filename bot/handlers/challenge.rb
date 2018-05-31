@@ -1,5 +1,6 @@
 module Commands
   def handle_challenge_intro
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     say "Ahh yep, sorry that was my bad...head back into challenges to accept or decline your friends request 👍", quick_replies: ['Challenges'] and stop_thread and return if (['accept', 'decline'].include?(message.text.downcase.split(' ')[0]))
     say "Ok 😇" and stop_thread and return if (message.text.upcase != message.quick_reply)
     case message.quick_reply

@@ -1,4 +1,5 @@
 def listen_for_feedback
+  stop_thread and return if message.text.nil?
   keywords = ['feedback', 'send feedback', 'got questions?', 'help']
   msg = message.text.split(' ').map(&:downcase)
   multiple_keywords, multiple_msg = ['got questions?', 'send feedback', 'need help?'], message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase } 

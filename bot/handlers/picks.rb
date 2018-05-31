@@ -50,6 +50,7 @@ module Commands
   end
 
   def handle_pick
+    say "Cool 😎📷\nJust type 'make picks' to get back to selecting 👍" and stop_thread and return if message.text.nil?
     @api = Api.new
     @api.fetch_user(user.id)
     qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]

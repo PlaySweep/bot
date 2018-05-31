@@ -9,23 +9,15 @@ def listen_for_start_postback
       say "If you're here to pick winners, challenge your friends, and earn some 💰...then I'm your bot 😉", quick_replies: [["Heck yeah!", "WELCOME"]]
       next_command :handle_walkthrough
     rescue NoMethodError => e
-      puts "Error: #{e.inspect}"
-      say "Hmm 🤔..."
-      postback.typing_on
-      sleep 1.5
-      postback.typing_on
-      say "I just tried to reach out to Facebook for some of your info and they seem to be having some issues."
-      postback.typing_on
-      sleep 0.5
-      postback.typing_on
-      say "...I'm Emma btw 👋"
-      sleep 0.5
-      postback.typing_on
-      say "While I take care of all that for you, go ahead and get started below by typing 'Select picks'"
-      [1827403637334265].each do |facebook_uuid|
+      puts "GET STARTED ERROR => #{e.inspect}"
+      params = { :user => {:facebook_uuid => user.id} }
+      @api.create('users', user.id, params)
+      short_wait(:postback)
+      say "Hi there 👋, Facebook is still retrieving some of your information for me, but I can wait on that 😉\n\nYou can get started on your streak by typing anything like 'make picks' or tapping the bubbles below 🎉", quick_replies: ['Select picks', 'Status']
+      if ENV['RACK_ENV'] == 'production'
         message_options = {
           messaging_type: "UPDATE",
-          recipient: { id: facebook_uuid },
+          recipient: { id: 1827403637334265 },
           message: {
             text: "Get started error => \n\n#{e.inspect}",
           }

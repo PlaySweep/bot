@@ -24,7 +24,7 @@ Rubotnik.route :message do |msg|
   listen_for_email
   listen_for_status
   listen_for_challenge
-  # listen_for_sweepcoins
+  listen_for_sweepcoins
   listen_for_invite_friends
   listen_for_misc
   listen_for_actions
@@ -32,7 +32,7 @@ Rubotnik.route :message do |msg|
   listen_for_notifications
 
   default do
-    capture_responses(message.text)
+    capture_responses(message.text) unless message.text.nil?
   end
 
 end
@@ -40,10 +40,8 @@ end
 Rubotnik.route :postback do
   listen_for_start_postback
   # listen_for_ads_postback
-  # listen_for_dashboard_postback
   listen_for_select_picks_postback
   listen_for_status_postback
-  # listen_for_my_picks_postback
   listen_for_challenge_postback
   listen_for_invite_friends_postback
   listen_for_actions_postback

@@ -143,6 +143,10 @@ class Api
 
   def create model, id, params
     case model
+    when 'users'
+      response = @conn.post('users', params)
+      response = JSON.parse(response.body)
+      @user = response['user']
     when 'picks'
       response = @conn.post("users/#{id}/#{model}", params)
       response = JSON.parse(response.body)
