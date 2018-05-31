@@ -191,17 +191,16 @@ def build_custom_message challenge
 end
 
 def capture_responses message
-  # TODO uncomment for prod
-  # [1566539433429514].each do |facebook_uuid|
-  #   message_options = {
-  #     messaging_type: "UPDATE",
-  #     recipient: { id: facebook_uuid },
-  #     message: {
-  #       text: "Unrecognized response,\n\n#{message}",
-  #     }
-  #   }
-  #   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-  # end
+  [1566539433429514].each do |facebook_uuid|
+    message_options = {
+      messaging_type: "UPDATE",
+      recipient: { id: facebook_uuid },
+      message: {
+        text: "Unrecognized response,\n\n#{message}",
+      }
+    }
+    Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
+  end
   quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
   say RANDOM.sample, quick_replies: [quick_reply_options.sample]
   stop_thread
