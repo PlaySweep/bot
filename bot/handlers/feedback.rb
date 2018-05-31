@@ -22,8 +22,7 @@ module Commands
     # Popcorn.notify(['4805227771', '6025103385'], "Emma captured some feedback from #{full_name},\n\n#{feedback}")
     say "Thank you 😇"
     short_wait(:message)
-    #TODO more options
-    options = ["I'm already feeling more self aware 🤓", "That wasn't so hard 😌"]
+    options = ["I'm already feeling more self aware 🤓", "That wasn't so hard 😌", "Thanks for the helpful feedback 😉"]
     say options.sample, quick_replies: ['Select picks', 'Status']
     stop_thread
   end

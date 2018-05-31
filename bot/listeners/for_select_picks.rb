@@ -15,7 +15,6 @@ def listen_for_select_picks_postback
 end
 
 def single_match
-  #TODO add 'picks'
   keywords = ['games', 'pick', 'picks', 'bet', 'bets', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football', 'sports']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
@@ -33,7 +32,7 @@ def single_match
 end
 
 def double_match
-  keywords = ['start sweeping', 'more sports', "start pickin'", ]
+  keywords = ['start sweeping', 'more sports']
   msg = message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase }
   matched = (keywords & msg)
   if matched.any?

@@ -2,7 +2,6 @@ module Commands
   def handle_walkthrough
     @api = Api.new
     @api.fetch_user(user.id)
-    #TODO update copy and refactor for wins and losing streaks
     case message.quick_reply
     when 'WELCOME'
       medium_wait(:message)

@@ -1,1 +1,1 @@
-CHALLENGE = ["Bragging rights are just a few taps away 👇", "I love a good challenge, always makes things more exciting 🤗"]
+CHALLENGE = ["Things a little chummy with your friends? 🌶️ it up with some challenges 👇", "Bragging rights are just a few taps away 👇", "I love a good challenge, always makes things more exciting 🤗", "Win a few challenges and watch your Sweepcoin balance take off ✈️"]

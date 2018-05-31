@@ -3,7 +3,6 @@ def listen_for_start_postback
     begin
       @api = Api.new
       @api.find_or_create('users', user.id)
-      #TODO test referral message
       update_referrer(postback.referral.ref) if postback.referral && postback.referral.ref.to_i != 0
       say "Welcome to Sweep #{@api.user.first_name}, my name is Emma 👋"
       short_wait(:postback)

@@ -12,15 +12,13 @@ module Commands
         stop_thread
       else
         if @api.user.data.sweep_coins < 30
-          say "You do not have enough Sweepcoins for a lifeline. Keep playing to earn more, or invite some friends!", quick_replies: ["Select picks", "Status", "Invite Friends"]
+          say "You do not have enough Sweepcoins for a lifeline. Keep making picks and challenging/inviting your friends to earn more 💵", quick_replies: ["Select picks", "Status", "Invite Friends"]
           stop_thread
         else
           use_lifeline
           @api.fetch_user(user.id)
           short_wait(:message)
-          say "Sweet! Let me go update that real quick..."
-          short_wait(:message)
-          say "Great! Your streak has been set back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
+          say "Great! Your winning streak has been set back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
           stop_thread
         end
       end
@@ -62,7 +60,6 @@ module Commands
     end
   end
 
-  #TODO test media call
   def accept_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :accept => true }, user.id)
