@@ -123,7 +123,7 @@ module Commands
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
-          text: "Phew, that was tiring...even for someone as vibrant as muah 😘\n\nI'll make sure to let you know if I find some more games ⏰", 
+          text: "Phew, that was tiring...even for someone as energetic as muah 😘\n\nI'll make sure to let you know when I find some more games ⏰", 
           quick_replies: ["More sports", "Status", "Notifications"]
         },
         { 

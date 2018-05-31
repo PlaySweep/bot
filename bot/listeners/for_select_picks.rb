@@ -15,7 +15,7 @@ def listen_for_select_picks_postback
 end
 
 def single_match
-  keywords = ['games', 'pick', 'picks', 'bet', 'bets', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football', 'sports']
+  keywords = ['games', 'pick', 'picks', 'bet', 'bets', 'matchups', 'nba', 'hockey', 'baseball', 'basketball', 'football']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   if matched.any?
