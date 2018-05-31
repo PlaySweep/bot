@@ -120,7 +120,7 @@ class Api
     when 'users'
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
-      if @user.empty?
+      if @user.nil?
         fetch_fb_user(id)
         if @fb_user
           puts "Facebook user: #{@fb_user.inspect}"

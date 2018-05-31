@@ -35,9 +35,14 @@ module Commands
         text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add more games 🐞",
         quick_replies: ["More sports", "Status", "Notifications"]
       },
-      @api.user.email.nil? ? 
-      { text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", quick_replies: ["More sports", "Status", "Email me 💌"]} : 
-      { text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", quick_replies: ["More sports", "Status", "Invite friends"]}
+      { 
+        text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", 
+        quick_replies: ["More sports", "Status", "Email me 💌"]
+      },
+      { 
+        text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", 
+        quick_replies: ["More sports", "Status", "Invite friends"]
+      }
     ]
     sample = options.sample
     say sample.text, quick_replies: sample.quick_replies
