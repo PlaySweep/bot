@@ -68,7 +68,7 @@ module Commands
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     @api.fetch_media('challenge_accepted')
     short_wait(:message)
-    show_media_with_button(user.id, 'challenges', @api.media.last(10).sample.attachment_id, quick_replies)
+    show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
     stop_thread
   end
 
@@ -80,7 +80,7 @@ module Commands
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     @api.fetch_media('challenge_declined')
     short_wait(:message)
-    show_media_with_button(user.id, 'challenges', @api.media.last(10).sample.attachment_id, quick_replies)
+    show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
     stop_thread
   end
 
