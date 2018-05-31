@@ -40,13 +40,14 @@ def build_text_for resource:, object:, options: nil
       ]
       text = responses.sample
     when :winning_streak
+      object.current_streak > 1 ? wins = 'wins' : wins = 'win'
       responses = [
         "I am so proud of you 🤗, let's keep that streak of #{object.current_streak} going!",
-        "You're in the green, sports fiend with #{object.current_streak} straight wins 🥑", 
+        "You're in the green, sports fiend with #{object.current_streak} straight #{wins} 🥑", 
         "Hot dog 🌭 you've gotta be loving that winning streak of #{object.current_streak} right about now...",
-        "Nom nom nom 🍔 you just keep on crushin' it with #{object.current_streak} wins in a row!",
-        "Those #{object.current_streak} wins in a row got you ridin' dirty 🤠",
-        "#{object.current_streak} wins in a row? I see a Sweep deep in the horizon for you 😎",
+        "Nom nom nom 🍔 you just keep on crushin' it with #{object.current_streak} #{wins} in a row!",
+        "Those #{object.current_streak} #{wins} in a row got you ridin' dirty 🤠",
+        "#{object.current_streak} #{wins} in a row? I see a Sweep deep in the horizon for you 😎",
         "Stop winning! I can't afford to keep paying you! (JK, keep winning 💰💰💰)"
       ]
       text = responses.sample
