@@ -64,7 +64,7 @@ module Commands
       "Think you know about #{sport}? Here's your chance to prove it with #{context_count} #{games} right here 🥇",
       "Don't be afraid to call 'em like you see it #{@api.user.first_name}, #{count} #{games} on deck 😉",
       "I have #{count} #{sport} #{games} for ya, show me what you got #{@api.user.first_name} 🏋️",
-      "The #{sport} SAT starts now...think you can do better than you did back in high school 🤐",
+      "The #{sport} SAT starts now...think you can do better than you did back in high school? 🤐",
       "Welcome to your own personal #{sport} Vegas 🤑"
     ]
     short_wait(:message)

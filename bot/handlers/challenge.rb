@@ -130,7 +130,8 @@ module Commands
     friend_balance = @api.user.data.pending_balance
     user.session[:challenge_details][:friend_balance] = friend_balance
     @api.fetch_user(user.id)
-    say "With a pending balance of #{@api.user.data.pending_balance}, type in your wager amount below (max: #{friend_balance}) 🤑"
+    @api.user.data.pending_balance > friend_balance ? display_max = friend_balance : display_max = @api.user.data.pending_balance
+    say "With a pending balance of #{@api.user.data.pending_balance}, type in your wager amount below (max: #{display_max}) 🤑"
     next_command :handle_wager_response
   end
 
@@ -273,6 +274,7 @@ module Commands
   end
 
   def retry_duration_details
+    #TODO endless loop
     days = message.text.split(' ').map(&:to_i).sort.reverse.first
     if days > 0
       full_name = user.session[:challenge_details][:full_name]
