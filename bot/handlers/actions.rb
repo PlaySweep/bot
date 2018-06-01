@@ -63,7 +63,8 @@ module Commands
   def accept_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :accept => true }, user.id)
-    if @api.challenge
+    sleep 2
+    if @api.challenge_valid
       short_wait(:message)
       say "Challenge accepted 👍"
       quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
@@ -73,7 +74,7 @@ module Commands
       stop_thread
     else
       short_wait(:message)
-      say "Awe man...this challenge is no longer available 👐", quick_replies: ['Make picks', 'Status', 'Challenges']
+      say "Awe man...this challenge is no longer available 😕", quick_replies: ['Make picks', 'Status', 'Challenges']
       stop_thread
     end
   end
@@ -81,7 +82,8 @@ module Commands
   def decline_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :decline => true }, user.id)
-    if @api.challenge
+    sleep 2
+    if @api.challenge_valid
       short_wait(:message)
       say "Challenge declined 👎"
       quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]

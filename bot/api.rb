@@ -10,7 +10,7 @@ class Api
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
                 :pick, :picks, :matchup, :matchups, :challenge_matchups, 
                 :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
-                :challenge, :challenge_type, :team, :prop, :sports, :media
+                :challenge, :challenge_type, :team, :prop, :sports, :media, :challenge_valid
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
@@ -120,7 +120,7 @@ class Api
     when 'users'
       response = @conn.get("#{model}/#{id}")
       @user = JSON.parse(response.body)['user']
-      if @user.nil?
+      if (@user.nil? || @user.empty?)
         fetch_fb_user(id)
         if @fb_user
           puts "Facebook user: #{@fb_user.inspect}"
@@ -167,9 +167,9 @@ class Api
       response = @conn.patch("#{model}/#{id}", params)
       puts "👍" if response.status == 200
     when 'challenges'
+      @challenge_valid = false
       response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
-      @challenge = response['challenge']
-      puts "👍" if response.status == 200
+      @challenge_valid = true if response.status == 200
     end
   end
 
