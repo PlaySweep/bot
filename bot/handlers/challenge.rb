@@ -3,59 +3,68 @@ module Commands
     say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     say "Ahh yep, sorry that was my bad...head back into challenges to accept or decline your friends request 👍", quick_replies: ['Challenges'] and stop_thread and return if (['accept', 'decline'].include?(message.text.downcase.split(' ')[0]))
     say "Ok 😇" and stop_thread and return if (message.text.upcase != message.quick_reply)
-    case message.quick_reply
-    when 'CHALLENGE FRIENDS'
-      @api = Api.new
-      @api.fetch_friends(user.id, :most_popular)
-      quick_replies = build_payload_for('users', @api.friends)
-      message.typing_on
-      say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
-      message.typing_off
-      next_command :handle_selected_challenge
-    when 'MY CHALLENGES'
-      @api = Api.new
-      @api.fetch_user(user.id)
-      if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
-        challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        build_text_for(resource: :challenges, object: challenges, options: :message)
-        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    challenge_friends = ['CHALLENGE A FRIEND', 'CHALLENGE FRIENDS', 'SEND CHALLENGE', 'CREATE CHALLENGE', 'MAKE CHALLENGE']
+    my_challenges = ['MY CHALLENGES', 'ACTIVE CHALLENGES', 'CURRENT CHALLENGES']
+    if message.quick_reply
+      if challenge_friends.include?(message.quick_reply)
+        @api = Api.new
+        @api.fetch_friends(user.id, :most_popular)
+        quick_replies = build_payload_for('users', @api.friends)
+        quick_replies.unshift("Search friends?")
+        quick_replies.push("Nevermind")
         short_wait(:message)
-        @api.fetch_media('challenge')
-        show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-        stop_thread
-      else
-        short_wait(:message)
-        say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
-        stop_thread
+        say "Tap your friend below or search 👇", quick_replies: quick_replies
+        next_command :handle_selected_challenge
+      elsif my_challenges.include?(message.quick_reply)
+        @api = Api.new
+        @api.fetch_user(user.id)
+        if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
+          challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+          build_text_for(resource: :challenges, object: challenges, options: :message)
+          quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+          short_wait(:message)
+          @api.fetch_media('challenge')
+          show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+          stop_thread
+        else
+          short_wait(:message)
+          say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
+          stop_thread
+        end
       end
     end
   end
 
   def handle_challenge_intro_postback
     say "Ok 😇" and stop_thread and return if (message.text.upcase != message.quick_reply)
-    case message.quick_reply
-    when 'CHALLENGE FRIENDS'
-      @api = Api.new
-      @api.fetch_friends(user.id, :most_popular)
-      quick_replies = build_payload_for('users', @api.friends)
-      message.typing_on
-      say "Tap your friend below or search 👇", quick_replies: quick_replies.unshift("Search friends?")
-      message.typing_off
-      next_command :handle_selected_challenge
-    when 'MY CHALLENGES'
-      @api = Api.new
-      @api.fetch_user(user.id)
-      if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
-        challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-        build_text_for(resource: :challenges, object: challenges, options: :message)
-        quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    challenge_friends = ['CHALLENGE A FRIEND', 'CHALLENGE FRIENDS', 'SEND CHALLENGE', 'CREATE CHALLENGE', 'MAKE CHALLENGE']
+    my_challenges = ['MY CHALLENGES', 'ACTIVE CHALLENGES', 'CURRENT CHALLENGES']
+    if message.quick_reply
+      if challenge_friends.include?(message.quick_reply)
+        @api = Api.new
+        @api.fetch_friends(user.id, :most_popular)
+        quick_replies = build_payload_for('users', @api.friends)
+        quick_replies.unshift("Search friends?")
+        quick_replies.push("Nevermind")
         short_wait(:message)
-        @api.fetch_media('challenge')
-        show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-        stop_thread
-      else
-        say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
-        stop_thread
+        say "Tap your friend below or search 👇", quick_replies: quick_replies
+        next_command :handle_selected_challenge
+      elsif my_challenges.include?(message.quick_reply)
+        @api = Api.new
+        @api.fetch_user(user.id)
+        if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
+          challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+          build_text_for(resource: :challenges, object: challenges, options: :message)
+          quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+          short_wait(:message)
+          @api.fetch_media('challenge')
+          show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+          stop_thread
+        else
+          short_wait(:message)
+          say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
+          stop_thread
+        end
       end
     end
   end
@@ -75,13 +84,14 @@ module Commands
   end
 
   def handle_query_users
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     short_wait(:message)
     say "Type your friends name below and I'll go find em' 👇", quick_replies: ["Nevermind"]
     next_command :handle_find_friend
   end
 
   def handle_find_friend
-    #TODO some weird logic on getting out of this loop when wanting to quit before typing friends name
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == 'NEVERMIND'
     @api = Api.new
     @api.fetch_user(user.id)
@@ -137,6 +147,7 @@ module Commands
   end
 
   def handle_wager_input
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     handle_query_matchups and return if !message.quick_reply
     @api = Api.new
     @api.fetch_user(user.id)
@@ -200,9 +211,10 @@ module Commands
   end
 
   def handle_selected_challenge
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     handle_query_users and return if !message.quick_reply
     show_invite and stop_thread and return if message.quick_reply == 'INVITE FRIENDS'
-    say "Invite your friends to get started with challenges 👍", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == "NEVERMIND"
+    say "Ok 😇, well if you want more options tap the invite bubble below 👇", quick_replies: ["Invite friends", "Select picks", "Status"] and stop_thread and return if message.quick_reply == "NEVERMIND"
     case message.quick_reply
     when 'SEARCH FRIENDS?'
       handle_query_users
@@ -276,6 +288,7 @@ module Commands
 
   def retry_duration_details
     #TODO endless loop
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     days = message.text.split(' ').map(&:to_i).sort.reverse.first
     if days > 0
       full_name = user.session[:challenge_details][:full_name]
@@ -302,6 +315,7 @@ module Commands
   end
 
   def confirm_challenge_details
+    say "Cool 🤳😎\nYou can type anything like 'make challenges' to get back to it 👍" and stop_thread and return if message.text.nil?
     clear_challenge and return if !message.quick_reply && user.session[:challenge_details][:attempts] == 1
     retry_challenge_confirmation if !message.quick_reply && user.session[:challenge_details][:attempts] == 0
     case message.quick_reply
