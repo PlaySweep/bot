@@ -29,19 +29,19 @@ module Commands
     options = [
       {
         text: "No overtime here...yet ⏳\n\nBut I bet one of your friends would ❤️ to try to take you in a challenge 🙊💰",
-        quick_replies: ["More sports", "Status", "Challenges"]
+        quick_replies: ["Status", "Challenges"]
       },
       {
         text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add more games 🐞",
-        quick_replies: ["More sports", "Status", "Notifications"]
+        quick_replies: ["Status", "Notifications"]
       },
       { 
         text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", 
-        quick_replies: ["More sports", "Status", "Email me 💌"]
+        quick_replies: ["Status", "Email me 💌"]
       },
       { 
         text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", 
-        quick_replies: ["More sports", "Status", "Invite friends"]
+        quick_replies: ["Status", "Invite friends"]
       }
     ]
     sample = options.sample

@@ -11,6 +11,10 @@ module Commands
       say "Game recaps on or off?", quick_replies: [["On", "RECAPS ON"], ["Off", "RECAPS OFF"]]
       next_command :handle_notification_change
     when 'TURN OFF EVERYTHING'
+      @api = Api.new
+      @api.fetch_user(user.id)
+      params = { :user => { :active => false } }
+      @api.update("users", user.id, params)
       set_notification_settings(user.id, :reminders, false)
       set_notification_settings(user.id, :new_games, false)
       set_notification_settings(user.id, :recaps, false)

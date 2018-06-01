@@ -197,7 +197,7 @@ def capture_responses message
         messaging_type: "UPDATE",
         recipient: { id: facebook_uuid },
         message: {
-          text: "Unrecognized response,\n\n#{message}",
+          text: "Unrecognized response sent by User ID #{user.id},\n\n#{message}",
         }
       }
       Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
