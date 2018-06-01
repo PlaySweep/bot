@@ -5,7 +5,7 @@ module Commands
     if confirm_email.size > 1
       @api = Api.new
       @api.fetch_user(user.id)
-      if @api.user.email.empty?
+      if @api.user.email.?
         params = { :user => { :email => message.text.downcase, :sweep_coins => @api.user.data.sweep_coins += 5 } }
         @api.update("users", user.id, params)
         short_wait(:message)
@@ -17,7 +17,7 @@ module Commands
         short_wait(:message)
         say "I already have your email as #{@api.user.email}, so you're good 👌", quick_replies: ['Make picks', 'Status']
         stop_thread
-      elsif !@api.user.email.empty? && (@api.user.email.downcase != message.text.downcase)
+      elsif !@api.user.email.nil? && (@api.user.email.downcase != message.text.downcase)
         params = { :user => { :email => message.text.downcase } }
         @api.update("users", user.id, params)
         short_wait(:message)

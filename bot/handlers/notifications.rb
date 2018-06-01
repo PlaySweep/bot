@@ -22,6 +22,10 @@ module Commands
       stop_thread
     else
       if (message.text.downcase.split(' ') & ['everything', 'stop', 'quit', 'unsubscribe'].map(&:squeeze)).any?
+        @api = Api.new
+        @api.fetch_user(user.id)
+        params = { :user => { :active => false } }
+        @api.update("users", user.id, params)
         set_notification_settings(user.id, :reminders, false)
         set_notification_settings(user.id, :new_games, false)
         set_notification_settings(user.id, :recaps, false)

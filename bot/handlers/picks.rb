@@ -78,7 +78,6 @@ module Commands
     if matchup_id && selected_id
       params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
-      @api.update('users', user.id, { :user => {:active => true} }) unless @api.user.active
       short_wait(:message)
       say "+1 Sweepcoin for your Daily Pick 💰!" unless @api.user.data.daily_picked
       short_wait(:message)

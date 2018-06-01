@@ -63,25 +63,37 @@ module Commands
   def accept_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :accept => true }, user.id)
-    short_wait(:message)
-    say "Challenge accepted 👍"
-    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-    @api.fetch_media('challenge_accepted')
-    short_wait(:message)
-    show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-    stop_thread
+    if @api.challenge
+      short_wait(:message)
+      say "Challenge accepted 👍"
+      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      @api.fetch_media('challenge_accepted')
+      short_wait(:message)
+      show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+      stop_thread
+    else
+      short_wait(:message)
+      say "Awe man...this challenge is no longer available 👐", quick_replies: ['Make picks', 'Status', 'Challenges']
+      stop_thread
+    end
   end
 
   def decline_challenge_action id
     @api = Api.new
     @api.update('challenges', id, { :decline => true }, user.id)
-    short_wait(:message)
-    say "Challenge declined 👎"
-    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-    @api.fetch_media('challenge_declined')
-    short_wait(:message)
-    show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-    stop_thread
+    if @api.challenge
+      short_wait(:message)
+      say "Challenge declined 👎"
+      quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      @api.fetch_media('challenge_declined')
+      short_wait(:message)
+      show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+      stop_thread
+    else
+      short_wait(:message)
+      say "This challenge is no longer available, so you're good 👍", quick_replies: ['Make picks', 'Status', 'Challenges']
+      stop_thread
+    end
   end
 
 end
