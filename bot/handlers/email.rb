@@ -5,7 +5,7 @@ module Commands
     if confirm_email.size > 1
       @api = Api.new
       @api.fetch_user(user.id)
-      if @api.user.email.?
+      if @api.user.email.nil?
         params = { :user => { :email => message.text.downcase, :sweep_coins => @api.user.data.sweep_coins += 5 } }
         @api.update("users", user.id, params)
         short_wait(:message)
