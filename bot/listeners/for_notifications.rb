@@ -7,16 +7,16 @@ def listen_for_notifications
     keywords = ['stop', 'unsubscribe', 'quit', 'notifications', 'notification', 'alert', 'alerts']
     msg = message.text.split(' ').map(&:downcase)
     matched = (keywords & msg)
-    new_games, reminders, recaps = @api.user.notification_settings.new_games, @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
-    if (!new_games && !reminders && !recaps)
+    reminders, recaps = @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
+    if (!reminders && !recaps)
       bind keywords, to: :entry_to_notifications, reply_with: {
        text: "All your notifications are turned off.\n\nWhich notification would you like to change?",
-       quick_replies: ["New games", "Reminders", "Game recaps", "Nevermind"]
+       quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
       } if matched.any?
     else
       bind keywords, to: :entry_to_notifications, reply_with: {
        text: "Which notification would you like to change?",
-       quick_replies: ["Turn off everything", "New games", "Reminders", "Game recaps", "Nevermind"]
+       quick_replies: ["Turn off everything", "Game preferences", "Game recaps", "Nevermind"]
       } if matched.any?
     end
   end
@@ -27,15 +27,15 @@ def listen_for_notifications_postback
   when 'MANAGE NOTIFICATIONS'
     @api = Api.new
     @api.fetch_user(user.id)
-    new_games, reminders, recaps = @api.user.notification_settings.new_games, @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
-    if (!new_games && !reminders && !recaps)
+    reminders, recaps = @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
+    if (!reminders && !recaps)
       bind 'MANAGE NOTIFICATIONS' do
-       say "All your notifications are turned off.\n\nWhich notification would you like to change?", quick_replies: ["New games", "Reminders", "Game recaps", "Nevermind"]
+       say "All your notifications are turned off.\n\nWhich notification would you like to change?", quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
        next_command :entry_to_notifications
       end
     else
       bind 'MANAGE NOTIFICATIONS' do
-       say "Which notification would you like to change?", quick_replies: ["Turn off everything", "New games", "Reminders", "Game recaps", "Nevermind"]
+       say "Which notification would you like to change?", quick_replies: ["Turn off everything", "Game preferences", "Game recaps", "Nevermind"]
        next_command :entry_to_notifications
       end
     end
