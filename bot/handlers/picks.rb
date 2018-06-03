@@ -79,13 +79,13 @@ module Commands
       params = { :pick => {:user_id => @api.user.id, :matchup_id => matchup_id, :selected_id => selected_id} }
       @api.create('picks', user.id, params)
       short_wait(:message)
-      say "+1 Sweepcoin for your Daily Pick 💰!" unless @api.user.data.daily_picked
+      say "+1 Sweepcoin for your Daily Pick 💰!" unless @api.user.daily.picked
       short_wait(:message)
-      say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
+      say "#{@api.pick.selected} ✅" unless @api.pick.nil?
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       short_wait(:message)
       fetch_matchup(sport, @api.matchups.first)
-      update_user_info unless @api.user.data.daily_picked
+      update_user_info unless @api.user.daily.picked
     else
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       fetch_matchup(sport, @api.matchups.first)
@@ -151,17 +151,13 @@ module Commands
       away = matchup.away_side
       home = matchup.home_side
       quick_replies = [
-        { content_type: 'text', title: "#{away.abbreviation} (#{away.action})", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
-        { content_type: 'text', title: "#{home.abbreviation} (#{home.action})", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
+        { content_type: 'text', title: "#{away.action}", payload: "#{matchup.sport} #{matchup.id} #{away.id}" },
+        { content_type: 'text', title: "#{home.action}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
-      message.typing_on
-      sleep 0.5
-      say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
-      sleep 1.5
-      message.typing_on
-      show_media(matchup.attachment_id, quick_replies)
-      message.typing_off
+      say "#{matchup.context}\n\n"
+      short_wait(:message)
+      say "🏈 #{away.action} #{matchup.type == 'Game' ? '@' : 'or'} #{home.action}\n\nStarting #{matchup.custom_time}\n📅 #{matchup.display_time}", quick_replies: quick_replies
       next_command :handle_pick
     end
   end

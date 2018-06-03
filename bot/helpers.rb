@@ -12,6 +12,8 @@ end
 def build_text_for resource:, object:, options: nil
   text = ""
   case resource
+  when :matchup
+    text.concat("#{object.away_side.action} #{object.type == 'Game' ? '@' : 'or'} #{object.home_side.action}\n\nStarting #{object.custom_time}\n📅 #{object.display_time}")
   when :matchups
     sleep 1
     object.each_with_index do |matchup, index|
