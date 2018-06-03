@@ -26,29 +26,29 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: 'Select Picks 👆',
+                title: 'Select picks',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
               },
               {
-                title: 'Status 🤔',
+                title: 'Status',
                 type: 'postback',
                 payload: 'STATUS' 
               },
               {
-                title: 'Challenges 🤝',
+                title: 'Challenges',
                 type: 'postback',
                 payload: 'CHALLENGE'
               }
             ]
           },
           {
-            title: 'Invite friends 🎉',
+            title: 'Invite friends',
             type: 'postback',
             payload: 'INVITE FRIENDS'
           },
           {
-            title: 'Notifications 👋',
+            title: 'Notifications',
             type: 'postback',
             payload: 'MANAGE NOTIFICATIONS'
           }
