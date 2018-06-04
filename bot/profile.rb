@@ -52,22 +52,6 @@ module Profile
             type: 'postback',
             payload: 'MANAGE NOTIFICATIONS'
           }
-          # {
-          #   type: 'nested',
-          #   title: 'Notifications & Help 👾',
-          #   call_to_actions: [
-          #     {
-          #       title: 'Notifications 👋',
-          #       type: 'postback',
-          #       payload: 'MANAGE NOTIFICATIONS'
-          #     },
-          #     {
-          #       title: 'AD TEST',
-          #       type: 'postback',
-          #       payload: 'SINGLE_MATCHUP FALCONS CARDINALS'
-          #     },
-          #   ]
-          # }
         ]
       }
     ]
