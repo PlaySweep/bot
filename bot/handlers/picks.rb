@@ -61,7 +61,7 @@ module Commands
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
-    count = @api.matchups.count
+    count = @api.matchups && @api.matchups.count
     count != 0 && count == 1 ? context_count = "this" : context_count = "these #{count}"
     options = [
       "Holy smokes 💨, have I got #{count} great #{sport} #{games} for you #{@api.user.first_name}!",
