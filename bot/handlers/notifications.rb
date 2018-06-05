@@ -30,8 +30,6 @@ module Commands
       @api.fetch_user(user.id)
       params = { :user => { :active => false } }
       @api.update("users", user.id, params)
-      set_notification_settings(user.id, :reminders, false)
-      set_notification_settings(user.id, :new_games, false)
       set_notification_settings(user.id, :recaps, false)
       say "Ok, I won't bug you with notifications anymore 👍", quick_replies: ["Select picks"]
       $tracker.track(user.id, 'Notification Changed', {'type' => 'All Off'})
@@ -45,8 +43,6 @@ module Commands
         @api.fetch_user(user.id)
         params = { :user => { :active => false } }
         @api.update("users", user.id, params)
-        set_notification_settings(user.id, :reminders, false)
-        set_notification_settings(user.id, :new_games, false)
         set_notification_settings(user.id, :recaps, false)
         say "Ok, I won't bug you with notifications anymore 👍", quick_replies: ["Select picks"]
         $tracker.track(user.id, 'Notification Changed', {'type' => 'All Off'})

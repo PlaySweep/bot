@@ -16,14 +16,14 @@ class Api
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
   end
 
-  def fetch_all model, facebook_uuid=nil, sport=nil
+  def fetch_all model, facebook_uuid=nil, sport=nil, type=nil
     case model
     when 'users'
       response = @conn.get("#{model}")
       @users = JSON.parse(response.body)['users']
     when 'matchups'
       if sport
-        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}&sport=#{sport}")
+        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}&type=#{type}&sport=#{sport}")
       else
         response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
       end
@@ -126,7 +126,7 @@ class Api
           puts "Facebook user: #{@fb_user.inspect}"
           params = { :user => 
             { 
-              :facebook_uuid => @fb_user.id, 
+              :facebook_uuid => @fb_user.has_key?('id') ? @fb_user.id : nil, 
               :first_name => @fb_user.has_key?('first_name') ? @fb_user.first_name : nil, 
               :last_name => @fb_user.has_key?('last_name') ? @fb_user.last_name : nil, 
               :profile_pic => @fb_user.has_key?('profile_pic') ? @fb_user.profile_pic : nil, 

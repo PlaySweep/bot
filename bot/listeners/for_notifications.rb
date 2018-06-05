@@ -7,8 +7,9 @@ def listen_for_notifications
     keywords = ['stop', 'unsubscribe', 'quit', 'notifications', 'notification', 'alert', 'alerts']
     msg = message.text.split(' ').map(&:downcase)
     matched = (keywords & msg)
-    reminders, recaps = @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
-    if (!reminders && !recaps)
+    recaps = @api.user.notification_settings.recaps
+    #TODO fix this condition
+    if (!recaps)
       bind keywords, to: :entry_to_notifications, reply_with: {
        text: "All your notifications are turned off.\n\nWhich notification would you like to change?",
        quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
@@ -27,8 +28,8 @@ def listen_for_notifications_postback
   when 'MANAGE NOTIFICATIONS'
     @api = Api.new
     @api.fetch_user(user.id)
-    reminders, recaps = @api.user.notification_settings.reminders, @api.user.notification_settings.recaps
-    if (!reminders && !recaps)
+    recaps = @api.user.notification_settings.recaps
+    if (!recaps)
       bind 'MANAGE NOTIFICATIONS' do
        say "All your notifications are turned off.\n\nWhich notification would you like to change?", quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
        next_command :entry_to_notifications

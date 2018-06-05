@@ -3,6 +3,7 @@ module Commands
     @api = Api.new
     @api.fetch_sports
     if @api.sports.include?(message.quick_reply)
+      user.session[:game_type] = 'game'
       handle_pick
     else
       redirect(:show_sports) and stop_thread and return if !message.quick_reply
@@ -49,6 +50,12 @@ module Commands
     stop_thread
   end
 
+  def handle_prop
+    say "Grabbing you some props..."
+    user.session[:game_type] = 'prop'
+    handle_pick
+  end
+
   def handle_pick
     say "Cool 😎📷\nJust type 'make picks' to get back to selecting 👍" and stop_thread and return if message.text.nil?
     @api = Api.new
@@ -59,7 +66,7 @@ module Commands
     sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
-    @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
     games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
     count = @api.matchups.count
     count != 0 && count == 1 ? context_count = "this" : context_count = "these #{count}"
@@ -82,12 +89,12 @@ module Commands
       say "+1 Sweepcoin for your Daily Pick 💰!" unless @api.user.daily.picked
       short_wait(:message)
       say "#{@api.pick.selected} ✅" unless @api.pick.nil?
-      @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+      @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
       short_wait(:message)
       fetch_matchup(sport, @api.matchups.first)
       update_user_info unless @api.user.daily.picked
     else
-      @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+      @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
       fetch_matchup(sport, @api.matchups.first)
     end
   end
@@ -104,12 +111,12 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
     fetch_matchup(sport, @api.matchups.first)
   end
 
   def fetch_matchup sport, matchup
-    if (matchup.nil? || matchup.empty?) 
+    if (matchup.nil? || matchup.empty?) && user.session[:game_type] == "prop"
       options = [
         { 
           text: "You're all caught up on #{sport}! Good luck out there 😇", 
@@ -147,6 +154,9 @@ module Commands
       sample = options.sample
       say sample.text, quick_replies: sample.quick_replies
       stop_thread
+    elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
+      say "All done, wanna take some NFL props?", quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
+      next_command :handle_prop
     else
       away = matchup.away_side
       home = matchup.home_side
@@ -155,10 +165,18 @@ module Commands
         { content_type: 'text', title: "#{home.action}", payload: "#{matchup.sport} #{matchup.id} #{home.id}" },
         { content_type: 'text', title: "Skip", payload: "Skip #{matchup.sport} #{matchup.id}" }
       ]
-      say "#{matchup.context}\n\n"
-      short_wait(:message)
-      say "🏈 #{away.action} #{matchup.type == 'Game' ? '@' : 'or'} #{home.action}\n\nStarting #{matchup.custom_time}\n📅 #{matchup.display_time}", quick_replies: quick_replies
-      next_command :handle_pick
+      if matchup.type == "Game"
+        short_wait(:message)
+        say "Starting #{matchup.custom_time}\n#{matchup.display_time}"
+        short_wait(:message)
+        show_media(matchup.attachment_id, quick_replies)
+        next_command :handle_pick
+      elsif matchup.type == "Prop"
+        say "#{matchup.context}\n\n"
+        short_wait(:message)
+        say "🏈 #{away.action} or #{home.action}\n\nStarting #{matchup.custom_time}\n📅 #{matchup.display_time}", quick_replies: quick_replies
+        next_command :handle_pick
+      end
     end
   end
 
