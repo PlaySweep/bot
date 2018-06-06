@@ -76,6 +76,10 @@ module Commands
     handle_fun
   end
 
+  def entry_to_prizing
+    handle_prizing
+  end
+
   def entry_to_lifeline
     handle_lifeline
   end
