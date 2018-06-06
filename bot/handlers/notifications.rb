@@ -3,23 +3,21 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     current_preferences = @api.user.notification_settings.category_preferences
-    current_preferences.each { |preference| }
     case message.quick_reply
     when 'GAME PREFERENCES'
       if current_preferences.length > 0
-         say "You're currently receiving alerts for 👇"
          list_preferences = ""
          current_preferences.each_with_index do |preference, index|
           if (index == current_preferences.length - 1)
-            list_preferences += "🔔 #{preference}"
+            list_preferences += "🔔 #{preference.sport}"
           else
-            list_preferences += "🔔 #{preference}\n"
+            list_preferences += "🔔 #{preference.sport}\n"
           end
          end
-        say "#{list_preferences}", quick_replies: ['Add more', 'Remove']
+        say "You're currently receiving alerts for 👇\n\n#{list_preferences}", quick_replies: ['Add sports', 'Update existing']
         next_command :handle_preference_change
       else
-        say "Add custom sport notifications 👍\n\nLike NFL, NBA, ..."
+        say "Add a category by typing below 👍\n\nTop sports 🍿 NFL, NCAAF, NBA, NCAAB, MLB, Soccer\n\nOther categories 🎬 Boxing, Tennis"
         next_command :handle_preferences
       end
     when 'GAME RECAPS'
