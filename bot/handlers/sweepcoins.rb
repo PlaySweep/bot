@@ -1,6 +1,6 @@
 module Commands
   def handle_sweepcoins
-    say "In case you need a reminder, the best ways to earn coins are to invite your friends, stay active, and WIN challenges against your friends 🏆", quick_replies: ['Invite friends', 'Challenges'] and stop_thread and return if !message.quick_reply
+    say "In case you need a reminder, the best ways to earn coins are to invite your friends, stay active, and WIN challenges against your friends 🏆", quick_replies: ['Invite friends', 'Challenges', 'Make picks'] and stop_thread and return if !message.quick_reply
     case message.quick_reply
     when 'SWEEPSTORE'
       handle_sweep_store

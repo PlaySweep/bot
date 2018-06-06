@@ -193,25 +193,10 @@ def build_custom_message challenge
 end
 
 def capture_responses message
-  if ENV['RACK_ENV'] == 'production'
-    [1566539433429514].each do |facebook_uuid|
-      message_options = {
-        messaging_type: "UPDATE",
-        recipient: { id: facebook_uuid },
-        message: {
-          text: "Unrecognized response sent by User ID #{user.id},\n\n#{message}",
-        }
-      }
-      Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-    end
-    quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
-    say RANDOM.sample, quick_replies: [quick_reply_options.sample]
-    stop_thread
-  else
-    quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
-    say RANDOM.sample, quick_replies: [quick_reply_options.sample]
-    stop_thread
-  end
+  random_defaults = [['Select picks', 'Status'], ['Challenges', 'Select picks'], ['Earn coins', 'Status']]
+  quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
+  say RANDOM.sample, quick_replies: [random_defaults.sample, quick_reply_options.sample].flatten
+  stop_thread
 end
 
 def strip_emoji text

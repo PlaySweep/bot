@@ -159,12 +159,16 @@ module Commands
     when :prop
       selection = @api.fetch_prop(selected_team_id)
     end
-    user.session[:challenge_details][:matchup_id] = matchup_id
-    user.session[:challenge_details][:selected_team_id] = selected_team_id
-    friend = user.session[:challenge_details][:full_name]
-    say "#{selection.name} ✅"
-    short_wait(:message)
-    type_wager_amount
+    if selection.nil? || selection.empty?
+      stop_thread
+    else
+      user.session[:challenge_details][:matchup_id] = matchup_id
+      user.session[:challenge_details][:selected_team_id] = selected_team_id
+      friend = user.session[:challenge_details][:full_name]
+      say "#{selection.name} ✅"
+      short_wait(:message)
+      type_wager_amount
+    end
   end
 
   def handle_wager_input_for_duration
