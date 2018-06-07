@@ -1,0 +1,313 @@
+# Logfile created on 2018-06-07 09:22:05 -0500 by logger.rb/56815
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-06-07 09:22:05 -0500 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [e1e2668e] Running /usr/bin/env mkdir -p /tmp on sweep
+ DEBUG [e1e2668e] Command: /usr/bin/env mkdir -p /tmp
+  INFO [e1e2668e] Finished in 1.603 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-playsweep-staging-ryanwaits.sh 0.0%
+  INFO Uploading /tmp/git-ssh-playsweep-staging-ryanwaits.sh 100.0%
+  INFO [789860aa] Running /usr/bin/env chmod 700 /tmp/git-ssh-playsweep-staging-ryanwaits.sh on sweep
+ DEBUG [789860aa] Command: /usr/bin/env chmod 700 /tmp/git-ssh-playsweep-staging-ryanwaits.sh
+  INFO [789860aa] Finished in 0.390 seconds with exit status 0 (successful).
+  INFO [17728a05] Running /usr/bin/env git ls-remote git@github.com:ryanwaits/playsweep.git HEAD on sweep
+ DEBUG [17728a05] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git ls-remote git@github.com:ryanwaits/playsweep.git HEAD )
+ DEBUG [17728a05] 	5f7aabc159450c44ea1703dea07af15b460e7af7	HEAD
+  INFO [17728a05] Finished in 1.622 seconds with exit status 0 (successful).
+  INFO [06ca33e9] Running /usr/bin/env mkdir -p /var/www/playsweep/shared /var/www/playsweep/releases on sweep
+ DEBUG [06ca33e9] Command: /usr/bin/env mkdir -p /var/www/playsweep/shared /var/www/playsweep/releases
+  INFO [06ca33e9] Finished in 0.298 seconds with exit status 0 (successful).
+  INFO [d53b55bc] Running /usr/bin/env mkdir -p /var/www/playsweep/shared/log /var/www/playsweep/shared/tmp/pids /var/www/playsweep/shared/tmp/cache /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/shared/public/system /var/www/playsweep/shared/public/uploads /var/www/playsweep/shared/node_modules on sweep
+ DEBUG [d53b55bc] Command: /usr/bin/env mkdir -p /var/www/playsweep/shared/log /var/www/playsweep/shared/tmp/pids /var/www/playsweep/shared/tmp/cache /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/shared/public/system /var/www/playsweep/shared/public/uploads /var/www/playsweep/shared/node_modules
+  INFO [d53b55bc] Finished in 0.367 seconds with exit status 0 (successful).
+ DEBUG [653ecfba] Running [ -f /var/www/playsweep/current/REVISION ] on sweep
+ DEBUG [653ecfba] Command: [ -f /var/www/playsweep/current/REVISION ]
+ DEBUG [653ecfba] Finished in 0.319 seconds with exit status 1 (failed).
+ DEBUG [6f209803] Running [ -f /var/www/playsweep/repo/HEAD ] on sweep
+ DEBUG [6f209803] Command: [ -f /var/www/playsweep/repo/HEAD ]
+ DEBUG [6f209803] Finished in 0.318 seconds with exit status 1 (failed).
+ DEBUG [4356d2a1] Running if test ! -d /var/www/playsweep; then echo "Directory does not exist '/var/www/playsweep'" 1>&2; false; fi on sweep
+ DEBUG [4356d2a1] Command: if test ! -d /var/www/playsweep; then echo "Directory does not exist '/var/www/playsweep'" 1>&2; false; fi
+ DEBUG [4356d2a1] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO [8ff94cc2] Running /usr/bin/env git clone --mirror git@github.com:ryanwaits/playsweep.git /var/www/playsweep/repo on sweep
+ DEBUG [8ff94cc2] Command: cd /var/www/playsweep && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git clone --mirror git@github.com:ryanwaits/playsweep.git /var/www/playsweep/repo )
+ DEBUG [8ff94cc2] 	Cloning into bare repository '/var/www/playsweep/repo'...
+  INFO [8ff94cc2] Finished in 0.856 seconds with exit status 0 (successful).
+ DEBUG [f3109e39] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [f3109e39] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [f3109e39] Finished in 0.275 seconds with exit status 0 (successful).
+  INFO [ec6c7c50] Running /usr/bin/env git remote set-url origin git@github.com:ryanwaits/playsweep.git on sweep
+ DEBUG [ec6c7c50] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git remote set-url origin git@github.com:ryanwaits/playsweep.git )
+  INFO [ec6c7c50] Finished in 0.308 seconds with exit status 0 (successful).
+  INFO [c0ea6919] Running /usr/bin/env git remote update --prune on sweep
+ DEBUG [c0ea6919] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [c0ea6919] 	Fetching origin
+  INFO [c0ea6919] Finished in 0.835 seconds with exit status 0 (successful).
+ DEBUG [9773059c] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [9773059c] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [9773059c] Finished in 0.271 seconds with exit status 0 (successful).
+  INFO [4a203c47] Running /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142211 on sweep
+ DEBUG [4a203c47] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142211 )
+  INFO [4a203c47] Finished in 0.323 seconds with exit status 0 (successful).
+  INFO [dffb87b2] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/playsweep/releases/20180607142211 on sweep
+ DEBUG [dffb87b2] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/playsweep/releases/20180607142211 )
+  INFO [dffb87b2] Finished in 0.319 seconds with exit status 0 (successful).
+ DEBUG [3c983ef9] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [3c983ef9] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [3c983ef9] Finished in 0.339 seconds with exit status 0 (successful).
+ DEBUG [92ded28d] Running /usr/bin/env git rev-list --max-count=1 master on sweep
+ DEBUG [92ded28d] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [92ded28d] 	5f7aabc159450c44ea1703dea07af15b460e7af7
+ DEBUG [92ded28d] Finished in 0.320 seconds with exit status 0 (successful).
+ DEBUG [7e7a9e44] Running if test ! -d /var/www/playsweep/releases/20180607142211; then echo "Directory does not exist '/var/www/playsweep/releases/20180607142211'" 1>&2; false; fi on sweep
+ DEBUG [7e7a9e44] Command: if test ! -d /var/www/playsweep/releases/20180607142211; then echo "Directory does not exist '/var/www/playsweep/releases/20180607142211'" 1>&2; false; fi
+ DEBUG [7e7a9e44] Finished in 0.307 seconds with exit status 0 (successful).
+  INFO [b2785338] Running /usr/bin/env echo "5f7aabc159450c44ea1703dea07af15b460e7af7" > REVISION on sweep
+ DEBUG [b2785338] Command: cd /var/www/playsweep/releases/20180607142211 && /usr/bin/env echo "5f7aabc159450c44ea1703dea07af15b460e7af7" > REVISION
+  INFO [b2785338] Finished in 0.314 seconds with exit status 0 (successful).
+  INFO [893fb804] Running /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142211 /var/www/playsweep/releases/20180607142211/tmp /var/www/playsweep/releases/20180607142211/vendor /var/www/playsweep/releases/20180607142211/public on sweep
+ DEBUG [893fb804] Command: /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142211 /var/www/playsweep/releases/20180607142211/tmp /var/www/playsweep/releases/20180607142211/vendor /var/www/playsweep/releases/20180607142211/public
+  INFO [893fb804] Finished in 0.336 seconds with exit status 0 (successful).
+ DEBUG [89d66d38] Running [ -L /var/www/playsweep/releases/20180607142211/log ] on sweep
+ DEBUG [89d66d38] Command: [ -L /var/www/playsweep/releases/20180607142211/log ]
+ DEBUG [89d66d38] Finished in 0.746 seconds with exit status 1 (failed).
+ DEBUG [27eba4a5] Running [ -d /var/www/playsweep/releases/20180607142211/log ] on sweep
+ DEBUG [27eba4a5] Command: [ -d /var/www/playsweep/releases/20180607142211/log ]
+ DEBUG [27eba4a5] Finished in 0.637 seconds with exit status 1 (failed).
+  INFO [1be11055] Running /usr/bin/env ln -s /var/www/playsweep/shared/log /var/www/playsweep/releases/20180607142211/log on sweep
+ DEBUG [1be11055] Command: /usr/bin/env ln -s /var/www/playsweep/shared/log /var/www/playsweep/releases/20180607142211/log
+  INFO [1be11055] Finished in 1.559 seconds with exit status 0 (successful).
+ DEBUG [569f4f42] Running [ -L /var/www/playsweep/releases/20180607142211/tmp/pids ] on sweep
+ DEBUG [569f4f42] Command: [ -L /var/www/playsweep/releases/20180607142211/tmp/pids ]
+ DEBUG [569f4f42] Finished in 0.410 seconds with exit status 1 (failed).
+ DEBUG [af62016f] Running [ -d /var/www/playsweep/releases/20180607142211/tmp/pids ] on sweep
+ DEBUG [af62016f] Command: [ -d /var/www/playsweep/releases/20180607142211/tmp/pids ]
+ DEBUG [af62016f] Finished in 0.758 seconds with exit status 1 (failed).
+  INFO [2b74ef4a] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/pids /var/www/playsweep/releases/20180607142211/tmp/pids on sweep
+ DEBUG [2b74ef4a] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/pids /var/www/playsweep/releases/20180607142211/tmp/pids
+  INFO [2b74ef4a] Finished in 0.450 seconds with exit status 0 (successful).
+ DEBUG [b0273f58] Running [ -L /var/www/playsweep/releases/20180607142211/tmp/cache ] on sweep
+ DEBUG [b0273f58] Command: [ -L /var/www/playsweep/releases/20180607142211/tmp/cache ]
+ DEBUG [b0273f58] Finished in 0.447 seconds with exit status 1 (failed).
+ DEBUG [b94c6ab4] Running [ -d /var/www/playsweep/releases/20180607142211/tmp/cache ] on sweep
+ DEBUG [b94c6ab4] Command: [ -d /var/www/playsweep/releases/20180607142211/tmp/cache ]
+ DEBUG [b94c6ab4] Finished in 0.434 seconds with exit status 1 (failed).
+  INFO [663ab3bc] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/cache /var/www/playsweep/releases/20180607142211/tmp/cache on sweep
+ DEBUG [663ab3bc] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/cache /var/www/playsweep/releases/20180607142211/tmp/cache
+  INFO [663ab3bc] Finished in 0.600 seconds with exit status 0 (successful).
+ DEBUG [c074947e] Running [ -L /var/www/playsweep/releases/20180607142211/tmp/sockets ] on sweep
+ DEBUG [c074947e] Command: [ -L /var/www/playsweep/releases/20180607142211/tmp/sockets ]
+ DEBUG [c074947e] Finished in 0.973 seconds with exit status 1 (failed).
+ DEBUG [cf570768] Running [ -d /var/www/playsweep/releases/20180607142211/tmp/sockets ] on sweep
+ DEBUG [cf570768] Command: [ -d /var/www/playsweep/releases/20180607142211/tmp/sockets ]
+ DEBUG [cf570768] Finished in 0.365 seconds with exit status 1 (failed).
+  INFO [80ea1942] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/releases/20180607142211/tmp/sockets on sweep
+ DEBUG [80ea1942] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/releases/20180607142211/tmp/sockets
+  INFO [80ea1942] Finished in 0.339 seconds with exit status 0 (successful).
+ DEBUG [91db468e] Running [ -L /var/www/playsweep/releases/20180607142211/vendor/bundle ] on sweep
+ DEBUG [91db468e] Command: [ -L /var/www/playsweep/releases/20180607142211/vendor/bundle ]
+ DEBUG [91db468e] Finished in 0.637 seconds with exit status 1 (failed).
+ DEBUG [8d58bc1c] Running [ -d /var/www/playsweep/releases/20180607142211/vendor/bundle ] on sweep
+ DEBUG [8d58bc1c] Command: [ -d /var/www/playsweep/releases/20180607142211/vendor/bundle ]
+ DEBUG [8d58bc1c] Finished in 0.683 seconds with exit status 1 (failed).
+  INFO [90029175] Running /usr/bin/env ln -s /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/releases/20180607142211/vendor/bundle on sweep
+ DEBUG [90029175] Command: /usr/bin/env ln -s /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/releases/20180607142211/vendor/bundle
+  INFO [90029175] Finished in 1.716 seconds with exit status 0 (successful).
+ DEBUG [67ac8417] Running [ -L /var/www/playsweep/releases/20180607142211/public/system ] on sweep
+ DEBUG [67ac8417] Command: [ -L /var/www/playsweep/releases/20180607142211/public/system ]
+ DEBUG [67ac8417] Finished in 0.341 seconds with exit status 1 (failed).
+ DEBUG [302b9784] Running [ -d /var/www/playsweep/releases/20180607142211/public/system ] on sweep
+ DEBUG [302b9784] Command: [ -d /var/www/playsweep/releases/20180607142211/public/system ]
+ DEBUG [302b9784] Finished in 0.426 seconds with exit status 1 (failed).
+  INFO [af7767d3] Running /usr/bin/env ln -s /var/www/playsweep/shared/public/system /var/www/playsweep/releases/20180607142211/public/system on sweep
+ DEBUG [af7767d3] Command: /usr/bin/env ln -s /var/www/playsweep/shared/public/system /var/www/playsweep/releases/20180607142211/public/system
+  INFO [af7767d3] Finished in 0.360 seconds with exit status 0 (successful).
+ DEBUG [e69838e4] Running [ -L /var/www/playsweep/releases/20180607142211/public/uploads ] on sweep
+ DEBUG [e69838e4] Command: [ -L /var/www/playsweep/releases/20180607142211/public/uploads ]
+ DEBUG [e69838e4] Finished in 0.342 seconds with exit status 1 (failed).
+ DEBUG [33e8af2a] Running [ -d /var/www/playsweep/releases/20180607142211/public/uploads ] on sweep
+ DEBUG [33e8af2a] Command: [ -d /var/www/playsweep/releases/20180607142211/public/uploads ]
+ DEBUG [33e8af2a] Finished in 0.320 seconds with exit status 1 (failed).
+  INFO [89f1ab2b] Running /usr/bin/env ln -s /var/www/playsweep/shared/public/uploads /var/www/playsweep/releases/20180607142211/public/uploads on sweep
+ DEBUG [89f1ab2b] Command: /usr/bin/env ln -s /var/www/playsweep/shared/public/uploads /var/www/playsweep/releases/20180607142211/public/uploads
+  INFO [89f1ab2b] Finished in 0.359 seconds with exit status 0 (successful).
+ DEBUG [8980152f] Running [ -L /var/www/playsweep/releases/20180607142211/node_modules ] on sweep
+ DEBUG [8980152f] Command: [ -L /var/www/playsweep/releases/20180607142211/node_modules ]
+ DEBUG [8980152f] Finished in 0.387 seconds with exit status 1 (failed).
+ DEBUG [2cd3f2f1] Running [ -d /var/www/playsweep/releases/20180607142211/node_modules ] on sweep
+ DEBUG [2cd3f2f1] Command: [ -d /var/www/playsweep/releases/20180607142211/node_modules ]
+ DEBUG [2cd3f2f1] Finished in 0.341 seconds with exit status 1 (failed).
+  INFO [7d1b37fc] Running /usr/bin/env ln -s /var/www/playsweep/shared/node_modules /var/www/playsweep/releases/20180607142211/node_modules on sweep
+ DEBUG [7d1b37fc] Command: /usr/bin/env ln -s /var/www/playsweep/shared/node_modules /var/www/playsweep/releases/20180607142211/node_modules
+  INFO [7d1b37fc] Finished in 0.317 seconds with exit status 0 (successful).
+  INFO [f61efb38] Running /usr/bin/env ln -s /var/www/playsweep/releases/20180607142211 /var/www/playsweep/releases/current on sweep
+ DEBUG [f61efb38] Command: /usr/bin/env ln -s /var/www/playsweep/releases/20180607142211 /var/www/playsweep/releases/current
+  INFO [f61efb38] Finished in 0.305 seconds with exit status 0 (successful).
+  INFO [be06d066] Running /usr/bin/env mv /var/www/playsweep/releases/current /var/www/playsweep on sweep
+ DEBUG [be06d066] Command: /usr/bin/env mv /var/www/playsweep/releases/current /var/www/playsweep
+  INFO [be06d066] Finished in 0.351 seconds with exit status 0 (successful).
+ DEBUG [7628cb3e] Running /usr/bin/env ls -x /var/www/playsweep/releases on sweep
+ DEBUG [7628cb3e] Command: /usr/bin/env ls -x /var/www/playsweep/releases
+ DEBUG [7628cb3e] 	20180607142211
+ DEBUG [7628cb3e] Finished in 0.331 seconds with exit status 0 (successful).
+ DEBUG [6039244b] Running if test ! -d /var/www/playsweep/releases; then echo "Directory does not exist '/var/www/playsweep/releases'" 1>&2; false; fi on sweep
+ DEBUG [6039244b] Command: if test ! -d /var/www/playsweep/releases; then echo "Directory does not exist '/var/www/playsweep/releases'" 1>&2; false; fi
+ DEBUG [6039244b] Finished in 0.324 seconds with exit status 0 (successful).
+  INFO [d2822190] Running /usr/bin/env echo "Branch master (at 5f7aabc159450c44ea1703dea07af15b460e7af7) deployed as release 20180607142211 by ryanwaits" >> /var/www/playsweep/revisions.log on sweep
+ DEBUG [d2822190] Command: cd /var/www/playsweep/releases && /usr/bin/env echo "Branch master (at 5f7aabc159450c44ea1703dea07af15b460e7af7) deployed as release 20180607142211 by ryanwaits" >> /var/www/playsweep/revisions.log
+  INFO [d2822190] Finished in 0.338 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-06-07 09:23:48 -0500 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [72384eef] Running /usr/bin/env mkdir -p /tmp on sweep
+ DEBUG [72384eef] Command: /usr/bin/env mkdir -p /tmp
+  INFO [72384eef] Finished in 1.509 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-playsweep-staging-ryanwaits.sh 0.0%
+  INFO Uploading /tmp/git-ssh-playsweep-staging-ryanwaits.sh 100.0%
+  INFO [c3910519] Running /usr/bin/env chmod 700 /tmp/git-ssh-playsweep-staging-ryanwaits.sh on sweep
+ DEBUG [c3910519] Command: /usr/bin/env chmod 700 /tmp/git-ssh-playsweep-staging-ryanwaits.sh
+  INFO [c3910519] Finished in 0.378 seconds with exit status 0 (successful).
+  INFO [66f44617] Running /usr/bin/env git ls-remote git@github.com:ryanwaits/playsweep.git HEAD on sweep
+ DEBUG [66f44617] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git ls-remote git@github.com:ryanwaits/playsweep.git HEAD )
+ DEBUG [66f44617] 	5f7aabc159450c44ea1703dea07af15b460e7af7	HEAD
+  INFO [66f44617] Finished in 0.826 seconds with exit status 0 (successful).
+  INFO [b6829fab] Running /usr/bin/env mkdir -p /var/www/playsweep/shared /var/www/playsweep/releases on sweep
+ DEBUG [b6829fab] Command: /usr/bin/env mkdir -p /var/www/playsweep/shared /var/www/playsweep/releases
+  INFO [b6829fab] Finished in 0.307 seconds with exit status 0 (successful).
+  INFO [b95dd6dd] Running /usr/bin/env mkdir -p /var/www/playsweep/shared/log /var/www/playsweep/shared/tmp/pids /var/www/playsweep/shared/tmp/cache /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/shared/public/system /var/www/playsweep/shared/public/uploads /var/www/playsweep/shared/node_modules on sweep
+ DEBUG [b95dd6dd] Command: /usr/bin/env mkdir -p /var/www/playsweep/shared/log /var/www/playsweep/shared/tmp/pids /var/www/playsweep/shared/tmp/cache /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/shared/public/system /var/www/playsweep/shared/public/uploads /var/www/playsweep/shared/node_modules
+  INFO [b95dd6dd] Finished in 0.353 seconds with exit status 0 (successful).
+ DEBUG [355099b1] Running [ -f /var/www/playsweep/current/REVISION ] on sweep
+ DEBUG [355099b1] Command: [ -f /var/www/playsweep/current/REVISION ]
+ DEBUG [355099b1] Finished in 0.346 seconds with exit status 0 (successful).
+ DEBUG [19041429] Running /usr/bin/env cat /var/www/playsweep/current/REVISION 2>/dev/null on sweep
+ DEBUG [19041429] Command: /usr/bin/env cat /var/www/playsweep/current/REVISION 2>/dev/null
+ DEBUG [19041429] 	5f7aabc159450c44ea1703dea07af15b460e7af7
+ DEBUG [19041429] Finished in 0.360 seconds with exit status 0 (successful).
+ DEBUG [df48984e] Running [ -f /var/www/playsweep/repo/HEAD ] on sweep
+ DEBUG [df48984e] Command: [ -f /var/www/playsweep/repo/HEAD ]
+ DEBUG [df48984e] Finished in 0.348 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /var/www/playsweep/repo
+ DEBUG [7394cbe4] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [7394cbe4] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [7394cbe4] Finished in 0.329 seconds with exit status 0 (successful).
+  INFO [02a8fc2a] Running /usr/bin/env git remote set-url origin git@github.com:ryanwaits/playsweep.git on sweep
+ DEBUG [02a8fc2a] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git remote set-url origin git@github.com:ryanwaits/playsweep.git )
+  INFO [02a8fc2a] Finished in 0.750 seconds with exit status 0 (successful).
+  INFO [6b0a0ec0] Running /usr/bin/env git remote update --prune on sweep
+ DEBUG [6b0a0ec0] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [6b0a0ec0] 	Fetching origin
+  INFO [6b0a0ec0] Finished in 0.787 seconds with exit status 0 (successful).
+ DEBUG [c4105975] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [c4105975] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [c4105975] Finished in 0.292 seconds with exit status 0 (successful).
+  INFO [e85eed97] Running /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142353 on sweep
+ DEBUG [e85eed97] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142353 )
+  INFO [e85eed97] Finished in 0.499 seconds with exit status 0 (successful).
+  INFO [0ac9c57c] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/playsweep/releases/20180607142353 on sweep
+ DEBUG [0ac9c57c] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/playsweep/releases/20180607142353 )
+  INFO [0ac9c57c] Finished in 0.427 seconds with exit status 0 (successful).
+ DEBUG [67723ecd] Running if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi on sweep
+ DEBUG [67723ecd] Command: if test ! -d /var/www/playsweep/repo; then echo "Directory does not exist '/var/www/playsweep/repo'" 1>&2; false; fi
+ DEBUG [67723ecd] Finished in 0.659 seconds with exit status 0 (successful).
+ DEBUG [176b9f45] Running /usr/bin/env git rev-list --max-count=1 master on sweep
+ DEBUG [176b9f45] Command: cd /var/www/playsweep/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-playsweep-staging-ryanwaits.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [176b9f45] 	5f7aabc159450c44ea1703dea07af15b460e7af7
+ DEBUG [176b9f45] Finished in 0.492 seconds with exit status 0 (successful).
+ DEBUG [d1382664] Running if test ! -d /var/www/playsweep/releases/20180607142353; then echo "Directory does not exist '/var/www/playsweep/releases/20180607142353'" 1>&2; false; fi on sweep
+ DEBUG [d1382664] Command: if test ! -d /var/www/playsweep/releases/20180607142353; then echo "Directory does not exist '/var/www/playsweep/releases/20180607142353'" 1>&2; false; fi
+ DEBUG [d1382664] Finished in 0.483 seconds with exit status 0 (successful).
+  INFO [6aec1cb1] Running /usr/bin/env echo "5f7aabc159450c44ea1703dea07af15b460e7af7" > REVISION on sweep
+ DEBUG [6aec1cb1] Command: cd /var/www/playsweep/releases/20180607142353 && /usr/bin/env echo "5f7aabc159450c44ea1703dea07af15b460e7af7" > REVISION
+  INFO [6aec1cb1] Finished in 0.854 seconds with exit status 0 (successful).
+  INFO [b450d908] Running /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142353 /var/www/playsweep/releases/20180607142353/tmp /var/www/playsweep/releases/20180607142353/vendor /var/www/playsweep/releases/20180607142353/public on sweep
+ DEBUG [b450d908] Command: /usr/bin/env mkdir -p /var/www/playsweep/releases/20180607142353 /var/www/playsweep/releases/20180607142353/tmp /var/www/playsweep/releases/20180607142353/vendor /var/www/playsweep/releases/20180607142353/public
+  INFO [b450d908] Finished in 0.703 seconds with exit status 0 (successful).
+ DEBUG [87947e27] Running [ -L /var/www/playsweep/releases/20180607142353/log ] on sweep
+ DEBUG [87947e27] Command: [ -L /var/www/playsweep/releases/20180607142353/log ]
+ DEBUG [87947e27] Finished in 0.474 seconds with exit status 1 (failed).
+ DEBUG [dfbec647] Running [ -d /var/www/playsweep/releases/20180607142353/log ] on sweep
+ DEBUG [dfbec647] Command: [ -d /var/www/playsweep/releases/20180607142353/log ]
+ DEBUG [dfbec647] Finished in 0.430 seconds with exit status 1 (failed).
+  INFO [7f43a875] Running /usr/bin/env ln -s /var/www/playsweep/shared/log /var/www/playsweep/releases/20180607142353/log on sweep
+ DEBUG [7f43a875] Command: /usr/bin/env ln -s /var/www/playsweep/shared/log /var/www/playsweep/releases/20180607142353/log
+  INFO [7f43a875] Finished in 0.460 seconds with exit status 0 (successful).
+ DEBUG [840fee2d] Running [ -L /var/www/playsweep/releases/20180607142353/tmp/pids ] on sweep
+ DEBUG [840fee2d] Command: [ -L /var/www/playsweep/releases/20180607142353/tmp/pids ]
+ DEBUG [840fee2d] Finished in 0.659 seconds with exit status 1 (failed).
+ DEBUG [f25b48a2] Running [ -d /var/www/playsweep/releases/20180607142353/tmp/pids ] on sweep
+ DEBUG [f25b48a2] Command: [ -d /var/www/playsweep/releases/20180607142353/tmp/pids ]
+ DEBUG [f25b48a2] Finished in 0.476 seconds with exit status 1 (failed).
+  INFO [517afcbb] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/pids /var/www/playsweep/releases/20180607142353/tmp/pids on sweep
+ DEBUG [517afcbb] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/pids /var/www/playsweep/releases/20180607142353/tmp/pids
+  INFO [517afcbb] Finished in 0.408 seconds with exit status 0 (successful).
+ DEBUG [99ab2b5b] Running [ -L /var/www/playsweep/releases/20180607142353/tmp/cache ] on sweep
+ DEBUG [99ab2b5b] Command: [ -L /var/www/playsweep/releases/20180607142353/tmp/cache ]
+ DEBUG [99ab2b5b] Finished in 0.374 seconds with exit status 1 (failed).
+ DEBUG [d6f537d6] Running [ -d /var/www/playsweep/releases/20180607142353/tmp/cache ] on sweep
+ DEBUG [d6f537d6] Command: [ -d /var/www/playsweep/releases/20180607142353/tmp/cache ]
+ DEBUG [d6f537d6] Finished in 0.429 seconds with exit status 1 (failed).
+  INFO [a4e32709] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/cache /var/www/playsweep/releases/20180607142353/tmp/cache on sweep
+ DEBUG [a4e32709] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/cache /var/www/playsweep/releases/20180607142353/tmp/cache
+  INFO [a4e32709] Finished in 0.516 seconds with exit status 0 (successful).
+ DEBUG [eda57669] Running [ -L /var/www/playsweep/releases/20180607142353/tmp/sockets ] on sweep
+ DEBUG [eda57669] Command: [ -L /var/www/playsweep/releases/20180607142353/tmp/sockets ]
+ DEBUG [eda57669] Finished in 0.481 seconds with exit status 1 (failed).
+ DEBUG [971f369a] Running [ -d /var/www/playsweep/releases/20180607142353/tmp/sockets ] on sweep
+ DEBUG [971f369a] Command: [ -d /var/www/playsweep/releases/20180607142353/tmp/sockets ]
+ DEBUG [971f369a] Finished in 0.615 seconds with exit status 1 (failed).
+  INFO [d4aad5aa] Running /usr/bin/env ln -s /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/releases/20180607142353/tmp/sockets on sweep
+ DEBUG [d4aad5aa] Command: /usr/bin/env ln -s /var/www/playsweep/shared/tmp/sockets /var/www/playsweep/releases/20180607142353/tmp/sockets
+  INFO [d4aad5aa] Finished in 0.425 seconds with exit status 0 (successful).
+ DEBUG [7e5fbd04] Running [ -L /var/www/playsweep/releases/20180607142353/vendor/bundle ] on sweep
+ DEBUG [7e5fbd04] Command: [ -L /var/www/playsweep/releases/20180607142353/vendor/bundle ]
+ DEBUG [7e5fbd04] Finished in 0.410 seconds with exit status 1 (failed).
+ DEBUG [38daae5f] Running [ -d /var/www/playsweep/releases/20180607142353/vendor/bundle ] on sweep
+ DEBUG [38daae5f] Command: [ -d /var/www/playsweep/releases/20180607142353/vendor/bundle ]
+ DEBUG [38daae5f] Finished in 0.417 seconds with exit status 1 (failed).
+  INFO [e785ea6f] Running /usr/bin/env ln -s /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/releases/20180607142353/vendor/bundle on sweep
+ DEBUG [e785ea6f] Command: /usr/bin/env ln -s /var/www/playsweep/shared/vendor/bundle /var/www/playsweep/releases/20180607142353/vendor/bundle
+  INFO [e785ea6f] Finished in 0.493 seconds with exit status 0 (successful).
+ DEBUG [ee212241] Running [ -L /var/www/playsweep/releases/20180607142353/public/system ] on sweep
+ DEBUG [ee212241] Command: [ -L /var/www/playsweep/releases/20180607142353/public/system ]
+ DEBUG [ee212241] Finished in 0.455 seconds with exit status 1 (failed).
+ DEBUG [b91390bd] Running [ -d /var/www/playsweep/releases/20180607142353/public/system ] on sweep
+ DEBUG [b91390bd] Command: [ -d /var/www/playsweep/releases/20180607142353/public/system ]
+ DEBUG [b91390bd] Finished in 0.419 seconds with exit status 1 (failed).
+  INFO [f02100d3] Running /usr/bin/env ln -s /var/www/playsweep/shared/public/system /var/www/playsweep/releases/20180607142353/public/system on sweep
+ DEBUG [f02100d3] Command: /usr/bin/env ln -s /var/www/playsweep/shared/public/system /var/www/playsweep/releases/20180607142353/public/system
+  INFO [f02100d3] Finished in 0.369 seconds with exit status 0 (successful).
+ DEBUG [407b7c43] Running [ -L /var/www/playsweep/releases/20180607142353/public/uploads ] on sweep
+ DEBUG [407b7c43] Command: [ -L /var/www/playsweep/releases/20180607142353/public/uploads ]
+ DEBUG [407b7c43] Finished in 0.360 seconds with exit status 1 (failed).
+ DEBUG [bde572b6] Running [ -d /var/www/playsweep/releases/20180607142353/public/uploads ] on sweep
+ DEBUG [bde572b6] Command: [ -d /var/www/playsweep/releases/20180607142353/public/uploads ]
+ DEBUG [bde572b6] Finished in 0.343 seconds with exit status 1 (failed).
+  INFO [73147301] Running /usr/bin/env ln -s /var/www/playsweep/shared/public/uploads /var/www/playsweep/releases/20180607142353/public/uploads on sweep
+ DEBUG [73147301] Command: /usr/bin/env ln -s /var/www/playsweep/shared/public/uploads /var/www/playsweep/releases/20180607142353/public/uploads
+  INFO [73147301] Finished in 0.364 seconds with exit status 0 (successful).
+ DEBUG [bf6c3a3e] Running [ -L /var/www/playsweep/releases/20180607142353/node_modules ] on sweep
+ DEBUG [bf6c3a3e] Command: [ -L /var/www/playsweep/releases/20180607142353/node_modules ]
+ DEBUG [bf6c3a3e] Finished in 0.354 seconds with exit status 1 (failed).
+ DEBUG [8d5f5902] Running [ -d /var/www/playsweep/releases/20180607142353/node_modules ] on sweep
+ DEBUG [8d5f5902] Command: [ -d /var/www/playsweep/releases/20180607142353/node_modules ]
+ DEBUG [8d5f5902] Finished in 0.365 seconds with exit status 1 (failed).
+  INFO [7fd4cb2d] Running /usr/bin/env ln -s /var/www/playsweep/shared/node_modules /var/www/playsweep/releases/20180607142353/node_modules on sweep
+ DEBUG [7fd4cb2d] Command: /usr/bin/env ln -s /var/www/playsweep/shared/node_modules /var/www/playsweep/releases/20180607142353/node_modules
+  INFO [7fd4cb2d] Finished in 0.363 seconds with exit status 0 (successful).
+  INFO [b233b5a1] Running /usr/bin/env ln -s /var/www/playsweep/releases/20180607142353 /var/www/playsweep/releases/current on sweep
+ DEBUG [b233b5a1] Command: /usr/bin/env ln -s /var/www/playsweep/releases/20180607142353 /var/www/playsweep/releases/current
+  INFO [b233b5a1] Finished in 0.440 seconds with exit status 0 (successful).
+  INFO [0988a890] Running /usr/bin/env mv /var/www/playsweep/releases/current /var/www/playsweep on sweep
+ DEBUG [0988a890] Command: /usr/bin/env mv /var/www/playsweep/releases/current /var/www/playsweep
+  INFO [0988a890] Finished in 0.346 seconds with exit status 0 (successful).
+ DEBUG [0943947d] Running /usr/bin/env ls -x /var/www/playsweep/releases on sweep
+ DEBUG [0943947d] Command: /usr/bin/env ls -x /var/www/playsweep/releases
+ DEBUG [0943947d] 	20180607142211	20180607142353
+ DEBUG [0943947d] Finished in 0.372 seconds with exit status 0 (successful).
+ DEBUG [feefed8e] Running if test ! -d /var/www/playsweep/releases; then echo "Directory does not exist '/var/www/playsweep/releases'" 1>&2; false; fi on sweep
+ DEBUG [feefed8e] Command: if test ! -d /var/www/playsweep/releases; then echo "Directory does not exist '/var/www/playsweep/releases'" 1>&2; false; fi
+ DEBUG [feefed8e] Finished in 0.438 seconds with exit status 0 (successful).
+  INFO [3292f264] Running /usr/bin/env echo "Branch master (at 5f7aabc159450c44ea1703dea07af15b460e7af7) deployed as release 20180607142353 by ryanwaits" >> /var/www/playsweep/revisions.log on sweep
+ DEBUG [3292f264] Command: cd /var/www/playsweep/releases && /usr/bin/env echo "Branch master (at 5f7aabc159450c44ea1703dea07af15b460e7af7) deployed as release 20180607142353 by ryanwaits" >> /var/www/playsweep/revisions.log
+  INFO [3292f264] Finished in 0.379 seconds with exit status 0 (successful).

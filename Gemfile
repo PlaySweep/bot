@@ -9,3 +9,12 @@ gem 'httparty'
 gem 'fuzzy_match'
 gem 'mixpanel-ruby'
 gem 'popcorn_notify'
+
+group :development do
+  # Deployment
+  gem "capistrano", "~> 3.10", require: false
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler', '~> 1.3'
+  gem 'capistrano-passenger'
+  gem 'capistrano-nc', '~> 0.2'
+end
