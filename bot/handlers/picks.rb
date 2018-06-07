@@ -84,11 +84,11 @@ module Commands
       say "#{@api.pick.selected} (#{@api.pick.action}) ✅" unless @api.pick.nil?
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
       short_wait(:message)
-      fetch_matchup(sport, @api.matchups.first)
+      fetch_matchup(sport, @api.matchups && @api.matchups.first)
       update_user_info unless @api.user.data.daily_picked
     else
       @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
-      fetch_matchup(sport, @api.matchups.first)
+      fetch_matchup(sport, @api.matchups && @api.matchups.first)
     end
   end
 
@@ -105,7 +105,7 @@ module Commands
     message.typing_on
     sleep 1
     @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
-    fetch_matchup(sport, @api.matchups.first)
+    fetch_matchup(sport, @api.matchups && @api.matchups.first)
   end
 
   def fetch_matchup sport, matchup
