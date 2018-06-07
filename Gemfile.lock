@@ -84,7 +84,6 @@ DEPENDENCIES
   httparty
   mixpanel-ruby
   popcorn_notify
-  rake
   rubotnik
   sinatra
 
