@@ -29,7 +29,7 @@ def for_blow_steam
 end
 
 def for_fun
-  keywords = %w[thanks! thanks awesome! awesome cool! nice nice! go! great great! yeah! wonderful sweet sweet!]
+  keywords = %w[thanks! thanks awesome! awesome cool! nice nice! go! great great! wonderful sweet sweet!]
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   multiple_keywords, multiple_msg = ["let's go!", "let's go", "thank you!", "thank you"], message.text.split(' ').permutation(2).to_a.map { |m| m.join(' ').downcase }
