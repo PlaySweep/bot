@@ -2,7 +2,7 @@ module Commands
   def handle_show_sports
     @api = Api.new
     @api.fetch_sports
-    if @api.sports.include?(message.quick_reply)
+    if @api.sports.map(&:upcase).include?(message.quick_reply)
       handle_pick
     else
       redirect(:show_sports) and stop_thread and return if !message.quick_reply
@@ -56,7 +56,7 @@ module Commands
     qr = [{ content_type: 'text', title: "Select picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     say "Make sure you tap the team bubbles when making your picks so I can track em' properly 😉", quick_replies: ["Select picks", "Status"] and stop_thread and return if (!message.quick_reply && message.text)
     show_button("Show Challenges", "Sorry, I was too focused on making picks 🙈\n\nTap below to respond to any pending challenges 👇", qr, "#{ENV['WEBVIEW_URL']}/challenges/#{user.id}") and stop_thread and return if (message.quick_reply.split(' ')[1] == 'CHALLENGE')
-    sport, matchup_id, selected_id = message.quick_reply.split(' ')[0], message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
+    sport, matchup_id, selected_id = get_sport(message.quick_reply), get_matchup_id(message.quick_reply), get_selected_id(message.quick_reply) unless message.quick_reply.nil?
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
@@ -64,14 +64,14 @@ module Commands
     count = @api.matchups && @api.matchups.count
     count != 0 && count == 1 ? context_count = "this" : context_count = "these #{count}"
     options = [
-      "Holy smokes 💨, have I got #{count} great #{sport} #{games} for you #{@api.user.first_name}!",
-      "#{count} #{sport} #{games} comin' right up! Time to get out your crystal ball 🔮",
-      "I've got a feeling you're gonna crush #{context_count} #{sport} #{games} 🎲",
-      "Think you know about #{sport}? Here's your chance to prove it with #{context_count} #{games} right here 🥇",
+      "Holy smokes 💨, have I got #{count} great #{sport.capitalize} #{games} for you #{@api.user.first_name}!",
+      "#{count} #{sport.capitalize} #{games} comin' right up! Time to get out your crystal ball 🔮",
+      "I've got a feeling you're gonna crush #{context_count} #{sport.capitalize} #{games} 🎲",
+      "Think you know about #{sport.capitalize}? Here's your chance to prove it with #{context_count} #{games} right here 🥇",
       "Don't be afraid to call 'em like you see it #{@api.user.first_name}, #{count} #{games} on deck 😉",
-      "I have #{count} #{sport} #{games} for ya, show me what you got #{@api.user.first_name} 🏋️",
-      "The #{sport} SAT starts now...think you can do better than you did back in high school? 🤐",
-      "Welcome to your own personal #{sport} Vegas 🤑"
+      "I have #{count} #{sport.capitalize} #{games} for ya, show me what you got #{@api.user.first_name} 🏋️",
+      "The #{sport.capitalize} SAT starts now...think you can do better than you did back in high school? 🤐",
+      "Welcome to your own personal #{sport.capitalize} Vegas 🤑"
     ]
     short_wait(:message)
     say options.sample unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
@@ -95,7 +95,7 @@ module Commands
   def skip
     @api = Api.new
     @api.fetch_user(user.id)  
-    sport, matchup_id = message.quick_reply.split(' ')[1], message.quick_reply.split(' ')[2] unless message.quick_reply.nil?
+    sport, matchup_id = get_sport(message.quick_reply), get_matchup_id(message.quick_reply) unless message.quick_reply.nil?
     @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id} })
     options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Done 🤝"]
     message.typing_on
@@ -112,7 +112,7 @@ module Commands
     if (matchup.nil? || matchup.empty?) 
       options = [
         { 
-          text: "You're all caught up on #{sport}! Good luck out there 😇", 
+          text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
           quick_replies: ["More sports", "Status"]
         }, 
         { 
@@ -120,11 +120,11 @@ module Commands
           quick_replies: ["More sports", "Status", "Invite friends"]
         },
         { 
-          text: "I got your #{sport} picks in! Sit back, relax, and let Emma help you to a Sweep 💰\n\nOh, and if you have anymore friends out there, get em' on board and earn some Sweepcoins 😉", 
+          text: "I got your #{sport.capitalize} picks in! Sit back, relax, and let Emma help you to a Sweep 💰\n\nOh, and if you have anymore friends out there, get em' on board and earn some Sweepcoins 😉", 
           quick_replies: ["More sports", "Status", "Invite friends"]
         },
         { 
-          text: "That's all she wrote for #{sport}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
+          text: "That's all she wrote for #{sport.capitalize}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
@@ -132,11 +132,11 @@ module Commands
           quick_replies: ["More sports", "Status", "Notifications"]
         },
         { 
-          text: "No more #{sport} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
+          text: "No more #{sport.capitalize} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
           quick_replies: ["More sports", "Status", "Notifications"]
         },
         { 
-          text: "All finished with #{sport}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
+          text: "All finished with #{sport.capitalize}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
           quick_replies: ["More sports", "Status", "Challenges"]
         },
         { 
@@ -179,5 +179,41 @@ module Commands
     }
     @api = Api.new
     @api.update('users', user.id, params)
+  end
+
+  def get_sport payload
+    if payload.split(' ')[0] == 'Skip'
+      if payload.split(' ').length == 3
+        payload.split(' ')[1]
+      else
+        payload.gsub(/\d+/,"").strip.split(' ')[1..-1].join(' ')
+      end
+    else
+      if payload.split(' ').length == 1 || payload.split(' ').length == 3
+        payload.split(' ')[0]
+      else
+         payload.gsub(/\d+/,"").strip
+      end
+    end
+  end
+
+  def get_matchup_id payload
+    if payload.split(' ').length == 1 || payload.split(' ').length == 2
+      return nil
+    elsif payload.split(' ')[0] == 'Skip'
+      payload.split(' ')[-1]
+    else
+      payload.split(' ')[-2]
+    end
+  end
+
+  def get_selected_id payload
+    if payload.split(' ').length == 1 || payload.split(' ').length == 2
+      return nil
+    elsif payload.split(' ')[0] == 'Skip'
+      return nil
+    else
+      payload.split(' ')[-1]
+    end
   end
 end
