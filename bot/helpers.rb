@@ -5,7 +5,13 @@ def build_payload_for resource, data
       user.push("#{data[index].full_name} #{data[index].facebook_uuid}")
     end
   when 'matchup'
-    
+    #matchups
+  when 'notifications'
+    quick_replies = []
+    data.map(&:name).each_slice(1).to_a.each do |sport|
+      quick_replies.push(["On", "#{sport[0].upcase} ON"], ["Off", "#{sport[0].upcase} OFF"])
+    end
+    quick_replies
   end
 end
 

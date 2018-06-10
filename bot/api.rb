@@ -94,9 +94,14 @@ class Api
     end
   end
 
-  def fetch_sports
-    response = @conn.get("sports")
-    @sports = JSON.parse(response.body)['sports']
+  def fetch_sports active: nil
+    if active
+      response = @conn.get("sports?active=true")
+      @sports = JSON.parse(response.body)['sports']
+    else
+      response = @conn.get("sports")
+      @sports = JSON.parse(response.body)['sports']
+    end
   end
 
   def query_users query

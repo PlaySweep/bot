@@ -96,9 +96,31 @@ def use_lifeline
   puts "💸"
 end
 
-def set_notification_settings id, type, action
-  @api = Api.new
-  params = { :user => { type => action } }
-  @api.update("users", id, params)
-  puts "Set notifications 👍" 
+def set_notification_settings id, preference, action, type=nil
+  if type == :add
+    @api = Api.new
+    @api.fetch_user(user.id)
+    category_preferences = @api.user.notification_settings.category_preferences
+    category_preferences.include?("NA") ? category_preferences.delete_at(category_preferences.index("NA")) : nil
+    category_preferences.push(action)
+    params = { :user => { preference => category_preferences } }
+    puts "Params: #{params.inspect}"
+    @api.update("users", id, params)
+    puts "Add #{action} preferences 👍" 
+  elsif type == :remove
+    @api = Api.new
+    @api.fetch_user(user.id)
+    category_preferences = @api.user.notification_settings.category_preferences
+    category_preferences.delete_at(category_preferences.index(action))
+    category_preferences.empty? ? category_preferences.push("NA") : nil
+    params = { :user => { preference => category_preferences } }
+    puts "Params: #{params.inspect}"
+    @api.update("users", id, params)
+    puts "Remove #{action} preferences 👍" 
+  else
+    @api = Api.new
+    params = { :user => { preference => action } }
+    @api.update("users", id, params)
+    puts "Set notification 👍"
+  end
 end
