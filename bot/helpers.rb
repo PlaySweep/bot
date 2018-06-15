@@ -133,7 +133,8 @@ def for_upcoming picks
   picks.size == 1 ? games = "game" : games = "games"
   text = "#{picks.size} upcoming #{games} 🙌\n"
   picks.first(3).each do |pick|
-    text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected}\n")
+    pick.type == 'Game' ? display_selected = pick.abbreviation : display_selected = pick.display_selected
+    text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{display_selected}\n")
   end
   additional_text = "\n...and more 👇"
   text.concat(additional_text) if picks.size > 3
