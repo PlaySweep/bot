@@ -174,9 +174,46 @@ module Commands
       say sample.text, quick_replies: sample.quick_replies
       stop_thread
     elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
-      options = ["No more #{sport} games, did you want to make some prop picks?"]
-      say options.sample, quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
-      next_command :handle_prop
+      @api.fetch_all('matchups', user.id, sport.downcase, 'prop') unless sport.nil?
+      if (@api.matchups.nil? || @api.matchups.empty?)
+        options = [
+          { 
+            text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
+            quick_replies: ["More sports", "Status"]
+          }, 
+          { 
+            text: "You did it! You're practically a GM now 👔", 
+            quick_replies: ["More sports", "Status", "Invite friends"]
+          },
+          { 
+            text: "That's all she wrote for #{sport.capitalize}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
+            quick_replies: ["More sports", "Status", "Challenges"]
+          },
+          { 
+            text: "Phew, that was tiring...even for someone as energetic as muah 😘\n\nI'll make sure to let you know when I find some more games ⏰", 
+            quick_replies: ["More sports", "Status", "Notifications"]
+          },
+          { 
+            text: "No more #{sport.capitalize} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
+            quick_replies: ["More sports", "Status", "Notifications"]
+          },
+          { 
+            text: "All finished with #{sport.capitalize}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
+            quick_replies: ["More sports", "Status", "Challenges"]
+          },
+          { 
+            text: "Do your fingers ever get tired? My brain does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
+            quick_replies: ["More sports", "Status"]
+          },
+        ]
+        sample = options.sample
+        say sample.text, quick_replies: sample.quick_replies
+        stop_thread
+      else
+        options = ["No more #{sport} games, did you want to make some prop picks?"]
+        say options.sample, quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
+        next_command :handle_prop
+      end
     else
       away = matchup.away_side
       home = matchup.home_side
