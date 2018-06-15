@@ -7,16 +7,16 @@ module Commands
     when 'YES'
       say "Which sport updates do you want to change?", quick_replies: active_categories
       next_command :handle_category_selection
-    when 'GAME PREFERENCES'
-      say "Which sport updates do you want to change?", quick_replies: active_categories
+    when 'SPORT PREFERENCES'
+      say "I will send you new game notifications for your preferred sports when turned on 🙌\n\nWhich ones would you like to update?", quick_replies: active_categories
       next_command :handle_category_selection
-    when 'GAME RECAPS'
+    when 'DAILY RECAPS'
       @api.user.notification_settings.recaps ? currently_on = true : currently_on = false
       if currently_on
-        say "Currently on ⏰\n\nWhen turned off, I won't send you morning recaps of your previous day results 😊\n\nTurn recaps off?", quick_replies: [["Turn off", "RECAPS OFF"], ["Nevermind", "NEVERMIND"]]
+        say "Currently on ⏰\n\nWhen turned off, I won't send you a morning recap of your results from the previous day 😊\n\nTurn recaps off?", quick_replies: [["Turn off", "RECAPS OFF"], ["Nevermind", "NEVERMIND"]]
         next_command :handle_notification_change
       else
-        say "Currently off 🛑\n\nWhen turned on, I'll send you morning recaps of your previous day results 😊\n\nTurn recaps on?", quick_replies: [["Turn on", "RECAPS ON"], ["Nevermind", "NEVERMIND"]]
+        say "Currently off 🛑\n\nWhen turned on, I'll send you a morning recap of your results from the previous day 😊\n\nTurn recaps on?", quick_replies: [["Turn on", "RECAPS ON"], ["Nevermind", "NEVERMIND"]]
         next_command :handle_notification_change
       end
     when 'TURN OFF EVERYTHING'
@@ -60,12 +60,15 @@ module Commands
       active_preferences = @api.user.notification_settings.category_preferences
       active_preferences.include?(sport) ? currently_on = true : currently_on = false
       if currently_on
-        say "Currently on ⏰\n\nWhen turned off, I'll stop sending reminders for new games and results when the match closes 😊\n\nTurn #{sport} off?", quick_replies: [["Turn off", "#{message.quick_reply} OFF"], ["Nevermind", "NEVERMIND"]]
+        say "Currently on ⏰\n\nWhen turned off, I won't send you any notifications for new #{sport} games 😊\n\nTurn #{sport} off?", quick_replies: [["Turn off", "#{message.quick_reply} OFF"], ["Keep it", "KEEP IT"]]
         next_command :handle_notification_change
       else
-        say "Currently off 🛑\n\nWhen turned on, I'll let you know when new games have been added and your results when the match closes 😊\n\nTurn #{sport} on?", quick_replies: [["Turn on", "#{message.quick_reply} ON"], ["Nevermind", "NEVERMIND"]]
+        say "Currently off 🛑\n\nWhen turned on, I will send you notifications for new #{sport} games 😊\n\nTurn #{sport} on?", quick_replies: [["Turn on", "#{message.quick_reply} ON"], ["Keep it", "KEEP IT"]]
         next_command :handle_notification_change
       end
+    else
+      say "Ok, you're all set then 👍", quick_replies: ["Select picks", "Status"]
+      stop_thread
     end
   end
 
@@ -78,6 +81,9 @@ module Commands
       sport = message.quick_reply.split(' ')[0]
     end
     case message.quick_reply
+    when 'KEEP IT'
+      say "Ok, anymore sports you want to update?", quick_replies: active_categories.first(9).unshift("No thanks")
+      next_command :handle_category_selection
     when 'RECAPS ON'
       set_notification_settings(user.id, :recaps, true)
       say "Cool, I turned your daily recaps on 👍", quick_replies: ["Select picks"]

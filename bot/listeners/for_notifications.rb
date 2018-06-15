@@ -12,12 +12,12 @@ def listen_for_notifications
     if (!recaps && category_preferences.include?("NA"))
       bind keywords, to: :entry_to_notifications, reply_with: {
        text: "All your notifications are turned off.\n\nWhich notification would you like to change?",
-       quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
+       quick_replies: ["Sport preferences", "Daily recaps", "Nevermind"]
       } if matched.any?
     else
       bind keywords, to: :entry_to_notifications, reply_with: {
-       text: "Which notification would you like to change?",
-       quick_replies: ["Turn off everything", "Game preferences", "Game recaps", "Nevermind"]
+       text: "Which notification would you like to update?",
+       quick_replies: ["Turn off everything", "Sport preferences", "Daily recaps", "Nevermind"]
       } if matched.any?
     end
   end
@@ -32,12 +32,12 @@ def listen_for_notifications_postback
     category_preferences = @api.user.notification_settings.category_preferences
     if (!recaps && category_preferences.include?("NA"))
       bind 'MANAGE NOTIFICATIONS' do
-       say "All your notifications are turned off.\n\nWhich notification would you like to change?", quick_replies: ["Game preferences", "Game recaps", "Nevermind"]
+       say "All your notifications are turned off.\n\nWhich notification would you like to change?", quick_replies: ["Sport preferences", "Daily recaps", "Nevermind"]
        next_command :entry_to_notifications
       end
     else
       bind 'MANAGE NOTIFICATIONS' do
-       say "Which notification would you like to change?", quick_replies: ["Turn off everything", "Game preferences", "Game recaps", "Nevermind"]
+       say "Which notification would you like to update?", quick_replies: ["Turn off everything", "Sport preferences", "Daily recaps", "Nevermind"]
        next_command :entry_to_notifications
       end
     end

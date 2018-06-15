@@ -1,9 +1,9 @@
 RANDOM_EMOJIS = %w[😏 🤑 😇 👌 🤗 👍 😉 😎]
 ANGRY = ["Soo I can't tell if you're happy or angry...😇😡", "😩", "I know...I know 😕"]
 RANDOM = [
-  "Not gonna lie, I didn't catch that...but type 'Invite friends' or 'Earn coins' and I'll respond accordingly 😎",
+  "Not gonna lie, I don't know what that means...but type 'Invite friends' or 'Sweepcoins' and I'll respond accordingly 😎",
   "I'm sorry, I'm not perf...🤷‍♀️, type 'Make picks' to get back to it ✌️",
-  "You don't always need buttons to talk to me...type stuff like 'Challenges' or Make picks' and I'll take care of you 😉"
+  "Sorry, didn't catch that...but you can type stuff like 'Challenges' or Make picks' and I'll take care of you 😉"
 ]
 SPORT_EMOJIS = { 
   NFL: '🏈', NCAA: '🏈', NBA: '🏀', NCAAB: '🏀', 

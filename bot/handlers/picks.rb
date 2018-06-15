@@ -51,9 +51,16 @@ module Commands
   end
 
   def handle_prop
-    say "Grabbing you some props..."
-    user.session[:game_type] = 'prop'
-    handle_pick
+    if message.quick_reply == 'NO'
+      options = [
+        {text: "Sounds good 👍, you can always come back later!"}
+      ]
+      say "Sounds good 👍, "
+      stop_thread
+    else
+      user.session[:game_type] = 'prop'
+      handle_pick
+    end
   end
 
   def handle_pick
@@ -67,7 +74,19 @@ module Commands
     return if message.quick_reply.nil?
     skip and return if message.quick_reply.split(' ')[0] == "Skip"
     @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
-    games = @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 ? "games" : "game"
+    if user.session[:game_type] == 'game'
+      if @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0
+        games = 'games'
+      else
+        games = 'game'
+      end
+    elsif user.session[:game_type] == 'prop'
+      if @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 
+        games = 'props'
+      else
+        games = 'prop'
+      end
+    end
     count = @api.matchups && @api.matchups.count
     count != 0 && count == 1 ? context_count = "this" : context_count = "these #{count}"
     options = [
@@ -92,9 +111,9 @@ module Commands
       @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
       short_wait(:message)
       fetch_matchup(sport, @api.matchups && @api.matchups.first)
-      update_user_info unless @api.user.data.daily_picked
+      update_user_info unless @api.user.daily.picked
     else
-      @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+      @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
       fetch_matchup(sport, @api.matchups && @api.matchups.first)
     end
   end
@@ -111,7 +130,7 @@ module Commands
     sleep 0.5
     message.typing_on
     sleep 1
-    @api.fetch_all('matchups', user.id, sport.downcase) unless sport.nil?
+    @api.fetch_all('matchups', user.id, sport.downcase, user.session[:game_type]) unless sport.nil?
     fetch_matchup(sport, @api.matchups && @api.matchups.first)
   end
 
@@ -155,7 +174,8 @@ module Commands
       say sample.text, quick_replies: sample.quick_replies
       stop_thread
     elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
-      say "All done, wanna take some NFL props?", quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
+      options = ["All done, wanna take some #{sport} props?", "No more #{sport} games, did you want to make some prop picks?"]
+      say options.sample, quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
       next_command :handle_prop
     else
       away = matchup.away_side

@@ -133,7 +133,7 @@ def for_upcoming picks
   picks.size == 1 ? games = "game" : games = "games"
   text = "#{picks.size} upcoming #{games} 🙌\n"
   picks.first(3).each do |pick|
-    text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
+    text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected}\n")
   end
   additional_text = "\n...and more 👇"
   text.concat(additional_text) if picks.size > 3
@@ -144,13 +144,13 @@ def for_in_flight upcoming, in_progress
   upcoming.size == 1 ? games = "game" : games = "games"
   upcoming_text = "#{upcoming.size} upcoming #{games} 🙌\n"
   upcoming.first(2).each_with_index do |pick, index|
-    upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
+    upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected})\n")
     upcoming_text.concat("...\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
   end
   in_progress.size == 1 ? games = "game" : games = "games"
   in_progress_text = "\n#{in_progress.size} #{games} in progress 🎥\n"
   in_progress.first(2).each_with_index do |pick, index|
-    in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.abbreviation} (#{pick.action})\n")
+    in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected})\n")
     in_progress_text.concat("...and more\n") if (index >= in_progress.first(2).size - 1) && in_progress.size > 2
   end
   additional_text = "\n...and more 👇"
@@ -190,7 +190,7 @@ def build_custom_message challenge
   when 'Matchup'
     options = ["What say you?! 😶", "What you gonna do about it? 🤔", "You think you can take em' or what? 🙏"]
     if challenge.matchup_details.game_type == 'Game'
-      text = "is challenging you to take the #{challenge.matchup_details.acceptor.selected.team_name} (#{challenge.matchup_details.acceptor.selected.action}) against the #{challenge.matchup_details.requestor.selected.team_name} (#{challenge.matchup_details.requestor.selected.action}) for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
+      text = "is challenging you to take the #{challenge.matchup_details.acceptor.selected.display_selected} against the #{challenge.matchup_details.requestor.selected.display_selected} for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
     elsif challenge.matchup_details.game_type == 'Prop'
       text = "is challenging you to take #{challenge.matchup_details.acceptor.selected.team_name} for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
     end
@@ -199,7 +199,7 @@ def build_custom_message challenge
 end
 
 def capture_responses message
-  random_defaults = [['Select picks', 'Status'], ['Challenges', 'Select picks'], ['Earn coins', 'Status']]
+  random_defaults = [['Select picks', 'Status'], ['Challenges', 'Select picks'], ['Sweepcoins', 'Status']]
   quick_reply_options = ["Got questions?", "Send feedback", "Need help?"]
   say RANDOM.sample, quick_replies: [random_defaults.sample, quick_reply_options.sample].flatten
   stop_thread
