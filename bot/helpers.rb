@@ -144,13 +144,15 @@ def for_in_flight upcoming, in_progress
   upcoming.size == 1 ? games = "game" : games = "games"
   upcoming_text = "#{upcoming.size} upcoming #{games} 🙌\n"
   upcoming.first(2).each_with_index do |pick, index|
-    upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected})\n")
+    pick.type == 'Game' ? display_selected = pick.abbreviation : display_selected = pick.display_selected
+    upcoming_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{display_selected})\n")
     upcoming_text.concat("...\n") if (index >= upcoming.first(2).size - 1) && upcoming.size > 2
   end
   in_progress.size == 1 ? games = "game" : games = "games"
   in_progress_text = "\n#{in_progress.size} #{games} in progress 🎥\n"
   in_progress.first(2).each_with_index do |pick, index|
-    in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{pick.display_selected})\n")
+    pick.type == 'Game' ? display_selected = pick.abbreviation : display_selected = pick.display_selected
+    in_progress_text.concat("#{SPORT_EMOJIS[pick.sport.to_sym] || SPORT_EMOJIS[:random]} #{display_selected})\n")
     in_progress_text.concat("...and more\n") if (index >= in_progress.first(2).size - 1) && in_progress.size > 2
   end
   additional_text = "\n...and more 👇"
