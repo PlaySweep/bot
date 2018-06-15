@@ -231,7 +231,7 @@ module Commands
       elsif matchup.type == "Prop"
         say "#{matchup.context}\n\n"
         short_wait(:message)
-        say "🏈 #{away.action} or #{home.action}\n\nStarting #{matchup.custom_time}\n📅 #{matchup.display_time}", quick_replies: quick_replies
+        say "🏈 #{away.action} or #{home.action}\n\nStarting #{matchup.custom_time}\n#{matchup.display_time}", quick_replies: quick_replies
         next_command :handle_pick
       end
     end
