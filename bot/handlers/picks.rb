@@ -53,9 +53,13 @@ module Commands
   def handle_prop
     if message.quick_reply == 'NO'
       options = [
-        {text: "Sounds good 👍, you can always come back later!"}
+        {
+          text: "Sounds good 👍\n\nYou can always come back later and pick!", 
+          quick_replies: ['More sports', 'Status']
+        }
       ]
-      say "Sounds good 👍, "
+      option = options.sample
+      say option.text, quick_replies: option.quick_replies
       stop_thread
     else
       user.session[:game_type] = 'prop'
@@ -146,10 +150,6 @@ module Commands
           quick_replies: ["More sports", "Status", "Invite friends"]
         },
         { 
-          text: "I got your #{sport.capitalize} picks in! Sit back, relax, and let Emma help you to a Sweep 💰\n\nOh, and if you have anymore friends out there, get em' on board and earn some Sweepcoins 😉", 
-          quick_replies: ["More sports", "Status", "Invite friends"]
-        },
-        { 
           text: "That's all she wrote for #{sport.capitalize}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
           quick_replies: ["More sports", "Status", "Challenges"]
         },
@@ -174,7 +174,7 @@ module Commands
       say sample.text, quick_replies: sample.quick_replies
       stop_thread
     elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
-      options = ["All done, wanna take some #{sport} props?", "No more #{sport} games, did you want to make some prop picks?"]
+      options = ["No more #{sport} games, did you want to make some prop picks?"]
       say options.sample, quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
       next_command :handle_prop
     else
