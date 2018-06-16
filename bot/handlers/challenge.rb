@@ -18,18 +18,20 @@ module Commands
       elsif my_challenges.include?(message.quick_reply)
         @api = Api.new
         @api.fetch_user(user.id)
-        if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
-          challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-          build_text_for(resource: :challenges, object: challenges, options: :message)
-          quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-          short_wait(:message)
-          @api.fetch_media('challenge')
-          show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-          stop_thread
-        else
-          short_wait(:message)
-          say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
-          stop_thread
+        unless (@api.user.nil? || @api.user.empty?)
+          if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
+            challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+            build_text_for(resource: :challenges, object: challenges, options: :message)
+            quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+            short_wait(:message)
+            @api.fetch_media('challenge')
+            show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+            stop_thread
+          else
+            short_wait(:message)
+            say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
+            stop_thread
+          end
         end
       end
     end
@@ -52,18 +54,20 @@ module Commands
       elsif my_challenges.include?(message.quick_reply)
         @api = Api.new
         @api.fetch_user(user.id)
-        if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
-          challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
-          build_text_for(resource: :challenges, object: challenges, options: :message)
-          quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-          short_wait(:message)
-          @api.fetch_media('challenge')
-          show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
-          stop_thread
-        else
-          short_wait(:message)
-          say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
-          stop_thread
+        unless (@api.user.nil? || @api.user.empty?)
+          if @api.user.pending_challenges.size > 0 || @api.user.active_challenges.size > 0
+            challenges = @api.user.pending_challenges.concat(@api.user.active_challenges)
+            build_text_for(resource: :challenges, object: challenges, options: :message)
+            quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+            short_wait(:message)
+            @api.fetch_media('challenge')
+            show_media_with_button(user.id, 'challenges', @api.media.last(15).sample.attachment_id, quick_replies)
+            stop_thread
+          else
+            short_wait(:message)
+            say "No challenges in flight 🛬", quick_replies: ['Start a challenge', 'Select picks', 'Status']
+            stop_thread
+          end
         end
       end
     end
