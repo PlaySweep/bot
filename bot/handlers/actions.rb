@@ -18,10 +18,12 @@ module Commands
           use_lifeline
           @api.fetch_user(user.id)
           short_wait(:message)
-          say "Great! Your winning streak has been set back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
+          say "Great! Your winning streak has been set back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌"
           stop_thread
         end
+        stop_thread
       end
+      stop_thread
     when 'No Lifeline'
       short_wait(:message)
       say "Ok, I'll hold off for now 👌", quick_replies: ["Select picks", "Status"]
