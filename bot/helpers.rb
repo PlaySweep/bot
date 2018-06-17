@@ -193,7 +193,7 @@ def build_custom_message challenge
   when 'Matchup'
     options = ["What say you?! 😶", "What you gonna do about it? 🤔", "You think you can take em' or what? 🙏"]
     if challenge.matchup_details.game_type == 'Game'
-      text = "is challenging you to take the #{challenge.matchup_details.acceptor.selected.display_selected} against the #{challenge.matchup_details.requestor.selected.display_selected} for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
+      text = "is challenging you to take #{challenge.matchup_details.acceptor.selected.display_selected} against #{challenge.matchup_details.requestor.selected.display_selected} for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
     elsif challenge.matchup_details.game_type == 'Prop'
       text = "is challenging you to take #{challenge.matchup_details.acceptor.selected.team_name} for #{challenge.wager.coins} Sweepcoins!\n\n#{options.sample}"
     end

@@ -121,7 +121,7 @@ module Commands
       matchup = matchups.first
       case matchup.type
       when 'Game'
-        say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation} (#{matchup.away_side.action})", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation} (#{matchup.home_side.action})", "#{matchup.id} #{matchup.home_side.id}"]]
+        say "#{matchup.description}", quick_replies: [["#{matchup.away_side.abbreviation}", "#{matchup.id} #{matchup.away_side.id}"], ["#{matchup.home_side.abbreviation}", "#{matchup.id} #{matchup.home_side.id}"]]
         user.session[:challenge_details][:selected_side_type] = :game
         user.session[:matchup_searches] = 0
         next_command :handle_wager_input
