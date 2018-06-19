@@ -17,7 +17,7 @@ def listen_for_notifications
     else
       bind keywords, to: :entry_to_notifications, reply_with: {
        text: "Which notification would you like to update?",
-       quick_replies: ["Turn off everything", "Sport preferences", "Daily recaps", "Nevermind"]
+       quick_replies: ["Sport preferences", "Daily recaps", "Turn off everything", "Nevermind"]
       } if matched.any?
     end
   end
@@ -37,7 +37,7 @@ def listen_for_notifications_postback
       end
     else
       bind 'MANAGE NOTIFICATIONS' do
-       say "Which notification would you like to update?", quick_replies: ["Turn off everything", "Sport preferences", "Daily recaps", "Nevermind"]
+       say "Which notification would you like to update?", quick_replies: ["Sport preferences", "Daily recaps", "Turn off everything", "Nevermind"]
        next_command :entry_to_notifications
       end
     end
