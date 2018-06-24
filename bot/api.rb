@@ -8,7 +8,7 @@ class Api
   Hash.use_dot_syntax = true
 
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
-                :pick, :picks, :matchup, :matchups, :challenge_matchups, 
+                :pick, :picks, :matchup, :matchups, :challenge_matchups, :copies,
                 :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
                 :challenge, :challenge_type, :team, :prop, :sports, :media, :challenge_valid
 
@@ -37,6 +37,11 @@ class Api
   def fetch_user id
     response = @conn.get("users/#{id}")
     @user = JSON.parse(response.body)['user']
+  end
+
+  def fetch_copy facebook_uuid:, category:
+    response = @conn.get("copies?facebook_uuid=#{facebook_uuid}&category=#{category}")
+    @copies = JSON.parse(response.body)['copies']
   end
 
   def fetch_challenge user_id, id

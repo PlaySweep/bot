@@ -15,7 +15,7 @@ def build_payload_for resource, data
   end
 end
 
-def build_text_for resource:, object:, options: nil
+def build_text_for resource:, object: nil, options: nil
   text = ""
   case resource
   when :matchup
@@ -35,76 +35,26 @@ def build_text_for resource:, object:, options: nil
     text = for_in_flight(upcoming, in_progress) if in_progress.size > 0
     text = for_upcoming(object) if in_progress.size == 0
   when :status
+    conn = Api.new
     case options
     when :winning_sweep
-      responses = [
-        "Damn, you lookin good at #{object.current_streak} wins in a row, you been workin out your picks? 😉",
-        "You just like being reminded you're at #{object.current_streak} wins in a row, don't you? 😉🎉",
-        "Is that a winning streak of #{object.current_streak} now? You’re peaking! Like MJ in 93, Lebron in 18...keep it goin' 🎉",
-        "Can I get an encore? Cause this #{object.current_streak} game win streak has been a heck of a performance 🎤",
-        "I'd pour Gatorade all over you and your #{object.current_streak} game win streak if I could 🏅",
-        "I'm gonna start losing count of your #{object.current_streak} game win streak here pretty soon...🔢💯",
-        "Ok, you're at #{object.current_streak} wins straight now, time to brag to your friends and earn some more Sweepcoins ☎️"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Winning Sweep')
+      text = copies.last(5).map(&:message).sample
     when :winning_streak
-      object.current_streak > 1 ? wins = 'wins' : wins = 'win'
-      responses = [
-        "I am so proud of you 🤗, let's keep that streak of #{object.current_streak} going!",
-        "You're in the green, sports fiend with #{object.current_streak} straight #{wins} 🥑", 
-        "Hot dog 🌭 you've gotta be loving that winning streak of #{object.current_streak} right about now...",
-        "Nom nom nom 🍔 you just keep on crushin' it with #{object.current_streak} #{wins} in a row!",
-        "#{object.current_streak} straight #{wins} has got you ridin' dirty 🤠",
-        "#{object.current_streak} #{wins} in a row? I see a Sweep deep in the horizon for you 😎",
-        "Stop winning! #{object.current_streak} in a row...I can't afford to keep paying you! (JK, keep winning 💰💰💰)"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Winning Streak')
+      text = copies.last(5).map(&:message).sample
     when :should_use_lifeline
-      responses = [
-        "Just when you thought you were out...use a lifeline and get your winning streak back to #{object.previous_streak} 💸",
-        "Emma says, Would you like to use a lifeline? #{object.current_losing_streak} loss ain't bad, but a winning streak of #{object.previous_streak} is better, right? ✌️",
-        "I found a lifeline! Roll with #{object.current_losing_streak} loss or trade in 30 Sweepcoins to get a winning streak of #{object.previous_streak} back 🚑",
-        "Flip the script with a lifeline, set that streak back to #{object.previous_streak} 👇",
-        "#{object.current_losing_streak} loss down and three more to go...or set your streak back to a winning streak of #{object.previous_streak} by using a lifeline 💰",
-        "Get back to #{object.previous_streak} in a row with a lifeline, or continue the reverse Sweep starting with #{object.current_losing_streak} loss 🤷‍♀️",
-        "Reincarnation is POSSIBLE...just use that little lifeline below and watch that streak flip back to #{object.previous_streak} 👇",
-        "Normally, the game would be over 👾, but you have a lifeline. Get back in with a streak of #{object.previous_streak}"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Use Lifeline')
+      text = copies.last(5).map(&:message).sample
     when :should_use_lifeline_but_cant
-      responses = [
-        "You may not be a winner right now, but #{object.current_losing_streak} loss in a row doesn't make you a loser either 😑",
-        "Eh, #{object.current_losing_streak} loss in a row isn't so hot, but you can call your mom. She'll build your self esteem right back up 😃",
-        "Umm, you need a redo maybe? Invite your friends to play to get you back to #{object.previous_streak} in a row...all you need is #{30 - object.data.sweep_coins} more Sweepcoins for a lifeline 🤑",
-        "You can’t do this alone. Invite your ride or dies to Sweep for a lifeline...you're #{30 - object.data.sweep_coins} Sweepcoins away from earning a lifeline 🚑",
-        "Since you're only #{30 - object.data.sweep_coins} away from a lifeline, you can always fail your way to the top, starting with #{object.current_losing_streak} loss in a row 💸",
-        "#{object.current_losing_streak} loss? That's ok. I'm not perfect either...challenge some friends for some more Sweepcoins so you can afford that lifeline 🤝"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status No Lifeline')
+      text = copies.last(5).map(&:message).sample
     when :losing_streak
-      object.current_losing_streak > 1 ? times = 'times' : times = 'time'
-      object.current_losing_streak > 1 ? losses = 'losses' : losses = 'loss'
-      responses = [
-        "#{object.current_losing_streak} #{losses} in a row? Welcome to the Loser’s Bracket...which is also the Winner’s Bracket 😝",
-        "Keep this #{object.current_losing_streak} game losing streak up and you'll be 😂 your way all the way to the Amazon 🏦",
-        "Wow, if everything in life was so rewarding when you lose #{object.current_losing_streak} #{times} in a row 😁",
-        "Keep up your #{object.current_losing_streak} game losing streak and take that L with pride...it might make you some 💰",
-        "I honestly didn't prepare for someone to be so good at losing, #{object.current_losing_streak} #{losses} and counting...",
-        "Stop losing! #{object.current_losing_streak} in a row...I can't afford to keep paying you! (JK, keep losing 💰💰💰)",
-        "Yeesh, #{object.current_losing_streak} game losing streak...maybe picking the opposite side is your thing 🤑"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Losing Streak')
+      text = copies.last(5).map(&:message).sample
     when :losing_sweep
-      object.current_losing_streak > 1 ? times = 'times' : times = 'time'
-      object.current_losing_streak > 1 ? losses = 'losses' : losses = 'loss'
-      responses = [
-        "OK, you're cashing in on losing too much not to tell anyone 😋\n\nLet everyone and their second cousin know about your #{object.current_losing_streak} game losing streak and earn some Sweepcoins 💰",
-        "You take pride in your losses, I can tell 😎...keep adding to your #{object.current_losing_streak} #{losses}!",
-        "#{object.current_losing_streak} #{losses} in a row and no end in sight 👀! Tweet, Gram, Snap...tell your friends you're crushin' it 😏",
-        "I don't get it either, but I'm paying you for this kind of losing streak...#{object.current_losing_streak} straight and counting 😏",
-        "Apparently you've uncovered the secret to success, and it's losing #{object.current_losing_streak} #{times} in a row 👓📚"
-      ]
-      text = responses.sample
+      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Losing Sweep')
+      text = copies.last(5).map(&:message).sample
     end
   when :challenges
     pending = object.select {|challenge| challenge.status == 'Pending'}
