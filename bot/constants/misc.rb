@@ -8,7 +8,7 @@ RANDOM = [
 SPORT_EMOJIS = { 
   NFL: '🏈', NCAA: '🏈', NBA: '🏀', NCAAB: '🏀', 
   MLB: '⚾️', NHL: '🏒', Soccer: '⚽', PGA: '⛳️', Golf: '⛳️', 
-  ATP: '🎾', Tennis: '🎾', 'French Open': '🎾', MMA: '🤼‍♀️', Boxing: '🥊', 
+  ATP: '🎾', Tennis: '🎾', 'French Open': '🎾', MMA: '🤼‍♀️', Boxing: '🥊', "College WS": "⚾️", "College Ws": "⚾️", 
   Olympics: '🌎', "Horse Racing": '🐎', 'Belmont Stakes': '🐴', 'World Cup': '⚽', random: '🎯' 
 }
 FUN = ["You are a 💫", "You're happy, I can tell 😁", "Woot woot 🎉"]
