@@ -9,5 +9,8 @@ map('/webhook') do
   run Facebook::Messenger::Server
 end
 
+require "i18n"
+I18n.config.available_locales = :en
+
 # run regular Sinatra too
 run Sinatra::Application
