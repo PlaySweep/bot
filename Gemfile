@@ -8,6 +8,7 @@ gem 'httparty'
 gem 'fuzzy_match'
 gem 'mixpanel-ruby'
 gem 'popcorn_notify'
+gem 'i18n'
 
 group :development do
   # Deployment
