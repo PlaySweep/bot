@@ -82,6 +82,7 @@ DEPENDENCIES
   fuzzy_match
   hash_dot
   httparty
+  i18n
   mixpanel-ruby
   popcorn_notify
   rubotnik

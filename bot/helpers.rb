@@ -159,5 +159,6 @@ def capture_responses message
 end
 
 def strip_emoji text
+  text = I18n.transliterate(text)
   text.gsub(/[^\p{L}\s]+/, '').squeeze(' ').strip
 end
