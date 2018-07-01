@@ -9,8 +9,15 @@ module Commands
     stop_thread
   end
 
-  def handle_prizing
-    say "It takes me around 24-48 hours to send out Amazon gift cards 💰...\n\nIf it's been any longer than that, I'll send your feedback to the humans that made me and we can get you taken care of 😊", quick_replies: ['Send feedback', 'Select picks', 'Status']
-    stop_thread
+  def handle_cash_out
+    amount = message.text.to_i
+    if amount != 0
+      @api = Api.new
+      @api.cash_out(user.id, amount)
+      say "Cha ching 💰"
+      short_wait(:message)
+      say "I cashed you out for $#{@api.payment.amount}\n\nCheck your email for next steps..."
+      stop_thread
+    end
   end
 end

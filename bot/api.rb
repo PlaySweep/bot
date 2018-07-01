@@ -10,7 +10,8 @@ class Api
   attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
                 :pick, :picks, :matchup, :matchups, :challenge_matchups, :copies,
                 :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
-                :challenge, :challenge_type, :team, :prop, :sports, :media, :challenge_valid
+                :challenge, :challenge_type, :team, :prop, :sports, :media, :challenge_valid,
+                :payment
 
   def initialize
     @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
@@ -189,5 +190,11 @@ class Api
       response = @conn.get("users/#{id}/status")
       @user = JSON.parse(response.body)['user']
     end
+  end
+
+  def cash_out facebook_uuid, amount
+    response = @conn.post("users/#{facebook_uuid}/payments", { :payment => {transaction_type: "receive", amount: amount} })
+    response = JSON.parse(response.body)
+    @payment = response['payment']
   end
 end

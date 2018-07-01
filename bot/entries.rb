@@ -76,8 +76,8 @@ module Commands
     handle_fun
   end
 
-  def entry_to_prizing
-    handle_prizing
+  def entry_to_cash_out
+    handle_cash_out
   end
 
   def entry_to_lifeline
@@ -87,10 +87,6 @@ module Commands
   def entry_to_not_enough_for_lifeline
     handle_not_enough_for_lifeline
   end
-
-  # def entry_to_how_to_play
-  #   handle_how_to_play
-  # end
 
   def entry_to_earn_coins
     handle_earn_coins

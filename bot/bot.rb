@@ -27,6 +27,7 @@ Rubotnik.route :message do |msg|
   listen_for_sweepcoins
   listen_for_invite_friends
   listen_for_misc
+  listen_for_prizing
   listen_for_actions
   listen_for_feedback
   listen_for_notifications

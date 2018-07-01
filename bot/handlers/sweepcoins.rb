@@ -2,6 +2,12 @@ module Commands
   def handle_sweepcoins
     say "In case you need a reminder, the best ways to earn coins are to invite your friends, stay active, and WIN challenges against your friends 🏆", quick_replies: ['Invite friends', 'Challenges', 'Make picks'] and stop_thread and return if !message.quick_reply
     case message.quick_reply
+    when 'CASH OUT'
+      @api = Api.new
+      @api.fetch_user(user.id)
+      bind 'CASH OUT', to: :entry_to_cash_out, reply_with: {
+        text: "You have #{@api.user.data.sweep_coins} Sweepcoins 💰\n\nHow much would you like to cash out for?"
+      }
     when 'SWEEPSTORE'
       handle_sweep_store
     when 'EARN COINS'
