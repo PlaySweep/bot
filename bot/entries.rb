@@ -1,9 +1,5 @@
 module Commands
 
-  # def entry_to_dashboard
-  #   handle_dashboard
-  # end 
-
   def entry_to_location
     handle_location
   end
@@ -31,14 +27,6 @@ module Commands
   def entry_to_status_postback
     handle_status_postback
   end
-
-  # def entry_to_my_picks
-  #   handle_my_picks
-  # end
-
-  # def entry_to_my_picks_postback
-  #   handle_my_picks_for_postback
-  # end
 
   def entry_to_sweepcoins
     handle_sweepcoins

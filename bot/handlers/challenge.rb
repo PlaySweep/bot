@@ -212,7 +212,7 @@ module Commands
       say "Great! You ready to challenge #{friend} for #{message.text} Sweepcoins?", quick_replies: ["Send it", "No, I screwed up"]
       next_command :confirm_challenge_details
     else
-      say "You do not have enough Sweepcoins to wager that amount, try typing a new amount below", quick_replies: ["Earn coins", "Earn coins"]
+      say "You do not have enough Sweepcoins to wager that amount, try typing a new amount below"
       short_wait(:message)
       type_wager_amount
     end

@@ -17,12 +17,9 @@ def listen_for_sweepcoins
   if @api.user.data.sweep_coins >= 100
     bind keywords, to: :entry_to_sweepcoins, reply_with: {
       text: "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\n#{options.sample}",
-      quick_replies: ['Cash out', 'Earn coins', 'Sweepstore']
+      quick_replies: ['Cash out']
     } if matched.any?
   else
-    bind keywords, to: :entry_to_sweepcoins, reply_with: {
-      text: "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\n#{options.sample}",
-      quick_replies: ['Earn coins', 'Sweepstore']
-    } if matched.any?
+    bind keywords, to: :entry_to_earning_coins if matched.any?
   end
 end

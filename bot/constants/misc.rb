@@ -11,4 +11,4 @@ SPORT_EMOJIS = {
   ATP: '🎾', Tennis: '🎾', 'French Open': '🎾', MMA: '🤼‍♀️', Boxing: '🥊', "College WS": "⚾️", "College Ws": "⚾️", 
   Olympics: '🌎', "Horse Racing": '🐎', 'Belmont Stakes': '🐴', 'World Cup': '⚽', random: '🎯' 
 }
-FUN = ["You are a 💫", "You're happy, I can tell 😁", "Woot woot 🎉"]
+FUN = ["You are a 💫", "😁", "Woot woot 🎉", "👍"]

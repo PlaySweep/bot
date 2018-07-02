@@ -1,30 +1,23 @@
 module Commands
   def handle_sweepcoins
     say "In case you need a reminder, the best ways to earn coins are to invite your friends, stay active, and WIN challenges against your friends 🏆", quick_replies: ['Invite friends', 'Challenges', 'Make picks'] and stop_thread and return if !message.quick_reply
-    case message.quick_reply
-    when 'CASH OUT'
+    if message.quick_reply == "CASH OUT"
       @api = Api.new
       @api.fetch_user(user.id)
       bind 'CASH OUT', to: :entry_to_cash_out, reply_with: {
-        text: "You have #{@api.user.data.sweep_coins} Sweepcoins 💰\n\nHow much would you like to cash out for?"
+        text: "You have #{@api.user.data.pending_balance} Sweepcoins available for cash out ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
       }
-    when 'SWEEPSTORE'
-      handle_sweep_store
-    when 'EARN COINS'
-      handle_earn_coins
     end
   end
 
-  def handle_sweep_store
-    say "Sweepstore coming soon...I promise, you're gonna like it 🛍", quick_replies: ['Make picks', 'Status', 'Challenges']
-    stop_thread
-  end
-
-  def handle_earn_coins
+  def handle_earning_coins
+    @api = Api.new
+    @api.fetch_user(user.id)
+    say "Your Sweepcoin balance is #{@api.user.data.sweep_coins}..."
     short_wait(:message)
-    say "I have big plans for how to use your Sweepcoins, but for now, I only offer lifelines to help you reset your streak..."
-    medium_wait(:message)
-    say "In the meantime, here are the ways you can keep earning more coins 😊\n\n🌞 Pick daily for 1 coin\n👯 Refer a friend for 10 coins\n💪 Win challenges\n🎉 Hit a Sweep for 10 coins", quick_replies: ['Challenges', 'Invite friends']
+    quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+    url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
+    show_button("Earn Sweepcoins", "Tap below to see a list of ways to earn more 👇", quick_replies, url)
     stop_thread
   end
 

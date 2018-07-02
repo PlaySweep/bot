@@ -162,3 +162,7 @@ def strip_emoji text
   text = I18n.transliterate(text)
   text.gsub(/[^\p{L}\s]+/, '').squeeze(' ').strip
 end
+
+def to_dollars amount
+  '%.2f' % (amount.to_f / 100.0)
+end

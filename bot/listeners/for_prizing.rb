@@ -5,13 +5,21 @@ def listen_for_prizing
   matched = (keywords & msg)
   @api = Api.new
   @api.fetch_user(user.id)
-  if @api.user.data.sweep_coins >= 100  
+  if @api.user.data.pending_balance >= 100  
    bind keywords, to: :entry_to_cash_out, reply_with: {
-     text: "You have #{@api.user.data.sweep_coins} Sweepcoins 💰\n\nHow much would you like to cash out for?"
+     text: "You have #{@api.user.data.pending_balance} Sweepcoins available for cash out ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
    } if matched.any?
   else
+    if @api.user.data.pending_balance == 0
+      text = "You have no more Sweepcoins"
+    elsif @api.user.data.pending_balance == 1
+      text = "You have just 1 Sweepcoin"
+    else
+      text = "You only have #{@api.user.data.pending_balance} Sweepcoins"
+    end
     bind keywords, to: :entry_to_cash_out, reply_with: {
-      text: "You only have #{@api.user.data.sweep_coins}, you need at least 100 Sweepcoins to be able to cash out."
+      text: "#{text} available for cash out\n\nYou need at least 100 🤑"
     } if matched.any?
+    stop_thread
   end
 end
