@@ -7,6 +7,11 @@ module Commands
       bind 'CASH OUT', to: :entry_to_cash_out, reply_with: {
         text: "You have #{@api.user.data.pending_balance} Sweepcoins available for cash out ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
       }
+    elsif message.quick_reply == "EARN COINS"
+      quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
+      url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
+      show_button("Earn Sweepcoins", "Tap below to see a list of ways to earn more 👇", quick_replies, url)
+      stop_thread
     end
   end
 

@@ -1,3 +1,5 @@
+VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+
 def build_payload_for resource, data
   case resource
   when 'users'
@@ -165,4 +167,8 @@ end
 
 def to_dollars amount
   '%.2f' % (amount.to_f / 100.0)
+end
+
+def is_a_valid_email? email
+  return true if (email =~ VALID_EMAIL_REGEX) == 0
 end

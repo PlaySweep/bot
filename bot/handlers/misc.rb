@@ -58,8 +58,9 @@ module Commands
   end
 
   def get_email_and_cash_out
-    confirm_email = message.text.downcase.split('@')
-    if confirm_email.size > 1
+    say "If you're having problems cashing out, you can email my developer at ryan@playsweep.com 🤓" and stop_thread if message.text.downcase == 'nevermind'
+    email = message.text.downcase
+    if is_a_valid_email?(email)
       @api = Api.new
       params = { :user => { :email => message.text.downcase } }
       @api.update("users", user.id, params)
@@ -68,6 +69,9 @@ module Commands
       short_wait(:message)
       say "You should receive an Amazon gift card for $#{@api.payment.amount} in the next 24 hours 👍", quick_replies: ['Make picks', 'Status']
       stop_thread
+    else
+      say "Whoops, that didn't look like a valid email...just type your email below 👍", quick_replies: ['Nevermind']
+      next_command :get_email_and_cash_out
     end
   end
 end
