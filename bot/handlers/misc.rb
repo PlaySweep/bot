@@ -20,7 +20,7 @@ module Commands
           @api.cash_out(user.id, amount)
           say "Cha ching 💰"
           short_wait(:message)
-          say "You should receive an Amazon gift card for $#{@api.payment.amount} in the next 24 hours 👍", quick_replies: ['Make picks', 'Status']
+          say "You should be receiving an email with your Amazon gift card for $#{@api.payment.amount} any minute now 👍", quick_replies: ['Make picks', 'Status']
           stop_thread
         else
           say "I can't cash you out for less than 100 Sweepcoins..."
@@ -67,7 +67,7 @@ module Commands
       @api.cash_out(user.id, user.session[:payout])
       say "Cha ching 💰"
       short_wait(:message)
-      say "You should receive an Amazon gift card for $#{@api.payment.amount} in the next 24 hours 👍", quick_replies: ['Make picks', 'Status']
+      say "You should be receiving an email with your Amazon gift card for $#{@api.payment.amount} any minute now 👍", quick_replies: ['Make picks', 'Status']
       stop_thread
     else
       say "Whoops, that didn't look like a valid email...just type your email below 👍", quick_replies: ['Nevermind']
