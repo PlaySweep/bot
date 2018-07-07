@@ -14,7 +14,7 @@ def listen_for_sweepcoins
   else
     options = ["Don't worry, I have a spending problem too 🤐"]
   end
-  if @api.user.data.sweep_coins >= 100
+  if @api.user.data.can_cash_out?
     bind keywords, to: :entry_to_sweepcoins, reply_with: {
       text: "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\n#{options.sample}",
       quick_replies: ['Cash out', 'Earn coins']

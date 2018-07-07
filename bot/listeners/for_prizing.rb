@@ -1,13 +1,13 @@
 def listen_for_prizing
   stop_thread and return if message.text.nil?
-  keywords = ['cash out', 'cash', 'prizes', 'prize', 'gift card', 'gift cards', 'money', 'prizing', 'payout', 'payment', 'pay out', 'amazon', 'gift', 'card', 'cards']
+  keywords = ['cash out', 'cash', 'prizes', 'prize', 'gift card', 'gift cards', 'money', 'prizing', 'payout', 'payment', 'pay out', 'payday', 'pay day', 'amazon', 'gift', 'card', 'cards']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   @api = Api.new
   @api.fetch_user(user.id)
-  if @api.user.data.pending_balance >= 100  
+  if @api.user.data.can_cash_out? 
    bind keywords, to: :entry_to_cash_out, reply_with: {
-     text: "You have #{@api.user.data.pending_balance} Sweepcoins available for cash out ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
+     text: "You have #{@api.user.data.pending_balance} Sweepcoins available for a gift card ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
    } if matched.any?
   else
     if @api.user.data.pending_balance == 0
@@ -17,8 +17,9 @@ def listen_for_prizing
     else
       text = "You only have #{@api.user.data.pending_balance} Sweepcoins"
     end
+    sweepcoins_left = (200 - @api.user.data.pending_balance)
     bind keywords, to: :entry_to_cash_out, reply_with: {
-      text: "#{text} available for cash out\n\nYou need at least 100 🤑"
+      text: "#{text} available toward a gift card...\n\n#{sweepcoins_left} more to go 🤑"
     } if matched.any?
     stop_thread
   end

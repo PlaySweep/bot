@@ -5,7 +5,7 @@ module Commands
       @api = Api.new
       @api.fetch_user(user.id)
       bind 'CASH OUT', to: :entry_to_cash_out, reply_with: {
-        text: "You have #{@api.user.data.pending_balance} Sweepcoins available for cash out ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
+        text: "You have #{@api.user.data.pending_balance} Sweepcoins available for a gift card ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
       }
     elsif message.quick_reply == "EARN COINS"
       quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
@@ -18,7 +18,8 @@ module Commands
   def handle_earning_coins
     @api = Api.new
     @api.fetch_user(user.id)
-    say "Your Sweepcoin balance is #{@api.user.data.sweep_coins}..."
+    @api.user.data.can_cash_out? ? text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins} 🤑" : text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\nYou need a minimum of 200 to generate an Amazon gift card 💰"
+    say text
     short_wait(:message)
     quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
