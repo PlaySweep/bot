@@ -26,27 +26,26 @@ module Commands
     @api = Api.new
     @api.fetch_user(user.id)
     #TODO possibly add a call to special list of matchups in exchange for sweepcoins
+    quick_replies = [["Status", "Challenges"], ["Status", "Notifications"], ["Status", "Email me 💌"], ["Status", "Invite friends"], ["Status", "Sweepcoins"], ["Status", "Earn coins"]]
 
     options = [
-      {
-        text: "No overtime here...yet ⏳\n\nBut I bet one of your friends would ❤️ to try to take you in a challenge 🙊💰",
-        quick_replies: ["Status", "Challenges"]
-      },
-      {
-        text: "I'm still thinkin' about what I want to add for you next 🤔\n\nI promise to bug you as soon as I add more games 🐞",
-        quick_replies: ["Status", "Notifications"]
-      },
-      { 
-        text: "Donezo. Kaput. Finito.\n\nBut, we can always email each other if things get real bad...I'll even throw in 🖐 Sweepcoins 🙂", 
-        quick_replies: ["Status", "Email me 💌"]
-      },
-      { 
-        text: "No new games just yet 🤷‍♀️\n\nBut you can call your parents, they miss you...and you can tell em' about your picks ☎️", 
-        quick_replies: ["Status", "Invite friends"]
-      }
+      "Time is a flat circle and we're back here again. Check back later for more games 🕛",
+      "If we're using our made-up names, I'm Spider-Man. You can be Dr. Strange. I'll message when I have more for you, Dr. Strange 🕷",
+      "Looks like you're stuck in the sunken place, no more games left to be picked.",
+      "You're done with picks for now, but don't ever leave me. Cause I'd find you...😜",
+      "No more games to pick here, maybe your mom has some meatloaf?",
+      "Nothing else available, gonna grab my wolfpack and hit the desert in Vegas",
+      "Our work is done here, but imagine what a little Vibranium could do...",
+      "If you ever take me to California, I hope you mean Coachella. All done for now.",
+      "You've made moves on everything you can. But I'm still single 🤦‍♀️",
+      "You're all caught up across the board. I'll have more games soon.",
+      "No more games to pick here, now is your time to think about how you'd take down a Demigorgon 🤔",
+      "No more games for now, I promise I won’t keep you waiting as long as the post office 📫",
+      "You’ve made your picks. Now go make peace with that printer upstairs that never works 🙄",
+      "All finished...what? Expecting another joke or something?",
+      "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot."
     ]
-    sample = options.sample
-    say sample.text, quick_replies: sample.quick_replies
+    say options.sample, quick_replies: quick_replies.sample
     stop_thread
   end
 
@@ -92,16 +91,10 @@ module Commands
       end
     end
     count = @api.matchups && @api.matchups.count
-    count != 0 && count == 1 ? context_count = "this" : context_count = "these #{count}"
     options = [
-      "Holy smokes 💨, have I got #{count} great #{sport.capitalize} #{games} for you #{@api.user.first_name}!",
-      "#{count} #{sport.capitalize} #{games} comin' right up! Time to get out your crystal ball 🔮",
-      "I've got a feeling you're gonna crush #{context_count} #{sport.capitalize} #{games} 🎲",
-      "Think you know about #{sport.capitalize}? Here's your chance to prove it with #{context_count} #{games} right here 🥇",
-      "Don't be afraid to call 'em like you see it #{@api.user.first_name}, #{count} #{games} on deck 😉",
-      "I have #{count} #{sport.capitalize} #{games} for ya, show me what you got #{@api.user.first_name} 🏋️",
-      "The #{sport.capitalize} SAT starts now...think you can do better than you did back in high school? 🤐",
-      "Welcome to your own personal #{sport.capitalize} Vegas 🤑"
+      "#{count} #{sport.capitalize} #{games} on deck...",
+      "#{count} #{sport.capitalize} #{games} comin up...",
+      "#{count} #{sport.capitalize} #{games} today...",
     ]
     short_wait(:message)
     say options.sample unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))
@@ -127,7 +120,7 @@ module Commands
     @api.fetch_user(user.id)  
     sport, matchup_id = get_sport(message.quick_reply), get_matchup_id(message.quick_reply) unless message.quick_reply.nil?
     @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id} })
-    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Done 🤝"]
+    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Done 🤝", "Okay 😎"]
     message.typing_on
     sleep 0.5
     say options.sample
@@ -139,73 +132,27 @@ module Commands
   end
 
   def fetch_matchup sport, matchup
+    options = [
+      { 
+        text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
+        quick_replies: ["More sports", "Status"]
+      }, 
+      { 
+        text: "Nicely done! You're practically a GM now 👔", 
+        quick_replies: ["More sports", "Status", "Invite friends"]
+      },
+      { 
+        text: "You're good with #{sport.capitalize} ☺️\n\nChallenge your friends for more Sweepcoins!", 
+        quick_replies: ["More sports", "Status", "Challenges"]
+      }
+    ]
     if (matchup.nil? || matchup.empty?) && user.session[:game_type] == "prop"
-      options = [
-        { 
-          text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
-          quick_replies: ["More sports", "Status"]
-        }, 
-        { 
-          text: "You did it! You're practically a GM now 👔", 
-          quick_replies: ["More sports", "Status", "Invite friends"]
-        },
-        { 
-          text: "That's all she wrote for #{sport.capitalize}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
-          quick_replies: ["More sports", "Status", "Challenges"]
-        },
-        { 
-          text: "Phew, that was tiring...even for someone as energetic as muah 😘\n\nI'll make sure to let you know when I find some more games ⏰", 
-          quick_replies: ["More sports", "Status", "Notifications"]
-        },
-        { 
-          text: "No more #{sport.capitalize} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
-          quick_replies: ["More sports", "Status", "Notifications"]
-        },
-        { 
-          text: "All finished with #{sport.capitalize}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
-          quick_replies: ["More sports", "Status", "Challenges"]
-        },
-        { 
-          text: "Do your fingers ever get tired? My brain does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
-          quick_replies: ["More sports", "Status"]
-        },
-      ]
       sample = options.sample
       say sample.text, quick_replies: sample.quick_replies
       stop_thread
     elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
       @api.fetch_all('matchups', user.id, sport.downcase, 'prop') unless sport.nil?
       if (@api.matchups.nil? || @api.matchups.empty?)
-        options = [
-          { 
-            text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
-            quick_replies: ["More sports", "Status"]
-          }, 
-          { 
-            text: "You did it! You're practically a GM now 👔", 
-            quick_replies: ["More sports", "Status", "Invite friends"]
-          },
-          { 
-            text: "That's all she wrote for #{sport.capitalize}...for now ☺️\n\nDon't forget to get out there and challenge your friends!", 
-            quick_replies: ["More sports", "Status", "Challenges"]
-          },
-          { 
-            text: "Phew, that was tiring...even for someone as energetic as muah 😘\n\nI'll make sure to let you know when I find some more games ⏰", 
-            quick_replies: ["More sports", "Status", "Notifications"]
-          },
-          { 
-            text: "No more #{sport.capitalize} games!\n\nMake sure you have new game reminders turned on, or check back later ⏰", 
-            quick_replies: ["More sports", "Status", "Notifications"]
-          },
-          { 
-            text: "All finished with #{sport.capitalize}!\n\nWant more action? Challenge your friends for some Sweepcoins...and bragging rights 🤑💪", 
-            quick_replies: ["More sports", "Status", "Challenges"]
-          },
-          { 
-            text: "Do your fingers ever get tired? My brain does 😴💤\n\nWe should both take a rest and enjoy the games 😊", 
-            quick_replies: ["More sports", "Status"]
-          },
-        ]
         sample = options.sample
         say sample.text, quick_replies: sample.quick_replies
         stop_thread

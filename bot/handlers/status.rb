@@ -40,7 +40,8 @@ module Commands
   def show_winning_sweep_message type
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    text = "You're on a Sweep (#{@api.user.current_streak} straight) 🏁"
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", text, quick_replies, url)
@@ -50,17 +51,19 @@ module Commands
   def show_winning_streak type
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    options = ["You're streakin' (#{@api.user.current_streak} straight) 🏁", "You are lit (#{@api.user.current_streak} straight) 🔥", "Nom nom (#{@api.user.current_streak} straight) 🍔", "You're ridin' hot (#{@api.user.current_streak} straight) 🤠", "We have lift off (#{@api.user.current_streak} straight) 🚀", "You're going off (#{@api.user.current_streak} straight) ⏰"]
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
-    show_button("Show Status", text, quick_replies, url)
+    show_button("Show Status", options.sample, quick_replies, url)
     stop_thread
   end
 
   def show_should_use_lifeline type
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: "Use lifeline", payload: "USE LIFELINE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    text = "#{@api.user.current_losing_streak} straight loss, but a lifeline is one tap away 👇"
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", text, quick_replies, url)
@@ -69,8 +72,9 @@ module Commands
 
   def show_should_use_lifeline_but_cant type
     show_my_picks(type)
-    quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: "Earn Coins", payload: "EARN COINS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    text = "#{@api.user.current_losing_streak} straight loss. Earn more Sweepcoins to get yourself out of a jam 👇"
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", text, quick_replies, url)
@@ -80,7 +84,8 @@ module Commands
   def show_losing_sweep type
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    options = ["Losing never felt so right (#{@api.user.current_losing_streak} straight losses) 😎", "Reverse streaking (#{@api.user.current_losing_streak} straight losses) 🔙", "Losing is the new winning (#{@api.user.current_losing_streak} straight losses) 🙌"]
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", text, quick_replies, url)
@@ -90,7 +95,8 @@ module Commands
   def show_losing_streak type
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
-    text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    # text = build_text_for(resource: :status, object: @api.user, options: current_status)
+    text = "The biggest loser (#{@api.user.current_losing_streak} straight losses) 👏"
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", text, quick_replies, url)

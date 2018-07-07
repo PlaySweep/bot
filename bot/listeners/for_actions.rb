@@ -18,8 +18,8 @@ def for_lifeline
     matched = (keywords & msg)
     if @api.user.data.sweep_coins >= 30
       bind keywords, to: :entry_to_lifeline, reply_with: {
-        text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
-        quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
+        text: "Use 30 Sweepcoins to revert your streak back to #{@api.user.previous_streak}?",
+        quick_replies: [["Yes 👍", "Yes Lifeline"], ["No 👎", "No Lifeline"]]
       } if matched.any?
     else
       bind keywords, to: :entry_to_not_enough_for_lifeline, reply_with: {
@@ -35,8 +35,8 @@ def for_lifeline
     matched = (keywords & msg)
     if @api.user.data.sweep_coins >= 30
       bind keywords, to: :entry_to_lifeline, reply_with: {
-        text: "Are you sure you want me to deduct 30 Sweepcoins from your wallet?",
-        quick_replies: [["👍", "Yes Lifeline"], ["👎", "No Lifeline"]]
+        text: "Use 30 Sweepcoins to revert your streak back to #{@api.user.previous_streak}?",
+        quick_replies: [["Yes 👍", "Yes Lifeline"], ["No 👎", "No Lifeline"]]
       } if matched.any?
     else
       bind keywords, to: :entry_to_not_enough_for_lifeline, reply_with: {

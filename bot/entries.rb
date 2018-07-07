@@ -77,7 +77,7 @@ module Commands
   end
 
   def entry_to_earn_coins
-    handle_earn_coins
+    handle_earning_coins
   end
 
 end

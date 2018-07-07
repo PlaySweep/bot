@@ -18,9 +18,9 @@ def listen_for_prizing
       text = "You only have #{@api.user.data.pending_balance} Sweepcoins"
     end
     sweepcoins_left = (200 - @api.user.data.pending_balance)
-    bind keywords, to: :entry_to_cash_out, reply_with: {
-      text: "#{text} available toward a gift card...\n\n#{sweepcoins_left} more to go 🤑"
-    } if matched.any?
-    stop_thread
+    bind keywords do
+      say "#{text} available toward a gift card...\n\n#{sweepcoins_left} more to go 🤑", quick_replies: ['Earn coins']
+      stop_thread
+    end if matched.any?
   end
 end
