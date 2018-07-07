@@ -2,8 +2,10 @@ module Commands
   def handle_show_sports
     @api = Api.new
     @api.fetch_sports
-    if @api.sports.map(&:upcase).include?(message.quick_reply)
+    if @api.sports.map(&:name).map(&:upcase).include?(message.quick_reply)
+      puts "SPORTS: #{@api.sports.inspect}"
       user.session[:game_type] = 'game'
+      user.session[:sport_emoji] = @api.sports.find { |sport| sport["name"].upcase == message.quick_reply }["emoji"]
       handle_pick
     else
       redirect(:show_sports) and stop_thread and return if !message.quick_reply
@@ -120,7 +122,7 @@ module Commands
     @api.fetch_user(user.id)  
     sport, matchup_id = get_sport(message.quick_reply), get_matchup_id(message.quick_reply) unless message.quick_reply.nil?
     @api.update('matchups', matchup_id, { :matchup => {:skipped_by => @api.user.id} })
-    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Done 🤝", "Okay 😎"]
+    options = ["Skipped 👍", "You can always come back later and pick 🙌", "You got it 😉", "Okay 😎"]
     message.typing_on
     sleep 0.5
     say options.sample
@@ -132,33 +134,18 @@ module Commands
   end
 
   def fetch_matchup sport, matchup
-    options = [
-      { 
-        text: "You're all caught up on #{sport.capitalize}! Good luck out there 😇", 
-        quick_replies: ["More sports", "Status"]
-      }, 
-      { 
-        text: "Nicely done! You're practically a GM now 👔", 
-        quick_replies: ["More sports", "Status", "Invite friends"]
-      },
-      { 
-        text: "You're good with #{sport.capitalize} ☺️\n\nChallenge your friends for more Sweepcoins!", 
-        quick_replies: ["More sports", "Status", "Challenges"]
-      }
-    ]
+    options = ["Done with #{user.session[:sport_emoji]}", "Finished with #{user.session[:sport_emoji]}", "Completed #{user.session[:sport_emoji]}"]
+    quick_replies = [["More sports", "Status", "Sweepcoins"], ["More sports", "Status", "Invite friends"], ["More sports", "Status", "Challenges"]]
     if (matchup.nil? || matchup.empty?) && user.session[:game_type] == "prop"
-      sample = options.sample
-      say sample.text, quick_replies: sample.quick_replies
+      say options.sample, quick_replies: quick_replies.sample
       stop_thread
     elsif (matchup.nil? || matchup.empty?) && user.session[:game_type] == "game" 
       @api.fetch_all('matchups', user.id, sport.downcase, 'prop') unless sport.nil?
       if (@api.matchups.nil? || @api.matchups.empty?)
-        sample = options.sample
-        say sample.text, quick_replies: sample.quick_replies
+        say options.sample, quick_replies: quick_replies.sample
         stop_thread
       else
-        options = ["No more #{sport} games, did you want to make some prop picks?"]
-        say options.sample, quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
+        say "No more #{user.session[:sport_emoji]} games, did you want to make some prop picks?", quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
         next_command :handle_prop
       end
     else

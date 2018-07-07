@@ -8,7 +8,7 @@ module Commands
         text: "You have #{@api.user.data.pending_balance} Sweepcoins available for a gift card ($#{to_dollars(@api.user.data.sweep_coins)}) 💰\n\nHow many coins do you want to withdrawal?"
       }
     elsif message.quick_reply == "EARN COINS"
-      @api.user.data.can_cash_out? ? text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins} 🤑" : text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\nYou need at least 200 to earn an Amazon gift card 💰"
+      @api.user.data.can_cash_out? ? text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins} 🤑" : text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\nYou need at least 200 to cash out for an Amazon gift card 💰"
       quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
       url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
       show_button("Earn Sweepcoins", "#{text}\n\nTap below to see a list of ways to earn more 👇", quick_replies, url)
@@ -19,7 +19,7 @@ module Commands
   def handle_earning_coins
     @api = Api.new
     @api.fetch_user(user.id)
-    @api.user.data.can_cash_out? ? text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins} 🤑" : text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\nYou need at least 200 to earn an Amazon gift card 💰"
+    @api.user.data.can_cash_out? ? text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins} 🤑" : text = "Your Sweepcoin balance is #{@api.user.data.sweep_coins}\n\nYou need at least 200 to cash out for an Amazon gift card 💰"
     quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
     url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
     show_button("Earn Sweepcoins", "#{text}\n\nTap below to see a list of ways to earn more 👇", quick_replies, url)

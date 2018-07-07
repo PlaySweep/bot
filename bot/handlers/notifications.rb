@@ -2,7 +2,7 @@ module Commands
   def handle_manage_notifications
     @api = Api.new
     @api.fetch_user(user.id)
-    active_categories = @api.fetch_sports(active: true)
+    active_categories = @api.fetch_sports(active: true).map(&:name)
     case message.quick_reply
     when 'YES'
       say "Which sport updates do you want to change?", quick_replies: active_categories
@@ -52,7 +52,7 @@ module Commands
 
   def handle_category_selection
     @api = Api.new
-    active_categories = @api.fetch_sports(active: true)
+    active_categories = @api.fetch_sports(active: true).map(&:name)
     sport_reply = message.quick_reply
     if active_categories.map(&:upcase).include?(sport_reply)
       sport = message.text
@@ -74,7 +74,7 @@ module Commands
 
   def handle_notification_change 
     @api = Api.new
-    active_categories = @api.fetch_sports(active: true) 
+    active_categories = @api.fetch_sports(active: true).map(&:name)
     if message.quick_reply.split(' ').length == 3
       sport = message.quick_reply.split(' ')[0..1].join(' ')
     elsif message.quick_reply.split(' ').length == 2
