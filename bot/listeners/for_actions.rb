@@ -17,14 +17,21 @@ def for_lifeline
     msg = message.text.split(' ').map(&:downcase)
     matched = (keywords & msg)
     if @api.user.data.sweep_coins >= 30
+      if @api.user.daily.lifeline_used
+        streak = @api.user.previous_streak
+        text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+      else
+        streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.daily.high_streak])
+        text = "Use 30 Sweepcoins to revert to your best streak of #{streak}?"
+      end
       bind keywords, to: :entry_to_lifeline, reply_with: {
-        text: "Use 30 Sweepcoins to revert your streak back to #{@api.user.previous_streak}?",
+        text: text,
         quick_replies: [["Yes 👍", "Yes Lifeline"], ["No 👎", "No Lifeline"]]
       } if matched.any?
     else
       bind keywords, to: :entry_to_not_enough_for_lifeline, reply_with: {
-        text: "You don't have enough for a lifeline, but feel free to invite or challenge some friends to earn more!",
-        quick_replies: ["Invite friends"]
+        text: "You don't have enough for a lifeline, but inviting or challenging friends can earn you more!",
+        quick_replies: ["Invite friends", "Earn coins"]
       } if matched.any?
     end
   when 'lifeline'
@@ -34,14 +41,21 @@ def for_lifeline
     msg = message.text.split(' ').map(&:downcase)
     matched = (keywords & msg)
     if @api.user.data.sweep_coins >= 30
+      if @api.user.daily.lifeline_used
+        streak = @api.user.previous_streak
+        text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+      else
+        streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.daily.high_streak])
+        text = "Use 30 Sweepcoins to revert to your best streak of #{streak}?"
+      end
       bind keywords, to: :entry_to_lifeline, reply_with: {
-        text: "Use 30 Sweepcoins to revert your streak back to #{@api.user.previous_streak}?",
+        text: text,
         quick_replies: [["Yes 👍", "Yes Lifeline"], ["No 👎", "No Lifeline"]]
       } if matched.any?
     else
       bind keywords, to: :entry_to_not_enough_for_lifeline, reply_with: {
-        text: "You don't have enough for a lifeline, but feel free to invite or challenge some friends to earn more!",
-        quick_replies: ["Invite friends"]
+        text: "You don't have enough for a lifeline, but inviting or challenging friends can earn you more!",
+        quick_replies: ["Invite friends", "Earn coins"]
       } if matched.any?
     end
   end

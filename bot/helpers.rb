@@ -172,3 +172,19 @@ end
 def is_a_valid_email? email
   return true if (email =~ VALID_EMAIL_REGEX) == 0
 end
+
+def find_best_streak streaks:
+  first_tier, second_tier, third_tier = [], [], []
+  streaks.map do |streak|
+    if streak % 4 == 3
+      first_tier << streak
+    elsif streak % 4 == 2
+      second_tier << streak
+    elsif streak % 4 == 1
+      third_tier << streak
+    end
+  end
+  return first_tier.max if first_tier.any?
+  return second_tier.max if second_tier.any?
+  return third_tier.max if third_tier.any?
+end

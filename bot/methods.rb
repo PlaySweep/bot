@@ -85,13 +85,12 @@ def set field, id, option
   @api.update("users", id, params)
 end
 
-def use_lifeline
+def use_lifeline new_streak
   @api = Api.new
   @api.fetch_user(user.id)
   balance = @api.user.data.sweep_coins
   current_streak = @api.user.current_streak
-  previous_streak = @api.user.previous_streak
-  params = { :user => { :sweep_coins => balance -= 30, :current_streak => previous_streak, :previous_streak => current_streak, :current_losing_streak => 0, :lifeline_used => true } }
+  params = { :user => { :sweep_coins => balance -= 30, :current_streak => new_streak, :previous_streak => current_streak, :current_losing_streak => 0, :lifeline_used => true } }
   @api.update('users', user.id, params)
   puts "💸"
 end
