@@ -145,7 +145,7 @@ module Commands
         say options.sample, quick_replies: quick_replies.sample
         stop_thread
       else
-        say "No more #{user.session[:sport_emoji]} games, did you want to make some prop picks?", quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
+        say "No more #{user.session[:sport_emoji]} games, but do you wanna make some side plays?", quick_replies: [["Yes", "#{sport}"], ["No", "NO"]]
         next_command :handle_prop
       end
     else

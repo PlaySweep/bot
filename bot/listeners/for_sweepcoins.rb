@@ -1,6 +1,6 @@
 def listen_for_sweepcoins
   stop_thread and return if message.text.nil?
-  keywords = %w[sweepcoins coins wallet balance]
+  keywords = %w[sweepcoins coins wallet balance coin sweepcoin $]
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   @api = Api.new

@@ -1,6 +1,6 @@
 def listen_for_prizing
   stop_thread and return if message.text.nil?
-  keywords = ['cash out', 'cash', 'prizes', 'prize', 'gift card', 'gift cards', 'money', 'prizing', 'payout', 'payment', 'pay out', 'payday', 'pay day', 'amazon', 'gift', 'card', 'cards']
+  keywords = ['cash out', 'cash', 'prizes', 'prize', 'gift card', 'gift cards', 'money', 'prizing', 'payout', 'payment', 'pay out', 'payday', 'pay day', 'pay', 'paid', 'amazon', 'gift', 'card', 'cards']
   msg = message.text.split(' ').map(&:downcase)
   matched = (keywords & msg)
   @api = Api.new

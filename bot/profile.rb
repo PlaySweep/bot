@@ -10,7 +10,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "Welcome to Sweep {{user_first_name}}, a game of streaks 💫\n\nWhether it's 4 wins or 4 losses, I reward you with in-app prizes and Amazon cash 💰\n\n💯 percent free!"
+        text: "Welcome to Sweep {{user_first_name}}, a game of streaks 💫\n\nPick 4 straight winners and earn Sweepcoins toward an Amazon gift card 💰\n\n💯 percent free!"
       }
     ]
   }

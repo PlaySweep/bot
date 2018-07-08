@@ -68,7 +68,7 @@ def send_confirmation referral_id
     messaging_type: "UPDATE",
     recipient: { id: referral_id },
     message: {
-      text: "Your friend #{new_user['first_name']} #{new_user['last_name']} just signed up through your referral!\n\nYour new Sweepcoin balance is #{referrer['data']['sweep_coins']}!",
+      text: "#{new_user['first_name']} #{new_user['last_name']} joined!\n\n100 Sweepcoins have been added to your wallet 💰",
       quick_replies: menu
     }
   }

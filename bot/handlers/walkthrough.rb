@@ -7,13 +7,15 @@ module Commands
       medium_wait(:message)
       say "So how does all this stuff work? Simple."
       short_wait(:message)
-      say "I send you games to pick and you try to hit 4 in a row 🚣‍♀️\n\n4 wins? Yup. 4 losses? Count that too 😇\n\n4 in a row of anything deserves some Amazon 💰, imo 😎", quick_replies: ["How much?"]
+      say "Pick 4 straight W's to hit a Sweep ✨", quick_replies: [["What do I win?", "HOW MUCH?"]]
       next_command :handle_walkthrough
     when 'HOW MUCH?'
-      message.typing_on
-      say "The winners of these 'Sweeps' will split a daily pot of $25 🤑"
       short_wait(:message)
-      say "I usually send out about $2-5 to winners each day...it's hard work, but I love it ❤️\n\nYou ready #{@api.user.first_name}? Don't worry, I'm just a tap or text away in case you need me 👍", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
+      say "A daily pot of 2500 Sweepcoins ($25) is split among winners at the end of the day 🤑", quick_replies: [["What are Sweepcoins?", "SWEEPCOINS?"]]
+      next_command :handle_walkthrough
+    when 'SWEEPCOINS?'
+      short_wait(:message)
+      say "100 Sweepcoins = $1 Amazon 💰\n\nIn addition to hitting a Sweep, you can earn coins through other achievements like daily picks and special streaks 🚀", quick_replies: [["Start Sweeping 🎉", "SELECT PICKS"]]
       stop_thread
     else
       redirect(:start)
