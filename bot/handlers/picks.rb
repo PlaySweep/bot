@@ -39,7 +39,6 @@ module Commands
       "Nothing else available, gonna grab my wolfpack and hit the desert in Vegas",
       "Our work is done here, but imagine what a little Vibranium could do...",
       "If you ever take me to California, I hope you mean Coachella. All done for now.",
-      "You've made moves on everything you can. But I'm still single 🤦‍♀️",
       "You're all caught up across the board. I'll have more games soon.",
       "No more games to pick here, now is your time to think about how you'd take down a Demigorgon 🤔",
       "No more games for now, I promise I won’t keep you waiting as long as the post office 📫",
