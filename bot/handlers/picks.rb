@@ -44,8 +44,8 @@ module Commands
       "No more games to pick here, now is your time to think about how you'd take down a Demigorgon 🤔",
       "No more games for now, I promise I won’t keep you waiting as long as the post office 📫",
       "You’ve made your picks. Now go make peace with that printer upstairs that never works 🙄",
-      "All finished...what? Expecting another joke or something?",
-      "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot."
+      "All finished...what? Expecting another joke or something? 😝",
+      "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot. 🤖"
     ]
     say options.sample, quick_replies: quick_replies.sample
     stop_thread

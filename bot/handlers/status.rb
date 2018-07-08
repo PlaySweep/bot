@@ -85,7 +85,7 @@ module Commands
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
     @api.user.current_losing_streak == 1 ? els = "L" : els = "L's"
-    options = ["Losing never felt so right (#{@api.user.current_losing_streak} straight #{els}) 😎", "Reverse streaking (#{@api.user.current_losing_streak} straight #{els}) 🔙", "Losing is the new winning (#{@api.user.current_losing_streak} straight #{els}) 🙌"]
+    options = ["Reverse streaking (#{@api.user.current_losing_streak} straight #{els}) 🔙", "Losing is the new winning (#{@api.user.current_losing_streak} straight #{els}) 🙌"]
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", options.sample, quick_replies, url)
@@ -96,7 +96,7 @@ module Commands
     show_my_picks(type)
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }, { content_type: 'text', title: CHALLENGE_OPTIONS.sample, payload: "CHALLENGE" }]
     @api.user.current_losing_streak == 1 ? els = "L" : els = "L's"
-    options = ["The biggest loser (#{@api.user.current_losing_streak} straight #{els}) 👏", "All time loser (#{@api.user.current_losing_streak} straight #{els}) 🏅"]
+    options = ["Losing never felt so right (#{@api.user.current_losing_streak} straight #{els}) 😎", "The biggest loser (#{@api.user.current_losing_streak} straight #{els}) 👏", "All time loser (#{@api.user.current_losing_streak} straight #{els}) 🏅"]
     url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
     short_wait(type)
     show_button("Show Status", options.sample, quick_replies, url)
