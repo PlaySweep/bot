@@ -86,16 +86,16 @@ module Commands
       end
     elsif user.session[:game_type] == 'prop'
       if @api.matchups && @api.matchups.count > 1 || @api.matchups && @api.matchups.count == 0 
-        games = 'props'
+        games = 'games'
       else
-        games = 'prop'
+        games = 'game'
       end
     end
     count = @api.matchups && @api.matchups.count
     options = [
-      "#{count} #{sport.capitalize} #{games} on deck...",
-      "#{count} #{sport.capitalize} #{games} comin up...",
-      "#{count} #{sport.capitalize} #{games} today...",
+      "#{count} #{user.session[:sport_emoji]} #{games} on deck...",
+      "#{count} #{user.session[:sport_emoji]} #{games} comin up...",
+      "#{count} #{user.session[:sport_emoji]} #{games} today...",
     ]
     short_wait(:message)
     say options.sample unless (matchup_id && selected_id || (@api.matchups.nil? || @api.matchups.empty?))

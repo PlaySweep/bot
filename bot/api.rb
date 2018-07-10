@@ -181,6 +181,9 @@ class Api
       @challenge_valid = false
       response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
       @challenge_valid = true if response.status == 200
+    when 'daily_statistics'
+      response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
+      puts "👍" if response.status == 200
     end
   end
 

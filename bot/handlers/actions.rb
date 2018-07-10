@@ -61,6 +61,9 @@ module Commands
       medium_wait(:message)
       show_invite
       stop_thread
+    else
+      say "👋"
+      stop_thread
     end
   end
 
