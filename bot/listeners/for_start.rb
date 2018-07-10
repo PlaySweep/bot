@@ -7,7 +7,6 @@ def listen_for_start_postback
       say "Welcome to Sweep #{@api.user.first_name}, my name is Emma 👋"
       short_wait(:postback)
       say "If you're here to pick winners, challenge your friends, and earn some 💰...then I'm your bot 😉", quick_replies: [["Heck yeah!", "WELCOME"]]
-      puts "REFERRER REF ID #{postback.referral.ref}"
       update_referrer(postback.referral.ref) if postback.referral && postback.referral.ref.to_i != 0
       next_command :handle_walkthrough
     rescue NoMethodError => e
