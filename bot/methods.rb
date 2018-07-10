@@ -1,7 +1,16 @@
 def update_referrer referral_id
   @api = Api.new
   @api.fetch_user(referral_id)
+  puts "🎉"*25
   puts "Referral 😁 😁 😁"
+  message_options = {
+    messaging_type: "UPDATE",
+    recipient: { id: 1566539433429514 },
+    message: {
+      text: "Referral made by #{@api.user.full_name}"
+    }
+  }
+  Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
   new_referral_count = @api.user.data.referral_count += 1
   new_sweep_coin_balance = @api.user.data.sweep_coins += 100
   params = { :user => { :referral_count => new_referral_count, :sweep_coins => new_sweep_coin_balance }, :friend_uuid => user.id }
