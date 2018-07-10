@@ -1,14 +1,13 @@
 def update_referrer referral_id
   @api = Api.new
   @api.fetch_user(referral_id)
-  puts "Referral 😁 😁 😁"
   puts "🎉"*25
   puts "Referral 😁 😁 😁"
   message_options = {
     messaging_type: "UPDATE",
-    recipient: { id: 1328837993906209 },
+    recipient: { id: 1566539433429514 },
     message: {
-      text: "Referral made..."
+      text: "Referral made by #{@api.user.full_name}"
     }
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
