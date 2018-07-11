@@ -175,6 +175,7 @@ end
 
 def find_best_streak streaks:
   first_tier, second_tier, third_tier = [], [], []
+  # return streaks[0] if streaks[1] == nil
   streaks.map do |streak|
     if streak % 4 == 3
       first_tier << streak
