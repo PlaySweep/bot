@@ -22,10 +22,12 @@ def for_lifeline
           puts 'used yesterday and have no record for today so use prev streak'
           streak = @api.user.previous_streak
           text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+          user.session[:lifeline_streak] = streak
         else
           puts 'didnt use yesterday and have no record for today so choose between prev streak and yesterdays high streak'
           streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.yesterday.high_streak])
           text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+          user.session[:lifeline_streak] = streak
         end
       else
         if @api.user.daily.wins > 0 || @api.user.daily.losses > 0
@@ -33,24 +35,29 @@ def for_lifeline
             puts 'have a record for the day and used a lifeline so use prev streak'
             streak = @api.user.previous_streak
             text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+            user.session[:lifeline_streak] = streak
           else
             puts 'have a record for today but havent used lifeline so choose between prev streak and daily high'
             streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.daily.high_streak])
             text = "Use 30 Sweepcoins to revert to your best streak of #{streak}?"
+            user.session[:lifeline_streak] = streak
           end
         else
           if @api.user.yesterday.lifeline_used && @api.user.daily.lifeline_used
             puts 'have a record but havent recorded a win yet and used lifeline yesterday so use prev streak'
             streak = @api.user.previous_streak
             text = "Use 30 Sweepcoins to revert to your previous streak of #{streak}?"
+            user.session[:lifeline_streak] = streak
           elsif !@api.user.yesterday.lifeline_used && !@api.user.daily.lifeline_used
             puts 'have a record but havent recorded a win yet and havent used yesterdays lifeline so choose between prev and yesterdays high'
             streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.yesterday.high_streak])
             text = "Use 30 Sweepcoins to revert to your best streak of #{streak}?"
+            user.session[:lifeline_streak] = streak
           else
-            puts 'have a record but havent recorded a win yet and havent used yesterdays lifeline so choose between prev and yesterdays high'
+            puts 'have a record but havent recorded a win yet and havent used yesterdays lifeline so choose between prev and daily high'
             streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.daily.high_streak])
             text = "Use 30 Sweepcoins to revert to your best streak of #{streak}?"
+            user.session[:lifeline_streak] = streak
           end
         end
       end

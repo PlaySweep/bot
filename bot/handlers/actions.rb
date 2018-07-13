@@ -4,41 +4,23 @@ module Commands
     @api.fetch_user(user.id)
     case message.quick_reply
     when 'Yes Lifeline'
-      if @api.user.daily.lifeline_used
-        if (@api.user.current_streak < @api.user.previous_streak) || (@api.user.current_streak < @api.user.daily.high_streak)
-          use_lifeline(@api.user.previous_streak)
-          @api.fetch_user(user.id)
-          short_wait(:message)
-          say "Well played 👏 you're back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
-          stop_thread
-        elsif @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.daily.high_streak == 0)
-          short_wait(:message)
-          say "I don't think you wanna do that #{@api.user.first_name}. That's crazy talk."
-          short_wait(:message)
-          say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
-          stop_thread
-        elsif @api.user.data.sweep_coins < 30
-          say "You do not have enough Sweepcoins for a lifeline. Keep making picks and challenging/inviting your friends to earn more 💵", quick_replies: ["Select picks", "Status", "Invite Friends"]
-          stop_thread
-        end
+      if @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.daily.high_streak == 0)
+        short_wait(:message)
+        say "I don't think you wanna do that #{@api.user.first_name}. That's crazy talk."
+        short_wait(:message)
+        say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
+        user.session[:lifeline_streak] = nil
+        stop_thread
+      elsif @api.user.data.sweep_coins < 30
+        say "You do not have enough Sweepcoins for a lifeline. Keep making picks and challenging/inviting your friends to earn more 💵", quick_replies: ["Select picks", "Status", "Invite Friends"]
+        user.session[:lifeline_streak] = nil
+        stop_thread
       else
-        if (@api.user.current_streak < @api.user.previous_streak) || (@api.user.current_streak < @api.user.daily.high_streak)
-          streak = find_best_streak(streaks: [@api.user.previous_streak, @api.user.daily.high_streak])
-          use_lifeline(streak)
-          @api.fetch_user(user.id)
-          short_wait(:message)
-          say "Well played 👏 you're back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
-          stop_thread
-        elsif @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.daily.high_streak == 0)
-          short_wait(:message)
-          say "I don't think you wanna do that #{@api.user.first_name}. That's crazy talk."
-          short_wait(:message)
-          say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
-          stop_thread
-        elsif @api.user.data.sweep_coins < 30
-          say "You do not have enough Sweepcoins for a lifeline. Keep making picks and challenging/inviting your friends to earn more 💵", quick_replies: ["Select picks", "Status", "Invite Friends"]
-          stop_thread
-        end
+        use_lifeline(user.session[:lifeline_streak])
+        @api.fetch_user(user.id)
+        short_wait(:message)
+        say "Well played 👏 you're back to #{@api.user.current_streak} 🔥\n\nYour new Sweepcoin balance is #{@api.user.data.sweep_coins} 👌", quick_replies: ["Select picks", "Status"]
+        stop_thread
       end
     when 'No Lifeline'
       short_wait(:message)
