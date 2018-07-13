@@ -13,7 +13,7 @@ module Commands
           stop_thread
         elsif @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.daily.high_streak == 0)
           short_wait(:message)
-          say "Hold up #{@api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{@api.user.current_streak}, did you? That's crazy talk."
+          say "I don't think you wanna do that #{@api.user.first_name}. That's crazy talk."
           short_wait(:message)
           say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
           stop_thread
@@ -31,7 +31,7 @@ module Commands
           stop_thread
         elsif @api.user.current_streak > 0 || (@api.user.previous_streak == 0 && @api.user.daily.high_streak == 0)
           short_wait(:message)
-          say "Hold up #{@api.user.first_name}, I don't think you meant to reset yourself back to zero from a streak of #{@api.user.current_streak}, did you? That's crazy talk."
+          say "I don't think you wanna do that #{@api.user.first_name}. That's crazy talk."
           short_wait(:message)
           say "Emma's got you. Let's get back to it 👇", quick_replies: ["Select picks", "Status"]
           stop_thread
