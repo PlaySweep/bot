@@ -73,6 +73,7 @@ module Commands
   end
 
   def handle_notification_change 
+    say "🤷‍♀️" and stop_thread and return if message.quick_reply.nil?
     @api = Api.new
     active_categories = @api.fetch_sports(active: true).map(&:name)
     if message.quick_reply.split(' ').length == 3
