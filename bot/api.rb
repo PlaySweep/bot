@@ -138,8 +138,8 @@ class Api
           params = { :user => 
             { 
               :facebook_uuid => @fb_user.has_key?('id') ? @fb_user.id : nil, 
-              :first_name => @fb_user.has_key?('first_name') ? @fb_user.first_name : nil, 
-              :last_name => @fb_user.has_key?('last_name') ? @fb_user.last_name : nil, 
+              :first_name => @fb_user.has_key?('first_name') ? strip_emoji(@fb_user.first_name) : nil, 
+              :last_name => @fb_user.has_key?('last_name') ? strip_emoji(@fb_user.last_name) : nil, 
               :profile_pic => @fb_user.has_key?('profile_pic') ? @fb_user.profile_pic : nil, 
               :gender => @fb_user.has_key?('gender') ? @fb_user.gender : nil, 
               :timezone => @fb_user.has_key?('timezone') ? @fb_user.timezone : nil 
@@ -147,6 +147,15 @@ class Api
           }
           response = @conn.post("#{model}", params)
           @user = JSON.parse(response.body)['user']
+        else
+          message_options = {
+            messaging_type: "UPDATE",
+            recipient: { id: 1328837993906209 },
+            message: {
+              text: "Facebook couldnt find user with id of #{id}"
+            }
+          }
+          Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
         end
       end
     end
