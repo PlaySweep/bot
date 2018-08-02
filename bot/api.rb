@@ -4,6 +4,40 @@ require 'hash_dot'
 require 'base64'
 require 'open-uri'
 
+require 'faraday'
+require 'json'
+
+API_URL = "http://localhost:3000/api/v1"
+
+# module Sweep
+#   class User
+#     attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :current_streak, :friends
+
+#     def initialize attributes
+#       @id = attributes['id']
+#       @facebook_uuid = attributes['facebook_uuid']
+#       @first_name = attributes['first_name']
+#       @last_name = attributes['last_name']
+#       @full_name = attributes['full_name']
+#       @current_streak = attributes['current_streak']
+#       @friends = attributes['friends']
+#     end
+
+#     def self.all
+#       response = Faraday.get("#{API_URL}/users")
+#       users = JSON.parse(response.body)['users']
+#       users.map { |attributes| new(attributes) }
+#     end
+
+#     def self.find uuid
+#       response = Faraday.get("#{API_URL}/users/#{uuid}")
+#       attributes = JSON.parse(response.body)['user']
+#       new(attributes)
+#     end
+
+#   end
+# end
+
 class Api
   Hash.use_dot_syntax = true
 
