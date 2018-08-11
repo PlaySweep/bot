@@ -1,7 +1,5 @@
 module Commands
   def handle_walkthrough
-    @api = Api.new
-    @api.fetch_user(user.id)
     case message.quick_reply
     when 'WELCOME'
       medium_wait(:message)

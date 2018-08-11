@@ -1,14 +1,6 @@
 def listen_for_misc
   stop_thread and return if message.text.nil?
-  for_blow_steam
   for_fun
-end
-
-def for_blow_steam
-  keywords = %w[fuck! fuck shit! shit bitch! bitch sucks! sucks damn! damn]
-  msg = message.text.split(' ').map(&:downcase).map(&:squeeze)
-  matched = (keywords & msg)
-  bind keywords, all: true, to: :entry_to_blow_steam if matched.any?
 end
 
 def for_fun

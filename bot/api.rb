@@ -9,238 +9,156 @@ require 'json'
 
 API_URL = "http://localhost:3000/api/v1"
 
-# module Sweep
-#   class User
-#     attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :current_streak, :friends
-
-#     def initialize attributes
-#       @id = attributes['id']
-#       @facebook_uuid = attributes['facebook_uuid']
-#       @first_name = attributes['first_name']
-#       @last_name = attributes['last_name']
-#       @full_name = attributes['full_name']
-#       @current_streak = attributes['current_streak']
-#       @friends = attributes['friends']
-#     end
-
-#     def self.all
-#       response = Faraday.get("#{API_URL}/users")
-#       users = JSON.parse(response.body)['users']
-#       users.map { |attributes| new(attributes) }
-#     end
-
-#     def self.find uuid
-#       response = Faraday.get("#{API_URL}/users/#{uuid}")
-#       attributes = JSON.parse(response.body)['user']
-#       new(attributes)
-#     end
-
-#   end
-# end
-
-class Api
+module Sweep
   Hash.use_dot_syntax = true
 
-  attr_accessor :conn, :fb_conn, :fb_user, :user, :user_list, 
-                :pick, :picks, :matchup, :matchups, :challenge_matchups, :copies,
-                :upcoming_picks, :friend, :friends, :in_progress_picks, :completed_picks, 
-                :challenge, :challenge_type, :team, :prop, :sports, :media, :challenge_valid,
-                :payment
+  class User
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :previous_streak, :current_streak, :current_losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends
 
-  def initialize
-    @conn = Faraday.new(:url => "#{ENV["API_URL"]}/api/v1/")
-  end
+    def initialize attributes
+      @id = attributes['id']
+      @facebook_uuid = attributes['facebook_uuid']
+      @first_name = attributes['first_name']
+      @last_name = attributes['last_name']
+      @full_name = attributes['full_name']
+      @previous_streak = attributes['previous_streak']
+      @current_streak = attributes['current_streak']
+      @current_losing_streak = attributes['current_losing_streak']
+      @current_picks = attributes['current_picks']
+      @can_cash_out = attributes['can_cash_out']
+      @data = attributes['data']
+      @pending_balance = attributes['pending_balance']
+      @email = attributes['email']
+      @friends = attributes['friends']
+    end
 
-  def fetch_all model, facebook_uuid=nil, sport=nil, type=nil
-    case model
-    when 'users'
-      response = @conn.get("#{model}")
-      @users = JSON.parse(response.body)['users']
-    when 'matchups'
-      if sport
-        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}&type=#{type}&sport=#{sport}")
+    def self.all
+      response = Faraday.get("#{API_URL}/users")
+      users = JSON.parse(response.body)['users']
+      users.map { |attributes| new(attributes) }
+    end
+
+    def self.find uuid
+      response = Faraday.get("#{API_URL}/users/#{uuid}")
+      attributes = JSON.parse(response.body)['user']
+      new(attributes)
+    end
+
+    def self.find_or_create facebook_uuid
+      response = Faraday.get("#{API_URL}/users/#{facebook_uuid}")
+      attributes = JSON.parse(response.body)['user']
+      if attributes.empty?
+        create(facebook_uuid)
       else
-        response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
-      end
-      @matchups = JSON.parse(response.body)['matchups']
-    when 'challenge_matchups'
-      response = @conn.get("#{model}?facebook_uuid=#{facebook_uuid}")
-      @challenge_matchups = JSON.parse(response.body)['matchups']
-    end
-  end
-
-  def fetch_user id
-    response = @conn.get("users/#{id}")
-    @user = JSON.parse(response.body)['user']
-  end
-
-  def fetch_copy facebook_uuid:, category:
-    response = @conn.get("copies?facebook_uuid=#{facebook_uuid}&category=#{category}")
-    @copies = JSON.parse(response.body)['copies']
-  end
-
-  def fetch_challenge user_id, id
-    response = @conn.get("users/#{user_id}/challenges/#{id}")
-    @challenge = JSON.parse(response.body)['challenge']
-  end
-
-  def fetch_challenge_type description
-    response = @conn.get("challenge_types?description=#{description}")
-    @challenge_type = JSON.parse(response.body)['challenge_type']
-  end
-
-  def fetch_team id
-    response = @conn.get("teams/#{id}")
-    @team = JSON.parse(response.body)['team']
-  end
-
-  def fetch_prop id
-    response = @conn.get("props/#{id}")
-    @prop = JSON.parse(response.body)['prop']
-  end
-
-  def fetch_media category
-    response = @conn.get("media?category=#{category}")
-    @media = JSON.parse(response.body)['media']
-  end
-
-  def fetch_matchup_by_teams side1, side2
-    response = @conn.get("matchup/by_teams?away_side=#{side1}&home_side=#{side2}")
-    @matchup = JSON.parse(response.body)['matchup']
-  end
-
-  def fetch_friends id, param=nil
-    case param
-    when :most_popular
-      response = @conn.get("users/#{id}/friends?most_popular=true")
-      @friends = JSON.parse(response.body)['friends']
-    else
-      response = @conn.get("users/#{id}/friends")
-      @friends = JSON.parse(response.body)['friends']
-    end
-  end
-
-  def fetch_picks id, param=nil
-    case param
-    when :in_flight
-      response = @conn.get("users/#{id}/picks?in_flight=true")
-      @picks = JSON.parse(response.body)['picks']
-    when :pending
-      response = @conn.get("users/#{id}/picks?pending=true")
-      @picks = JSON.parse(response.body)['picks']
-    else
-      response = @conn.get("users/#{id}/picks")
-      @picks = JSON.parse(response.body)['picks']
-    end
-  end
-
-  def fetch_sports active: nil
-    if active
-      response = @conn.get("sports?active=true")
-      @sports = JSON.parse(response.body)['sports']
-    else
-      response = @conn.get("sports")
-      @sports = JSON.parse(response.body)['sports']
-    end
-  end
-
-  def query_users query
-    response = @conn.get("users?name=#{query}")
-    @user_list = JSON.parse(response.body)['users']
-  end
-
-  def query_matchups query
-    response = @conn.get("challenge_matchups?name=#{query}")
-    @matchup_list = JSON.parse(response.body)['matchups']
-  end
-
-  def fetch_fb_user id
-    @fb_conn = Faraday.new(:url => "https://graph.facebook.com/v2.11/#{id}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=#{ENV['ACCESS_TOKEN']}")
-    response = @fb_conn.get
-    @fb_user = JSON.parse(response.body)
-  end
-
-  def find_or_create model, id
-    case model
-    when 'users'
-      response = @conn.get("#{model}/#{id}")
-      @user = JSON.parse(response.body)['user']
-      if (@user.nil? || @user.empty?)
-        fetch_fb_user(id)
-        if @fb_user
-          puts "Facebook user: #{@fb_user.inspect}"
-          params = { :user => 
-            { 
-              :facebook_uuid => @fb_user.has_key?('id') ? @fb_user.id : nil, 
-              :first_name => @fb_user.has_key?('first_name') ? strip_emoji(@fb_user.first_name) : nil, 
-              :last_name => @fb_user.has_key?('last_name') ? strip_emoji(@fb_user.last_name) : nil, 
-              :profile_pic => @fb_user.has_key?('profile_pic') ? @fb_user.profile_pic : nil, 
-              :gender => @fb_user.has_key?('gender') ? @fb_user.gender : nil, 
-              :timezone => @fb_user.has_key?('timezone') ? @fb_user.timezone : nil 
-            } 
-          }
-          response = @conn.post("#{model}", params)
-          @user = JSON.parse(response.body)['user']
-        else
-          message_options = {
-            messaging_type: "UPDATE",
-            recipient: { id: 1328837993906209 },
-            message: {
-              text: "Facebook couldnt find user with id of #{id}"
-            }
-          }
-          Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
-        end
+        find(facebook_uuid)
       end
     end
-  end
 
-  def create model, id, params
-    case model
-    when 'users'
-      response = @conn.post('users', params)
-      response = JSON.parse(response.body)
-      @user = response['user']
-    when 'picks'
-      response = @conn.post("users/#{id}/#{model}", params)
-      response = JSON.parse(response.body)
-      @pick = response['pick']
-    when 'challenges'
-      response = @conn.post("users/#{id}/#{model}", params)
-      response = JSON.parse(response.body)
-      @challenge = response['challenge']
+    def self.create facebook_uuid
+      response = Faraday.get("https://graph.facebook.com/v2.11/#{facebook_uuid}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=#{ENV['ACCESS_TOKEN']}")
+      user = JSON.parse(response.body)
+      params = { :user => 
+        { 
+          :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
+          :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
+          :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
+          :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
+          :gender => user.has_key?('gender') ? user['gender'] : nil, 
+          :timezone => user.has_key?('timezone') ? user['timezone'] : nil 
+        } 
+      }
+      response = Faraday.post("#{API_URL}/users", params)
+      attributes = JSON.parse(response.body)['user']
+      new(attributes)
     end
-  end
 
-  def update model, id, params, user_id = nil
-    case model
-    when 'users'
-      response = @conn.patch("#{model}/#{id}", params)
-      puts "👍" if response.status == 200
-    when 'matchups'
-      response = @conn.patch("#{model}/#{id}", params)
-      puts "👍" if response.status == 200
-    when 'challenges'
-      @challenge_valid = false
-      response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
-      @challenge_valid = true if response.status == 200
-    when 'daily_statistics'
-      response = @conn.patch("users/#{user_id}/#{model}/#{id}", params)
-      puts "👍" if response.status == 200
+    def update_referral referred_facebook_uuid:
+      params = { :user => { :referral_count => @data['referral_count'] += 1, :coins => @data['coins'] += 100 }, :friend_uuid => referred_facebook_uuid }
+      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", params)
+      if response.status == 200
+        $tracker.track(@api.user.id, "User Made Referral")
+        send_confirmation(@facebook_uuid, referred_facebook_uuid)
+        puts "👍"
+      else
+        puts "⁉️"
+      end
     end
-  end
 
-  def for_picks scope, id
-    case scope
-    when 'status'
-      response = @conn.get("users/#{id}/status")
-      @user = JSON.parse(response.body)['user']
+    def update_email
+      params = { :user => { :email => email } }
+      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", params)
+      if response.status == 200
+        puts "👍"
+      else
+        puts "⁉️"
+      end
     end
+
+    def update_status
+      
+    end
+
   end
 
-  def cash_out facebook_uuid, amount
-    response = @conn.post("users/#{facebook_uuid}/payments", { :payment => {transaction_type: "receive", amount: amount} })
-    response = JSON.parse(response.body)
-    @payment = response['payment']
+  class Event
+    attr_reader :id, :data, :participants
+
+    def initialize attributes
+      @id = attributes['id']
+      @data = attributes['data']
+      @participants = attributes['participants']
+    end
+
+    def self.all facebook_uuid:, type: nil
+      if type.nil?
+        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}")
+      else
+        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}&type=#{type}")
+      end
+      events = JSON.parse(response.body)['events']
+      events.map { |attributes| new(attributes) }
+    end
+
+    def self.find id:
+      response = Faraday.get("#{API_URL}/events/#{id}")
+      attributes = JSON.parse(response.body)['event']
+      new(attributes)
+    end
+
+  end
+
+  class Pick
+    attr_reader :id, :selected
+
+    def initialize attributes
+      @id = attributes['id']
+      @selected = attributes['selected']
+    end
+
+    def self.create facebook_uuid:, attributes:
+      params = { :pick => { user_id: facebook_uuid, event_id: attributes[:event_id], selected_id: attributes[:selected_id] } }
+      response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/picks", params)
+      attributes = JSON.parse(response.body)['pick']
+      new(attributes)
+    end
+
+  end
+
+  class Payment
+    attr_reader :id, :transaction_type, :amount
+
+    def initialize attributes
+      @id = attributes['id']
+      @transaction_type = attributes['transaction_type']
+      @amount = attributes['amount']
+    end
+
+    def self.create facebook_uuid:, attributes:
+      params = { :payment => { transaction_type: "receive", amount: attributes[:amount] } }
+      response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/payments", params)
+      attributes = JSON.parse(response.body)['payment']
+      new(attributes)
+    end
+
   end
 end

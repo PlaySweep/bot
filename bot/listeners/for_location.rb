@@ -4,7 +4,7 @@ end
 
 def for_location
   bind 'location', all: true, to: :handle_lookup_location, reply_with: {
-     text: "Home sweet home 🏡",
+     text: "Where you at? 🏡",
      quick_replies: LOCATION_PROMPT
    }
 end

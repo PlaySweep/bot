@@ -10,10 +10,6 @@ module Commands
       message.typing_on
       say "Tap on the sport bubbles when you see them to begin making your picks 👍", quick_replies: ["Select picks", "Status"]
       stop_thread
-    when :blow_steam
-      message.typing_on
-      say "You don't wanna blow steam anymore? Okaayyy", quick_replies: ["Select picks", "Status"]
-      stop_thread
     when :catch
       message.typing_on
       say "Ok lets get to it then", quick_replies: ["Select picks", "Status"]
@@ -39,10 +35,12 @@ module Commands
     case type
     when :message
       message.typing_on
+      sleep 1.5
     when :postback
       postback.typing_on
+      sleep 1.5
     end
-    sleep 1
+    message.typing_off
   end
 
   def long_wait type

@@ -26,7 +26,7 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: 'Select picks',
+                title: 'Make picks',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
               },
@@ -38,7 +38,7 @@ module Profile
               {
                 title: 'Challenges',
                 type: 'postback',
-                payload: 'CHALLENGE'
+                payload: 'CHALLENGES'
               }
             ]
           },

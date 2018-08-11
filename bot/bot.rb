@@ -5,9 +5,9 @@ Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
 # Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
-Rubotnik.set_profile(
-  Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
-)
+# Rubotnik.set_profile(
+#   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
+# )
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
 # HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
@@ -20,17 +20,14 @@ EMAIL_PROMPT = UI::QuickReplies.email
 Rubotnik.route :message do |msg|
   listen_for_media
   listen_for_select_picks
-  # listen_for_location
+  listen_for_location
   listen_for_email
   listen_for_status
-  listen_for_challenge
-  listen_for_sweepcoins
   listen_for_invite_friends
   listen_for_misc
   listen_for_prizing
-  listen_for_actions
-  listen_for_feedback
-  listen_for_notifications
+  # listen_for_feedback
+  # listen_for_notifications
 
   default do
     capture_responses(message.text) unless message.text.nil?
@@ -40,13 +37,10 @@ end
 
 Rubotnik.route :postback do
   listen_for_start_postback
-  # listen_for_ads_postback
   listen_for_select_picks_postback
   listen_for_status_postback
-  listen_for_challenge_postback
   listen_for_invite_friends_postback
-  listen_for_actions_postback
-  listen_for_notifications_postback
+  # listen_for_notifications_postback
 end
 
 ############################ TEST ON LOCALHOST #################################
