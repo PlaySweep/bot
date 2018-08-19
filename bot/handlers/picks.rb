@@ -1,7 +1,7 @@
 module Commands
   def handle_show_sports
     quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Preferences", payload: "PREFERENCES" }]
-    url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
     show_button("Make some picks 🎉", "We got some games today", quick_replies, url)
     stop_thread
   end
