@@ -11,7 +11,6 @@ def listen_for_select_picks_postback
       handle_no_sports_available
     end
   end
-  stop_thread
 end
 
 def single_match
@@ -23,7 +22,6 @@ def single_match
   else
     bind keywords, all: true, to: :handle_no_sports_available if matched.any?
   end
-  stop_thread
 end
 
 def double_match
@@ -35,7 +33,6 @@ def double_match
   else
     bind keywords, all: true, to: :handle_no_sports_available if matched.any?
   end
-  stop_thread
 end
 
 def matchups_available?

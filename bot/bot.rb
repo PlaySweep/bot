@@ -26,6 +26,7 @@ Rubotnik.route :message do |msg|
   listen_for_invite_friends
   listen_for_misc
   listen_for_prizing
+  listen_for_challenges
   # listen_for_feedback
   # listen_for_notifications
 
@@ -40,6 +41,7 @@ Rubotnik.route :postback do
   listen_for_select_picks_postback
   listen_for_status_postback
   listen_for_invite_friends_postback
+  listen_for_challenges_postback
   # listen_for_notifications_postback
 end
 

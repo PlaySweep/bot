@@ -13,7 +13,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :previous_streak, :current_streak, :current_losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :streak, :losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends
 
     def initialize attributes
       @id = attributes['id']
@@ -21,9 +21,8 @@ module Sweep
       @first_name = attributes['first_name']
       @last_name = attributes['last_name']
       @full_name = attributes['full_name']
-      @previous_streak = attributes['previous_streak']
-      @current_streak = attributes['current_streak']
-      @current_losing_streak = attributes['current_losing_streak']
+      @streak = attributes['streak']
+      @losing_streak = attributes['losing_streak']
       @current_picks = attributes['current_picks']
       @can_cash_out = attributes['can_cash_out']
       @data = attributes['data']
@@ -153,6 +152,23 @@ module Sweep
       response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/payments", params)
       attributes = JSON.parse(response.body)['payment']
       new(attributes)
+    end
+
+  end
+
+  class Contest
+    attr_reader :id, :name, :type
+
+    def initialize attributes
+      @id = attributes['id']
+      @name = attributes['name']
+      @type = attributes['type']
+    end
+
+    def self.all
+      response = Faraday.get("#{API_URL}/contests")
+      contests = JSON.parse(response.body)['contests']
+      contests.map { |attributes| new(attributes) }
     end
 
   end

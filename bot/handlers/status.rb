@@ -27,8 +27,8 @@ module Commands
       stop_thread
     else
       quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-      @sweepy.current_streak == 1 ? dubs = "W" : dubs = "W's"
-      text = "You're still at #{@sweepy.current_streak} in a row 🏁. Next up are the Falcons (+3.5) at 3p."
+      @sweepy.streak == 1 ? dubs = "W" : dubs = "W's"
+      text = "You're still at #{@sweepy.streak} in a row 🏁. Next up are the Falcons (+3.5) at 3p."
       url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
       show_button("Show me more 🤗", text, quick_replies, url)
       stop_thread
@@ -60,19 +60,19 @@ module Commands
   end
 
   def user_has_sweep?
-    @sweepy.current_streak % 4 == 0
+    @sweepy.streak % 4 == 0
   end
 
   def user_has_win_streak?
-    @sweepy.current_streak > 0 && @sweepy.current_losing_streak < 1
+    @sweepy.streak > 0 && @sweepy.losing_streak < 1
   end
 
   def user_has_losing_streak?
-    @sweepy.current_streak < 1 && @sweepy.current_losing_streak >= 1
+    @sweepy.streak < 1 && @sweepy.losing_streak >= 1
   end
 
   def user_has_no_activity?
-    @sweepy.current_streak == 0 && @sweepy.current_losing_streak == 0 && @sweepy.previous_streak == 0 
+    @sweepy.streak == 0 && @sweepy.losing_streak == 0
   end
 
   def current_status
