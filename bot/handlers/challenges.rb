@@ -16,7 +16,7 @@ module Commands
       buttons: [
         {
           type: "web_url",
-          url: "#{ENV['WEBVIEW_URL']}/contests",
+          url: "#{ENV['WEBVIEW_URL']}/#{user.id}/contests",
           title: "View Contests",
           webview_height_ratio: "tall"
         }           
@@ -29,7 +29,7 @@ module Commands
       buttons: [
         {
           type: "web_url",
-          url: "#{ENV['WEBVIEW_URL']}/battles",
+          url: "#{ENV['WEBVIEW_URL']}/#{user.id}/battles",
           title: "View Battles",
           webview_height_ratio: "tall"
         }             
