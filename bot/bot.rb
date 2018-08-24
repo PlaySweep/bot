@@ -28,7 +28,8 @@ Rubotnik.route :message do |msg|
   listen_for_prizing
   listen_for_challenges
   # listen_for_feedback
-  # listen_for_notifications
+  listen_for_notifications
+  listen_for_unsubscribe
 
   default do
     capture_responses(message.text) unless message.text.nil?
@@ -42,7 +43,7 @@ Rubotnik.route :postback do
   listen_for_status_postback
   listen_for_invite_friends_postback
   listen_for_challenges_postback
-  # listen_for_notifications_postback
+  listen_for_notifications_postback
 end
 
 ############################ TEST ON LOCALHOST #################################
