@@ -7,6 +7,8 @@ module Commands
   end
 
   def handle_unsubscribe
+    @sweepy = Sweep::User.find(user.id)
+    @sweepy.unsubscribe
     say "I unsubscribed you from any further messages 🔕.", quick_replies: ["Preferences", "Make picks"]
     stop_thread
   end

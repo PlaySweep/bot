@@ -39,6 +39,16 @@ module Profile
                 title: 'Challenges',
                 type: 'postback',
                 payload: 'CHALLENGES'
+              },
+              {
+                title: 'Leaderboard',
+                type: 'postback',
+                payload: 'LEADERBOARD'
+              },
+              {
+                title: 'Store',
+                type: 'postback',
+                payload: 'STORE'
               }
             ]
           },

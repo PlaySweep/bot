@@ -29,6 +29,8 @@ module Sweep
       @pending_balance = attributes['pending_balance']
       @email = attributes['email']
       @friends = attributes['friends']
+      @sport_preference = attributes['sport_preference']
+      @system_preference = attributes['system_preference']
     end
 
     def self.all
@@ -87,6 +89,31 @@ module Sweep
       response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", params)
       if response.status == 200
         puts "👍"
+      else
+        puts "⁉️"
+      end
+    end
+
+    def unsubscribe
+      unsubscribe_system_preference
+      unsubscribe_sport_preference
+    end
+
+    def unsubscribe_system_preference
+      params = { :system_preference => { recaps: false } }
+      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}/system_preferences/#{@system_preference.id}", params)
+      if response.status == 200
+        puts "👋"
+      else
+        puts "⁉️"
+      end
+    end
+
+    def unsubscribe_sport_preference
+      params = { :sport_preference => { leagues: [].to_json } }
+      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}/sport_preferences/#{@sport_preference.id}", params)
+      if response.status == 200
+        puts "👋"
       else
         puts "⁉️"
       end
@@ -172,4 +199,5 @@ module Sweep
     end
 
   end
+
 end
