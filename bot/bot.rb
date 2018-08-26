@@ -30,6 +30,7 @@ Rubotnik.route :message do |msg|
   # listen_for_feedback
   listen_for_notifications
   listen_for_unsubscribe
+  listen_for_store
 
   default do
     capture_responses(message.text) unless message.text.nil?
