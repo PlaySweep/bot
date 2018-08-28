@@ -16,29 +16,18 @@ module Commands
   end
 
   def show_winning_sweep_message type
-    if true
-      @sweepy.update_status
-      say "I got some updates for you #{@sweepy.first_name}, one sec ☝️"
-      medium_wait(:message)
-      quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-      text = "Since you've been gone, you won your last game and now have a streak of 3!"
-      url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
-      show_button("Show me more 🤗", text, quick_replies, url)
-      stop_thread
-    else
-      quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-      @sweepy.streak == 1 ? dubs = "W" : dubs = "W's"
-      text = "You're still at #{@sweepy.streak} in a row 🏁. Next up are the Falcons (+3.5) at 3p."
-      url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
-      show_button("Show me more 🤗", text, quick_replies, url)
-      stop_thread
-    end
+    quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
+    @sweepy.streak == 1 ? dubs = "W" : dubs = "W's"
+    text = "You're still at #{@sweepy.streak} in a row 🏁. Next up are the Falcons (+3.5) at 3p."
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
+    show_button("Show me more 🤗", text, quick_replies, url)
+    stop_thread
   end
 
   def show_winning_streak type
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
     text = "You are lit!"
-    url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
     show_button("Show Status", text, quick_replies, url)
     stop_thread
   end
@@ -46,7 +35,7 @@ module Commands
   def show_losing_streak type
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
     text = "Losing has its perks too!"
-    url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
     show_button("Show Status", text, quick_replies, url)
     stop_thread
   end
@@ -54,7 +43,7 @@ module Commands
   def show_no_activity type
     quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
     text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
-    url = "#{ENV['WEBVIEW_URL']}/status/#{user.id}"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
     show_button("Show Status", text, quick_replies, url)
     stop_thread
   end

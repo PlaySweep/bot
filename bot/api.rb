@@ -86,7 +86,7 @@ module Sweep
     end
 
     def update params
-      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", params)
+      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", { :user => params })
       if response.status == 200
         puts "👍"
       else
