@@ -41,11 +41,6 @@ module Profile
                 payload: 'CHALLENGES'
               },
               {
-                title: 'Leaderboard',
-                type: 'postback',
-                payload: 'LEADERBOARD'
-              },
-              {
                 title: 'Store',
                 type: 'postback',
                 payload: 'STORE'
@@ -58,9 +53,9 @@ module Profile
             payload: 'INVITE FRIENDS'
           },
           {
-            title: 'Notifications',
+            title: 'Preferences',
             type: 'postback',
-            payload: 'MANAGE NOTIFICATIONS'
+            payload: 'PREFERENCES'
           }
         ]
       }

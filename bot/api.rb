@@ -195,7 +195,11 @@ module Sweep
     def self.all
       response = Faraday.get("#{API_URL}/contests")
       contests = JSON.parse(response.body)['contests']
-      contests.map { |attributes| new(attributes) }
+      unless contests.empty?
+        contests.map { |attributes| new(attributes) }
+      else
+        []
+      end
     end
 
   end

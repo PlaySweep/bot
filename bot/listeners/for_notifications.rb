@@ -7,7 +7,7 @@ def listen_for_notifications
 end
 
 def listen_for_notifications_postback
-  bind 'MANAGE NOTIFICATIONS' do
+  bind 'PREFERENCES' do
     handle_show_preferences
   end
 end

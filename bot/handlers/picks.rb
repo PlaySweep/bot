@@ -26,7 +26,10 @@ module Commands
       "All finished...what? Expecting another joke or something? 😝",
       "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot. 🤖"
     ]
-    say options.sample, quick_replies: quick_replies.sample
+
+    quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Preferences", payload: "PREFERENCES" }]
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks?no_games_available"
+    show_button("Check my picks 👀", options.sample, quick_replies, url)
     stop_thread
   end
 end
