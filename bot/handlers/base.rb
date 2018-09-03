@@ -14,10 +14,6 @@ module Commands
       message.typing_on
       say "Ok lets get to it then", quick_replies: ["Select picks", "Status"]
       stop_thread
-    when :lifeline
-      message.typing_on
-      say "Ok nevermind then", quick_replies: ["Select picks", "Status"]
-      stop_thread
     end
   end
 

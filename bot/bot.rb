@@ -46,6 +46,7 @@ Rubotnik.route :postback do
   listen_for_challenges_postback
   listen_for_notifications_postback
   listen_for_store_postback
+  
 end
 
 ############################ TEST ON LOCALHOST #################################

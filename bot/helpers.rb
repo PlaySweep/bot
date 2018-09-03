@@ -45,15 +45,6 @@ def build_text_for resource:, object: nil, options: nil
     when :winning_streak
       copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Winning Streak')
       text = copies.last(5).map(&:message).sample
-    when :should_use_lifeline
-      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Store')
-      text = copies.last(5).map(&:message).sample
-    when :should_use_lifeline_but_cant
-      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Earn Coins')
-      text = copies.last(5).map(&:message).sample
-    when :losing_streak
-      copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Losing Streak')
-      text = copies.last(5).map(&:message).sample
     when :losing_sweep
       copies = conn.fetch_copy(facebook_uuid: user.id, category: 'Status Losing Sweep')
       text = copies.last(5).map(&:message).sample

@@ -26,19 +26,6 @@ module Commands
               webview_height_ratio: "full"
             }           
           ]      
-        },
-         {
-          title: "Battle your friends",
-          image_url: "http://www.playsweep.com/images/logo.png",
-          subtitle: "Earn some coins and some bragging rights 🤑",
-          buttons: [
-            {
-              type: "web_url",
-              url: "#{ENV['WEBVIEW_URL']}/#{user.id}/battles",
-              title: "View Battles",
-              webview_height_ratio: "full"
-            }             
-          ]      
         }
       ]
     end
