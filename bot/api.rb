@@ -100,7 +100,7 @@ module Sweep
     end
 
     def unsubscribe_system_preference
-      params = { :system_preference => { recaps: false } }
+      params = { :system_preference => { tournaments: false } }
       response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}/system_preferences/#{@system_preference.id}", params)
       if response.status == 200
         puts "👋"

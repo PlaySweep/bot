@@ -26,36 +26,63 @@ module Profile
             title: 'Actions ⚡️',
             call_to_actions: [
               {
-                title: 'Make picks',
+                title: 'Make Picks 💯',
                 type: 'postback',
                 payload: 'SELECT PICKS' 
               },
               {
-                title: 'Status',
+                title: 'Status 📈',
                 type: 'postback',
                 payload: 'STATUS' 
               },
               {
-                title: 'Challenges',
+                title: 'Tournament Play 🏆',
                 type: 'postback',
                 payload: 'CHALLENGES'
               },
               {
-                title: 'Store',
+                title: 'Battle Friends 🥊',
                 type: 'postback',
-                payload: 'STORE'
+                payload: 'BATTLE'
+              },
+              {
+                title: 'Share & Earn 🎉',
+                type: 'postback',
+                payload: 'INVITE FRIENDS'
               }
             ]
           },
           {
-            title: 'Invite friends',
-            type: 'postback',
-            payload: 'INVITE FRIENDS'
+            type: 'nested',
+            title: 'Sweepcoins 🤑',
+            call_to_actions: [
+              {
+                title: 'Shopping 🛍',
+                type: 'postback',
+                payload: 'STORE'
+              },
+              {
+                title: 'Cash Out 💸',
+                type: 'postback',
+                payload: 'CASH OUT'
+              }
+            ]
           },
           {
-            title: 'Preferences',
-            type: 'postback',
-            payload: 'PREFERENCES'
+            type: 'nested',
+            title: 'Preferences ⭐️',
+            call_to_actions: [
+              {
+                title: 'Notifications 💥',
+                type: 'postback',
+                payload: 'PREFERENCES'
+              },
+              {
+                title: 'Help 🙋',
+                type: 'postback',
+                payload: 'HELP'
+              }
+            ]
           }
         ]
       }
