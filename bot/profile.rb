@@ -41,11 +41,6 @@ module Profile
                 payload: 'CHALLENGES'
               },
               {
-                title: 'Battle Friends 🥊',
-                type: 'postback',
-                payload: 'BATTLE'
-              },
-              {
                 title: 'Share & Earn 🎉',
                 type: 'postback',
                 payload: 'INVITE FRIENDS'

@@ -184,12 +184,13 @@ module Sweep
   end
 
   class Contest
-    attr_reader :id, :name, :type
+    attr_reader :id, :name, :type, :status
 
     def initialize attributes
       @id = attributes['id']
       @name = attributes['name']
       @type = attributes['type']
+      @status = attributes['status']
     end
 
     def self.all
