@@ -13,12 +13,9 @@ module Commands
       elsif @sweepy.pending_balance == 1
         text = "You have just 1 Sweepcoin"
       else
-        text = "You have #{@sweepy.pending_balance} Sweepcoins 💰"
+        sweepcoins_left = (200 - @sweepy.pending_balance)
+        text = "You have #{@sweepy.pending_balance} Sweepcoins 💰. Only #{sweepcoins_left} more to cash out 👍"
       end
-      sweepcoins_left = (200 - @sweepy.pending_balance)
-      quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
-      show_button("Gimme more coins 🤑", "#{text}. Only #{sweepcoins_left} more to cash out 👍", quick_replies, url)
       stop_thread
     end
   end
