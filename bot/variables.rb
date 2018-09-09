@@ -4,7 +4,7 @@ module Commands
     show(media)
   end
 
-  def show_button title, text, quick_replies, url=nil
+  def show_button title, text, quick_replies=nil, url=nil
     payload = [
       {
         type: :web_url,

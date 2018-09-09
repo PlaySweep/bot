@@ -4,7 +4,7 @@ module Commands
     if @sweepy.can_cash_out
       sweepcoins_left = (200 - @sweepy.pending_balance)
       quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }]
-      url = "#{ENV['WEBVIEW_URL']}/sweepcoins"
+      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/sweepcoins"
       show_button("Cash out 🤑", "You have #{@sweepy.data.coins} Sweepcoins 👍", quick_replies, url)
       stop_thread
     else

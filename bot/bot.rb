@@ -5,9 +5,9 @@ Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
 # Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
-Rubotnik.set_profile(
-  Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
-)
+# Rubotnik.set_profile(
+#   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
+# )
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
 # HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
@@ -31,9 +31,11 @@ Rubotnik.route :message do |msg|
   listen_for_notifications
   listen_for_unsubscribe
   listen_for_store
+  listen_for_live and stop_thread
 
   default do
     capture_responses(message.text) unless message.text.nil?
+    capture_responses(message.text) unless message.quick_reply.split(' ')[0] == 'SURVIVOR' if message.quick_reply
   end
 
 end
@@ -46,7 +48,7 @@ Rubotnik.route :postback do
   listen_for_challenges_postback
   listen_for_notifications_postback
   listen_for_store_postback
-  
+  listen_for_prizing_postback
 end
 
 ############################ TEST ON LOCALHOST #################################

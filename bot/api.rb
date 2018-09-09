@@ -122,12 +122,13 @@ module Sweep
   end
 
   class Event
-    attr_reader :id, :data, :participants
+    attr_reader :id, :data, :participants, :status
 
     def initialize attributes
       @id = attributes['id']
       @data = attributes['data']
       @participants = attributes['participants']
+      @status = attributes['status']
     end
 
     def self.all facebook_uuid:, type: nil
@@ -157,10 +158,14 @@ module Sweep
     end
 
     def self.create facebook_uuid:, attributes:
-      params = { :pick => { user_id: facebook_uuid, event_id: attributes[:event_id], selected_id: attributes[:selected_id] } }
+      params = { :pick => { event_id: attributes[:event_id], selected_id: attributes[:selected_id] } }
       response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/picks", params)
-      attributes = JSON.parse(response.body)['pick']
-      new(attributes)
+      if response.status == 200
+        attributes = JSON.parse(response.body)['pick']
+        new(attributes)
+      else
+        false
+      end
     end
 
   end
@@ -196,7 +201,7 @@ module Sweep
     def self.all
       response = Faraday.get("#{API_URL}/contests")
       contests = JSON.parse(response.body)['contests']
-      unless contests.empty?
+      unless contests.nil? || contests.empty?
         contests.map { |attributes| new(attributes) }
       else
         []
