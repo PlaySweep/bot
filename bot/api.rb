@@ -13,7 +13,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :streak, :losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :streak, :losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends, :sport_preference, :system_preference 
 
     def initialize attributes
       @id = attributes['id']

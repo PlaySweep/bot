@@ -52,7 +52,7 @@ module Profile
             title: 'Sweepcoins 🤑',
             call_to_actions: [
               {
-                title: 'Shopping 🛍',
+                title: 'Shop 🛍',
                 type: 'postback',
                 payload: 'STORE'
               },
@@ -71,11 +71,6 @@ module Profile
                 title: 'Notifications 💥',
                 type: 'postback',
                 payload: 'PREFERENCES'
-              },
-              {
-                title: 'Help 🙋',
-                type: 'postback',
-                payload: 'HELP'
               }
             ]
           }

@@ -7,5 +7,5 @@ def listen_for_status
 end
 
 def listen_for_status_postback
-  bind 'STATUS', to: :entry_to_status_postback
+  bind 'STATUS', to: :entry_to_status
 end

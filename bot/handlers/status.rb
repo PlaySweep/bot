@@ -2,49 +2,37 @@ module Commands
   def handle_status
     @sweepy = Sweep::User.find(user.id)
     show_winning_sweep_message(:message) if current_status == :winning_sweep
-    show_winning_streak(:message) if current_status == :winning_streak
-    show_losing_streak(:message) if current_status == :losing_streak
-    show_no_activity(:message) if current_status == :no_activity
+    show_winning_streak if current_status == :winning_streak
+    show_losing_streak if current_status == :losing_streak
+    show_no_activity if current_status == :no_activity
   end
 
-  def handle_status_postback
-    @sweepy = Sweep::User.find(user.id)
-    show_winning_sweep_message(:postback) if current_status == :winning_sweep
-    show_winning_streak(:postback) if current_status == :winning_streak
-    show_losing_streak(:postback) if current_status == :losing_streak
-    show_no_activity(:postback) if current_status == :no_activity
-  end
-
-  def show_winning_sweep_message type
-    quick_replies = [{ content_type: 'text', title: "Invite friends", payload: "INVITE FRIENDS" }, { content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
+  def show_winning_sweep_message
     @sweepy.streak == 1 ? dubs = "W" : dubs = "W's"
-    text = "You're still at #{@sweepy.streak} in a row 🏁. Next up are the Falcons (+3.5) at 3p."
+    text = "You're currently on a Sweep and at #{@sweepy.streak} in a row 🏁"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
-    show_button("Show me more 🤗", text, quick_replies, url)
+    show_button("Show me more 🤗", text, nil, url)
     stop_thread
   end
 
-  def show_winning_streak type
-    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-    text = "You are lit!"
+  def show_winning_streak
+    text = "Your streak is currently at #{@sweepy.streak}! Keep it up 🚀"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
-    show_button("Show Status", text, quick_replies, url)
+    show_button("Show Status", text, nil, url)
     stop_thread
   end
 
-  def show_losing_streak type
-    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-    text = "Losing has its perks too!"
+  def show_losing_streak
+    text = "Yeah, a losing streak of #{@sweepy.losing_streak} sucks, but at least you'll get something for 4 L's in a row 🤑"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
-    show_button("Show Status", text, quick_replies, url)
+    show_button("Show Status", text, nil, url)
     stop_thread
   end
 
-  def show_no_activity type
-    quick_replies = [{ content_type: 'text', title: SELECT_PICKS_OPTIONS.sample, payload: "SELECT PICKS" }]
-    text = "I'm still waiting to process one of your results, so for now your streak remains at 0 ☺️"
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
-    show_button("Show Status", text, quick_replies, url)
+  def show_no_activity
+    text = "Your streak is at 0 because I haven't closed out any of your picks yet ☺️"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
+    show_button("Make Picks NOW 🎉", text, nil, url)
     stop_thread
   end
 

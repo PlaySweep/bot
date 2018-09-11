@@ -102,7 +102,7 @@ module Commands
        }
      ].freeze
 
-     show(UI::FBInvite.new(friends, quick_replies = [{ content_type: 'text', title: "Select picks", payload: "Select picks" }, { content_type: 'text', title: "Status", payload: "Status" }]))
+     show(UI::FBInvite.new(friends))
    end
 
   def show_image

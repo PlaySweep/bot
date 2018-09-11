@@ -1,15 +1,12 @@
 module Commands
   def handle_show_sports
-    quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Preferences", payload: "PREFERENCES" }]
+    options = ["I see a Sweep in your near future...", "Picks are BACK! Get in there now!"]
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
-    show_button("Make some picks 🎉", "We got some games today", quick_replies, url)
+    show_button("PICK EM 🎉", options.sample, nil, url)
     stop_thread
   end
 
   def handle_no_sports_available
-    #TODO possibly add a call to special list of matchups in exchange for sweepcoins
-    quick_replies = [["Status", "Challenges"], ["Status", "Notifications"], ["Status", "Email me 💌"], ["Status", "Invite friends"], ["Status", "Sweepcoins"], ["Status", "Earn coins"]]
-
     options = [
       "Time is a flat circle and we're back here again. Check back later for more games 🕛",
       "If we're using our made-up names, I'm Spider-Man. You can be Dr. Strange. I'll message when I have more for you, Dr. Strange 🕷",
@@ -27,9 +24,8 @@ module Commands
       "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot. 🤖"
     ]
 
-    quick_replies = [{ content_type: 'text', title: "Challenges", payload: "CHALLENGES" }, { content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Preferences", payload: "PREFERENCES" }]
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks?no_games_available"
-    show_button("Check my picks 👀", options.sample, quick_replies, url)
+    show_button("Check my picks 👀", options.sample, nil, url)
     stop_thread
   end
 end

@@ -5,9 +5,9 @@ Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
 # Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
-# Rubotnik.set_profile(
-#   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
-# )
+Rubotnik.set_profile(
+  Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
+)
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
 # HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 

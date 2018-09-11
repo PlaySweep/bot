@@ -13,7 +13,7 @@ module Commands
   end
 
   def entry_to_status_postback
-    handle_status_postback
+    handle_status
   end
 
   def entry_to_notifications
