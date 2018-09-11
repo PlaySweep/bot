@@ -9,7 +9,7 @@ Rubotnik.set_profile(
   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
 )
 HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
-HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+# HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
