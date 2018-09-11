@@ -23,7 +23,7 @@ module Commands
   end
 
   def show_losing_streak
-    text = "Yeah, a losing streak of #{@sweepy.losing_streak} sucks, but at least you'll get something for 4 L's in a row 🤑"
+    text = "Yeah, a losing streak of #{@sweepy.losing_streak} no bueno, but at least you'll get something for 4 of em' in a row 🤑"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/status"
     show_button("Show Status", text, nil, url)
     stop_thread
