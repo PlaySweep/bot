@@ -1,6 +1,6 @@
 module Commands
   def handle_show_sports
-    options = ["I see a Sweep in your near future...", "Picks are BACK! Get in there now!"]
+    options = ["Win your picks and earn some Sweepcoins 🤑", "We got some games available, make your picks NOW 🎉", "I see a Sweep in your near future...", "Picks are IN! Get back in there and win!", "Time to show off your prediction skills 🏆!"]
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
     show_button("PICK EM 🎉", options.sample, nil, url)
     stop_thread
@@ -25,7 +25,7 @@ module Commands
     ]
 
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks?no_games_available"
-    show_button("Check my picks 👀", options.sample, nil, url)
+    show_button("See Picks 👀", options.sample, nil, url)
     stop_thread
   end
 end
