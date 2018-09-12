@@ -1,7 +1,7 @@
 module Commands
   def handle_status
     @sweepy = Sweep::User.find(user.id)
-    show_winning_sweep_message(:message) if current_status == :winning_sweep
+    show_winning_sweep_message if current_status == :winning_sweep
     show_winning_streak if current_status == :winning_streak
     show_losing_streak if current_status == :losing_streak
     show_no_activity if current_status == :no_activity
