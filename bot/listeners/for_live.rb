@@ -9,23 +9,27 @@ def survivor
     event_id = message.quick_reply.split(' ')[1]
     selected_id = message.quick_reply.split(' ')[2]
     event = Sweep::Event.find(id: event_id)
-    puts "⏳" * 10
-    puts "#{event.status}"
-    puts "⏳" * 10
     if (event.status == 'started' || event.status == 'finished')
       puts "DONT MAKE THE PICK"
       say "You missed the deadline! 😡"
-      stop_thread and return
+      keywords = %w[survivor]
+      msg = message.quick_reply.split(' ').map(&:downcase)
+      matched = (keywords & msg)
+      bind keywords, all: true, to: :entry_to_too_late_for_survivor if matched.any?
     else
       puts "This should not run..."
       pick = Sweep::Pick.create(facebook_uuid: user.id, attributes: {event_id: event_id, selected_id: selected_id})
       if pick
-        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests"
-        show_button("Tournament Status", "✅ #{pick.selected.data.name}", nil, url)
-        stop_thread and return
+        user.session[:selected_pick] = pick.selected.data.name
+        keywords = %w[survivor]
+        msg = message.quick_reply.split(' ').map(&:downcase)
+        matched = (keywords & msg)
+        bind keywords, all: true, to: :entry_to_survivor if matched.any?
       else
-        say "You missed the deadline! 😡"
-        stop_thread and return
+        keywords = %w[survivor]
+        msg = message.quick_reply.split(' ').map(&:downcase)
+        matched = (keywords & msg)
+        bind keywords, all: true, to: :entry_to_too_late_for_survivor if matched.any?
       end
     end
   end

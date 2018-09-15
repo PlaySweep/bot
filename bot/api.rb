@@ -199,7 +199,7 @@ module Sweep
     end
 
     def self.all facebook_uuid:
-      response = Faraday.get("#{API_URL}/contests?facebook_uuid=#{facebook_uuid}")
+      response = Faraday.get("#{API_URL}/contests?facebook_uuid=#{facebook_uuid}&pending=true")
       contests = JSON.parse(response.body)['contests']
       unless contests.nil? || contests.empty?
         contests.map { |attributes| new(attributes) }

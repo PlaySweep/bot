@@ -28,4 +28,12 @@ module Commands
     handle_fun
   end
 
+  def entry_to_survivor
+    handle_survivor_pick
+  end
+
+  def entry_to_too_late_for_survivor
+    handle_too_late
+  end
+
 end
