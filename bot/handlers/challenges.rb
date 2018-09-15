@@ -1,13 +1,13 @@
 module Commands
   def handle_show_challenges
-    quick_replies = [{ content_type: 'text', title: "Make picks", payload: "SELECT PICKS" }, { content_type: 'text', title: "Status", payload: "STATUS" }, { content_type: 'text', title: "Preferences", payload: "PREFERENCES" }]
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests"
     #TODO
-    @contests = Sweep::Contest.all
+    @contests = Sweep::Contest.all(facebook_uuid: user.id)
     unless @contests.empty? || @contests.nil?
-      puts @contests.inspect
-      show_button("Enter now!", "We have #{@contests.length} tournaments available!\n\n⭐️ FEATURED ⭐️\n - #{@contest.name}", quick_replies, url)
-      # stop_thread
+      @contest = @contests.first
+      tournaments = @contests.length == 1 ? "tournament" : "tournaments"
+      show_button("Enter and WIN 💰!", "#{@contests.length} #{tournaments} available!\n\n⭐️ FEATURED ⭐️\n#{@contest.name}", nil, url)
+      stop_thread
     else
       @sweepy = Sweep::User.find(user.id)
       if @sweepy.system_preference.data.tournaments
