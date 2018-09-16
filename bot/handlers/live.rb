@@ -8,7 +8,7 @@ module Commands
 
   def handle_survivor_pick
     say "✅ #{user.session[:selected_pick]}"
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests?live"
     show_button("LIVE Status 💥", "Tap below to keep up with how things are going 👇", nil, url)
     user.session[:selected_pick] = nil
     stop_thread
