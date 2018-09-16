@@ -1,11 +1,16 @@
 module Commands
   def handle_too_late
-    say "Too late! Missed the deadline"
+    @sweepy = Sweep::User.find(user.id)
+    say "Ahhh #{@sweepy.first_name}, you ran out of time on that pick! You've been eliminated from the #{user.session[:event_name]} 🙅."
+    user.session[:event_name] = nil
     stop_thread
   end
 
   def handle_survivor_pick
+    say "✅ #{user.session[:selected_pick]}"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests"
-    show_button("Tournament Status", "✅ #{user.session[:selected_pick]}", nil, url)
+    show_button("LIVE Status 💥", "Tap below to keep up with how things are going 👇", nil, url)
+    user.session[:selected_pick] = nil
+    stop_thread
   end
 end

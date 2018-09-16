@@ -10,14 +10,12 @@ def survivor
     selected_id = message.quick_reply.split(' ')[2]
     event = Sweep::Event.find(id: event_id)
     if (event.status == 'started' || event.status == 'finished')
-      puts "DONT MAKE THE PICK"
-      say "You missed the deadline! 😡"
+      user.session[:event_name] = event.data.name
       keywords = %w[survivor]
       msg = message.quick_reply.split(' ').map(&:downcase)
       matched = (keywords & msg)
       bind keywords, all: true, to: :entry_to_too_late_for_survivor if matched.any?
     else
-      puts "This should not run..."
       pick = Sweep::Pick.create(facebook_uuid: user.id, attributes: {event_id: event_id, selected_id: selected_id})
       if pick
         user.session[:selected_pick] = pick.selected.data.name
