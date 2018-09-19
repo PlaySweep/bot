@@ -1,6 +1,5 @@
 module Commands
   def handle_show_challenges
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests"
     @contests = Sweep::Contest.all(facebook_uuid: user.id)
     unless @contests.empty? || @contests.nil?
       pending_contests = @contests.select { |contest| contest.status == "pending" }
@@ -8,11 +7,24 @@ module Commands
       finished_contests = @contests.select { |contest| contest.status == "finished" }
       if pending_contests.any?
         contest = pending_contests.first
+        case contest.type
+        when 'StandardContest'
+          contest_route = 'standard_contests'
+        when 'SurvivorContest'
+          contest_route = 'survivor_contests'
+        end
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/#{contest_route}/#{contest.id}"
         show_button("Enter and WIN 💰!", "⭐️ FEATURED ⭐️\n#{contest.name}", nil, url)
         stop_thread
       elsif started_contests.any?
-        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/contests?live"
         contest = started_contests.first
+        case contest.type
+        when 'StandardContest'
+          contest_route = 'standard_contests'
+        when 'SurvivorContest'
+          contest_route = 'survivor_contests'
+        end
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/#{contest_route}/#{contest.id}"
         show_button("LIVE NOW ✨!", "⭐️ FEATURED ⭐️\n#{contest.name}", nil, url)
         stop_thread
       else

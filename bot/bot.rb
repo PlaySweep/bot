@@ -31,11 +31,14 @@ Rubotnik.route :message do |msg|
   listen_for_notifications
   listen_for_unsubscribe
   listen_for_store
-  listen_for_live and stop_thread
+  listen_for_live
 
   default do
-    capture_responses(message.text) unless message.text.nil?
-    capture_responses(message.text) unless message.quick_reply.split(' ')[0] == 'SURVIVOR' if message.quick_reply
+    if message.quick_reply
+      unless message.quick_reply.split(' ')[0] == 'SURVIVOR'
+        capture_responses(message.text) unless message.text.nil?
+      end
+    end
   end
 
 end
