@@ -38,6 +38,8 @@ Rubotnik.route :message do |msg|
       unless message.quick_reply.split(' ')[0] == 'SURVIVOR'
         capture_responses(message.text) unless message.text.nil?
       end
+    else
+      capture_responses(message.text) unless message.text.nil?
     end
   end
 
