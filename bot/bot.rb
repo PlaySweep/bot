@@ -4,7 +4,7 @@ require 'popcorn'
 Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
-# Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
+Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
 Rubotnik.set_profile(
   Profile::START_BUTTON, Profile::START_GREETING
 )
