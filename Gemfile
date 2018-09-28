@@ -10,6 +10,7 @@ gem 'mixpanel-ruby'
 gem 'popcorn_notify'
 gem 'i18n'
 gem 'dotenv'
+gem 'figaro'
 
 group :development do
   # Deployment
