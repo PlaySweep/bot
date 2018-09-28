@@ -1,5 +1,5 @@
 # require 'dotenv/load' # Use this if you want plain 'rackup' over 'heroku local'
-require './config/application.yml'
+require_relative './config/application.yml'
 require 'facebook/messenger'
 require 'sinatra'
 require 'mixpanel-ruby'
