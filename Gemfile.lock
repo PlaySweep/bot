@@ -78,6 +78,7 @@ DEPENDENCIES
   capistrano-nc (~> 0.2)
   capistrano-passenger
   capistrano-rvm
+  dotenv
   faraday
   fuzzy_match
   hash_dot

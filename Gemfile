@@ -9,6 +9,7 @@ gem 'fuzzy_match'
 gem 'mixpanel-ruby'
 gem 'popcorn_notify'
 gem 'i18n'
+gem 'dotenv'
 
 group :development do
   # Deployment
