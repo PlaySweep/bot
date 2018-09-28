@@ -1,15 +1,18 @@
 require 'rubotnik'
 require 'popcorn'
+require 'yaml'
+
+config = YAML.load_file('config/application.yml')
 # require_relative all files in "bot" folder or do it by hand
 Rubotnik::Autoloader.load('bot')
 
 # Subscribe your bot to a Facebook Page (put access and verify tokens in .env)
-# Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
+# Rubotnik.subscribe(config["ACCESS_TOKEN"])
 Rubotnik.set_profile(
   Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU
 )
-HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"] }
-# HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+HTTParty.post 'https://graph.facebook.com/v2.9/me/subscribed_apps', query: { access_token: config["ACCESS_TOKEN"] }
+# HTTParty.post 'https://graph.facebook.com/v2.9/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING, Profile::SIMPLE_MENU].to_json, query: { access_token: config["ACCESS_TOKEN"] }
 
 # Generates a location prompt for quick_replies
 LOCATION_PROMPT = UI::QuickReplies.location
