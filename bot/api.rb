@@ -7,7 +7,7 @@ require 'open-uri'
 require 'faraday'
 require 'json'
 
-API_URL = "#{ENV["API_URL"]}/api/v1"
+API_URL = "#{ENV["API_URL"]}/v1"
 
 module Sweep
   Hash.use_dot_syntax = true
