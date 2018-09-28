@@ -1,5 +1,5 @@
 require 'dotenv'
-Dotenv.load('config.application.yml')
+Dotenv.load('config/application.yml')
 
 require 'facebook/messenger'
 require 'sinatra'
