@@ -7,4 +7,4 @@ set :tmp_dir, '/home/deploy/tmp'
 set :branch, 'master'
 set :rails_env, 'production'
 
-set :linked_files, %w{config/application.yml}
+set :linked_files, %w{config/secrets.yml}

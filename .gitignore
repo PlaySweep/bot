@@ -1,4 +1,4 @@
 .DS_Store
 .env
 /log/*
-/config/application.yml
+/config/secrets.yml
