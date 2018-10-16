@@ -12,25 +12,25 @@ module Commands
   end
 
   def handle_user_location
-    coords = message.attachments.first['payload']['coordinates']
-    lat = coords['lat']
-    long = coords['long']
-    message.typing_on
-    parsed = get_parsed_response(API_URL, "#{lat},#{long}")
-    address = extract_full_address(parsed)
-    say "Coordinates of your location: Latitude #{lat}, Longitude #{long}.\n "
-        "Looks like you're at #{address}"
-    message.typing_off
+    say "Great, I see you're in New York!"
+    say "Confirm your favorite team by tapping below 👇", quick_replies: ["New York Knicks"]
+    next_command :handle_team
+  end
+
+  def handle_team
+    say "Got it!"
+    say "Send quick overview and gif of how to play..."
+    stop_thread
   end
 
   # Talk to API
-  def get_parsed_response(url, query)
-    response = HTTParty.get(url + query)
-    parsed = JSON.parse(response.body)
-    parsed['status'] != 'ZERO_RESULTS' ? parsed : nil
-  end
+  # def get_parsed_response(url, query)
+  #   response = HTTParty.get(url + query)
+  #   parsed = JSON.parse(response.body)
+  #   parsed['status'] != 'ZERO_RESULTS' ? parsed : nil
+  # end
 
-  def extract_full_address(parsed)
-    parsed['results'].first['formatted_address']
-  end
+  # def extract_full_address(parsed)
+  #   parsed['results'].first['formatted_address']
+  # end
 end

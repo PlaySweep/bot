@@ -33,6 +33,19 @@ Rubotnik.route :message do |msg|
   listen_for_unsubscribe
   listen_for_store
   listen_for_live
+  bind 'knicks', all: true do
+    say "Got it!"
+    message.typing_on
+    sleep 1.5
+    message.typing_off
+    say "Quick overview of how to play and show short gif video..."
+    message.typing_on
+    sleep 1.5
+    message.typing_off
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
+    show_button("PICK EM 🎉", "Get started with your first Sweep card now!", nil, url)
+    stop_thread
+  end
 
   default do
     if message.quick_reply
