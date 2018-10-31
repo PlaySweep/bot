@@ -33,12 +33,12 @@ Rubotnik.route :message do |msg|
   # listen_for_unsubscribe
   # listen_for_store
   # listen_for_live
-  bind 'Ready!', all: true do
-    say "Here's how it works:\n\n1. 🏀 I'll send you 3 plays every day the Knicks are on the court\n2. ☝️ Make 3 predictions\n3. 🏆 Get all 3 right and earn your way into the Budweiser Final (I'll remind you 😎)\n4. 🎉 Win some crazy, unforgettable Knicks experiences from Budweiser"
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
-    show_button("PICK EM 🏀", " Make your 3 picks now!", nil, url)
-    stop_thread
-  end
+  # bind 'Ready!', all: true do
+  #   say "Here's how it works:\n\n1. 🏀 I'll send you 3 plays every day the Knicks are on the court\n2. ☝️ Make 3 predictions\n3. 🏆 Get all 3 right and earn your way into the Budweiser Final (I'll remind you 😎)\n4. 🎉 Win some crazy, unforgettable Knicks experiences from Budweiser"
+  #   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
+  #   show_button("PICK EM 🏀", " Make your 3 picks now!", nil, url)
+  #   stop_thread
+  # end
 
   default do
     if message.quick_reply
