@@ -19,31 +19,24 @@ EMAIL_PROMPT = UI::QuickReplies.email
 ####################### HANDLE INCOMING MESSAGES ##############################
 
 Rubotnik.route :message do |msg|
-  listen_for_media
+  # listen_for_media
   listen_for_select_picks
-  listen_for_location
-  listen_for_email
-  listen_for_status
-  listen_for_invite_friends
-  listen_for_misc
-  listen_for_prizing
-  listen_for_challenges
+  # listen_for_location
+  # listen_for_email
+  # listen_for_status
+  # listen_for_invite_friends
+  # listen_for_misc
+  # listen_for_prizing
+  # listen_for_challenges
   # listen_for_feedback
-  listen_for_notifications
-  listen_for_unsubscribe
-  listen_for_store
-  listen_for_live
-  bind 'knicks', all: true do
-    say "Got it!"
-    message.typing_on
-    sleep 1.5
-    message.typing_off
-    say "Quick overview of how to play and show short gif video..."
-    message.typing_on
-    sleep 1.5
-    message.typing_off
+  # listen_for_notifications
+  # listen_for_unsubscribe
+  # listen_for_store
+  # listen_for_live
+  bind 'Ready!', all: true do
+    say "Here's how it works:\n\n1. 🏀 I'll send you 3 plays every day the Knicks are on the court\n2. ☝️ Make 3 predictions\n3. 🏆 Get all 3 right and earn your way into the Budweiser Final (I'll remind you 😎)\n4. 🎉 Win some crazy, unforgettable Knicks experiences from Budweiser"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
-    show_button("PICK EM 🎉", "Get started with your first Sweep card now!", nil, url)
+    show_button("PICK EM 🏀", " Make your 3 picks now!", nil, url)
     stop_thread
   end
 
@@ -61,13 +54,13 @@ end
 
 Rubotnik.route :postback do
   listen_for_start_postback
-  listen_for_select_picks_postback
-  listen_for_status_postback
-  listen_for_invite_friends_postback
-  listen_for_challenges_postback
-  listen_for_notifications_postback
-  listen_for_store_postback
-  listen_for_prizing_postback
+  # listen_for_select_picks_postback
+  # listen_for_status_postback
+  # listen_for_invite_friends_postback
+  # listen_for_challenges_postback
+  # listen_for_notifications_postback
+  # listen_for_store_postback
+  # listen_for_prizing_postback
 end
 
 ############################ TEST ON LOCALHOST #################################

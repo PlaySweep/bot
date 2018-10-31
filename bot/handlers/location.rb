@@ -12,14 +12,7 @@ module Commands
   end
 
   def handle_user_location
-    say "Great, I see you're in New York!"
-    say "Confirm your favorite team by tapping below 👇", quick_replies: ["New York Knicks"]
-    next_command :handle_team
-  end
-
-  def handle_team
-    say "Got it!"
-    say "Send quick overview and gif of how to play..."
+    say "Thanks, I see you're in New York. I'm going to add you into the Knicks Sweep 🎉\n\nReady to go?", quick_replies: ["Ready!"]
     stop_thread
   end
 
