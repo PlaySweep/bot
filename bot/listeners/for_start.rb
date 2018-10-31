@@ -27,7 +27,7 @@ end
 def over_21
   if message.quick_reply == "YES, I'M OVER 21"
     say "Got it!"
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/picks"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/event?loader"
     show_button("PICK NOW 🏀", " Ready to make your 3 picks and win some unforgettable Knicks experiences from Budweiser?!", nil, url)
     stop_thread
   else
