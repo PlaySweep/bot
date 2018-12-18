@@ -1,1 +1,1 @@
-INVITE_FRIENDS = ["Earn 100 Sweepcoins by referring your friends to play with you 🎉"]
+INVITE_FRIENDS = ["Hey Nick, just tap the share button below and your friend will get an invite in their Messenger inbox 👍"]
