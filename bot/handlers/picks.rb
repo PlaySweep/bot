@@ -1,7 +1,7 @@
 module Commands
   def handle_show_sports
     options = ["Just tap below if you're looking to make picks 👇", "Time to show off your prediction skills 🏆!"]
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/event?loader"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
     show_button("PICK EM 🎉", options.sample, nil, url)
     stop_thread
   end
@@ -24,7 +24,7 @@ module Commands
       "No more games yet....and no, you can’t ask me to help you carry your couch when you move. I'm a bot. 🤖"
     ]
 
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard?loader"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
     show_button("See Picks 👀", options.sample, nil, url)
     stop_thread
   end

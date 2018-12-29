@@ -1,7 +1,7 @@
 def listen_for_start_postback
   bind 'START' do
     begin
-      for_team_ad
+      true ? for_team_ad : location
     rescue NoMethodError => e
       puts "Error => #{e.inspect}"
       stop_thread
@@ -10,7 +10,8 @@ def listen_for_start_postback
 end
 
 def location
-  say "Welcome to the Knicks edition of The Budweiser Sweep, Nick 🏀️!"
+  sweepy = Sweep::User.find_or_create(user.id)
+  say "Welcome to The Budweiser Sweep, #{sweepy.first_name} 🏀️!"
   # Sweep::User.find(postback.referral.ref).update_referral(sweepy.facebook_uuid) if postback.referral && postback.referral.ref.to_i != 0
   say "Please confirm your location by tapping 'Send Location' below 📍", quick_replies: LOCATION_PROMPT
   next_command :handle_lookup_location

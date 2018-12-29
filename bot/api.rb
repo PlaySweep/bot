@@ -37,11 +37,11 @@ module Sweep
     def self.find_or_create facebook_uuid
       response = Faraday.get("#{API_URL}/users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
-      # if attributes.empty?
-      #   create(facebook_uuid)
-      # else
-      #   find(facebook_uuid)
-      # end
+      if attributes.empty?
+        create(facebook_uuid)
+      else
+        find(facebook_uuid)
+      end
       find(facebook_uuid)
     end
 
@@ -111,31 +111,26 @@ module Sweep
 
   end
 
-  class Event
-    attr_reader :id, :data, :participants, :status
+  class Slate
+    attr_reader :id, :events, :status
 
     def initialize attributes
       @id = attributes['id']
-      @data = attributes['data']
-      @participants = attributes['participants']
+      @events = attributes['events']
       @status = attributes['status']
     end
 
     def self.all facebook_uuid:, type: nil
-      if type.nil?
-        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}")
-      else
-        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}&type=#{type}")
-      end
-      events = JSON.parse(response.body)['events']
+      response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates")
+      events = JSON.parse(response.body)['slates']
       events.map { |attributes| new(attributes) }
     end
 
-    def self.find id:
-      response = Faraday.get("#{API_URL}/events/#{id}")
-      attributes = JSON.parse(response.body)['event']
-      new(attributes)
-    end
+    # def self.find id:
+    #   response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates/#{id}")
+    #   attributes = JSON.parse(response.body)['slate']
+    #   new(attributes)
+    # end
 
   end
 
