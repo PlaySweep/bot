@@ -60,12 +60,12 @@ module Commands
   end
 
   def show_invite
-    titles = ["Predict the outcome of 4 games in a row and win Amazon Cash!", "Predict sports games, free. Hit a streak of 4. Win some cash."]
-    subtitles = ["Add some excitement to any game (even ⚾)"]
+    titles = ["Play The Budweiser Sweep and earn incredible Knicks prizes 🎉"]
+    subtitles = ["Make 3 picks for each game. Get them all right and be entered for a chance to win huge prizes!"]
      friends = [
        {
-         title: "Friends who Sweep together win together 👯",
-         image_url: "https://i.imgur.com/8F4EOpX.png",
+         title: "Earn a Finals Entry by inviting your friends to play 😎",
+         image_url: "https://www.underconsideration.com/brandnew/archives/budweiser_2016_logo_detail.png",
          buttons: [
            {
              type: "element_share",
@@ -78,16 +78,12 @@ module Commands
                      {
                        title: titles.sample,
                        subtitle: subtitles.sample,
-                       image_url: "https://i.imgur.com/8F4EOpX.png",
-                       default_action: {
-                         type: "web_url",
-                         url: "http://www.playsweep.com?ref=#{user.id}"
-                       },
+                       image_url: "https://www.underconsideration.com/brandnew/archives/budweiser_2016_logo_detail.png",
                        buttons: [
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/PlaySweep?ref=#{user.id}", 
+                           url: "https://m.me/1179524508844267", 
                            title: "Play Now 🎉",
                            webview_height_ratio: 'full'
                          }

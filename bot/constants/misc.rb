@@ -6,9 +6,9 @@ RANDOM = [
   "Sorry, didn't catch that...but you can type stuff like 'Challenges' or Make picks' and I'll take care of you 😉"
 ]
 SPORT_EMOJIS = { 
-  NFL: '🏈', NCAA: '🏈', NBA: '🏀', NCAAB: '🏀', 
-  MLB: '⚾️', NHL: '🏒', Soccer: '⚽', PGA: '⛳️', Golf: '⛳️', 
-  ATP: '🎾', Tennis: '🎾', 'French Open': '🎾', MMA: '🤼‍♀️', Boxing: '🥊', "College WS": "⚾️", "College Ws": "⚾️", 
+  NFL: '🏈', NCAA: '🏈', NBA: '🏀️', NCAAB: '🏀️', 
+  MLB: '🏀️', NHL: '🏒', Soccer: '⚽', PGA: '⛳️', Golf: '⛳️', 
+  ATP: '🎾', Tennis: '🎾', 'French Open': '🎾', MMA: '🤼‍♀️', Boxing: '🥊', "College WS": "🏀️", "College Ws": "🏀️", 
   Olympics: '🌎', "Horse Racing": '🐎', 'Belmont Stakes': '🐴', 'World Cup': '⚽', random: '🎯' 
 }
 FUN = ["You are a 💫", "😁", "Woot woot 🎉", "👍"]

@@ -7,30 +7,19 @@ require 'open-uri'
 require 'faraday'
 require 'json'
 
-API_URL = "#{ENV["API_URL"]}/api/v1"
+API_URL = "#{ENV["API_URL"]}/v1"
 
 module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :full_name, :streak, :losing_streak, :current_picks, :can_cash_out, :data, :email, :pending_balance, :friends, :sport_preference, :system_preference 
+    attr_reader :id, :facebook_uuid, :first_name, :last_name 
 
     def initialize attributes
       @id = attributes['id']
       @facebook_uuid = attributes['facebook_uuid']
       @first_name = attributes['first_name']
       @last_name = attributes['last_name']
-      @full_name = attributes['full_name']
-      @streak = attributes['streak']
-      @losing_streak = attributes['losing_streak']
-      @current_picks = attributes['current_picks']
-      @can_cash_out = attributes['can_cash_out']
-      @data = attributes['data']
-      @pending_balance = attributes['pending_balance']
-      @email = attributes['email']
-      @friends = attributes['friends']
-      @sport_preference = attributes['sport_preference']
-      @system_preference = attributes['system_preference']
     end
 
     def self.all
@@ -53,6 +42,7 @@ module Sweep
       else
         find(facebook_uuid)
       end
+      find(facebook_uuid)
     end
 
     def self.create facebook_uuid
@@ -121,31 +111,26 @@ module Sweep
 
   end
 
-  class Event
-    attr_reader :id, :data, :participants, :status
+  class Slate
+    attr_reader :id, :events, :status
 
     def initialize attributes
       @id = attributes['id']
-      @data = attributes['data']
-      @participants = attributes['participants']
+      @events = attributes['events']
       @status = attributes['status']
     end
 
     def self.all facebook_uuid:, type: nil
-      if type.nil?
-        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}")
-      else
-        response = Faraday.get("#{API_URL}/events?facebook_uuid=#{facebook_uuid}&type=#{type}")
-      end
-      events = JSON.parse(response.body)['events']
+      response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates")
+      events = JSON.parse(response.body)['slates']
       events.map { |attributes| new(attributes) }
     end
 
-    def self.find id:
-      response = Faraday.get("#{API_URL}/events/#{id}")
-      attributes = JSON.parse(response.body)['event']
-      new(attributes)
-    end
+    # def self.find id:
+    #   response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates/#{id}")
+    #   attributes = JSON.parse(response.body)['slate']
+    #   new(attributes)
+    # end
 
   end
 

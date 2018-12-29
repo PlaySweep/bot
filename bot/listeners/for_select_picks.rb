@@ -36,6 +36,6 @@ def double_match
 end
 
 def matchups_available?
-  @events = Sweep::Event.all(facebook_uuid: user.id)
-  (@events.nil? || @events.empty?) ? false : true
+  @slates = Sweep::Slate.all(facebook_uuid: user.id)
+  (@slates.nil? || @slates.empty?) ? false : true
 end
