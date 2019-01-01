@@ -11,6 +11,7 @@ gem 'popcorn_notify'
 gem 'i18n'
 gem 'dotenv'
 gem 'figaro'
+gem 'wit'
 
 group :development do
   # Deployment

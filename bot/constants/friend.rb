@@ -1,1 +1,0 @@
-FRIEND_LOOKUP = ["Hmm 💭, I couldn't find anybody by that query. And I'm usually pretty accurate...you wanna try again?", "Interesting...are you sure they've installed Sweep?"]

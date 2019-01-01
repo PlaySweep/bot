@@ -1,1 +1,0 @@
-INVITE_FRIENDS = ["Hey Nick, just tap the share button below and your friend will get an invite in their Messenger inbox 👍"]

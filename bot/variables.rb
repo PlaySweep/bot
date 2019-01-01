@@ -60,6 +60,7 @@ module Commands
   end
 
   def show_invite
+    @sweepy = Sweep::User.find(user.id)
     titles = ["Play The Budweiser Sweep and earn incredible Knicks prizes 🎉"]
     subtitles = ["Make 3 picks for each game. Get them all right and be entered for a chance to win huge prizes!"]
      friends = [
@@ -83,7 +84,7 @@ module Commands
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/1179524508844267", 
+                           url: "https://m.me/1179524508844267?ref=#{user.id}_#{1}", 
                            title: "Play Now 🎉",
                            webview_height_ratio: 'full'
                          }

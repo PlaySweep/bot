@@ -23,3 +23,17 @@ def send_confirmation referrer_id, referred_id
   }
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
 end
+
+def fetch_email
+  say "Whats your email?", quick_replies: EMAIL_PROMPT
+  stop_thread
+end
+
+def strip_emoji text
+  text = I18n.transliterate(text)
+  text.gsub(/[^\p{L}\s]+/, '').squeeze(' ').strip
+end
+
+def is_a_valid_email? email
+  return true if (email =~ VALID_EMAIL_REGEX) == 0
+end
