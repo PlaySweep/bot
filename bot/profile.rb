@@ -10,7 +10,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "Welcome to The Budweiser Sweep Nick 💫\n\nPick 3 winners and earn a chance at exclusive Knicks prizes 🏀️"
+        text: "Welcome to The Budweiser Sweep {{user_first_name}} 💫\n\nPick 3 winners and earn a chance at exclusive Knicks prizes 🏀️"
       }
     ]
   }

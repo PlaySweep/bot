@@ -7,7 +7,10 @@ def start
       if postback.referral
         for_team_ad(postback.referral.ref.split("_")[-1])
       else
-        location
+        sweepy = Sweep::User.find_or_create(user.id)
+        say "Welcome to The Budweiser Sweep, #{sweepy.first_name} 🏀️!"
+        say "We have a few qualifying NBA teams to choose from. Give us a city and we'll find the closest matching team to get started with 📍"
+        next_command :handle_lookup_location
       end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}"
@@ -16,21 +19,42 @@ def start
   end
 end
 
-def location
-  sweepy = Sweep::User.find_or_create(user.id)
-  say "Welcome to The Budweiser Sweep, #{sweepy.first_name} 🏀️!"
-  say "We have a few qualifying NBA teams to choose from. Give us a city and we'll find the closest matching team to get started with 📍"
-  next_command :handle_lookup_location
-end
-
 def handle_lookup_location
   response = $wit.message(message.text).to_dot
-  coords = response.entities.location[0].resolved.values[0][0].coords
-  puts "COORDS => #{coords.inspect}"
-  # lat, long = coords.lat, coords.long
-  # parsed = get_parsed_response(GOOGLE_MAPS_API_URL, "#{lat},#{long}")
-  # address = extract_full_address(parsed)
-  say "You chose #{message.text}, which qualifies you for the San Antonio Spurs Sweep! Ready to play?"
+  if response.entities.keys.first == "location"
+    coords = response.entities.location[0].resolved.values[0][0].coords
+    puts "COORDS => #{coords.inspect}"
+    # lat, long = coords.lat, coords.long
+    # parsed = get_parsed_response(GOOGLE_MAPS_API_URL, "#{lat},#{long}")
+    # address = extract_full_address(parsed)
+    say "You chose #{message.text}, which qualifies you for the San Antonio Spurs Sweep! Ready to play?"
+    next_command :ready
+  else
+    say "I couldn't figure out a location from that, try something like, 'Austin, TX' or 'Phoenix Arizona'"
+    next_command :handle_lookup_location
+  end
+end
+
+def ready
+  response = $wit.message(message.text).to_dot
+  puts "SURE RESPONSE => #{response.inspect}"
+  if response.entities.any?
+    entity = response.entities.sentiment
+    if entity.first.value == "positive"
+      say "Great! Lets do this!"
+      say "Start typing stuff, I'm pretty smart and can respond accordingly..."
+      stop_thread
+    elsif entity.first.value == "neutral"
+      say "You don't sound too excited, but thats ok. You will!"
+      stop_thread
+    else
+      say "I'm sorry about that, but unfortunately that's the best option we have based on the location you gave us. If you want to try another city, we can do another lookup?"
+      stop_thread
+    end
+  else
+    say "I didn't catch that, but I'll assume you're good to go..."
+    stop_thread
+  end
   stop_thread
 end
 
