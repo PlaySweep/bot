@@ -7,7 +7,7 @@ require 'open-uri'
 require 'faraday'
 require 'json'
 
-API_URL = "#{ENV["API_URL"]}/v1"
+API_URL = "#{ENV["API_URL"]}/v1/budweiser"
 
 module Sweep
   Hash.use_dot_syntax = true
@@ -20,22 +20,25 @@ module Sweep
       @facebook_uuid = attributes['facebook_uuid']
       @first_name = attributes['first_name']
       @last_name = attributes['last_name']
+
+      @conn = Faraday.new(API_URL)
+      @conn.headers["Authorization"] = @facebook_uuid
     end
 
     def self.all
-      response = Faraday.get("#{API_URL}/users")
+      response = @conn.get("#{API_URL}/users")
       users = JSON.parse(response.body)['users']
       users.map { |attributes| new(attributes) }
     end
 
     def self.find uuid
-      response = Faraday.get("#{API_URL}/users/#{uuid}")
+      response = @conn.get("#{API_URL}/users/#{uuid}")
       attributes = JSON.parse(response.body)['user']
       new(attributes)
     end
 
     def self.find_or_create facebook_uuid
-      response = Faraday.get("#{API_URL}/users/#{facebook_uuid}")
+      response = @conn.get("#{API_URL}/users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
       if attributes.empty?
         create(facebook_uuid)
@@ -58,14 +61,14 @@ module Sweep
           :timezone => user.has_key?('timezone') ? user['timezone'] : nil 
         } 
       }
-      response = Faraday.post("#{API_URL}/users", params)
+      response = @conn.post("#{API_URL}/users", params)
       attributes = JSON.parse(response.body)['user']
       new(attributes)
     end
 
     def update_referral referred_facebook_uuid:
-      params = { :user => { :referral_count => @data['referral_count'] += 1, :coins => @data['coins'] += 100 }, :friend_uuid => referred_facebook_uuid }
-      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", params)
+      params = { :user => { :referral_count => @data['referral_count'] += 1, :friend_uuid => referred_facebook_uuid } }
+      response = @conn.patch("#{API_URL}/users/#{@facebook_uuid}", params)
       if response.status == 200
         $tracker.track(@api.user.id, "User Made Referral")
         send_confirmation(@facebook_uuid, referred_facebook_uuid)
@@ -76,34 +79,9 @@ module Sweep
     end
 
     def update params
-      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}", { :user => params })
+      response = @conn.patch("#{API_URL}/users/#{@facebook_uuid}", { :user => params })
       if response.status == 200
         puts "👍"
-      else
-        puts "⁉️"
-      end
-    end
-
-    def unsubscribe
-      unsubscribe_system_preference
-      unsubscribe_sport_preference
-    end
-
-    def unsubscribe_system_preference
-      params = { :system_preference => { tournaments: false } }
-      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}/system_preferences/#{@system_preference.id}", params)
-      if response.status == 200
-        puts "👋"
-      else
-        puts "⁉️"
-      end
-    end
-
-    def unsubscribe_sport_preference
-      params = { :sport_preference => { leagues: [].to_json } }
-      response = Faraday.patch("#{API_URL}/users/#{@facebook_uuid}/sport_preferences/#{@sport_preference.id}", params)
-      if response.status == 200
-        puts "👋"
       else
         puts "⁉️"
       end
@@ -121,7 +99,9 @@ module Sweep
     end
 
     def self.all facebook_uuid:, type: nil
-      response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates")
+      conn = Faraday.new(API_URL)
+      conn.headers["Authorization"] = facebook_uuid
+      response = conn.get("slates")
       events = JSON.parse(response.body)['slates']
       events.map { |attributes| new(attributes) }
     end
@@ -135,63 +115,25 @@ module Sweep
   end
 
   class Pick
-    attr_reader :id, :selected
+    # attr_reader :id, :selected
 
-    def initialize attributes
-      @id = attributes['id']
-      @selected = attributes['selected']
-    end
+    # def initialize attributes
+    #   @id = attributes['id']
+    #   @selected = attributes['selected']
+    # end
 
-    def self.create facebook_uuid:, attributes:
-      params = { :pick => { event_id: attributes[:event_id], selected_id: attributes[:selected_id] } }
-      response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/picks", params)
-      if response.status == 200
-        attributes = JSON.parse(response.body)['pick']
-        new(attributes)
-      else
-        false
-      end
-    end
-
-  end
-
-  class Payment
-    attr_reader :id, :transaction_type, :amount
-
-    def initialize attributes
-      @id = attributes['id']
-      @transaction_type = attributes['transaction_type']
-      @amount = attributes['amount']
-    end
-
-    def self.create facebook_uuid:, attributes:
-      params = { :payment => { transaction_type: "receive", amount: attributes[:amount] } }
-      response = Faraday.post("#{API_URL}/users/#{facebook_uuid}/payments", params)
-      attributes = JSON.parse(response.body)['payment']
-      new(attributes)
-    end
-
-  end
-
-  class Contest
-    attr_reader :id, :name, :type, :status
-
-    def initialize attributes
-      @id = attributes['id']
-      @name = attributes['name']
-      @type = attributes['type']
-      @status = attributes['status']
-    end
-
-    def self.all facebook_uuid:
-      response = Faraday.get("#{API_URL}/contests?facebook_uuid=#{facebook_uuid}")
-      contests = JSON.parse(response.body)['contests']
-      unless contests.nil? || contests.empty?
-        contests.map { |attributes| new(attributes) }
-      else
-        []
-      end
-    end
+    # def self.create facebook_uuid:, attributes:
+    #   conn = Faraday.new(API_URL)
+    #   conn.headers["Authorization"] = facebook_uuid
+    #   params = { :pick => { event_id: attributes[:event_id], selected_id: attributes[:selected_id] } }
+    #   conn.post("#{API_URL}/users/#{facebook_uuid}/picks", params)
+    #   if response.status == 200
+    #     attributes = JSON.parse(response.body)['pick']
+    #     new(attributes)
+    #   else
+    #     false
+    #   end
+    # end
 
   end
 

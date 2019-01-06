@@ -7,13 +7,14 @@ def start
       if postback.referral
         for_team_ad(postback.referral.ref.split("_")[-1])
       else
-        sweepy = Sweep::User.find_or_create(user.id)
+        sweepy = Sweep::User.create(user.id)
         say "Welcome to The Budweiser Sweep, #{sweepy.first_name} 🏀️!"
         say "We have a few qualifying NBA teams to choose from. Give us a city and we'll find the closest matching team to get started with 📍"
         next_command :handle_lookup_location
       end
     rescue NoMethodError => e
-      puts "Error => #{e.inspect}"
+      puts "Error => #{e.inspect}\n"
+      puts "With User ID => #{user.id}"
       stop_thread
     end
   end
