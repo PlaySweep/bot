@@ -10,8 +10,8 @@ def start
         sweepy = Sweep::User.find_or_create(user.id)
         say "Welcome to The Budweiser Sweep, #{sweepy.first_name}!"
         say "We’re here to test your ability to guess what’s going to happen for every Mets game this Spring Training\n\nTrust us, you’ll want to guess too, as we’re giving away some crazy cool Mets prizes all spring long ⚾️"
-        confirmation_text = "First, we need to confirm a few details with you - just click below to help confirm who you are, so we can give you your prize when you win, yeah we know you’re gonna win"
-        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
+        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win...yeah we know you’re gonna win 😎"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
         show_button("Prepare to WIN 💥", confirmation_text, nil, url)
         # next_command :handle_lookup_location
       end

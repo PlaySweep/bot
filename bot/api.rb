@@ -51,7 +51,7 @@ module Sweep
     end
 
     def self.create facebook_uuid
-      response = Faraday.get("https://graph.facebook.com/v2.11/#{facebook_uuid}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=EAACaERT7YxUBAKZBTyJYwL8CUZC6MoTXped8HdmGGCtxm2nz2zYQPmVWDsKzu1zuaQcYWnqtzLvlcRNwNem6vRoEuxUSUnmEwZAPUS3Yf12Ka40F3bOAjuJjf5yApzNhgV3KiHUsz7r0jwjd4gdyrWizKqb9ML5tlp5w7oVjtgjmg5QcS8o")
+      response = Faraday.get("https://graph.facebook.com/v2.11/#{facebook_uuid}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
       user = JSON.parse(response.body)
       params = { :user => 
         { 
