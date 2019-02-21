@@ -1,5 +1,5 @@
 require 'hash_dot'
-GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
+require 'httparty'
 
 def start
   bind 'START' do
@@ -7,10 +7,13 @@ def start
       if postback.referral
         for_team_ad(postback.referral.ref.split("_")[-1])
       else
-        sweepy = Sweep::User.create(user.id)
-        say "Welcome to The Budweiser Sweep, #{sweepy.first_name} 🏀️!"
-        say "We have a few qualifying NBA teams to choose from. Give us a city and we'll find the closest matching team to get started with 📍"
-        next_command :handle_lookup_location
+        sweepy = Sweep::User.find_or_create(user.id)
+        say "Welcome to The Budweiser Sweep, #{sweepy.first_name}!"
+        say "We’re here to test your ability to guess what’s going to happen for every Mets game this Spring Training\n\nTrust us, you’ll want to guess too, as we’re giving away some crazy cool Mets prizes all spring long ⚾️"
+        confirmation_text = "First, we need to confirm a few details with you - just click below to help confirm who you are, so we can give you your prize when you win, yeah we know you’re gonna win"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
+        show_button("Prepare to WIN 💥", confirmation_text, nil, url)
+        # next_command :handle_lookup_location
       end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"

@@ -13,7 +13,7 @@ end
 
 def handle_show_sports
   options = ["Just tap below if you're looking to make picks 👇", "Time to show off your prediction skills 🏆!"]
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
   show_button("PICK EM 🎉", options.sample, nil, url)
   stop_thread
 end
