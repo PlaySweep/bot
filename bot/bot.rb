@@ -37,8 +37,11 @@ Rubotnik.route :message do
       show_rules if entities.include?("rules")
       show_prizes if entities.include?("prizes")
       send_help if entities.include?("help")
+      positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive"
+      negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative"
+      neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral"
       default do
-        say "I do not follow..."
+        say "Hmm, I do not follow that one..."
         stop_thread
       end unless entities
     end

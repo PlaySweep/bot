@@ -1,6 +1,6 @@
 def trigger_invite
   $tracker.track(user.id, 'User Intended Referral', {'for' => 'Message'})
-  say "Just tap the share button below and your friend will get an invite in their Messenger inbox 👍"
+  say "Its easy to get your friends to play with you, just tap the share button below and they'll get an invite straight to their Messenger inbox 👍"
   show_invite
   stop_thread
 end

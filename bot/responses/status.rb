@@ -1,10 +1,12 @@
 def fetch_status
-  # @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(user.id)
   # show_winning_sweep_message if current_status == :winning_sweep
   # show_winning_streak if current_status == :winning_streak
   # show_losing_streak if current_status == :losing_streak
   # show_no_activity if current_status == :no_activity
-  say "Here is your status"
+  text = "Your answers are in, #{@sweepy.first_name}! You need to get all 3 right to complete a Sweep 🏁"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+  show_button("See your picks", text, nil, url)
   stop_thread
 end
 

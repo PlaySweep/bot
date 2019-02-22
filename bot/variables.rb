@@ -61,11 +61,11 @@ module Commands
 
   def show_invite
     @sweepy = Sweep::User.find(user.id)
-    titles = ["Play The Budweiser Sweep and earn incredible Knicks prizes 🎉"]
-    subtitles = ["Make 3 picks for each game. Get them all right and be entered for a chance to win huge prizes!"]
+    titles = ["Play The Budweiser Sweep and earn incredible Cardinals prizes ⚾️"]
+    subtitles = ["Answer 3 questions for each game, get them all right, and you could win your way to primetime seats 🎉"]
      friends = [
        {
-         title: "Earn a Finals Entry by inviting your friends to play 😎",
+         title: "Invite your friends to play the Budweiser Sweep! 😎",
          image_url: "https://www.underconsideration.com/brandnew/archives/budweiser_2016_logo_detail.png",
          buttons: [
            {
