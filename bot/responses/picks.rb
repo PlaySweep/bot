@@ -12,9 +12,9 @@ def matchups_available?
 end
 
 def handle_show_sports
-  options = ["Just tap below if you're looking to make picks 👇", "Time to show off your prediction skills 🏆!"]
+  options = ["We have some games available below 👇", "We've got questions, you've got answers!"]
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("PICK EM 🎉", options.sample, nil, url)
+  show_button("Play Now 💥", options.sample, nil, url)
   stop_thread
 end
 
@@ -37,6 +37,6 @@ def handle_no_sports_available
   ]
 
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
-  show_button("See Picks 👀", options.sample, nil, url)
+  show_button("Check my status", options.sample, nil, url)
   stop_thread
 end

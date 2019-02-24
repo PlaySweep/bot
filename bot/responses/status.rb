@@ -6,7 +6,7 @@ def fetch_status
   # show_no_activity if current_status == :no_activity
   text = "Your answers are in, #{@sweepy.first_name}! You need to get all 3 right to complete a Sweep 🏁"
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("See your picks", text, nil, url)
+  show_button("See your status", text, nil, url)
   stop_thread
 end
 
