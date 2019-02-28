@@ -8,11 +8,13 @@ def start
         for_team_ad(postback.referral.ref.split("_")[-1])
       else
         sweepy = Sweep::User.find_or_create(user.id)
-        say "Welcome to The Budweiser Sweep, #{sweepy.first_name}!"
-        say "We’re here to test your ability to answer questions correctly about what’s going to happen for every Cardinals game this Spring Training\n\nTrust us, you’ll want to answer these, as we’re giving away some crazy cool Cardinals prizes all spring long ⚾️"
-        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win...yeah we know you’re gonna win 😎"
+        intro = "Welcome to the Budweiser Sweep,"
+        disclaimer = "Please not that you need to be of legal drinking age to enter."
+        body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
+        say "#{intro}\n\n#{disclaimer}\n\n#{body}"
+        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-        show_button("Prepare to WIN 💥", confirmation_text, nil, url)
+        show_button("Confirm NOW 💥", confirmation_text, nil, url)
         # next_command :handle_lookup_location
       end
     rescue NoMethodError => e

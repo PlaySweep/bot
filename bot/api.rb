@@ -13,7 +13,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed 
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :preference 
 
     def initialize attributes
       @id = attributes['id']
@@ -21,6 +21,7 @@ module Sweep
       @first_name = attributes['first_name']
       @last_name = attributes['last_name']
       @confirmed = attributes['confirmed']
+      @preference = attributes['preference']
     end
 
     def self.all
@@ -90,6 +91,22 @@ module Sweep
       end
     end
 
+  end
+
+  class Preference
+    attr_reader :id, :owner_id
+
+    def initialize attributes
+      @id = attributes['id']
+      @owner_id = attributes['owner_id']
+    end
+
+    def self.update owner_id, facebook_uuid
+      @conn = Faraday.new(API_URL)
+      @conn.headers["Authorization"] = facebook_uuid
+      user = Sweep::User.find(facebook_uuid)
+      response = @conn.patch("#{API_URL}/users/#{facebook_uuid}/preferences/#{user.preference.id}", { preference: { owner_id: owner_id } })
+    end
   end
 
   class Slate

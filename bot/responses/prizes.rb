@@ -1,4 +1,4 @@
 def show_prizes
-  say "We're giving away 2 Cardinals home game tickets to the winner of the next Sweep Contest Drawing ⚾️!"
+  say "Prizes change every single day, but the prizes that are available are primarily game tickets and autographed merchandise ⚾️"
   stop_thread
 end

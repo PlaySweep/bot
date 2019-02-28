@@ -12,7 +12,7 @@ def matchups_available?
 end
 
 def handle_show_sports
-  options = ["We have some games available below 👇", "We've got questions, you've got answers!"]
+  options = ["Tap below to see all of the available contests!"]
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
   show_button("Play Now 💥", options.sample, nil, url)
   stop_thread
@@ -37,6 +37,6 @@ def handle_no_sports_available
   ]
 
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
-  show_button("Check my status", options.sample, nil, url)
+  show_button("See Answers", options.sample, nil, url)
   stop_thread
 end

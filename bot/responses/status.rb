@@ -4,9 +4,9 @@ def fetch_status
   # show_winning_streak if current_status == :winning_streak
   # show_losing_streak if current_status == :losing_streak
   # show_no_activity if current_status == :no_activity
-  text = "Your answers are in, #{@sweepy.first_name}! You need to get all 3 right to complete a Sweep 🏁"
+  text = "Your answers are in, #{@sweepy.first_name}! Tap below to see what you answered or to update your answers 🏁"
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("See your status", text, nil, url)
+  show_button("See Answers", text, nil, url)
   stop_thread
 end
 
