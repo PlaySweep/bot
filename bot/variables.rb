@@ -84,7 +84,7 @@ module Commands
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/1179524508844267?ref=#{user.id}_#{1}", 
+                           url: "https://m.me/606217113124396?ref=#{user.id}_#{1}", 
                            title: "Play Now 🎉",
                            webview_height_ratio: 'full'
                          }

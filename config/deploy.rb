@@ -11,6 +11,8 @@ set :assets_roles, [:web, :app]
 set :rvm_ruby_version, 'ruby-2.4.1@default'      # Defaults to: 'default'
 set :rvm_map_bins, %w{gem rake ruby rails bundle}
 
+set :stages, %w{beta production}
+
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'node_modules'
 #append :linked_files, 'config/database.yml'
 
@@ -18,5 +20,5 @@ set :keep_releases, 8
 set :passenger_restart_with_touch, true
 
 # Dafault to QA ENV stageless deploy
-set :stage, :staging
+set :stage, :beta
 # after "deploy", "nc:finished"

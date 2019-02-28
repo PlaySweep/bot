@@ -51,11 +51,17 @@ module Sweep
     end
 
     def self.create facebook_uuid
-      # response = Faraday.get("https://graph.facebook.com/v2.11/#{facebook_uuid}?fields=first_name,last_name,profile_pic,gender,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
-      # user = JSON.parse(response.body)
+      response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
+      user = JSON.parse(response.body)
       params = { :user => 
         { 
-          :facebook_uuid => facebook_uuid
+          :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
+          :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
+          :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
+          :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
+          :locale => user.has_key?('locale') ? user['locale'] : nil, 
+          :gender => user.has_key?('gender') ? user['gender'] : nil, 
+          :timezone => user.has_key?('timezone') ? user['timezone'] : nil 
         } 
       }
       response = @conn.post("#{API_URL}/users", params)

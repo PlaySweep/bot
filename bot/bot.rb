@@ -6,14 +6,14 @@ require_relative './api.rb'
 require 'wit'
 Rubotnik::Autoloader.load('bot')
 
-# Rubotnik.subscribe(ENV['ACCESS_TOKEN'])
+# Rubotnik.subscribe("EAAbXmgDyHk8BANmG3wxxrqr4cGU3SrWZBPbEy9EQjplstOr7NIEJwN4AMAA6WNiZAdLAAsPa7g3FrBnqW66xpJ1snZCUGfKwf4CrslKjuxYHtxdK4ZA9nSj2WgFPrw1ZB7R9L4qAgWdSXpHZAEyPawwYiZAGnHi2DZApgB6Bkaluqc6XXzKCfX9w")
 Rubotnik.set_profile(
   Profile::START_BUTTON, Profile::START_GREETING
 )
 
-
-HTTParty.post 'https://graph.facebook.com/v2.11/me/subscribed_apps', query: { access_token: ENV["ACCESS_TOKEN"], subscription_fields: [] }
-HTTParty.post 'https://graph.facebook.com/v2.11/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+# HTTParty.get 'https://graph.facebook.com/v3.2/606217113124396/subscribed_apps'
+HTTParty.post "https://graph.facebook.com/v3.2/606217113124396/subscribed_apps", query: { access_token: ENV["ACCESS_TOKEN"], subscribed_fields: ["name", "messages", "messaging_postbacks", "messaging_referrals"] }
+# HTTParty.post 'https://graph.facebook.com/v2.6/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
 # LOCATION_PROMPT = UI::QuickReplies.location
 # EMAIL_PROMPT = UI::QuickReplies.email
@@ -23,7 +23,7 @@ Rubotnik.route :postback do
 end
 
 Rubotnik.route :message do
-  # if Sweep::User.find(user.id).confirmed #TODO figure out a way to not call out to api every time to verify if they are confirmed
+  if Sweep::User.find(user.id).confirmed #TODO figure out a way to not call out to api every time to verify if they are confirmed
     unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
       Sweep::User.find_or_create(user.id)
       response = $wit.message(message.text).to_dot
@@ -49,10 +49,10 @@ Rubotnik.route :message do
         stop_thread
       end unless entities
     end
-  # else
-  #   confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
-  #   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-  #   show_button("Quick Setup ⚡️", confirmation_text, nil, url)
-  #   stop_thread
-  # end
+  else
+    confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+    show_button("Quick Setup ⚡️", confirmation_text, nil, url)
+    stop_thread
+  end
 end
