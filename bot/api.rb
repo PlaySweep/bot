@@ -107,6 +107,13 @@ module Sweep
       user = Sweep::User.find(facebook_uuid)
       response = @conn.patch("#{API_URL}/users/#{facebook_uuid}/preferences/#{user.preference.id}", { preference: { owner_id: owner_id } })
     end
+
+    def self.update_by_team team, facebook_uuid
+      @conn = Faraday.new(API_URL)
+      @conn.headers["Authorization"] = facebook_uuid
+      user = Sweep::User.find(facebook_uuid)
+      response = @conn.get("#{API_URL}/preferences/#{user.preference.id}/set_owner?team=#{team}")
+    end
   end
 
   class Slate

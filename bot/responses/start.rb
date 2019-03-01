@@ -5,17 +5,32 @@ def start
   bind 'START' do
     begin
       if postback.referral
-        for_team_ad(postback.referral.ref.split("_")[-1])
+        #TODO fix these calls and sleep
+        team = postback.referral.ref.split('_').map(&:capitalize).join(' ')
+        puts "REFERRALS => #{postback.referral.inspect}"
+        sweepy = Sweep::User.find_or_create(user.id)
+        Sweep::Preference.update_by_team(team, user.id)
+        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name},"
+        disclaimer = "Please not that you need to be of legal drinking age to enter."
+        say "#{intro}\n\n#{disclaimer}\n\n"
+        sweepy = Sweep::User.find(user.id)
+        sleep 1
+        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.preference.team_name}"
+        body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.preference.team_name} game this Spring Training."
+        body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.preference.team_name} prizes all Spring long. First, we need to confirm a few details about who you are so you can collect your prizes when you win..."
+        say "#{body_one}\n\n#{body_two}\n\n#{body_three}"
+        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+        show_button("Confirm NOW 💥", confirmation_text, nil, url)
       else
         sweepy = Sweep::User.find_or_create(user.id)
-        intro = "Welcome to the Budweiser Sweep,"
+        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name},"
         disclaimer = "Please not that you need to be of legal drinking age to enter."
         body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
         say "#{intro}\n\n#{disclaimer}\n\n#{body}"
         confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
         show_button("Confirm NOW 💥", confirmation_text, nil, url)
-        # next_command :handle_lookup_location
       end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"
@@ -74,12 +89,11 @@ def extract_full_address(parsed)
   parsed['results'].first['formatted_address']
 end
 
-def for_team_ad(owner_id)
-  sweepy = Sweep::User.find_or_create(user.id)
-  say "Welcome to the Knicks edition of The Budweiser Sweep, Nick 🏀️!"
-  puts "Ref => #{postback.referral.ref}"
-  say "Please confirm that you're over 21 below 👇", quick_replies: ["Yes, I'm over 21", "No, I'm under 21"]
-  next_command :over_21
+def for_team_ad(referral_tag)
+  sweepy = Sweep::User.find_or_create(user.id, referral_tag)
+  puts "Referral Tag Passed => #{referral_tag}"
+  puts "Postback Referral => #{postback.referral.ref}"
+  stop_thread
 end
 
 def over_21
