@@ -1,6 +1,6 @@
 # config/deploy/production.rb
 
-server 'sweep_deploy', roles: %w{app db web}
+server 'sweep', user: 'ubuntu', roles: %w{app db web}
 set :deploy_to, "/var/www/sweep_bot"
 set :tmp_dir, '/home/deploy/tmp'
 

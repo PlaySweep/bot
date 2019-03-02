@@ -42,13 +42,11 @@ module Sweep
       @conn = Faraday.new(API_URL)
       @conn.headers["Authorization"] = facebook_uuid
       response = @conn.get("#{API_URL}/users/#{facebook_uuid}")
-      attributes = JSON.parse(response.body)['user']
-      if attributes.empty?
+      if response.body.empty?
         create(facebook_uuid)
       else
         find(facebook_uuid)
       end
-      find(facebook_uuid)
     end
 
     def self.create facebook_uuid
