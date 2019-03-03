@@ -5,7 +5,7 @@ def start
   bind 'START' do
     begin
       if postback.referral
-        #TODO fix these calls and sleep
+        #TODO fix these multiple calls and remove the sleep
         team = postback.referral.ref.split('_').map(&:capitalize).join(' ')
         puts "REFERRALS => #{postback.referral.inspect}"
         sweepy = Sweep::User.find_or_create(user.id)
@@ -15,6 +15,9 @@ def start
         say "#{intro}\n\n#{disclaimer}\n\n"
         sweepy = Sweep::User.find(user.id)
         sleep 1
+        img_url = sweepy.preference.team_entry_image
+        image = UI::ImageAttachment.new(img_url)
+        show(image)
         body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.preference.team_name}"
         body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.preference.team_name} game this Spring Training."
         body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.preference.team_name} prizes all Spring long. First, we need to confirm a few details about who you are so you can collect your prizes when you win..."
