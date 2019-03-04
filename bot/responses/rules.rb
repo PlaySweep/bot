@@ -1,6 +1,6 @@
 def show_rules
-  rules_url = "http://www.endemiclabs.co/budweiser-sweep-rules.html"
-  show_button("Rules", "You can view the official Rules by tapping below 👇", nil, rules_url)
+  # rules_url = "http://www.endemiclabs.co/budweiser-sweep-rules.html"
+  show_button("Rules", "You can view the official Rules by tapping below 👇", nil, "https://www.scribd.com/document/401003912/Official-Budweiser-Sweep-Rules")
 
   terms_url = "https://www.budweiser.com/en/terms-conditions.html"
   show_button("Terms of Service", "You can view the official Terms of Service by tapping below 👇", nil, terms_url)
