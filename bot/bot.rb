@@ -56,7 +56,7 @@ Rubotnik.route :message do
       end
     elsif sweepy.confirmed && !sweepy.preference.owner_id && !entities.include?("team_select")
       prompt_team_select
-    elsif sweepy.confirmed && !sweepy.preference.owner_id && entities.include?("team_select")
+    elsif sweepy.confirmed && entities.include?("team_select")
       team_select
     else
       confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
