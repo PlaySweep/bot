@@ -28,7 +28,7 @@ Rubotnik.route :message do
     say "Sorry #{sweepy.first_name}, you are unable to play at this time."
     stop_thread
   else
-    if sweepy.confirmed && sweepy.preference.owner_id  #TODO figure out a way to not call out to api every time to verify if they are confirmed
+    if sweepy.confirmed  #TODO figure out a way to not call out to api every time to verify if they are confirmed
       unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
         response = $wit.message(message.text).to_dot
         entity_objects = response.entities
@@ -54,8 +54,6 @@ Rubotnik.route :message do
           stop_thread
         end unless entities
       end
-    elsif sweepy.confirmed && entities.include?("team_select")
-      team_select
     else
       confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
       url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
