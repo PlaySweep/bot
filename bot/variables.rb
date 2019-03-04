@@ -18,7 +18,7 @@ module Commands
     show(button_template)
   end
 
-  def show_carousel resource, quick_replies
+  def show_carousel resource, quick_replies=nil
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
@@ -61,7 +61,7 @@ module Commands
 
   def show_invite
     @sweepy = Sweep::User.find(user.id)
-    titles = ["Play The Budweiser Sweep and earn incredible Cardinals prizes ⚾️"]
+    titles = ["Play The Budweiser Sweep and earn incredible #{@sweepy.preference.team_name} prizes ⚾️"]
     subtitles = ["Answer 3 questions for each game, get them all right, and you could win your way to primetime seats 🎉"]
      friends = [
        {
@@ -84,7 +84,7 @@ module Commands
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/606217113124396?ref=#{user.id}_#{1}", 
+                           url: "https://m.me/606217113124396?ref=#{@sweepy.preference.team_name.split(' ').map(&:downcase).join('_')}?user_reference_id=#{user.id}", 
                            title: "Play Now 🎉",
                            webview_height_ratio: 'full'
                          }

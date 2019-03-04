@@ -25,7 +25,7 @@ end
 Rubotnik.route :message do
   sweepy = Sweep::User.find_or_create(user.id)
   if sweepy.locked
-    say "Sorry, #{sweepy.first_name}, you are unable to play at this time."
+    say "Sorry #{sweepy.first_name}, you are unable to play at this time."
     stop_thread
   else
     if sweepy.confirmed && sweepy.preference.owner_id  #TODO figure out a way to not call out to api every time to verify if they are confirmed
