@@ -54,8 +54,6 @@ Rubotnik.route :message do
           stop_thread
         end unless entities
       end
-    elsif sweepy.confirmed && !sweepy.preference.owner_id && !entities.include?("team_select")
-      prompt_team_select
     elsif sweepy.confirmed && entities.include?("team_select")
       team_select
     else
