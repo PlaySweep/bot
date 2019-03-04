@@ -13,7 +13,7 @@ end
 
 def prompt_team_select
   text = "For Spring training, please select one of the available teams below to get started 👇"
-  available_teams = [{id: 1, name: "Cardinals"}, {id: 2, name: "Dodgers"}, {id: 3, name: "Cubs"}]
+  available_teams = [{id: 1, name: "St Louis Cardinals"}, {id: 2, name: "Los Angeles Dodgers"}, {id: 3, name: "Chicago Cubs"}]
   quick_replies = available_teams.map do |team, i|
     {
       "content_type": "text",

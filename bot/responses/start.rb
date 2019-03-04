@@ -10,7 +10,7 @@ def start
         puts "REFERRALS => #{postback.referral.inspect}"
         sweepy = Sweep::User.find_or_create(user.id)
         Sweep::Preference.update_by_team(team, user.id)
-        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name},"
+        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
         sweepy = Sweep::User.find(user.id)
@@ -27,7 +27,7 @@ def start
         show_button("Confirm NOW 💥", confirmation_text, nil, url)
       else
         sweepy = Sweep::User.find_or_create(user.id)
-        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name},"
+        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
         say "#{intro}\n\n#{disclaimer}\n\n#{body}"
