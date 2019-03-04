@@ -6,7 +6,7 @@ def start
     begin
       if postback.referral
         #TODO fix these multiple calls and remove the sleep
-        team = postback.referral.ref.split('_').map(&:capitalize).join(' ')
+        team = postback.referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
         puts "REFERRALS => #{postback.referral.inspect}"
         sweepy = Sweep::User.find_or_create(user.id)
         Sweep::Preference.update_by_team(team, user.id)
