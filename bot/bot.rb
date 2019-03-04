@@ -30,11 +30,11 @@ Rubotnik.route :message do
   else
     if sweepy.confirmed  #TODO figure out a way to not call out to api every time to verify if they are confirmed
       unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
+        response = $wit.message(message.text).to_dot
+        entity_objects = response.entities
+        entities = response.entities.keys
+
         if sweepy.preference.owner_id
-          response = $wit.message(message.text).to_dot
-          entity_objects = response.entities
-          entities = response.entities.keys
-          
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
           fetch_status if entities.include?("status")
