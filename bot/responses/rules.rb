@@ -1,5 +1,5 @@
 def show_rules
-  rules_url = "https://www.endemiclabs.co/budweiser_sweep_rules.pdf"
+  rules_url = "https://endemic-lp.herokuapp.com/budweiser_sweep_rules.pdf"
   show_button("Rules", "You can view the official Rules by tapping below 👇", nil, rules_url)
 
   terms_url = "https://www.budweiser.com/en/terms-conditions.html"
