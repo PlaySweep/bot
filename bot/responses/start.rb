@@ -7,14 +7,20 @@ def start
       if postback.referral
         #TODO fix these multiple calls and remove the sleep
         team = postback.referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
-        puts "REFERRALS => #{postback.referral.inspect}"
-        sweepy = Sweep::User.find_or_create(user.id)
+        param_key = postback.referral.ref.split('?')[-1].split('=')[0]
+        param_value = postback.referral.ref.split('?')[-1].split('=')[1]
+        case param_key
+        when "source"
+          sweepy = Sweep::User.find_or_create(user.id, source: param_value)
+        when "referrer_uuid"
+          sweepy = Sweep::User.find_or_create(user.id, referrer_uuid: param_value)
+        end
         Sweep::Preference.update_by_team(team, user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
         sweepy = Sweep::User.find(user.id)
-        sleep 1
+        sleep 0.5
         img_url = sweepy.preference.team_entry_image
         image = UI::ImageAttachment.new(img_url)
         show(image)

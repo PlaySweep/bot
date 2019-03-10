@@ -84,7 +84,7 @@ module Commands
                          {
                            type: "web_url",
                            messenger_extensions: true,
-                           url: "https://m.me/606217113124396?ref=#{@sweepy.preference.team_name.split(' ').map(&:downcase).join('_')}?user_reference_id=#{user.id}", 
+                           url: "https://m.me/606217113124396?ref=#{@sweepy.preference.team_name.split(' ').map(&:downcase).join('_')}?referrer_uuid=#{user.id}", 
                            title: "Play Now 🎉",
                            webview_height_ratio: 'full'
                          }
