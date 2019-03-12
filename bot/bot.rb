@@ -13,7 +13,7 @@ Rubotnik.set_profile(
 
 # HTTParty.get 'https://graph.facebook.com/v3.2/606217113124396/subscribed_apps'
 HTTParty.post "https://graph.facebook.com/v3.2/606217113124396/subscribed_apps", query: { access_token: ENV["ACCESS_TOKEN"], subscribed_fields: ["name", "messages", "messaging_postbacks", "messaging_referrals"] }
-# HTTParty.post 'https://graph.facebook.com/v2.6/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+HTTParty.post 'https://graph.facebook.com/v2.6/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
 
 # LOCATION_PROMPT = UI::QuickReplies.location
 # EMAIL_PROMPT = UI::QuickReplies.email
