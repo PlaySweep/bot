@@ -14,7 +14,11 @@ def start
           sweepy = Sweep::User.find_or_create(user.id, source: param_value)
         when "referrer_uuid"
           sweepy = Sweep::User.find_or_create(user.id, referrer_uuid: param_value)
+        else
+          sweepy = Sweep::User.find_or_create(user.id)
         end
+        sweepy = Sweep::User.find_or_create(user.id)
+        sleep 0.5
         Sweep::Preference.update_by_team(team, user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."

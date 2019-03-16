@@ -119,7 +119,7 @@ module Sweep
     def self.update_by_team team, facebook_uuid
       @conn = Faraday.new(API_URL)
       @conn.headers["Authorization"] = facebook_uuid
-      user = Sweep::User.find(facebook_uuid)
+      user = Sweep::User.find_or_create(facebook_uuid)
       response = @conn.get("#{API_URL}/preferences/#{user.preference.id}/set_owner?team=#{team}")
     end
   end
