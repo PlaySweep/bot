@@ -60,22 +60,33 @@ module Sweep
 
     def self.create facebook_uuid, source: nil, referrer_uuid: nil
       response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
-      user = JSON.parse(response.body)
-      params = { :user => 
-        { 
-          :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
-          :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
-          :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
-          :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
-          :locale => user.has_key?('locale') ? user['locale'] : nil, 
-          :gender => user.has_key?('gender') ? user['gender'] : nil, 
-          :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-          :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
-        } 
-      }
-      response = referrer_uuid ? @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params) : @conn.post("#{API_URL}/users", params)
-      attributes = JSON.parse(response.body)['user']
-      new(attributes)
+      if response.status == 200
+        user = JSON.parse(response.body)
+        params = { :user => 
+          { 
+            :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
+            :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
+            :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
+            :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
+            :locale => user.has_key?('locale') ? user['locale'] : nil, 
+            :gender => user.has_key?('gender') ? user['gender'] : nil, 
+            :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
+            :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
+          } 
+        }
+        response = referrer_uuid ? @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params) : @conn.post("#{API_URL}/users", params)
+        attributes = JSON.parse(response.body)['user']
+        new(attributes)
+      else
+        params = { :user => 
+          { 
+            :facebook_uuid => facebook_uuid
+          } 
+        }
+        response = @conn.post("#{API_URL}/users", params)
+        attributes = JSON.parse(response.body)['user']
+        new(attributes)
+      end
     end
 
     def update_referral referred_facebook_uuid:
