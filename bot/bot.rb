@@ -46,7 +46,6 @@ Rubotnik.route :message do
           list_of_commands if entities.include?("commands")
           legal if entities.include?("legal")
           location if entities.include?("local_events")
-          team_select if entities.include?("team_select")
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
           neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
