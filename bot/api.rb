@@ -13,7 +13,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :locked, :preference 
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :locked, :roles 
 
     def initialize attributes
       @id = attributes['id']
@@ -22,7 +22,7 @@ module Sweep
       @last_name = attributes['last_name']
       @confirmed = attributes['confirmed']
       @locked = attributes['locked']
-      @preference = attributes['preference']
+      @roles = attributes['roles']
     end
 
     def self.all
@@ -39,7 +39,7 @@ module Sweep
       new(attributes)
     end
 
-    def self.find_or_create facebook_uuid, source: nil, referrer_uuid: nil
+    def self.find_or_create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
       @conn = Faraday.new(API_URL)
       @conn.headers["Authorization"] = facebook_uuid
       response = @conn.get("#{API_URL}/users/#{facebook_uuid}")
@@ -58,10 +58,10 @@ module Sweep
       find(facebook_uuid)
     end
 
-    def self.create facebook_uuid, source: nil, referrer_uuid: nil
-      response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
-      if response.status == 200
-        user = JSON.parse(response.body)
+    def self.create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
+      fb_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
+      if fb_response.status == 200
+        user = JSON.parse(fb_response.body)
         params = { :user => 
           { 
             :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
@@ -74,7 +74,16 @@ module Sweep
             :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
           } 
         }
-        response = referrer_uuid ? @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params) : @conn.post("#{API_URL}/users", params)
+        if referrer_uuid && team
+          response = @conn.post("#{API_URL}/users?team=#{team}&referrer_uuid=#{referrer_uuid}", params)
+        elsif team
+          response = @conn.post("#{API_URL}/users?team=#{team}", params)
+        elsif referrer_uuid
+          response = @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
+        else
+          response = @conn.post("#{API_URL}/users", params)
+        end
+
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       else
@@ -83,7 +92,16 @@ module Sweep
             :facebook_uuid => facebook_uuid
           } 
         }
-        response = @conn.post("#{API_URL}/users", params)
+        if referrer_uuid && team
+          response = @conn.post("#{API_URL}/users?team=#{team}&referrer_uuid=#{referrer_uuid}", params)
+        elsif team
+          response = @conn.post("#{API_URL}/users?team=#{team}", params)
+        elsif referrer_uuid
+          response = @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
+        else
+          response = @conn.post("#{API_URL}/users", params)
+        end
+
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       end
@@ -110,29 +128,6 @@ module Sweep
       end
     end
 
-  end
-
-  class Preference
-    attr_reader :id, :owner_id
-
-    def initialize attributes
-      @id = attributes['id']
-      @owner_id = attributes['owner_id']
-    end
-
-    def self.update owner_id, facebook_uuid
-      @conn = Faraday.new(API_URL)
-      @conn.headers["Authorization"] = facebook_uuid
-      user = Sweep::User.find(facebook_uuid)
-      response = @conn.patch("#{API_URL}/users/#{facebook_uuid}/preferences/#{user.preference.id}", { preference: { owner_id: owner_id } })
-    end
-
-    def self.update_by_team team, facebook_uuid
-      @conn = Faraday.new(API_URL)
-      @conn.headers["Authorization"] = facebook_uuid
-      user = Sweep::User.find_or_create(facebook_uuid)
-      response = @conn.get("#{API_URL}/preferences/#{user.preference.id}/set_owner?team=#{team}")
-    end
   end
 
   class Slate

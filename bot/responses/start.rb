@@ -11,26 +11,23 @@ def start
         param_value = postback.referral.ref.split('?')[-1].split('=')[1]
         case param_key
         when "source"
-          sweepy = Sweep::User.find_or_create(user.id, source: param_value)
+          sweepy = Sweep::User.find_or_create(user.id, team: team, source: param_value)
         when "referrer_uuid"
-          sweepy = Sweep::User.find_or_create(user.id, referrer_uuid: param_value)
+          sweepy = Sweep::User.find_or_create(user.id, team: team, referrer_uuid: param_value)
         else
-          sweepy = Sweep::User.find_or_create(user.id)
+          sweepy = Sweep::User.find_or_create(user.id, team: team)
         end
-        sweepy = Sweep::User.find_or_create(user.id)
-        sleep 0.5
-        Sweep::Preference.update_by_team(team, user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
         sweepy = Sweep::User.find(user.id)
         sleep 0.5
-        img_url = sweepy.preference.team_entry_image
+        img_url = sweepy.roles.first.team_entry_image
         image = UI::ImageAttachment.new(img_url)
         show(image)
-        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.preference.team_name}"
-        body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.preference.team_name} game this Spring Training."
-        body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.preference.team_name} prizes all Spring long."
+        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.roles.first.team_name}"
+        body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.roles.first.team_name} game this Spring Training."
+        body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.roles.first.team_name} prizes all Spring long."
         say "#{body_one}\n\n#{body_two}\n\n#{body_three}"
         confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"

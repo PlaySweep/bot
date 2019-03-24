@@ -34,7 +34,7 @@ Rubotnik.route :message do
         entity_objects = response.entities
         entities = response.entities.keys
 
-        if sweepy.preference.owner_id
+        if sweepy.roles.first.owner_id
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
           fetch_status if entities.include?("status")
