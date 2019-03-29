@@ -18,7 +18,7 @@ end
 def prompt_team_select
   #TODO HARD CODED TEAM IDS PLEASE REFACTOR
   text = "Please select one of the available teams below to get started 👇"
-  available_teams = [{id: 1, name: "St Louis Cardinals"}, {id: 2, name: "Los Angeles Dodgers"}, {id: 3, name: "Chicago Cubs"}, {id: 11, name: "San Diego Padres"}, {id: 21, name: "New York Mets"}, {id: 16, name: "Washington Nationals"}]
+  available_teams = [{id: 1, name: "St Louis Cardinals"}, {id: 2, name: "Los Angeles Dodgers"}]
   quick_replies = available_teams.map do |team, i|
     {
       "content_type": "text",
