@@ -28,7 +28,7 @@ def start
         img_url = sweepy.preference.team_entry_image
         image = UI::ImageAttachment.new(img_url)
         show(image)
-        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.preference.team_name}"
+        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.preference.team_name}."
         body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.preference.team_name} game this season."
         body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.preference.team_name} prizes all season long."
         say "#{body_one}\n\n#{body_two}\n\n#{body_three}"
