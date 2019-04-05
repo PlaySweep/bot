@@ -46,9 +46,9 @@ module Sweep
       attributes = JSON.parse(response.body)['user']
       if attributes.empty?
         if referrer_uuid
-          create(facebook_uuid, referrer_uuid: referrer_uuid)
+          create(facebook_uuid, team: team, referrer_uuid: referrer_uuid)
         elsif source
-          create(facebook_uuid, source: source)
+          create(facebook_uuid, team: team, source: source)
         else
           create(facebook_uuid)
         end
@@ -59,9 +59,9 @@ module Sweep
     end
 
     def self.create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
-      fb_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
-      if fb_response.status == 200
-        user = JSON.parse(fb_response.body)
+      response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone&access_token=#{ENV["ACCESS_TOKEN"]}")
+      if response.status == 200
+        user = JSON.parse(response.body)
         params = { :user => 
           { 
             :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
@@ -74,12 +74,9 @@ module Sweep
             :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
           } 
         }
-        if referrer_uuid && team
-          response = @conn.post("#{API_URL}/users?team=#{team}&referrer_uuid=#{referrer_uuid}", params)
-        elsif team
-          response = @conn.post("#{API_URL}/users?team=#{team}", params)
-        elsif referrer_uuid
-          response = @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
+        
+        if team
+          response = source ? @conn.post("#{API_URL}/users?team=#{team}", params) : @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
         else
           response = @conn.post("#{API_URL}/users", params)
         end
@@ -92,16 +89,7 @@ module Sweep
             :facebook_uuid => facebook_uuid
           } 
         }
-        if referrer_uuid && team
-          response = @conn.post("#{API_URL}/users?team=#{team}&referrer_uuid=#{referrer_uuid}", params)
-        elsif team
-          response = @conn.post("#{API_URL}/users?team=#{team}", params)
-        elsif referrer_uuid
-          response = @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
-        else
-          response = @conn.post("#{API_URL}/users", params)
-        end
-
+        response = @conn.post("#{API_URL}/users", params)
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       end
