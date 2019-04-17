@@ -11,16 +11,35 @@ def start
         param_value = postback.referral.ref.split('?')[-1].split('=')[1]
         case param_key
         when "source"
+          puts "%" * 25
+          puts "Source is run..."
+          puts "The Source Key => #{param_key}"
+          puts "The Source Value => #{param_value}"
+          puts "Team => #{team}"
+          puts "%" * 25
           sweepy = Sweep::User.find_or_create(user.id, team: team, source: param_value)
         when "referrer_uuid"
+          puts "$" * 25
+          puts "Referrer is run..."
+          puts "The Source Key => #{param_key}"
+          puts "The Source Value => #{param_value}"
+          puts "Team => #{team}"
+          puts "$" * 25
           sweepy = Sweep::User.find_or_create(user.id, team: team, referrer_uuid: param_value)
         else
+          puts "*" * 25
+          puts "Neither source or referrer is run..."
+          puts "The Source Key => #{param_key}"
+          puts "The Source Value => #{param_value}"
+          puts "Team => #{team}"
+          puts "*" * 25
           sweepy = Sweep::User.find_or_create(user.id, team: team)
         end
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
         sweepy = Sweep::User.find(user.id)
+        # sweepy = Sweep::User.find_or_create(user.id, team: team)
         sleep 0.5
         img_url = sweepy.roles.first.team_entry_image
         image = UI::ImageAttachment.new(img_url)
