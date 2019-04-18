@@ -86,7 +86,8 @@ module Sweep
       else
         params = { :user => 
           { 
-            :facebook_uuid => facebook_uuid
+            :facebook_uuid => facebook_uuid,
+            :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
           } 
         }
         response = team ? @conn.post("#{API_URL}/users?team=#{team}", params) : @conn.post("#{API_URL}/users", params)
