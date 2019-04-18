@@ -89,7 +89,7 @@ module Sweep
             :facebook_uuid => facebook_uuid
           } 
         }
-        response = @conn.post("#{API_URL}/users", params)
+        response = team ? @conn.post("#{API_URL}/users?team=#{team}", params) : @conn.post("#{API_URL}/users", params)
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       end
