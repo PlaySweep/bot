@@ -111,7 +111,7 @@ module Sweep
     def update uuid:, team:
       @conn = Faraday.new(API_URL)
       @conn.headers["Authorization"] = uuid
-      response = @conn.patch("#{API_URL}/users/#{uuid}?team=#{team}", { :user => {} })
+      response = @conn.patch("#{API_URL}/users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
       if response.status == 200
         attributes = JSON.parse(response.body)['user']
         new(attributes)
