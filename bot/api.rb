@@ -113,8 +113,7 @@ module Sweep
       @conn.headers["Authorization"] = uuid
       response = @conn.patch("#{API_URL}/users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
       if response.status == 200
-        attributes = JSON.parse(response.body)['user']
-        new(attributes)
+        puts "👍"
       else
         puts "⁉️"
       end
