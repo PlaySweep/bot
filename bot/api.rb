@@ -108,10 +108,11 @@ module Sweep
       end
     end
 
-    def update params
-      response = @conn.patch("#{API_URL}/users/#{@facebook_uuid}", { :user => params })
+    def update uuid:, team:
+      response = @conn.patch("#{API_URL}/users/#{uuid}?team=#{team}", { :user => {} })
       if response.status == 200
-        puts "👍"
+        attributes = JSON.parse(response.body)['user']
+        new(attributes)
       else
         puts "⁉️"
       end

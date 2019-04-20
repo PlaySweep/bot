@@ -34,7 +34,7 @@ Rubotnik.route :message do
         entity_objects = response.entities
         entities = response.entities.keys
 
-        if sweepy.roles.first.owner_id
+        if sweepy.roles.first.try(:owner_id)
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
           fetch_status if entities.include?("status")
@@ -55,6 +55,9 @@ Rubotnik.route :message do
           end unless entities
         else
           if entities.include?("team_select")
+            puts "*" * 25
+            puts "Running Team select ⚾️"
+            puts "*" * 25
             team_select
           else
             prompt_team_select
