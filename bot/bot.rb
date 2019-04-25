@@ -57,8 +57,7 @@ Rubotnik.route :message do
         else
           if entities.include?("location")
             fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords']) if entity_objects["location"][0].first
-          end
-          if entities.include?("team_select")
+          elsif entities.include?("team_select")
             team_select
           else
             prompt_team_select
