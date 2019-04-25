@@ -41,14 +41,16 @@ def fetch_teams coords
   end
 
   text = "I found some teams! Tap below 👇"
-  quick_replies = available_teams.map do |team, i|
-    {
-      "content_type": "text",
-      "title": team.abbreviation,
-      "payload":"#{team.name}_#{team.id}",
-    }
-  end
-  say text, quick_replies: quick_replies
+  puts "Teams: #{teams.inspect}"
+  puts "Available Teams: #{available_teams.inspect}"
+  # quick_replies = available_teams.map do |team, i|
+  #   {
+  #     "content_type": "text",
+  #     "title": team.abbreviation,
+  #     "payload":"#{team.name}_#{team.id}",
+  #   }
+  # end
+  # say text, quick_replies: quick_replies
   puts "Distance: #{distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles}"
   stop_thread
 end
