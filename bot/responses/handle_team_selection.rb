@@ -1,3 +1,5 @@
+require 'haversine'
+
 def team_select
   @sweepy = Sweep::User.find(user.id)
   if message.quick_reply
@@ -24,17 +26,20 @@ def fetch_teams coords
   teams = Sweep::Team.all
   radius = 250
   while available_teams.size < 3
+    distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles
     teams.each do |team|
-      available_teams << team unless available_teams.size > 3
+      if distance < radius
+        available_teams << team unless available_teams.size > 3
+      end
     end
     radius *= 3
   end
   text = "I found some teams! Tap below 👇"
-  quick_replies = available_teams.map do |team, i|
+  quick_replies = available_teams.map do |team|
     {
       "content_type": "text",
-      "title": team[:abbreviation],
-      "payload":"#{team[:name]}_#{team[:id]}",
+      "title": team.abbreviation,
+      "payload":"#{team.name}_#{team.id}",
     }
   end
   say text, quick_replies: quick_replies
