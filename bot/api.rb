@@ -160,7 +160,7 @@ module Sweep
 
     def self.all
       conn = Faraday.new(ADMIN_URL)
-      response = conn.get("teams")
+      response = conn.get("teams?active=true")
       collection = JSON.parse(response.body)["teams"]
       collection.map { |attributes| new(attributes) }
     end
