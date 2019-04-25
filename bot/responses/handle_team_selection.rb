@@ -27,7 +27,7 @@ def fetch_teams coords
   radius = 250
   while available_teams.size < 3
     teams.each do |team|
-      distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles
+      distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
       if distance < radius
         available_teams << team unless available_teams.size > 3
       end
