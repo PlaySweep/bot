@@ -8,7 +8,6 @@ require 'haversine'
 require_relative './bot/bot.rb'
 $tracker = Mixpanel::Tracker.new(ENV['MIXPANEL_BOT_TOKEN'])
 $wit = Wit.new(access_token: "N7JLUA2ORNWIIPTK4V5X3N2ATJVXLCQH")
-$geo = Haversine
 
 map('/webhook') do
   run Facebook::Messenger::Server
