@@ -4,11 +4,8 @@ def team_select
   @sweepy = Sweep::User.find(user.id)
   if message.quick_reply
     selected_team_id = message.quick_reply.split('_')[1]
-    puts "Team ID => #{selected_team_id}"
     selected_team_name = message.quick_reply.split('_')[0]
-    puts "Team Name => #{selected_team_name}"
     @sweepy.update(uuid: user.id, team: selected_team_name)
-    sleep 1
     say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{selected_team_name} 👍"
     say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
     text = "Tap below to get started 👇"
@@ -46,6 +43,6 @@ def fetch_teams coords
 end
 
 def prompt_team_select
-  say "To get started, just type in your hometown or the city of the team you want to play for 👇"
+  say "Type in your hometown or the city of the team you want to play for and I'll find the closest teams available 👇"
   stop_thread
 end
