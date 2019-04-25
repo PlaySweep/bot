@@ -28,13 +28,18 @@ def fetch_teams coords
   while available_teams.size < 3
     teams.each do |team|
       puts "Radius is now #{radius}..."
-      distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long)
-      if distance.to_miles < radius
-        available_teams << team unless available_teams.size > 3
-      end
+      puts "Radius is now #{coords.lat}..."
+      puts "Radius is now #{coords.long}..."
+      puts "Radius is now #{team.lat}..."
+      puts "Radius is now #{team.long}..."
+      # distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles
+      # if distance < radius
+      #   available_teams << team unless available_teams.size > 3
+      # end
     end
     radius *= 3
   end
+
   text = "I found some teams! Tap below 👇"
   quick_replies = available_teams.map do |team, i|
     {
@@ -44,6 +49,7 @@ def fetch_teams coords
     }
   end
   say text, quick_replies: quick_replies
+  puts "#{distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles}"
   stop_thread
 end
 
