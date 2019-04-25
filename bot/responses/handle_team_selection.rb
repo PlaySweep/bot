@@ -33,8 +33,8 @@ def fetch_teams coords
   quick_replies = available_teams.map do |team, i|
     {
       "content_type": "text",
-      "title": team.abbreviation,
-      "payload":"#{team.name}_#{team.id}",
+      "title": team[:abbreviation],
+      "payload":"#{team[:name]}_#{team[:id]}",
     }
   end
   say text, quick_replies: quick_replies
