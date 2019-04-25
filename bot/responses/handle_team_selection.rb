@@ -34,7 +34,7 @@ def fetch_teams coords
       puts "Radius is now #{team.long}..."
       # distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles
       # if distance < radius
-        available_teams << team
+        available_teams << team unless available_teams.size > 3
       # end
     end
     radius *= 3
