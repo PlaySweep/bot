@@ -22,7 +22,6 @@ end
 
 def fetch_teams coords
   available_teams = []
-  coords = {lat: 25.774269104004, long: -80.193656921387}.to_dot
   # say "I found your lat: #{coords.lat} and long: #{coords.long} for #{message.text}"
   teams = Sweep::Team.all
   radius = 250
