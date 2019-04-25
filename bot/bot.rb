@@ -57,7 +57,7 @@ Rubotnik.route :message do
         else
           if entities.include?("location")
             if entity_objects["location"].first['resolved']
-              fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'])
+              fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
             else
               say "You might need to be a bit more specific than #{message.text}.\n"
               prompt_team_select
