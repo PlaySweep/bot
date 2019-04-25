@@ -1,5 +1,3 @@
-require 'haversine'
-
 def team_select
   @sweepy = Sweep::User.find(user.id)
   if message.quick_reply
@@ -34,7 +32,7 @@ def fetch_teams coords
       puts "Radius is now #{team.long}..."
       # distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles
       # if distance < radius
-      puts "Distance: #{distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long).to_miles}"
+      puts "Distance: #{$geo.distance(coords.lat, coords.long, team.lat, team.long).to_miles}"
         available_teams << team unless available_teams.size > 3
       # end
     end
