@@ -22,21 +22,26 @@ end
 
 def fetch_teams coords
   available_teams = []
-  coords = coords.to_dot
-  say "I found your lat: #{coords.lat} and long: #{coords.long} for #{message.text}"
-  teams = [{id: 17, name: "Miami Marlins", abbreviation: "Marlins", lat: 25.774269104004, long: -80.193656921387}, {id: 4, name: "Tampa Bay Rays", abbreviation: "Rays", lat: 27.947519302368, long: -82.458427429199}]
-  teams.each do |team|
-    distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long)
-      if distance.to_miles < 1000
-        available_teams << team unless available_teams.size > 5
+  coords = {lat: 25.774269104004, long: -80.193656921387}.to_dot
+  # say "I found your lat: #{coords.lat} and long: #{coords.long} for #{message.text}"
+  teams = Sweep::Team.all
+  radius = 250
+  while available_teams.size < 3
+    teams.each do |team|
+      puts "Radius is now #{radius}..."
+      distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long)
+      if distance.to_miles < radius
+        available_teams << team unless available_teams.size > 3
       end
+    end
+    radius *= 3
   end
   text = "I found some teams! Tap below 👇"
   quick_replies = available_teams.map do |team, i|
     {
       "content_type": "text",
-      "title": team[:abbreviation],
-      "payload":"#{team[:name]}_#{team[:id]}",
+      "title": team.abbreviation,
+      "payload":"#{team.name}_#{team.id}",
     }
   end
   say text, quick_replies: quick_replies

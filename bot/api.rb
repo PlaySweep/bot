@@ -8,6 +8,7 @@ require 'faraday'
 require 'json'
 
 API_URL = "#{ENV["API_URL"]}/v1/budweiser"
+ADMIN_URL = "#{ENV["API_URL"]}/admin"
 
 module Sweep
   Hash.use_dot_syntax = true
@@ -143,6 +144,26 @@ module Sweep
     #   attributes = JSON.parse(response.body)['slate']
     #   new(attributes)
     # end
+
+  end
+
+  class Team
+    attr_reader :id, :name, :abbreviation, :lat, :long
+
+    def initialize attributes
+      @id = attributes['id']
+      @name = attributes['name']
+      @abbreviation = attributes['abbreviation']
+      @lat = attributes['lat']
+      @long = attributes['long']
+    end
+
+    def self.all
+      conn = Faraday.new(ADMIN_URL)
+      response = conn.get("teams")
+      collection = JSON.parse(response.body)["teams"]
+      collection.map { |attributes| new(attributes) }
+    end
 
   end
 
