@@ -1,3 +1,5 @@
+require 'haversine'
+
 def team_select
   @sweepy = Sweep::User.find(user.id)
   if message.quick_reply
