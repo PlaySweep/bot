@@ -22,7 +22,6 @@ end
 
 def fetch_teams coords
   available_teams = []
-  say "I found your lat: #{coords.lat} and long: #{coords.long} for #{message.text}"
   teams = Sweep::Team.all
   radius = 250
   while available_teams.size < 3
@@ -34,7 +33,7 @@ def fetch_teams coords
     end
     radius *= 3
   end
-  text = "I found some teams! Tap below 👇"
+  text = "I found some teams near #{message.text}! Tap below 👇"
   quick_replies = available_teams.map do |team|
     {
       "content_type": "text",
