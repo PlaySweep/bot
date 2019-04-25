@@ -11,6 +11,7 @@ gem 'popcorn_notify'
 gem 'i18n'
 gem 'figaro'
 gem 'wit'
+gem 'haversine'
 
 group :development do
   # Deployment

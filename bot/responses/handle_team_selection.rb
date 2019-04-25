@@ -18,6 +18,29 @@ def team_select
   end
 end
 
+def fetch_teams coords
+  available_teams = []
+  coords = coords.to_dot
+  say "I found your lat: #{coords.lat} and long: #{coords.long} for #{message.text}"
+  teams = [{id: 17, name: "Miami Marlins", abbreviation: "Marlins", lat: 25.774269104004, long: -80.193656921387}, {id: 4, name: "Tampa Bay Rays", abbreviation: "Rays", lat: 27.947519302368, long: -82.458427429199}]
+  teams.each do |team|
+    distance = Haversine.distance(coords.lat, coords.long, team.lat, team.long)
+      if distance.to_miles < 1000
+        available_teams << team unless available_teams.size > 5
+      end
+  end
+  text = "I found some teams! Tap below 👇"
+  quick_replies = available_teams.map do |team, i|
+    {
+      "content_type": "text",
+      "title": team[:abbreviation],
+      "payload":"#{team[:name]}_#{team[:id]}",
+    }
+  end
+  say text, quick_replies: quick_replies
+  stop_thread
+end
+
 def prompt_team_select
   #TODO HARD CODED TEAM IDS PLEASE REFACTOR
   text = "Please select one of the available teams below to get started 👇"

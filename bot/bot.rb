@@ -55,6 +55,9 @@ Rubotnik.route :message do
             stop_thread
           end unless entities
         else
+          if entities.include?("location")
+            fetch_teams(entity_objects["location"][0].first['resolved']['values'].first['coords']) if entity_objects["location"][0].first
+          end
           if entities.include?("team_select")
             team_select
           else
