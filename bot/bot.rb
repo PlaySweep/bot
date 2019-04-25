@@ -33,7 +33,8 @@ Rubotnik.route :message do
         response = $wit.message(message.text).to_dot
         entity_objects = response.entities
         entities = response.entities.keys
-
+        puts "Entity Objects Returned: #{entity_objects.inspect}"
+        puts "Entity Keys Returned: #{entities.inspect}"
         if !sweepy.roles.first.nil?
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
@@ -55,9 +56,6 @@ Rubotnik.route :message do
           end unless entities
         else
           if entities.include?("team_select")
-            puts "*" * 25
-            puts "Running Team select ⚾️"
-            puts "*" * 25
             team_select
           else
             prompt_team_select
