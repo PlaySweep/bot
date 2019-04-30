@@ -30,38 +30,43 @@ Rubotnik.route :message do
   else
     if sweepy.confirmed  #TODO figure out a way to not call out to api every time to verify if they are confirmed
       unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
-        response = $wit.message(message.text).to_dot
-        entity_objects = response.entities
-        entities = response.entities.keys
+        begin
+          response = $wit.message(message.text).to_dot
+          entity_objects = response.entities
+          entities = response.entities.keys
 
-        if !sweepy.roles.first.nil?
-          unsubscribe if entities.include?("unsubscribe")
-          fetch_picks if entities.include?("make_picks")
-          fetch_status if entities.include?("status")
-          trigger_invite if entities.include?("share")
-          show_how_to_play if entities.include?("how_to_play")
-          show_rules if entities.include?("rules")
-          show_prizes if entities.include?("prizes")
-          send_help if entities.include?("help")
-          list_of_commands if entities.include?("commands")
-          legal if entities.include?("legal")
-          location if entities.include?("local_events")
-          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
-          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
-          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
-          default do
-            say "Hmm, I do not follow that one..."
-            stop_thread
-          end unless entities
-        else
-          if entities.include?("team_select")
-            puts "*" * 25
-            puts "Running Team select ⚾️"
-            puts "*" * 25
-            team_select
+          if !sweepy.roles.first.nil?
+            unsubscribe if entities.include?("unsubscribe")
+            fetch_picks if entities.include?("make_picks")
+            fetch_status if entities.include?("status")
+            trigger_invite if entities.include?("share")
+            show_how_to_play if entities.include?("how_to_play")
+            show_rules if entities.include?("rules")
+            show_prizes if entities.include?("prizes")
+            send_help if entities.include?("help")
+            list_of_commands if entities.include?("commands")
+            legal if entities.include?("legal")
+            location if entities.include?("local_events")
+            positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
+            negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
+            neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
+            default do
+              say "Hmm, I do not follow that one..."
+              stop_thread
+            end unless entities
           else
-            prompt_team_select
+            if entities.include?("team_select")
+              puts "*" * 25
+              puts "Running Team select ⚾️"
+              puts "*" * 25
+              team_select
+            else
+              prompt_team_select
+            end
           end
+        rescue Wit::Error => e
+          puts "Wit Error: #{e.inspect}"
+          stop_thread
         end
       end
     else
