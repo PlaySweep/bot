@@ -19,6 +19,7 @@ Rubotnik::Autoloader.load('bot')
 # EMAIL_PROMPT = UI::QuickReplies.email
 
 Rubotnik.route :postback do
+  puts "ENV var for Baseball Sweep => #{ENV["ACCESS_TOKEN"]}"
   start
 end
 
@@ -33,6 +34,7 @@ Rubotnik.route :message do
         response = $wit.message(message.text).to_dot
         entity_objects = response.entities
         entities = response.entities.keys
+        puts "ENV var for Baseball Sweep => #{ENV["ACCESS_TOKEN"]}"
         puts "Entity Objects Returned: #{entity_objects.inspect}"
         puts "Entity Keys Returned: #{entities.inspect}"
         if !sweepy.roles.first.nil?
