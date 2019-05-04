@@ -5,7 +5,7 @@ def fetch_status
   # show_losing_streak if current_status == :losing_streak
   # show_no_activity if current_status == :no_activity
   text = "Your answers are in, #{@sweepy.first_name}! Tap below to see what you answered or to update your answers 🏁"
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=2"
   show_button("See Answers", text, nil, url)
   stop_thread
 end

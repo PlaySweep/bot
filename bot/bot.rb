@@ -70,6 +70,9 @@ Rubotnik.route :message do
             prompt_team_select
           end
         end
+      else
+        say "😎"
+        stop_thread
       end
     else
       confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
