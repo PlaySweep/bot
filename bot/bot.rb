@@ -71,7 +71,7 @@ Rubotnik.route :message do
           end
         end
       else
-        say "😎"
+        say ["😎", "👏", "👌", "👍", "🍻"].sample
         stop_thread
       end
     else
