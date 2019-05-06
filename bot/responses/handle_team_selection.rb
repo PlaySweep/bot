@@ -17,7 +17,7 @@ def team_select
     show_button("Play Now ⚾️", text, nil, url)
     stop_thread
   else
-    selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, '')
+    selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
     @teams = Sweep::Team.by_name(name: selected_team_name)
     if @teams.any?
       @sweepy.update(uuid: user.id, team: selected_team_name)
