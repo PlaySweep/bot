@@ -19,7 +19,7 @@ def team_select_change
     @sweepy = Sweep::User.find(user.id)
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
     if @teams.any?
-      @sweepy.update(uuid: user.id, team: selected_team_name)
+      @sweepy.update(uuid: user.id, team: user.session[:selected_team_name])
       say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
       say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
       text = "Tap below to get started 👇"
@@ -37,6 +37,9 @@ def team_select_change
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
     show_button("Play Now ⚾️", text, nil, url)
     clear_session
+    stop_thread
+  else
+    say "Sorry, I didn't catch that."
     stop_thread
   end
 end
