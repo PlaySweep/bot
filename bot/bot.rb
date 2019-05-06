@@ -52,7 +52,7 @@ Rubotnik.route :message do
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
           neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
-          team_select if entities.include?("team_select")
+          switch_prompt if entities.include?("team_select")
           default do
             say "Hmm, I do not follow that one..."
             stop_thread

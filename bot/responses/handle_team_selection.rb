@@ -1,8 +1,36 @@
 require 'haversine'
 
 def switch_prompt
-  say "You can switch Budweiser Sweep teams by typing in a location or the team name."
-  stop_thread
+  selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
+  @teams = Sweep::Team.by_name(name: selected_team_name)
+  if @teams.any?
+    say "So you want to switch to the #{selected_team_name}?"
+    user.session[:selected_team_name] = selected_team_name)
+    next_command :team_select_change
+  else
+    say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Chicago Cubs or Dodgers"
+    stop_thread
+  end
+end
+
+def team_select_change
+  case message.text
+  when ["yea", "yes", "yeah"].includes?(message.text.downcase)
+    @sweepy = Sweep::User.find(user.id)
+    @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
+    if @teams.any?
+      @sweepy.update(uuid: user.id, team: selected_team_name)
+      say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
+      say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
+      text = "Tap below to get started 👇"
+      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+      show_button("Play Now ⚾️", text, nil, url)
+      stop_thread
+    else
+      say "Sorry, we currently don't offer Budweiser Sweep contests for that team. Remember to either type the name or abbreviation of the team, i.e. Los Angeles Dodgers or Dodgers"
+      stop_thread
+    end
+  end
 end
 
 def team_select
@@ -28,7 +56,7 @@ def team_select
       show_button("Play Now ⚾️", text, nil, url)
       stop_thread
     else
-      say "Sorry, we currently don't offer Budweiser Sweep contests for that team."
+      say "Sorry, we currently don't offer Budweiser Sweep contests for that team. Remember to either type the name or abbreviation of the team, i.e. Los Angeles Dodgers or Dodgers"
       stop_thread
     end
   end
@@ -60,6 +88,6 @@ def fetch_teams coords
 end
 
 def prompt_team_select
-  say "Type in your hometown or the city of the team you want to play for and I'll find the closest teams available 👇"
+  say "Type in a city or team you want to play for and I'll find what's available 👇"
   stop_thread
 end
