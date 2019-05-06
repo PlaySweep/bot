@@ -52,6 +52,19 @@ Rubotnik.route :message do
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
           neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
+          if entities.include?("location")
+            if entity_objects["location"].first['resolved']
+              fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
+            else
+              say "You might need to be a bit more specific than #{message.text}.\n"
+              prompt_team_select
+            end
+          elsif entities.include?("team_select")
+            team_select
+          else
+            say ["😎", "👏", "👌", "👍", "🍻"].sample
+            stop_thread
+          end
           default do
             say "Hmm, I do not follow that one..."
             stop_thread
