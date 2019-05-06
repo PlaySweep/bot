@@ -33,7 +33,8 @@ def team_select_change
       stop_thread
     end
   when "NO"
-    text = "Ok then, tap for more #{@sweepy.roles.first.team_name} games below 👇"
+    say "Ok 👌"
+    text = "#{@sweepy.roles.first.team_name} games below 👇"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
     show_button("Play Now ⚾️", text, nil, url)
     clear_session
