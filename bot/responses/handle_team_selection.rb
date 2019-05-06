@@ -4,7 +4,7 @@ def switch_prompt
   selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
   @teams = Sweep::Team.by_name(name: selected_team_name)
   if @teams.any?
-    say "So you want to switch to the #{selected_team_name}?"
+    say "So you want to switch to the #{selected_team_name}?", quick_replies: ["Yes", "No"]
     user.session[:selected_team_name] = selected_team_name
     next_command :team_select_change
   else
@@ -14,8 +14,8 @@ def switch_prompt
 end
 
 def team_select_change
-  case message.text
-  when ["yea", "yes", "yeah"].include?(message.text.downcase)
+  case message.quick_reply
+  when "YES"
     @sweepy = Sweep::User.find(user.id)
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
     if @teams.any?
@@ -25,11 +25,19 @@ def team_select_change
       text = "Tap below to get started 👇"
       url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
       show_button("Play Now ⚾️", text, nil, url)
+      clear_session
       stop_thread
     else
       say "Sorry, we currently don't offer Budweiser Sweep contests for that team. Remember to either type the name or abbreviation of the team, i.e. Los Angeles Dodgers or Dodgers"
+      clear_session
       stop_thread
     end
+  when "NO"
+    text = "Ok then, tap for more #{@sweepy.roles.first.team_name} games below 👇"
+    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+    show_button("Play Now ⚾️", text, nil, url)
+    clear_session
+    stop_thread
   end
 end
 
@@ -90,4 +98,8 @@ end
 def prompt_team_select
   say "Type in a city or team you want to play for and I'll find what's available 👇"
   stop_thread
+end
+
+def clear_session
+  user.session[:selected_team_name] = ""
 end
