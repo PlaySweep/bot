@@ -12,6 +12,7 @@ gem 'i18n'
 gem 'figaro'
 gem 'wit'
 gem 'haversine'
+gem 'activeresource'
 
 group :development do
   # Deployment
