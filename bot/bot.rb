@@ -71,8 +71,19 @@ Rubotnik.route :message do
           end
         end
       else
-        say ["😎", "👏", "👌", "👍", "🍻"].sample
-        stop_thread
+        if entities.include?("location")
+          if entity_objects["location"].first['resolved']
+            fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
+          else
+            say "You might need to be a bit more specific than #{message.text}.\n"
+            prompt_team_select
+          end
+        elsif entities.include?("team_select")
+          team_select
+        else
+          say ["😎", "👏", "👌", "👍", "🍻"].sample
+          stop_thread
+        end
       end
     else
       confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
