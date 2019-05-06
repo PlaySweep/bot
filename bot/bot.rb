@@ -52,6 +52,7 @@ Rubotnik.route :message do
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
           neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
+          team_select if entities.include?("team_select")
           if entities.include?("location")
             if entity_objects["location"].first['resolved']
               fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
