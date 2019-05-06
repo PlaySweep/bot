@@ -14,9 +14,9 @@ def switch_prompt
 end
 
 def team_select_change
-  case message.quick_reply.payload
+  @sweepy = Sweep::User.find(user.id)
+  case message.quick_reply
   when "YES"
-    @sweepy = Sweep::User.find(user.id)
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
     if @teams.any?
       @sweepy.update(uuid: user.id, team: user.session[:selected_team_name])
