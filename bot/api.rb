@@ -164,6 +164,13 @@ module Sweep
       collection.map { |attributes| new(attributes) }
     end
 
+    def self.by_name name:
+      conn = Faraday.new(ADMIN_URL)
+      response = conn.get("teams?team=#{name}")
+      collection = JSON.parse(response.body)["teams"]
+      collection.map { |attributes| new(attributes) }
+    end
+
   end
 
 end
