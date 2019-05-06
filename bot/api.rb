@@ -101,7 +101,6 @@ module Sweep
       params = { :user => { :referral_count => @data['referral_count'] += 1, :friend_uuid => referred_facebook_uuid } }
       response = @conn.patch("#{API_URL}/users/#{@facebook_uuid}", params)
       if response.status == 200
-        $tracker.track(@api.user.id, "User Made Referral")
         send_confirmation(@facebook_uuid, referred_facebook_uuid)
         puts "👍"
       else
