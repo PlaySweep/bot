@@ -15,7 +15,7 @@ end
 
 def team_select_change
   case message.text
-  when ["yea", "yes", "yeah"].includes?(message.text.downcase)
+  when ["yea", "yes", "yeah"].include?(message.text.downcase)
     @sweepy = Sweep::User.find(user.id)
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
     if @teams.any?
