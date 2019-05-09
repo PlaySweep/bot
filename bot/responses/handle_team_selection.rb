@@ -95,9 +95,9 @@ def fetch_teams coords
       "payload":"#{team.name}_#{team.id}",
     }
   end
-  text = "If you don't see the team you want - we have more 👇"
+  text = "I found some teams near #{message.text}!\n\nBut if you don't see the team you want - we have more 👇"
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("Play Now ⚾️", text, quick_replies, url)
+  show_button("Select team ⚾️", text, quick_replies, url)
   stop_thread
 end
 
