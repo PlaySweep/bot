@@ -95,12 +95,14 @@ def fetch_teams coords
       "payload":"#{team.name}_#{team.id}",
     }
   end
-  say text, quick_replies: quick_replies
+  text = "If you don't see the team you want - we have more 👇"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+  show_button("Play Now ⚾️", text, quick_replies, url)
   stop_thread
 end
 
 def prompt_team_select
-  say "Type in a city or team you want to play for and I'll find what's available 👇"
+  say "Give us a nearby city and I'll do a quick search to find what teams are available for you 👇"
   stop_thread
 end
 
