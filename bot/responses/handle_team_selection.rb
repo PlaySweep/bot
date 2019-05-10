@@ -1,6 +1,7 @@
 require 'haversine'
 
 def switch_prompt
+  @sweepy = Sweep::User.find(user.id)
   selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
   @teams = Sweep::Team.by_name(name: selected_team_name)
   if @teams.any?
