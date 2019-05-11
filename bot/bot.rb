@@ -4,22 +4,33 @@ require 'hash_dot'
 require 'httparty'
 require_relative './api.rb'
 require 'wit'
+require 'facebook/messenger'
+
 Rubotnik::Autoloader.load('bot')
 
-# Rubotnik.subscribe("EAAbXmgDyHk8BANmG3wxxrqr4cGU3SrWZBPbEy9EQjplstOr7NIEJwN4AMAA6WNiZAdLAAsPa7g3FrBnqW66xpJ1snZCUGfKwf4CrslKjuxYHtxdK4ZA9nSj2WgFPrw1ZB7R9L4qAgWdSXpHZAEyPawwYiZAGnHi2DZApgB6Bkaluqc6XXzKCfX9w")
-# Rubotnik.set_profile(
-#   Profile::START_BUTTON, Profile::START_GREETING
-# )
+include Facebook::Messenger
 
-# HTTParty.get 'https://graph.facebook.com/v3.2/606217113124396/subscribed_apps'
-# HTTParty.post "https://graph.facebook.com/v3.2/606217113124396/subscribed_apps", query: { access_token: ENV["ACCESS_TOKEN"], subscribed_fields: ["name", "messages", "messaging_postbacks", "messaging_referrals"] }
-# HTTParty.post 'https://graph.facebook.com/v2.6/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+Facebook::Messenger::Subscriptions.subscribe(
+  access_token: ENV["ACCESS_TOKEN"],
+  subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
+)
 
-# LOCATION_PROMPT = UI::QuickReplies.location
-# EMAIL_PROMPT = UI::QuickReplies.email
+Facebook::Messenger::Profile.set({
+  greeting: [
+    {
+      locale: 'default',
+      text: 'Welcome to the Bud Light Sweep!'
+    }
+  ]
+}, access_token: ENV['ACCESS_TOKEN'])
+
+Facebook::Messenger::Profile.set({
+  get_started: {
+    payload: 'START'
+  }
+}, access_token: ENV['ACCESS_TOKEN'])
 
 Rubotnik.route :postback do
-  puts "ENV var for Baseball Sweep => #{ENV["ACCESS_TOKEN"]}"
   start
 end
 
@@ -34,7 +45,6 @@ Rubotnik.route :message do
         response = $wit.message(message.text).to_dot
         entity_objects = response.entities
         entities = response.entities.keys
-        puts "ENV var for Baseball Sweep => #{ENV["ACCESS_TOKEN"]}"
         puts "Entity Objects Returned: #{entity_objects.inspect}"
         puts "Entity Keys Returned: #{entities.inspect}"
         if !sweepy.roles.first.nil?
