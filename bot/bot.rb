@@ -76,9 +76,10 @@ Rubotnik.route :message do
               prompt_team_select
             end
           elsif entities.include?("team_select")
-            team_select
+            switch_prompt
           else
-            prompt_team_select
+            say "Hmm, I do not follow that one..."
+            stop_thread
           end
         end
       end

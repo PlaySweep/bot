@@ -29,7 +29,7 @@ def team_select_change
       clear_session
       stop_thread
     else
-      say "Sorry, we currently don't offer Budweiser Sweep contests for that team. Remember to either type the name or abbreviation of the team, i.e. Los Angeles Dodgers or Dodgers"
+      say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Texas Rangers or Dodgers"
       clear_session
       stop_thread
     end
@@ -69,7 +69,7 @@ def team_select
       show_button("Play Now ⚾️", text, nil, url)
       stop_thread
     else
-      say "Sorry, we currently don't offer Budweiser Sweep contests for that team. Remember to either type the name or abbreviation of the team, i.e. Los Angeles Dodgers or Dodgers"
+      say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Texas Rangers or Dodgers"
       stop_thread
     end
   end
@@ -103,7 +103,7 @@ def fetch_teams coords
 end
 
 def prompt_team_select
-  say "Give us a nearby city and I'll do a quick search to find what teams are available for you 👇"
+  say "Type in a city and I'll do a quick search to find what teams are available for you 👇"
   stop_thread
 end
 
