@@ -6,7 +6,7 @@ require 'sinatra'
 require 'mixpanel-ruby'
 require 'haversine'
 require_relative './bot/bot.rb'
-$wit = Wit.new(access_token: "N7JLUA2ORNWIIPTK4V5X3N2ATJVXLCQH")
+$wit = Wit.new(access_token: ENV["WIT_ACCESS_TOKEN"])
 
 map('/webhook') do
   run Facebook::Messenger::Server
