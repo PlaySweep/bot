@@ -1,6 +1,7 @@
 # config/deploy/beta.rb
 
-server 'sweep_beta', roles: %w{app db web}
+# server 'bud_beta', roles: %w{app db web}
+server 'turner_beta', roles: %w{app db web}
 set :deploy_to, "/var/www/sweep_bot"
 set :tmp_dir, '/home/deploy/tmp'
 
