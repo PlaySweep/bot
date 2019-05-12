@@ -41,7 +41,7 @@ def team_select_change
     end
   when "NO"
     say "Ok 👌"
-    text = "#{@sweepy.roles.first.team_name} games below 👇"
+    text = "More games below 👇"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
     show_button("Play Now ⚾️", text, nil, url)
     clear_session
