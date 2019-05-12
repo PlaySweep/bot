@@ -5,9 +5,15 @@ def switch_prompt
   selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
   @teams = Sweep::Team.by_name(name: selected_team_name)
   if @teams.any?
-    say "Would you like to switch from the #{@sweepy.roles.first.team_name} to the #{selected_team_name}?", quick_replies: ["Yes", "No"]
-    user.session[:selected_team_name] = selected_team_name
-    next_command :team_select_change
+    if @sweepy.roles.first
+      say "Would you like to switch from the #{@sweepy.roles.first.team_name} to the #{selected_team_name}?", quick_replies: ["Yes", "No"]
+      user.session[:selected_team_name] = selected_team_name
+      next_command :team_select_change
+    else
+      say "Would you like to switch to the #{selected_team_name}?", quick_replies: ["Yes", "No"]
+      user.session[:selected_team_name] = selected_team_name
+      next_command :team_select_change
+    end
   else
     say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Texas Rangers or Dodgers"
     stop_thread
@@ -88,7 +94,6 @@ def fetch_teams coords
     end
     radius *= 3
   end
-  text = "I found some teams near #{message.text}! Tap below 👇"
   quick_replies = available_teams.map do |team|
     {
       "content_type": "text",
@@ -96,7 +101,7 @@ def fetch_teams coords
       "payload":"#{team.name}_#{team.id}",
     }
   end
-  text = "I found some teams near #{message.text}!\n\nBut if you don't see the team you want - we have more 👇"
+  text = "I found some matches!\n\nBut if you don't see the team you want - we have more 👇"
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
   show_button("Select team ⚾️", text, quick_replies, url)
   stop_thread
