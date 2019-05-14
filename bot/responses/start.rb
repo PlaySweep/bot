@@ -55,7 +55,7 @@ def start
         sweepy = Sweep::User.find_or_create(user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
-        body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
+        body = "The Budweiser Sweep game is your chance to predict the future during the basketball season - answer three questions for your chance to win exclusive prizes."
         say "#{intro}\n\n#{disclaimer}\n\n#{body}"
         confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
@@ -127,9 +127,9 @@ end
 
 def over_21
   if message.quick_reply == "YES, I'M OVER 21"
-    say "Got it! So here's how it works:\n\n1. 🏀️ I'll send you 3 plays every day the Knicks are on the court\n2. ☝️ Make 3 predictions\n3. 🏆 Get all 3 right and earn your way into the Budweiser Final (I'll remind you 😎)\n4. 🎉 Win some crazy, unforgettable Knicks experiences from Budweiser"
+    say "Got it! So here's how it works:\n\n1. 🏈 I'll send you 3 plays every day the Knicks are on the court\n2. ☝️ Make 3 predictions\n3. 🏆 Get all 3 right and earn your way into the Budweiser Final (I'll remind you 😎)\n4. 🎉 Win some crazy, unforgettable Knicks experiences from Budweiser"
     url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
-    show_button("PICK NOW 🏀️", " Ready to make your 3 picks? Tap below 👇", nil, url)
+    show_button("PICK NOW 🏈", " Ready to make your 3 picks? Tap below 👇", nil, url)
     stop_thread
   else
     say "I'm sorry, you are ineligible to participate 👋"

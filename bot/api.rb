@@ -146,8 +146,12 @@ module Sweep
 
     def self.by_name name:
       response = $admin.get("teams?team=#{name}")
-      collection = JSON.parse(response.body)["teams"]
-      collection.map { |attributes| new(attributes) }
+      begin
+        collection = JSON.parse(response.body)["teams"]
+        collection.map { |attributes| new(attributes) }
+      rescue
+        []
+      end
     end
 
   end

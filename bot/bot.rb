@@ -15,20 +15,8 @@ Facebook::Messenger::Subscriptions.subscribe(
   subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
 )
 
-Facebook::Messenger::Profile.set({
-  greeting: [
-    {
-      locale: 'default',
-      text: 'Welcome to the Bud Light Sweep!'
-    }
-  ]
-}, access_token: ENV['ACCESS_TOKEN'])
-
-Facebook::Messenger::Profile.set({
-  get_started: {
-    payload: 'START'
-  }
-}, access_token: ENV['ACCESS_TOKEN'])
+Facebook::Messenger::Profile.set(Profile::START_GREETING, access_token: ENV['ACCESS_TOKEN'])
+Facebook::Messenger::Profile.set(Profile::START_BUTTON, access_token: ENV['ACCESS_TOKEN'])
 
 Rubotnik.route :postback do
   start
