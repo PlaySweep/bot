@@ -23,7 +23,7 @@ def handle_no_sports_available
     "You're all caught up across the board. I'll have more games soon."
   ]
 
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=2"
   show_button("See Answers", options.sample, nil, url)
   stop_thread
 end

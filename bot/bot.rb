@@ -59,10 +59,12 @@ Rubotnik.route :message do
           list_of_commands if entities.include?("commands")
           legal if entities.include?("legal")
           location if entities.include?("local_events")
-          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
-          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
-          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
+          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch")
           switch_prompt if entities.include?("team_select")
+
+          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
           default do
             say "Hmm, I do not follow that one..."
             stop_thread
@@ -76,9 +78,9 @@ Rubotnik.route :message do
               prompt_team_select
             end
           elsif entities.include?("team_select")
-            switch_prompt
+            team_select
           else
-            say "Hmm, I do not follow that one..."
+            say "You still haven't selected your team, #{sweepy.first_name}! Type in a city or state below and we'll find the closest teams available 👇"
             stop_thread
           end
         end

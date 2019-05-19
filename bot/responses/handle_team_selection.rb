@@ -1,5 +1,11 @@
 require 'haversine'
 
+def switch_prompt_message
+  examples = ["Dodgers or Baltimore Orioles", "Cardinals or New York Mets", "Diamondbacks or Miami Marlins"]
+  say "To switch teams, just type the name of the team you want to play for (like #{examples.sample}) 👌"
+  stop_thread
+end
+
 def switch_prompt
   @sweepy = Sweep::User.find(user.id)
   selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
@@ -85,13 +91,10 @@ def fetch_teams coords
   available_teams = []
   teams = Sweep::Team.all
   radius = 250
-  while available_teams.size < 3
-    teams.each do |team|
-      distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
-      if distance < radius
-        available_teams << team unless available_teams.include?(team) || available_teams.size > 3
-      end
-    end
+  teams.each do |team|
+    distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
+    available_teams.push(team) if distance < radius
+    break if available_teams.size == 3
     radius *= 3
   end
   quick_replies = available_teams.map do |team|
@@ -101,14 +104,14 @@ def fetch_teams coords
       "payload":"#{team.name}_#{team.id}",
     }
   end
-  text = "I found some matches!\n\nBut if you don't see the team you want - we have more 👇"
+  text = "Here's what I found...\n\nIf you don't see the team you want - we have more 👇"
   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("Select team ⚾️", text, quick_replies, url)
+  show_button("More Teams ⚾️", text, quick_replies, url)
   stop_thread
 end
 
 def prompt_team_select
-  say "Type in a city and I'll do a quick search to find what teams are available for you 👇"
+  say "Type in a city or state and I'll find what teams are available 👇"
   stop_thread
 end
 
