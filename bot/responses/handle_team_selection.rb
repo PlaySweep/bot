@@ -105,7 +105,7 @@ def fetch_teams coords
     }
   end
   text = "Here's what I found...\n\nIf you don't see the team you want - we have more 👇"
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/teams"
   show_button("More Teams ⚾️", text, quick_replies, url)
   stop_thread
 end
