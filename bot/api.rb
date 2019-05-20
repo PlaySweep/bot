@@ -7,7 +7,10 @@ require 'open-uri'
 require 'faraday'
 require 'json'
 
-API_URL = "#{ENV["API_URL"]}/v1/budweiser"
+API_URL = "#{ENV["API_ROOT_URL"]}"
+ADMIN_URL = "#{ENV["ADMIN_ROOT_URL"]}"
+$api = Faraday.new(API_URL)
+$admin = Faraday.new(ADMIN_URL)
 
 module Sweep
   Hash.use_dot_syntax = true
@@ -25,24 +28,16 @@ module Sweep
       @roles = attributes['roles']
     end
 
-    def self.all
-      response = @conn.get("#{API_URL}/users")
-      users = JSON.parse(response.body)['users']
-      users.map { |attributes| new(attributes) }
-    end
-
     def self.find uuid
-      @conn = Faraday.new(API_URL)
-      @conn.headers["Authorization"] = uuid
-      response = @conn.get("#{API_URL}/users/#{uuid}")
+      $api.headers["Authorization"] = uuid
+      response = $api.get("users/#{uuid}")
       attributes = JSON.parse(response.body)['user']
       new(attributes)
     end
 
     def self.find_or_create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
-      @conn = Faraday.new(API_URL)
-      @conn.headers["Authorization"] = facebook_uuid
-      response = @conn.get("#{API_URL}/users/#{facebook_uuid}")
+      $api.headers["Authorization"] = facebook_uuid
+      response = $api.get("users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
       if attributes.empty?
         if referrer_uuid
@@ -76,9 +71,9 @@ module Sweep
         }
         
         if team
-          response = source ? @conn.post("#{API_URL}/users?team=#{team}", params) : @conn.post("#{API_URL}/users?referrer_uuid=#{referrer_uuid}", params)
+          response = source ? $api.post("users?team=#{team}", params) : $api.post("users?referrer_uuid=#{referrer_uuid}", params)
         else
-          response = @conn.post("#{API_URL}/users", params)
+          response = $api.post("users", params)
         end
 
         attributes = JSON.parse(response.body)['user']
@@ -90,28 +85,15 @@ module Sweep
             :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
           } 
         }
-        response = team ? @conn.post("#{API_URL}/users?team=#{team}", params) : @conn.post("#{API_URL}/users", params)
+        response = team ? $api.post("users?team=#{team}", params) : $api.post("users", params)
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       end
     end
 
-    def update_referral referred_facebook_uuid:
-      params = { :user => { :referral_count => @data['referral_count'] += 1, :friend_uuid => referred_facebook_uuid } }
-      response = @conn.patch("#{API_URL}/users/#{@facebook_uuid}", params)
-      if response.status == 200
-        $tracker.track(@api.user.id, "User Made Referral")
-        send_confirmation(@facebook_uuid, referred_facebook_uuid)
-        puts "👍"
-      else
-        puts "⁉️"
-      end
-    end
-
     def update uuid:, team:
-      @conn = Faraday.new(API_URL)
-      @conn.headers["Authorization"] = uuid
-      response = @conn.patch("#{API_URL}/users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
+      $api.headers["Authorization"] = uuid
+      response = $api.patch("users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
       if response.status == 200
         puts "👍"
       else
@@ -131,18 +113,42 @@ module Sweep
     end
 
     def self.all facebook_uuid:, type: nil
-      conn = Faraday.new(API_URL)
-      conn.headers["Authorization"] = facebook_uuid
-      response = conn.get("slates")
+      $api.headers["Authorization"] = facebook_uuid
+      response = $api.get("slates")
       events = JSON.parse(response.body)['slates']
       events.map { |attributes| new(attributes) }
     end
 
-    # def self.find id:
-    #   response = Faraday.get("#{API_URL}/users/#{facebook_uuid}/slates/#{id}")
-    #   attributes = JSON.parse(response.body)['slate']
-    #   new(attributes)
-    # end
+    def self.find id:
+      response = $api.get("users/#{facebook_uuid}/slates/#{id}")
+      attributes = JSON.parse(response.body)['slate']
+      new(attributes)
+    end
+
+  end
+
+  class Team
+    attr_reader :id, :name, :abbreviation, :lat, :long
+
+    def initialize attributes
+      @id = attributes['id']
+      @name = attributes['name']
+      @abbreviation = attributes['abbreviation']
+      @lat = attributes['lat']
+      @long = attributes['long']
+    end
+
+    def self.all
+      response = $admin.get("teams?active=true")
+      collection = JSON.parse(response.body)["teams"]
+      collection.map { |attributes| new(attributes) }
+    end
+
+    def self.by_name name:
+      response = $admin.get("teams?team=#{name}")
+      collection = JSON.parse(response.body)["teams"]
+      collection.map { |attributes| new(attributes) }
+    end
 
   end
 

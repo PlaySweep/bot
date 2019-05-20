@@ -4,19 +4,31 @@ require 'hash_dot'
 require 'httparty'
 require_relative './api.rb'
 require 'wit'
+require 'facebook/messenger'
+
 Rubotnik::Autoloader.load('bot')
 
-# Rubotnik.subscribe("EAAbXmgDyHk8BANmG3wxxrqr4cGU3SrWZBPbEy9EQjplstOr7NIEJwN4AMAA6WNiZAdLAAsPa7g3FrBnqW66xpJ1snZCUGfKwf4CrslKjuxYHtxdK4ZA9nSj2WgFPrw1ZB7R9L4qAgWdSXpHZAEyPawwYiZAGnHi2DZApgB6Bkaluqc6XXzKCfX9w")
-# Rubotnik.set_profile(
-#   Profile::START_BUTTON, Profile::START_GREETING
-# )
+include Facebook::Messenger
 
-# HTTParty.get 'https://graph.facebook.com/v3.2/606217113124396/subscribed_apps'
-# HTTParty.post "https://graph.facebook.com/v3.2/606217113124396/subscribed_apps", query: { access_token: ENV["ACCESS_TOKEN"], subscribed_fields: ["name", "messages", "messaging_postbacks", "messaging_referrals"] }
-# HTTParty.post 'https://graph.facebook.com/v2.6/me/messenger_profile', body: [Profile::START_BUTTON, Profile::START_GREETING].to_json, query: { access_token: ENV["ACCESS_TOKEN"] }
+Facebook::Messenger::Subscriptions.subscribe(
+  access_token: ENV["ACCESS_TOKEN"],
+  subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
+)
 
-# LOCATION_PROMPT = UI::QuickReplies.location
-# EMAIL_PROMPT = UI::QuickReplies.email
+Facebook::Messenger::Profile.set({
+  greeting: [
+    {
+      locale: 'default',
+      text: 'Welcome to the Bud Light Sweep!'
+    }
+  ]
+}, access_token: ENV['ACCESS_TOKEN'])
+
+Facebook::Messenger::Profile.set({
+  get_started: {
+    payload: 'START'
+  }
+}, access_token: ENV['ACCESS_TOKEN'])
 
 Rubotnik.route :postback do
   start
@@ -30,43 +42,47 @@ Rubotnik.route :message do
   else
     if sweepy.confirmed  #TODO figure out a way to not call out to api every time to verify if they are confirmed
       unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
-        begin
-          response = $wit.message(message.text).to_dot
-          entity_objects = response.entities
-          entities = response.entities.keys
+        response = $wit.message(message.text).to_dot
+        entity_objects = response.entities
+        entities = response.entities.keys
+        puts "Entity Objects Returned: #{entity_objects.inspect}"
+        puts "Entity Keys Returned: #{entities.inspect}"
+        if !sweepy.roles.first.nil?
+          unsubscribe if entities.include?("unsubscribe")
+          fetch_picks if entities.include?("make_picks")
+          fetch_status if entities.include?("status")
+          trigger_invite if entities.include?("share")
+          show_how_to_play if entities.include?("how_to_play")
+          show_rules if entities.include?("rules")
+          show_prizes if entities.include?("prizes")
+          send_help if entities.include?("help")
+          list_of_commands if entities.include?("commands")
+          legal if entities.include?("legal")
+          location if entities.include?("local_events")
+          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch")
+          switch_prompt if entities.include?("team_select")
 
-          if !sweepy.roles.first.nil?
-            unsubscribe if entities.include?("unsubscribe")
-            fetch_picks if entities.include?("make_picks")
-            fetch_status if entities.include?("status")
-            trigger_invite if entities.include?("share")
-            show_how_to_play if entities.include?("how_to_play")
-            show_rules if entities.include?("rules")
-            show_prizes if entities.include?("prizes")
-            send_help if entities.include?("help")
-            list_of_commands if entities.include?("commands")
-            legal if entities.include?("legal")
-            location if entities.include?("local_events")
-            positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1
-            negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1
-            neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1
-            default do
-              say "Hmm, I do not follow that one..."
-              stop_thread
-            end unless entities
-          else
-            if entities.include?("team_select")
-              puts "*" * 25
-              puts "Running Team select ⚾️"
-              puts "*" * 25
-              team_select
+          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+          default do
+            say "Hmm, I do not follow that one..."
+            stop_thread
+          end unless entities
+        else
+          if entities.include?("location")
+            if entity_objects["location"].first['resolved']
+              fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
             else
+              say "You might need to be a bit more specific than #{message.text}.\n"
               prompt_team_select
             end
+          elsif entities.include?("team_select")
+            team_select
+          else
+            say "You still haven't selected your team, #{sweepy.first_name}! Type in a city or state below and we'll find the closest teams available 👇"
+            stop_thread
           end
-        rescue Wit::Error => e
-          puts "Wit Error: #{e.inspect}"
-          stop_thread
         end
       end
     else
