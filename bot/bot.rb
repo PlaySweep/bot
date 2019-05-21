@@ -19,7 +19,7 @@ Facebook::Messenger::Profile.set({
   greeting: [
     {
       locale: 'default',
-      text: 'Welcome to the Bud Light Sweep!'
+      text: "Welcome to the Budweiser Sweep!\n\nAnswer 3 questions when your team plays a game and win exclusive prizes ⚾️"
     }
   ]
 }, access_token: ENV['ACCESS_TOKEN'])

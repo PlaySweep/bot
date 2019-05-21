@@ -91,10 +91,12 @@ def fetch_teams coords
   available_teams = []
   teams = Sweep::Team.all
   radius = 250
-  teams.each do |team|
-    distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
-    available_teams.push(team) if distance < radius
-    break if available_teams.size == 3
+  while available_teams.size < 3
+    teams.each do |team|
+      distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
+      available_teams.push(team) if distance < radius
+      break if available_teams.size == 3
+    end
     radius *= 3
   end
   quick_replies = available_teams.map do |team|
