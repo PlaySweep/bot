@@ -39,7 +39,7 @@ module Sweep
       $api.headers["Authorization"] = facebook_uuid
       response = $api.get("users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
-      if attributes.empty?
+      if attributes.nil?
         if referrer_uuid
           create(facebook_uuid, team: team, referrer_uuid: referrer_uuid)
         elsif source
