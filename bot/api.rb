@@ -38,8 +38,8 @@ module Sweep
     def self.find_or_create facebook_uuid, team: nil, source: nil
       $api.headers["Authorization"] = facebook_uuid
       response = $api.get("users/#{facebook_uuid}")
-      attributes = JSON.parse(response.body)
-      if attributes['user'].nil?
+      attributes = JSON.parse(response.body)['user']
+      if attributes.empty?
         if source
           create(facebook_uuid, team: team, source: source)
         else
