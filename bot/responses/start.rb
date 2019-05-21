@@ -18,14 +18,6 @@ def start
           puts "Team => #{team}"
           puts "%" * 25
           sweepy = Sweep::User.find_or_create(user.id, team: team, source: param_value)
-        when "referrer_uuid"
-          puts "$" * 25
-          puts "Referrer is run..."
-          puts "The Source Key => #{param_key}"
-          puts "The Source Value => #{param_value}"
-          puts "Team => #{team}"
-          puts "$" * 25
-          sweepy = Sweep::User.find_or_create(user.id, team: team, referrer_uuid: param_value)
         else
           puts "*" * 25
           puts "Neither source or referrer is run..."

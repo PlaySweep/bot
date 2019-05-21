@@ -35,14 +35,12 @@ module Sweep
       new(attributes)
     end
 
-    def self.find_or_create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
+    def self.find_or_create facebook_uuid, team: nil, source: nil
       $api.headers["Authorization"] = facebook_uuid
       response = $api.get("users/#{facebook_uuid}")
-      attributes = JSON.parse(response.body)['user']
-      if attributes.nil?
-        if referrer_uuid
-          create(facebook_uuid, team: team, referrer_uuid: referrer_uuid)
-        elsif source
+      attributes = JSON.parse(response.body)
+      if attributes['user']
+        if source
           create(facebook_uuid, team: team, source: source)
         else
           create(facebook_uuid)
@@ -53,7 +51,7 @@ module Sweep
       find(facebook_uuid)
     end
 
-    def self.create facebook_uuid, team: nil, source: nil, referrer_uuid: nil
+    def self.create facebook_uuid, team: nil, source: nil
       response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
       if response.status == 200
         user = JSON.parse(response.body)
@@ -66,12 +64,12 @@ module Sweep
             :locale => user.has_key?('locale') ? user['locale'] : nil, 
             :gender => user.has_key?('gender') ? user['gender'] : nil, 
             :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-            :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
+            :referral => source ? source : "landing_page"
           } 
         }
         
         if team
-          response = source ? $api.post("users?team=#{team}", params) : $api.post("users?referrer_uuid=#{referrer_uuid}", params)
+          response = $api.post("users?team=#{team}", params)
         else
           response = $api.post("users", params)
         end
@@ -82,7 +80,7 @@ module Sweep
         params = { :user => 
           { 
             :facebook_uuid => facebook_uuid,
-            :referral => source ? source : referrer_uuid ? "referral_#{referrer_uuid}" : "landing_page"
+            :referral => source ? source : "landing_page"
           } 
         }
         response = team ? $api.post("users?team=#{team}", params) : $api.post("users", params)
