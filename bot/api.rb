@@ -75,9 +75,6 @@ module Sweep
         else
           response = $api.post("users", params)
         end
-
-        attributes = JSON.parse(response.body)['user']
-        new(attributes)
       else
         params = { :user => 
           { 
