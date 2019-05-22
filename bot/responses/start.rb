@@ -4,64 +4,40 @@ require 'httparty'
 def start
   bind 'START' do
     begin
-      # if postback.referral
-      #   #TODO fix these multiple calls and remove the sleep
-      #   team = postback.referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
-      #   param_key = postback.referral.ref.split('?')[-1].split('=')[0]
-      #   param_value = postback.referral.ref.split('?')[-1].split('=')[1]
-      #   case param_key
-      #   when "source"
-      #     puts "%" * 25
-      #     puts "Source is run..."
-      #     puts "The Source Key => #{param_key}"
-      #     puts "The Source Value => #{param_value}"
-      #     puts "Team => #{team}"
-      #     puts "%" * 25
-      #     sweepy = Sweep::User.create(user.id, team: team, source: param_value)
-      #   else
-      #     puts "*" * 25
-      #     puts "Neither source or referrer is run..."
-      #     puts "The Source Key => #{param_key}"
-      #     puts "The Source Value => #{param_value}"
-      #     puts "Team => #{team}"
-      #     puts "*" * 25
-      #     sweepy = Sweep::User.create(user.id, team: team)
-      #   end
-      #   intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
-      #   disclaimer = "Please note that you need to be of legal drinking age to enter."
-      #   say "#{intro}\n\n#{disclaimer}\n\n"
-      #   sweepy = Sweep::User.find(user.id)
-      #   # sweepy = Sweep::User.find_or_create(user.id, team: team)
-      #   sleep 0.5
-      #   img_url = sweepy.roles.first.team_entry_image
-      #   image = UI::ImageAttachment.new(img_url)
-      #   show(image)
-      #   body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.roles.last.team_name}."
-      #   body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.roles.last.team_name} game this season."
-      #   body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.roles.last.team_name} prizes all season long."
-      #   say "#{body_one}\n\n#{body_two}\n\n#{body_three}"
-      #   confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
-      #   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-      #   show_button("Confirm NOW 💥", confirmation_text, nil, url)
-      # else
-      #   sweepy = Sweep::User.create(user.id)
-      #   intro = "Welcome to the Budweiser Sweep!"
-      #   disclaimer = "Please note that you need to be of legal drinking age to enter."
-      #   body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
-      #   say "#{intro}\n\n#{disclaimer}\n\n#{body}"
-      #   confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
-      #   url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-      #   show_button("Confirm NOW 💥", confirmation_text, nil, url)
-      # end
-      sweepy = Sweep::User.create(user.id)
-      intro = "Welcome to the Budweiser Sweep!"
-      disclaimer = "Please note that you need to be of legal drinking age to enter."
-      body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
-      say "#{intro}\n\n#{disclaimer}\n\n#{body}"
-      confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
-      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-      show_button("Confirm NOW 💥", confirmation_text, nil, url)
-      stop_thread
+      if postback.referral
+        team = postback.referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
+        param_key = postback.referral.ref.split('?')[-1].split('=')[0]
+        param_value = postback.referral.ref.split('?')[-1].split('=')[1]
+        if param_key == "source"
+          sweepy = Sweep::User.find_or_create(user.id, team: team, source: param_value)
+        else
+          sweepy = Sweep::User.find_or_create(user.id, team: team)
+        end
+        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
+        disclaimer = "Please note that you need to be of legal drinking age to enter."
+        say "#{intro}\n\n#{disclaimer}\n\n"
+        sleep 0.5
+        img_url = sweepy.roles.first.team_entry_image
+        image = UI::ImageAttachment.new(img_url)
+        show(image)
+        body_one = "The Budweiser Sweep you’ve entered will feature questions from the #{sweepy.roles.last.team_name}."
+        body_two = "This is a game to test your ability to answer questions correctly about what’s going to happen for every #{sweepy.roles.last.team_name} game this season."
+        body_three = "You’ll definitely want to answer these, as we’re giving away some cool #{sweepy.roles.last.team_name} prizes all season long."
+        say "#{body_one}\n\n#{body_two}\n\n#{body_three}"
+        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+        show_button("Confirm NOW 💥", confirmation_text, nil, url)
+      else
+        sweepy = Sweep::User.create(user.id, team)
+        intro = "Welcome to the Budweiser Sweep!"
+        disclaimer = "Please note that you need to be of legal drinking age to enter."
+        body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
+        say "#{intro}\n\n#{disclaimer}\n\n#{body}"
+        confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+        show_button("Confirm NOW 💥", confirmation_text, nil, url)
+        stop_thread
+      end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"
       puts "With User ID => #{user.id}"
