@@ -45,7 +45,7 @@ def start
         show_button("Confirm NOW 💥", confirmation_text, nil, url)
       else
         sweepy = Sweep::User.create(user.id)
-        intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
+        intro = "Welcome to the Budweiser Sweep!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
         say "#{intro}\n\n#{disclaimer}\n\n#{body}"
