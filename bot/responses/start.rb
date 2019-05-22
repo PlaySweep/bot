@@ -65,15 +65,6 @@ def start
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"
       puts "With User ID => #{user.id}"
-      sweepy = Sweep::User.create(user.id)
-      intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
-      disclaimer = "Please note that you need to be of legal drinking age to enter."
-      body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
-      say "#{intro}\n\n#{disclaimer}\n\n#{body}"
-      confirmation_text = "First, we need to confirm a few details so you can collect your prizes when you win!"
-      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-      show_button("Confirm NOW 💥", confirmation_text, nil, url)
-      stop_thread
     end
   end
 end
