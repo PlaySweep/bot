@@ -49,9 +49,9 @@ module Sweep
     end
 
     def self.create facebook_uuid, team: nil, source: nil
-      response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
-      if response.status == 200
-        user = JSON.parse(response.body)
+      graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
+      if graph_response.status == 200
+        user = JSON.parse(graph_response.body)
         params = { :user => 
           { 
             :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
@@ -70,7 +70,7 @@ module Sweep
         else
           response = $api.post("users", params)
         end
-        
+
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       else
