@@ -14,6 +14,7 @@ def start
           sweepy = Sweep::User.find_or_create(user.id, team: team)
         end
         sleep 1
+        sweepy = Sweep::User.find(user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
