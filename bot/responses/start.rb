@@ -17,7 +17,7 @@ def start
           puts "The Source Value => #{param_value}"
           puts "Team => #{team}"
           puts "%" * 25
-          sweepy = Sweep::User.find_or_create(user.id, team: team, source: param_value)
+          sweepy = Sweep::User.create(user.id, team: team, source: param_value)
         else
           puts "*" * 25
           puts "Neither source or referrer is run..."
@@ -25,7 +25,7 @@ def start
           puts "The Source Value => #{param_value}"
           puts "Team => #{team}"
           puts "*" * 25
-          sweepy = Sweep::User.find_or_create(user.id, team: team)
+          sweepy = Sweep::User.create(user.id, team: team)
         end
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
@@ -44,7 +44,7 @@ def start
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
         show_button("Confirm NOW 💥", confirmation_text, nil, url)
       else
-        sweepy = Sweep::User.find_or_create(user.id)
+        sweepy = Sweep::User.create(user.id)
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
