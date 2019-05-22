@@ -13,10 +13,10 @@ def start
         else
           sweepy = Sweep::User.find_or_create(user.id, team: team)
         end
+        sleep 1
         intro = "Welcome to the Budweiser Sweep #{sweepy.first_name}!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         say "#{intro}\n\n#{disclaimer}\n\n"
-        sleep 0.5
         img_url = sweepy.roles.first.team_entry_image
         image = UI::ImageAttachment.new(img_url)
         show(image)
@@ -28,7 +28,7 @@ def start
         url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
         show_button("Confirm NOW 💥", confirmation_text, nil, url)
       else
-        sweepy = Sweep::User.create(user.id, team)
+        sweepy = Sweep::User.find_or_create(user.id, team: team)
         intro = "Welcome to the Budweiser Sweep!"
         disclaimer = "Please note that you need to be of legal drinking age to enter."
         body = "The Budweiser Sweep game is your chance to predict the future this baseball season - answer three questions about baseball games for your chance to win exclusive prizes."
