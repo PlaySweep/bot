@@ -32,6 +32,7 @@ Facebook::Messenger::Profile.set({
 
 Rubotnik.route :postback do
   start
+  trigger_invite_postback
 end
 
 Rubotnik.route :message do
@@ -60,7 +61,7 @@ Rubotnik.route :message do
           legal if entities.include?("legal")
           location if entities.include?("local_events")
           switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch")
-          switch_prompt if entities.include?("team_select")
+          switch_prompt if entities.include?("team_select") and !entities.include?("status")
 
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
