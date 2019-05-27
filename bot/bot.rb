@@ -36,7 +36,7 @@ Rubotnik.route :postback do
 end
 
 Rubotnik.route :message do
-  sweepy = Sweep::User.find_or_create(user.id)
+  sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
   if sweepy.locked
     say "Sorry #{sweepy.first_name}, you are unable to play at this time."
     stop_thread

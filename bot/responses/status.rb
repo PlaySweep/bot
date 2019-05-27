@@ -1,5 +1,5 @@
 def fetch_status
-  @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
   # show_winning_sweep_message if current_status == :winning_sweep
   # show_winning_streak if current_status == :winning_streak
   # show_losing_streak if current_status == :losing_streak

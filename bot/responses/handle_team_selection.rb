@@ -7,7 +7,7 @@ def switch_prompt_message
 end
 
 def switch_prompt
-  @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
   selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
   @teams = Sweep::Team.by_name(name: selected_team_name)
   if @teams.any?
@@ -27,7 +27,7 @@ def switch_prompt
 end
 
 def team_select_change
-  @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
   case message.quick_reply
   when "YES"
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
@@ -59,7 +59,7 @@ def team_select_change
 end
 
 def team_select
-  @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
   if message.quick_reply
     selected_team_name = message.quick_reply.split('_')[0]
     @sweepy.update(uuid: user.id, team: selected_team_name)

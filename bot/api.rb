@@ -28,27 +28,37 @@ module Sweep
       @roles = attributes['roles']
     end
 
-    def self.find uuid
-      $api.headers["Authorization"] = uuid
-      response = $api.get("users/#{uuid}")
+    def self.find facebook_uuid:, onboard: false
+      $api.headers["Authorization"] = facebook_uuid
+      response = onboard ? $api.get("users/#{facebook_uuid}?onboard=true") : $api.get("users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
       unless attributes.empty?
         new(attributes)
       end
     end
 
-    def self.find_or_create facebook_uuid, team: nil, source: nil
-      sweepy = find(facebook_uuid)
+    # def self.find_or_create facebook_uuid, team: nil, source: nil
+    #   sweepy = find(facebook_uuid)
+    #   if sweepy
+    #     sweepy
+    #   elsif source && team
+    #     create(facebook_uuid, team: team, source: source)
+    #   else
+    #     create(facebook_uuid)
+    #   end
+    # end
+
+    def self.find_or_create facebook_uuid:, onboard: false, team: nil, source: nil
+      sweepy = find(facebook_uuid: facebook_uuid, onboard: onboard)
       if sweepy
         sweepy
-      elsif source && team
-        create(facebook_uuid, team: team, source: source)
       else
-        create(facebook_uuid)
+        sweepy = create(facebook_uuid: facebook_uuid, onboard: onboard, team: team, source: source)
       end
+      sweepy
     end
 
-    def self.create facebook_uuid, team: nil, source: nil
+    def self.create facebook_uuid:, onboard: false, team: nil, source: nil
       graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,timezone,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
       if graph_response.status == 200
         user = JSON.parse(graph_response.body)
@@ -65,8 +75,8 @@ module Sweep
           } 
         }
         
-        if team
-          response = $api.post("users?team=#{team}", params)
+        if onboard
+          response = team ? $api.post("users?onboard=true&team=#{team}", params) : $api.post("users?onboard=true", params)
         else
           response = $api.post("users", params)
         end
@@ -77,10 +87,10 @@ module Sweep
         params = { :user => 
           { 
             :facebook_uuid => facebook_uuid,
-            :referral => source ? source : "landing_page"
+            :referral => "landing_page"
           } 
         }
-        response = team ? $api.post("users?team=#{team}", params) : $api.post("users", params)
+        response = $api.post("users?onboard=true", params)
         attributes = JSON.parse(response.body)['user']
         new(attributes)
       end

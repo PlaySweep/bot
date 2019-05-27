@@ -1,5 +1,5 @@
 def team_select
-  @sweepy = Sweep::User.find(user.id)
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
   if message.quick_reply
     selected_team_id = message.quick_reply.split('_')[1]
     puts "Team ID => #{selected_team_id}"

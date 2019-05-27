@@ -22,15 +22,7 @@ module Commands
     show(UI::FBCarousel.new(resource, quick_replies))
   end
 
-  def show_media_with_button user_id, endpoint, message_attachment, quick_replies
-    case endpoint
-    when 'challenges'
-      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
-      title = "My Challenges"
-    when 'status'
-      url = "#{ENV['WEBVIEW_URL']}/#{endpoint}/#{user_id}"
-      title = "View Status"
-    end
+  def show_media_with_button user_id, title, attachment_id, url, quick_replies=nil
       option = { message: {
       attachment: {
         type: "template",
@@ -39,19 +31,22 @@ module Commands
            elements: [
               {
                  media_type: "image",
-                 attachment_id: message_attachment,
+                 attachment_id: attachment_id,
                  buttons: [
                    { type: "web_url", url: url, title: title, messenger_extensions: true, webview_height_ratio: 'full' }
                  ]
               }
            ]
         }
-      },
-      quick_replies: quick_replies
+      }
     }}
 
+    if quick_replies && quick_replies.any?
+      option[:message][:quick_replies] = quick_replies
+    end
+
     message_options = {
-      messaging_type: "RESPONSE",
+      messaging_type: "UPDATE",
       recipient: { id: user_id },
       message: option[:message]
     }
@@ -60,7 +55,7 @@ module Commands
   end
 
   def show_invite
-    @sweepy = Sweep::User.find(user.id)
+    @sweepy = Sweep::User.find(facebook_uuid: user.id)
     titles = ["Play The Budweiser Sweep and earn incredible #{@sweepy.roles.first.team_name} prizes ⚾️"]
     subtitles = ["Answer 3 questions for each game, get them all right, and you could win your way to primetime seats 🎉"]
      friends = [
