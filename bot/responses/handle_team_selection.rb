@@ -94,7 +94,7 @@ def fetch_teams coords
   while available_teams.size < 3
     teams.each do |team|
       distance = Haversine.distance(coords.lat, coords.long, team.lat.to_f, team.long.to_f).to_miles
-      available_teams.push(team) if distance < radius
+      available_teams.push(team) if distance < radius and !available_teams.include?(team)
       break if available_teams.size == 3
     end
     radius *= 3
