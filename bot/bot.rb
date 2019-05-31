@@ -87,15 +87,17 @@ Rubotnik.route :message do
         end
       end
     else
-      response = $wit.message(message.text).to_dot
-      entities = response.entities.keys
-      if entities.include?("unsubscribe")
-        unsubscribe
-      else
-        confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
-        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-        show_button("Quick Setup ⚡️", confirmation_text, nil, url)
-        stop_thread
+      unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
+        response = $wit.message(message.text).to_dot
+        entities = response.entities.keys
+        if entities.include?("unsubscribe")
+          unsubscribe
+        else
+          confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
+          url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+          show_button("Quick Setup ⚡️", confirmation_text, nil, url)
+          stop_thread
+        end
       end
     end
   end
