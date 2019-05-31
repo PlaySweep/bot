@@ -87,6 +87,8 @@ Rubotnik.route :message do
         end
       end
     else
+      response = $wit.message(message.text).to_dot
+      entities = response.entities.keys
       if entities.include?("unsubscribe")
         unsubscribe
       else
