@@ -87,10 +87,14 @@ Rubotnik.route :message do
         end
       end
     else
-      confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
-      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-      show_button("Quick Setup ⚡️", confirmation_text, nil, url)
-      stop_thread
+      if entities.include?("unsubscribe")
+        unsubscribe
+      else
+        confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
+        url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
+        show_button("Quick Setup ⚡️", confirmation_text, nil, url)
+        stop_thread
+      end
     end
   end
 end

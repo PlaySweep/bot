@@ -2,7 +2,7 @@ require 'haversine'
 
 def switch_prompt_message
   examples = ["Dodgers or Baltimore Orioles", "Cardinals or New York Mets", "Diamondbacks or Miami Marlins"]
-  say "To switch teams, just type the name of the team you want to play for (like #{examples.sample}) 👌"
+  say "If you would like to switch your Budweiser Sweep team, please type the team name (like #{examples.sample}) below.\n\nKeep in mind that you will be entering contests to win prizes for whichever team you select, so you may want to take into account team proximity in case tickets are the prize 👌"
   stop_thread
 end
 
