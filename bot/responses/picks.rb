@@ -12,9 +12,7 @@ def matchups_available?
 end
 
 def handle_show_sports
-  options = ["Tap below to see all of the available contests!"]
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-  show_button("Play Now 💥", options.sample, nil, url)
+  show_carousel(elements: picks_elements)
   stop_thread
 end
 
@@ -23,7 +21,41 @@ def handle_no_sports_available
     "You're all caught up across the board. I'll have more games soon."
   ]
 
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=3"
-  show_button("See Answers", options.sample, nil, url)
+  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=3" 
   stop_thread
+end
+
+def picks_elements
+  #TODO change image to fb lockup version
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
+  [
+      {
+      title: "#{@sweepy.roles.first.abbreviation} Contests",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/cardinals_fb_lockup2.png", #@sweepy.roles.first.local_image,
+      subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
+      buttons: [
+        {
+          type: :web_url,
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+          title: "Play now",
+          webview_height_ratio: 'full',
+          messenger_extensions: true
+        }
+      ]
+    },
+      {
+      title: "All-Star Contest",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_image.png",
+      subtitle: "Play the All-Star Contest for a chance to win tickets to the game and more!",
+      buttons: [
+        {
+          type: :web_url,
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=2",
+          title: "Play now",
+          webview_height_ratio: 'full',
+          messenger_extensions: true
+        }
+      ]
+    }
+  ]
 end

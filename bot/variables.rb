@@ -18,8 +18,12 @@ module Commands
     show(button_template)
   end
 
-  def show_carousel resource, quick_replies=nil
-    show(UI::FBCarousel.new(resource, quick_replies))
+  def show_carousel elements:, quick_replies: nil
+    if quick_replies
+      show(UI::FBCarousel.new(elements, quick_replies))
+    else
+      show(UI::FBCarousel.new(elements))
+    end
   end
 
   def show_media_with_button user_id, title, attachment_id, url, quick_replies=nil

@@ -51,7 +51,7 @@ Rubotnik.route :message do
         if !sweepy.roles.first.nil?
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
-          fetch_status if entities.include?("status")
+          fetch_status and stop_thread if entities.include?("status")
           trigger_invite if entities.include?("share")
           show_how_to_play if entities.include?("how_to_play")
           show_rules if entities.include?("rules")
@@ -60,9 +60,9 @@ Rubotnik.route :message do
           list_of_commands if entities.include?("commands")
           legal if entities.include?("legal")
           location if entities.include?("local_events")
-          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch")
-          switch_prompt if entities.include?("team_select") and !entities.include?("status")
-
+          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
+          switch_prompt if entities.include?("team_select") unless entities.include?("status") || entities.include?("prizes") 
+          
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
           negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
           neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 

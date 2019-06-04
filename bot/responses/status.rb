@@ -4,9 +4,7 @@ def fetch_status
   # show_winning_streak if current_status == :winning_streak
   # show_losing_streak if current_status == :losing_streak
   # show_no_activity if current_status == :no_activity
-  text = "Your answers are in, #{@sweepy.first_name}! Tap below to see what you answered or to update your answers 🏁"
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=3"
-  show_button("See Answers", text, nil, url)
+  show_carousel(elements: status_elements)
   stop_thread
 end
 
@@ -65,4 +63,39 @@ def current_status
   elsif user_has_no_activity?
     :no_activity
   end
+end
+
+def status_elements
+  #TODO change image to fb lockup version
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
+  [
+      {
+        title: "Status",
+        image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
+        subtitle: "Check your results or make any changes before the games start!",
+        buttons: [
+          {
+            type: :web_url,
+            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
+            title: "Status",
+            webview_height_ratio: 'full',
+            messenger_extensions: true
+          }
+        ]
+      },
+      {
+      title: "All-Star Contest Leaderboard",
+      image_url: "https://s3.amazonaws.com/budweiser-sweep-assets/allstar_fb_logo.png",
+      subtitle: "See how you rank against the competition!",
+      buttons: [
+        {
+          type: :web_url,
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/leaderboard/allstar",
+          title: "Leaderboard",
+          webview_height_ratio: 'full',
+          messenger_extensions: true
+        }
+      ]
+    }
+  ]
 end

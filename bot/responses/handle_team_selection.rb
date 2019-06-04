@@ -33,11 +33,9 @@ def team_select_change
     @teams = Sweep::Team.by_name(name: user.session[:selected_team_name])
     if @teams.any?
       @sweepy.update(uuid: user.id, team: user.session[:selected_team_name])
-      say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
+      say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
       say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
-      text = "Tap below to get started 👇"
-      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-      show_button("Play Now ⚾️", text, nil, url)
+      show_carousel(elements: selection_elements)
       clear_session
       stop_thread
     else
@@ -63,22 +61,18 @@ def team_select
   if message.quick_reply
     selected_team_name = message.quick_reply.split('_')[0]
     @sweepy.update(uuid: user.id, team: selected_team_name)
-    say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{selected_team_name} 👍"
+    say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{selected_team_name} 👍"
     say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
-    text = "Tap below to get started 👇"
-    url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-    show_button("Play Now ⚾️", text, nil, url)
+    show_carousel(elements: selection_elements)
     stop_thread
   else
     selected_team_name = message.text.gsub(/[^0-9A-Za-z]/, ' ')
     @teams = Sweep::Team.by_name(name: selected_team_name)
     if @teams.any?
       @sweepy.update(uuid: user.id, team: selected_team_name)
-      say "Got it #{@sweepy.first_name}, from now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
+      say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
       say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
-      text = "Tap below to get started 👇"
-      url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load"
-      show_button("Play Now ⚾️", text, nil, url)
+      show_carousel(elements: selection_elements)
       stop_thread
     else
       say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Texas Rangers or Dodgers"
@@ -120,3 +114,41 @@ end
 def clear_session
   user.session[:selected_team_name] = ""
 end
+
+def selection_elements
+  #TODO change image to fb lockup version
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
+  [
+      {
+      title: "#{@sweepy.roles.first.abbreviation} Contests",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/cardinals_fb_lockup2.png", #@sweepy.roles.first.local_image,
+      subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
+      buttons: [
+        {
+          type: :web_url,
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+          title: "Play now",
+          webview_height_ratio: 'full',
+          messenger_extensions: true
+        }
+      ]
+    },
+      {
+      title: "All-Star Contest",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_image.png",
+      subtitle: "Play the All-Star Contest for a chance to win tickets to the game and more!",
+      buttons: [
+        {
+          type: :web_url,
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=2",
+          title: "Play now",
+          webview_height_ratio: 'full',
+          messenger_extensions: true
+        }
+      ]
+    }
+  ]
+end
+
+
+
