@@ -21,7 +21,6 @@ def switch_prompt
       next_command :team_select_change
     end
   else
-    say "Sorry, we currently don't offer Budweiser Sweep contests for that team.\n\nYou can try another team, i.e. Texas Rangers or Dodgers"
     stop_thread
   end
 end
