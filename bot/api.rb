@@ -96,6 +96,16 @@ module Sweep
       end
     end
 
+    def unsubscribe uuid:
+      $api.headers["Authorization"] = uuid
+      response = $api.patch("users/#{uuid}?unsubscribe=true", { :user => {:active => false} })
+      if response.status == 200
+        puts "👍"
+      else
+        puts "⁉️"
+      end
+    end
+
     def update uuid:, team:
       $api.headers["Authorization"] = uuid
       response = $api.patch("users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
