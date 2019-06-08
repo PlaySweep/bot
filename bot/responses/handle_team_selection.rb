@@ -130,9 +130,9 @@ def selection_elements
       ]
     },
       {
-      title: "All-Star Contest",
+      title: "Road to All-Star",
       image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_image.png",
-      subtitle: "Play the All-Star Contest for a chance to win tickets to the game and more!",
+      subtitle: "Play the Road to All-Star for a chance to win tickets to the game and more!",
       buttons: [
         {
           type: :web_url,

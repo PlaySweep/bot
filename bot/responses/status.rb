@@ -84,7 +84,7 @@ def status_elements
         ]
       },
       {
-      title: "All-Star Contest Leaderboard",
+      title: "Road to All-Star Leaderboard",
       image_url: "https://s3.amazonaws.com/budweiser-sweep-assets/allstar_fb_logo.png",
       subtitle: "See how you rank against the competition!",
       buttons: [
