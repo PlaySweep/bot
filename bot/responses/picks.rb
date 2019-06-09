@@ -1,9 +1,5 @@
 def fetch_picks
-  if matchups_available?
-    handle_show_sports
-  else
-    handle_no_sports_available
-  end
+  handle_show_sports
 end
 
 def matchups_available?
@@ -13,15 +9,6 @@ end
 
 def handle_show_sports
   show_carousel(elements: picks_elements)
-  stop_thread
-end
-
-def handle_no_sports_available
-  options = [
-    "You're all caught up across the board. I'll have more games soon."
-  ]
-
-  url = "#{ENV['WEBVIEW_URL']}/#{user.id}/dashboard/initial_load?tab=3" 
   stop_thread
 end
 

@@ -71,7 +71,7 @@ module Sweep
             :locale => user.has_key?('locale') ? user['locale'] : nil, 
             :gender => user.has_key?('gender') ? user['gender'] : nil, 
             :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-            :referral => source ? source : "landing_page"
+            :data => { :referral => source ? source : "landing_page" }
           } 
         }
         
