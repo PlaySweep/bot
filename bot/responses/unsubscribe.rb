@@ -13,5 +13,8 @@ def confirm_unsubscribe
   when "NO"
     say "Thanks for sticking around #{@sweepy.first_name}!"
     stop_thread
+  else
+    @sweepy.unsubscribe(uuid: user.id)
+    stop_thread
   end
 end
