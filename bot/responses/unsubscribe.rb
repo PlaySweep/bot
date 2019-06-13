@@ -1,6 +1,8 @@
 def unsubscribe
-  say "Are you sure you want to be removed from all notifications?", quick_replies: ["Yes", "No"]
-  next_command :confirm_unsubscribe
+  @sweepy = Sweep::User.find(facebook_uuid: user.id)
+  @sweepy.unsubscribe(uuid: user.id)
+  say "Thanks for trying us out #{@sweepy.first_name}!\n\nI've removed you from any further messages 🔕."
+  stop_thread
 end
 
 def confirm_unsubscribe
