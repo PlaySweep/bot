@@ -8,7 +8,7 @@ def team_select
     @sweepy.update(uuid: user.id, team: selected_team_name)
     sleep 1
     say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{selected_team_name} 👍"
-    say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
+    say "So here's how it works: \n1. I’ll send you 6 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 6 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
     show_carousel(elements: team_select_elements)
     stop_thread
   else

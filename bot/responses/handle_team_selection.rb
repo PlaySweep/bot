@@ -33,7 +33,7 @@ def team_select_change
     if @teams.any?
       @sweepy.update(uuid: user.id, team: user.session[:selected_team_name])
       say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
-      say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
+      say "So here's how it works: \n1. I’ll send you 6 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 6 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
       show_carousel(elements: selection_elements)
       clear_session
       stop_thread
@@ -58,7 +58,7 @@ def team_select
     selected_team_name = message.quick_reply.split('_')[0]
     @sweepy.update(uuid: user.id, team: selected_team_name)
     say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{selected_team_name} 👍"
-    say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
+    say "So here's how it works: \n1. I’ll send you 6 questions for every time the #{selected_team_name} are on the field 🙌\n2. Answer 6 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
     show_carousel(elements: selection_elements)
     stop_thread
   else
@@ -67,7 +67,7 @@ def team_select
     if @teams.any?
       @sweepy.update(uuid: user.id, team: selected_team_name)
       say "Got it #{@sweepy.first_name}! From now on, you’ll see all relevant contests to the #{@teams.first.abbreviation} 👍"
-      say "So here's how it works: \n1. I’ll send you 3 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 3 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
+      say "So here's how it works: \n1. I’ll send you 6 questions for every time the #{@teams.first.abbreviation} are on the field 🙌\n2. Answer 6 questions right and earn a 'Sweep' 💥\n3. A Sweep enters you into a drawing every single day to win prizes 🎟\n4. Get notified when you win and when it's time to answer more questions 🎉"
       show_carousel(elements: selection_elements)
       stop_thread
     else

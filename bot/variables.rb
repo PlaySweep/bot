@@ -61,7 +61,7 @@ module Commands
   def show_invite
     @sweepy = Sweep::User.find(facebook_uuid: user.id)
     titles = ["Play The Budweiser Sweep and earn incredible #{@sweepy.roles.first.team_name} prizes ⚾️"]
-    subtitles = ["Answer 3 questions for each game, get them all right, and you could win your way to primetime seats 🎉"]
+    subtitles = ["Answer 6 questions for each game, get them all right, and you could win your way to primetime seats 🎉"]
      friends = [
        {
          title: "Invite your friends to play the Budweiser Sweep! 😎",

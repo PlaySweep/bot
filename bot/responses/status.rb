@@ -70,32 +70,32 @@ def status_elements
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   [
       {
-        title: "Status",
-        image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
-        subtitle: "Check your results or make any changes before the games start!",
-        buttons: [
-          {
-            type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
-            title: "Status",
-            webview_height_ratio: 'full',
-            messenger_extensions: true
-          }
-        ]
-      },
-      {
-      title: "Road to All-Star Leaderboard",
-      image_url: "https://s3.amazonaws.com/budweiser-sweep-assets/allstar_fb_logo.png",
-      subtitle: "See how you rank against the competition!",
+      title: "#{@sweepy.roles.first.abbreviation} Contests",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/cleveland_browns_fb_logo.png",
+      subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every week and win awesome prizes!",
       buttons: [
         {
           type: :web_url,
-          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/leaderboard/allstar",
-          title: "Leaderboard",
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+          title: "Play now",
           webview_height_ratio: 'full',
           messenger_extensions: true
         }
       ]
-    }
+    },
+        {
+        title: "#{@sweepy.roles.first.abbreviation} Leaderboard",
+        image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/bud_light_leaderboard_logo2.png",
+        subtitle: "See how you rank against the competition!",
+        buttons: [
+          {
+            type: :web_url,
+            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=2",
+            title: "Leaderboard",
+            webview_height_ratio: 'full',
+            messenger_extensions: true
+          }
+        ]
+      }
   ]
 end
