@@ -8,9 +8,9 @@ end
 def prizing_elements
   [
         {
-        title: "Road to All-Star Prizing",
+        title: "All-Star Week Prizing",
         image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_logo.png",
-        subtitle: "There are tons of prizes on the line for the Road to All-Star!",
+        subtitle: "There are tons of prizes on the line for the All-Star Week!",
         buttons: [
           {
             type: :web_url,

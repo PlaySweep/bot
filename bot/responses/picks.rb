@@ -31,9 +31,9 @@ def picks_elements
       ]
     },
       {
-      title: "Road to All-Star",
+      title: "All-Star Week",
       image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_image.png",
-      subtitle: "Play the Road to All-Star for a chance to win tickets to the game and more!",
+      subtitle: "Play in contests all All-Star Week for a chance to win prizes!",
       buttons: [
         {
           type: :web_url,
