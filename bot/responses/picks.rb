@@ -32,7 +32,7 @@ def picks_elements
     },
       {
       title: "All-Star Week",
-      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_prizing_image.png",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_week_logo.png",
       subtitle: "Play in contests all All-Star Week for a chance to win prizes!",
       buttons: [
         {
