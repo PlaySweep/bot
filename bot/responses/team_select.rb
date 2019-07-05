@@ -1,3 +1,5 @@
+require 'possessive'
+
 def team_select
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   if message.quick_reply
@@ -36,8 +38,8 @@ def team_select_elements
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   [
       {
-      title: "#{@sweepy.roles.first.abbreviation} Contests",
-      image_url: @sweepy.roles.first.local_image,
+      title: "#{@sweepy.roles.first.abbreviation.possessive} Contests",
+      image_url: @sweepy.roles.first.team_entry_image,
       subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
       buttons: [
         {

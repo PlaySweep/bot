@@ -1,3 +1,5 @@
+require 'possessive'
+
 def fetch_picks
   handle_show_sports
 end
@@ -13,12 +15,12 @@ def handle_show_sports
 end
 
 def picks_elements
-  #TODO change image to fb lockup version
+  #TODO figure out a way to store custom team leaderboard image
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   [
       {
-      title: "#{@sweepy.roles.first.abbreviation} Contests",
-      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/cleveland_browns_fb_logo.png",
+      title: "#{@sweepy.roles.first.abbreviation.possessive} Contests",
+      image_url: @sweepy.roles.first.team_entry_image,
       subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every week and win awesome prizes!",
       buttons: [
         {

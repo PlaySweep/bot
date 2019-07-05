@@ -1,4 +1,5 @@
 require 'haversine'
+require 'possessive'
 
 def switch_prompt_message
   examples = ["Dodgers or Baltimore Orioles", "Cardinals or New York Mets", "Diamondbacks or Miami Marlins"]
@@ -116,8 +117,8 @@ def selection_elements
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   [
       {
-      title: "#{@sweepy.roles.first.abbreviation} Contests",
-      image_url: @sweepy.roles.first.local_image,
+      title: "#{@sweepy.roles.first.abbreviation.possessive} Contests",
+      image_url: @sweepy.roles.first.team_entry_image,
       subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
       buttons: [
         {
