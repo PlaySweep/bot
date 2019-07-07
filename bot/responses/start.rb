@@ -4,7 +4,7 @@ require 'httparty'
 def start
   bind 'START' do
     begin
-      if postback.referral
+      if postback.referral.ref
         team = postback.referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
         param_key = postback.referral.ref.split('?')[-1].split('=')[0]
         source = postback.referral.ref.split('?')[-1].split('=')[1]
