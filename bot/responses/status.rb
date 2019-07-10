@@ -84,14 +84,14 @@ def status_elements
         ]
       },
       {
-      title: "All-Star Week Leaderboard",
-      image_url: "https://s3.amazonaws.com/budweiser-sweep-assets/allstar_fb_logo.png",
-      subtitle: "See how you did against the competition in the 2019 Road To All-Star!",
+      title: "#{@sweepy.roles.first.abbreviation} Contests",
+      image_url: @sweepy.roles.first.local_image,
+      subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
       buttons: [
         {
           type: :web_url,
-          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/leaderboard/allstar",
-          title: "Leaderboard",
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+          title: "Play now",
           webview_height_ratio: 'full',
           messenger_extensions: true
         }

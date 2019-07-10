@@ -51,7 +51,7 @@ Rubotnik.route :message do
         if !sweepy.roles.first.nil?
           unsubscribe if entities.include?("unsubscribe")
           fetch_picks if entities.include?("make_picks")
-          fetch_status and stop_thread if entities.include?("status")
+          fetch_status if entities.include?("status") unless entities.include?("make_picks")
           trigger_invite if entities.include?("share")
           show_how_to_play if entities.include?("how_to_play")
           show_rules if entities.include?("rules")

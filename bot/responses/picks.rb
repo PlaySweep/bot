@@ -30,15 +30,15 @@ def picks_elements
         }
       ]
     },
-      {
-      title: "All-Star Week",
-      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/allstar_week_logo.png",
-      subtitle: "Play in contests all All-Star Week for a chance to win prizes!",
+    {
+      title: "Status",
+      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
+      subtitle: "Check your results or make any changes before the games start!",
       buttons: [
         {
           type: :web_url,
-          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=2",
-          title: "Play now",
+          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
+          title: "Status",
           webview_height_ratio: 'full',
           messenger_extensions: true
         }
