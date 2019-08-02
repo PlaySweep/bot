@@ -48,43 +48,26 @@ Rubotnik.route :message do
         entities = response.entities.keys
         puts "Entity Objects Returned: #{entity_objects.inspect}"
         puts "Entity Keys Returned: #{entities.inspect}"
-        if !sweepy.roles.first.nil?
-          unsubscribe if entities.include?("unsubscribe")
-          fetch_picks if entities.include?("make_picks")
-          fetch_status if entities.include?("status") unless entities.include?("make_picks")
-          trigger_invite if entities.include?("share")
-          show_how_to_play if entities.include?("how_to_play")
-          show_rules if entities.include?("rules")
-          show_prizes if entities.include?("prizes")
-          send_help if entities.include?("help")
-          list_of_commands if entities.include?("commands")
-          legal if entities.include?("legal")
-          location if entities.include?("local_events")
-          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
-          switch_prompt if entities.include?("team_select") unless entities.include?("status") || entities.include?("prizes") 
-          
-          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          default do
-            say "Hmm, I do not follow that one..."
-            stop_thread
-          end unless entities
-        else
-          if entities.include?("location")
-            if entity_objects["location"].first['resolved']
-              fetch_teams(entity_objects["location"].first['resolved']['values'].first['coords'].to_dot)
-            else
-              say "You might need to be a bit more specific than #{message.text}.\n"
-              prompt_team_select
-            end
-          elsif entities.include?("team_select")
-            team_select
-          else
-            say "You still haven't selected your team, #{sweepy.first_name}! Type in a city or state below and we'll find the closest teams available 👇"
-            stop_thread
-          end
-        end
+        unsubscribe if entities.include?("unsubscribe")
+        fetch_picks if entities.include?("make_picks")
+        fetch_status if entities.include?("status") unless entities.include?("make_picks")
+        trigger_invite if entities.include?("share")
+        show_how_to_play if entities.include?("how_to_play")
+        show_rules if entities.include?("rules")
+        show_prizes if entities.include?("prizes")
+        send_help if entities.include?("help")
+        list_of_commands if entities.include?("commands")
+        legal if entities.include?("legal")
+        location if entities.include?("local_events")
+        switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") || entities.include?("team_select") unless entities.include?("status") || entities.include?("prizes")
+        
+        positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+        negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+        neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
+        default do
+          say "Hmm, I do not follow that one..."
+          stop_thread
+        end unless entities
       end
     else
       unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
