@@ -12,8 +12,12 @@ def team_select
     show_carousel(elements: team_select_elements)
     stop_thread
   else
-    say "Type switch if you want to select or change teams."
-    stop_thread
+    if @sweepy.roles.first.nil?
+      say "Type switch if you want to select or change teams."
+      stop_thread
+    else
+      stop_thread
+    end
   end
 end
 
