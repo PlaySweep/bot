@@ -59,7 +59,8 @@ Rubotnik.route :message do
         list_of_commands if entities.include?("commands")
         legal if entities.include?("legal")
         location if entities.include?("local_events")
-        switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") || entities.include?("team_select") unless entities.include?("status") || entities.include?("prizes")
+        team_select if entities.include?("team_select") && sweepy.roles.first.nil?
+        switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
         
         positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
         negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
