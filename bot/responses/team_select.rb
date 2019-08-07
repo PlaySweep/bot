@@ -41,7 +41,7 @@ def team_select_elements
     },
     {
       title: "Status",
-      image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
+      image_url: @sweepy.images.find { |image| image.category == "Status" }.url,
       subtitle: "Check your results or make any changes before the games start!",
       buttons: [
         {

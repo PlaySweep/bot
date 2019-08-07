@@ -19,7 +19,7 @@ Facebook::Messenger::Profile.set({
   greeting: [
     {
       locale: 'default',
-      text: "Welcome to the Budweiser Sweep!\n\nAnswer 3 questions when your team plays a game and win exclusive prizes ⚾️"
+      text: "Welcome to the SWEEP {{user_first_name}}!\nTap Get Started below to start answering questions and winning exclusive prizes!"
     }
   ]
 }, access_token: ENV['ACCESS_TOKEN'])
@@ -32,7 +32,6 @@ Facebook::Messenger::Profile.set({
 
 Rubotnik.route :postback do
   start
-  trigger_invite_postback
 end
 
 Rubotnik.route :message do
@@ -77,10 +76,7 @@ Rubotnik.route :message do
         if entities.include?("unsubscribe")
           unsubscribe
         else
-          confirmation_text = "Please confirm your Budweiser Sweep account below to move forward 👇"
-          url = "#{ENV['WEBVIEW_URL']}/#{user.id}/account"
-          show_button("Quick Setup ⚡️", confirmation_text, nil, url)
-          stop_thread
+          account_confirmation
         end
       end
     end

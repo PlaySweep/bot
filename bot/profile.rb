@@ -1,5 +1,9 @@
 module Profile
 
+  def fetch_greeting
+
+  end
+
   START_BUTTON = {
     get_started: {
       payload: 'START'
@@ -10,7 +14,7 @@ module Profile
     greeting: [
       {
         locale: 'default',
-        text: "Welcome to the Budweiser Sweep {{user_first_name}}!\n\nAnswer 3 questions when your team plays a game and win exclusive prizes ⚾️!"
+        text: "Welcome to the SWEEP {{user_first_name}}!\nTap Get Started below to start answering questions and winning exclusive prizes!"
       }
     ]
   }

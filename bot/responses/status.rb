@@ -72,7 +72,7 @@ def status_elements
     [
         {
           title: "Status",
-          image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
+          image_url: @sweepy.images.find { |image| image.category == "Status" }.url,
           subtitle: "Check your results or make any changes before the games start!",
           buttons: [
             {
@@ -103,7 +103,7 @@ def status_elements
     [
       {
         title: "Status",
-        image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/fb_status_logo2.png",
+        image_url: @sweepy.images.find { |image| image.category == "Status" }.url,
         subtitle: "Check your results or make any changes before the games start!",
         buttons: [
           {
@@ -116,9 +116,9 @@ def status_elements
         ]
       },
       {
-        title: "Budweiser Game of the Day",
-        image_url: "https://budweiser-sweep-assets.s3.amazonaws.com/budweiser_mlb_fb_lockup.png",
-        subtitle: "Make selections for the Budweiser Game of the Day and win awesome prizes!",
+        title: "#{@sweepy.account.tenant.capitalize} Game of the Day",
+        image_url: @sweepy.images.find { |image| image.category == "Account" }.url,
+        subtitle: "Make selections for the #{@sweepy.account.tenant.capitalize} Game of the Day and win awesome prizes!",
         buttons: [
           {
             type: :web_url,
