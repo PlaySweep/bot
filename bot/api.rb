@@ -16,7 +16,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :locked, :roles , :account, :copies, :images
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :locked, :slug, :roles, :account, :copies, :images
 
     def initialize attributes
       @id = attributes['id']
@@ -25,6 +25,7 @@ module Sweep
       @last_name = attributes['last_name']
       @confirmed = attributes['confirmed']
       @locked = attributes['locked']
+      @slug = attributes['slug']
       @roles = attributes['roles']
       @account = attributes['account']
       @copies = attributes['copies']
@@ -32,24 +33,12 @@ module Sweep
     end
 
     def self.find facebook_uuid:, onboard: false
-      $api.headers["Authorization"] = facebook_uuid
-      response = onboard ? $api.get("users/#{facebook_uuid}?onboard=true") : $api.get("users/#{facebook_uuid}")
+      response = onboard ? $api.get("facebook/sessions/#{facebook_uuid}?onboard=true") : $api.get("facebook/sessions/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
       unless attributes.empty?
         new(attributes)
       end
     end
-
-    # def self.find_or_create facebook_uuid, team: nil, source: nil
-    #   sweepy = find(facebook_uuid)
-    #   if sweepy
-    #     sweepy
-    #   elsif source && team
-    #     create(facebook_uuid, team: team, source: source)
-    #   else
-    #     create(facebook_uuid)
-    #   end
-    # end
 
     def self.find_or_create facebook_uuid:, onboard: false, team: nil, source: nil
       sweepy = find(facebook_uuid: facebook_uuid, onboard: onboard)
@@ -100,7 +89,6 @@ module Sweep
     end
 
     def unsubscribe uuid:
-      $api.headers["Authorization"] = uuid
       response = $api.patch("users/#{uuid}?unsubscribe=true", { :user => {:active => false} })
       if response.status == 200
         puts "👍"
@@ -110,7 +98,6 @@ module Sweep
     end
 
     def update uuid:, team:
-      $api.headers["Authorization"] = uuid
       response = $api.patch("users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
       if response.status == 200
         puts "👍"
@@ -131,7 +118,6 @@ module Sweep
     end
 
     def self.all facebook_uuid:, type: nil
-      $api.headers["Authorization"] = facebook_uuid
       response = $api.get("slates")
       events = JSON.parse(response.body)['slates']
       events.map { |attributes| new(attributes) }

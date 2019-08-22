@@ -45,8 +45,6 @@ Rubotnik.route :message do
         response = $wit.message(message.text).to_dot
         entity_objects = response.entities
         entities = response.entities.keys
-        puts "Entity Objects Returned: #{entity_objects.inspect}"
-        puts "Entity Keys Returned: #{entities.inspect}"
         unsubscribe if entities.include?("unsubscribe")
         fetch_picks if entities.include?("make_picks")
         fetch_status if entities.include?("status") unless entities.include?("make_picks")
