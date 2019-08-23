@@ -19,7 +19,7 @@ def picks_elements
     [
         {
         title: "#{@sweepy.roles.first.abbreviation} Contests",
-        image_url: @sweepy.roles.first.local_image,
+        image_url: @sweepy.roles.first.entry_image,
         subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
         buttons: [
           {
