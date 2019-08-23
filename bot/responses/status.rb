@@ -77,7 +77,7 @@ def status_elements
           buttons: [
             {
               type: :web_url,
-              url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
+              url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/2",
               title: "Status",
               webview_height_ratio: 'full',
               messenger_extensions: true
@@ -91,7 +91,7 @@ def status_elements
         buttons: [
           {
             type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/1",
             title: "Play now",
             webview_height_ratio: 'full',
             messenger_extensions: true
@@ -108,7 +108,7 @@ def status_elements
         buttons: [
           {
             type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
+            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/2",
             title: "Status",
             webview_height_ratio: 'full',
             messenger_extensions: true
@@ -116,13 +116,13 @@ def status_elements
         ]
       },
       {
-        title: "#{@sweepy.account.tenant.capitalize} Game of the Day",
-        image_url: @sweepy.images.find { |image| image.category == "Account" }.url,
-        subtitle: "Make selections for the #{@sweepy.account.tenant.capitalize} Game of the Day and win awesome prizes!",
+        title: "#{@sweepy.account.friendly_name.capitalize} Game of the Day",
+        image_url: @sweepy.images.find { |image| image.category == "Account Lockup" }.url,
+        subtitle: "Make selections for the #{@sweepy.account.friendly_name.capitalize} Game of the Day and win awesome prizes!",
         buttons: [
           {
             type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/1",
             title: "Play now",
             webview_height_ratio: 'full',
             messenger_extensions: true

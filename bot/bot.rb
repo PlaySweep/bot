@@ -19,7 +19,7 @@ Facebook::Messenger::Profile.set({
   greeting: [
     {
       locale: 'default',
-      text: "Welcome to the SWEEP {{user_first_name}}!\nTap Get Started below to start answering questions and winning exclusive prizes!"
+      text: ""
     }
   ]
 }, access_token: ENV['ACCESS_TOKEN'])

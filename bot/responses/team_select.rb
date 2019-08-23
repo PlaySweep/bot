@@ -32,7 +32,7 @@ def team_select_elements
       buttons: [
         {
           type: :web_url,
-          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=1",
+          url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/1",
           title: "Play now",
           webview_height_ratio: 'full',
           messenger_extensions: true
@@ -46,7 +46,7 @@ def team_select_elements
       buttons: [
         {
           type: :web_url,
-          url: "#{ENV["WEBVIEW_URL"]}/#{@sweepy.facebook_uuid}/dashboard/initial_load?tab=3",
+          url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/2",
           title: "Status",
           webview_height_ratio: 'full',
           messenger_extensions: true
