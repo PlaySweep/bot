@@ -24,11 +24,13 @@ end
 def team_select_elements
   #TODO change image to fb lockup version
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
+  contest_copy = sweepy.copies.find { |copy| copy.category == "Contest Subtitle" }
+  interpolated_contest_copy = contest_copy % { team_abbreviation: @sweepy.roles.first.team_name }
   [
       {
       title: "#{@sweepy.roles.first.abbreviation} Contests",
       image_url: @sweepy.roles.first.team_entry_image,
-      subtitle: "Make selections for your #{@sweepy.roles.first.team_name} every day and win awesome prizes!",
+      subtitle: interpolated_contest_copy,
       buttons: [
         {
           type: :web_url,
