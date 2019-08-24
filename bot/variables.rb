@@ -64,45 +64,5 @@ module Commands
     image = UI::ImageAttachment.new(img_url)
     show(image)
   end
-
-  def show_invite
-      sweepy = Sweep::User.find(facebook_uuid: user.id)
-      titles = ["Play The #{sweepy.account.app_name} and win incredible prizes"]
-       friends = [
-         {
-           title: "Invite your friends to play the Budweiser Sweep!",
-           image_url: sweepy.images.find { |image| image.category == "Status" }.url,
-           buttons: [
-             {
-               type: "element_share",
-               share_contents: { 
-                 attachment: {
-                   type: "template",
-                   payload: {
-                     template_type: "generic",
-                     elements: [
-                       {
-                         title: titles.sample,
-                         image_url: sweepy.images.find { |image| image.category == "Status" }.url,
-                         buttons: [
-                           {
-                             type: "web_url",
-                             messenger_extensions: true,
-                             url: sweepy.links.find { |link| link.category == "Facebook Page" }.url, 
-                             title: "Play Now",
-                             webview_height_ratio: 'full'
-                           }
-                         ]
-                       }
-                     ]
-                   }
-                 }
-               }
-             }
-           ]
-         }
-       ].freeze
-
-       show(UI::FBInvite.new(friends))
-     end
+  
 end
