@@ -30,6 +30,7 @@ module Sweep
       @account = attributes['account']
       @copies = attributes['copies']
       @images = attributes['images']
+      @links = attributes['links']
     end
 
     def self.find facebook_uuid:, onboard: false
