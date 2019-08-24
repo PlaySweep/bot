@@ -88,8 +88,8 @@ module Sweep
       end
     end
 
-    def unsubscribe uuid:
-      response = $api.patch("users/#{uuid}?unsubscribe=true", { :user => {:active => false} })
+    def unsubscribe id:
+      response = $api.patch("users/#{id}?unsubscribe=true", { :user => {:active => false} })
       if response.status == 200
         puts "👍"
       else
