@@ -69,8 +69,8 @@ def status_elements
   #TODO change image to fb lockup version
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   if @sweepy.roles.first
-    contest_copy = sweepy.copies.find { |copy| copy.category == "Contest Subtitle" }
-    interpolated_contest_copy = contest_copy % { team_abbreviation: @sweepy.roles.first.abbreviation }
+    contest_copy = @sweepy.copies.find { |copy| copy.category == "Contest Subtitle" }
+    interpolated_contest_copy = contest_copy.message % { team_abbreviation: @sweepy.roles.first.abbreviation }
     [
         {
           title: "Status",
