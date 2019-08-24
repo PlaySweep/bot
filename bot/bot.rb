@@ -50,11 +50,9 @@ Rubotnik.route :message do
         fetch_status if entities.include?("status") unless entities.include?("make_picks")
         trigger_invite if entities.include?("share")
         show_how_to_play if entities.include?("how_to_play")
-        show_rules if entities.include?("rules")
         show_prizes if entities.include?("prizes")
         send_help if entities.include?("help")
         list_of_commands if entities.include?("commands")
-        legal if entities.include?("legal")
         location if entities.include?("local_events")
         switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
         
