@@ -1,3 +1,5 @@
+require 'possessive'
+
 def fetch_picks
   handle_show_sports
 end
@@ -20,7 +22,7 @@ def picks_elements
     interpolated_contest_copy = contest_copy.message % { team_abbreviation: @sweepy.roles.first.abbreviation }
     [
         {
-        title: "#{@sweepy.roles.first.abbreviation} Contests",
+        title: "#{@sweepy.roles.first.abbreviation.possessive} Contests",
         image_url: @sweepy.roles.first.team_entry_image,
         subtitle: interpolated_contest_copy,
         buttons: [

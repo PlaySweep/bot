@@ -1,3 +1,5 @@
+require 'possessive'
+
 def fetch_status
   @sweepy = Sweep::User.find(facebook_uuid: user.id)
   # show_winning_sweep_message if current_status == :winning_sweep
@@ -87,7 +89,7 @@ def status_elements
           ]
         },
         {
-        title: "#{@sweepy.roles.first.abbreviation} Contests",
+        title: "#{@sweepy.roles.first.abbreviation.possessive} Contests",
         image_url: @sweepy.roles.first.team_entry_image,
         subtitle: interpolated_contest_copy,
         buttons: [
