@@ -39,7 +39,7 @@ Rubotnik.route :message do
     puts "*" * 25
     puts "Running ad..."
     puts "*" * 25
-    start
+    Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
   else
     sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
     if sweepy.locked
