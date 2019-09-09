@@ -35,7 +35,7 @@ Rubotnik.route :postback do
 end
 
 Rubotnik.route :message do
-  if message.quick_reply == "START"
+  if message.quick_reply.payload == "START"
     start
   end
   sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
