@@ -50,36 +50,5 @@ def picks_elements
         ]
       }
     ]
-  else
-    [
-        {
-        title: "#{@sweepy.account.friendly_name.capitalize} Game of the Day",
-        image_url: @sweepy.images.find { |image| image.category == "Account Lockup" }.url,
-        subtitle: "Make selections for the #{@sweepy.account.friendly_name.capitalize} Game of the Day and win awesome prizes!",
-        buttons: [
-          {
-            type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/1",
-            title: "Play now",
-            webview_height_ratio: 'full',
-            messenger_extensions: true
-          }
-        ]
-      },
-      {
-        title: "Status",
-        image_url: @sweepy.images.find { |image| image.category == "Status" }.url,
-        subtitle: "Check your results or make any changes before the games start!",
-        buttons: [
-          {
-            type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{@sweepy.slug}/2",
-            title: "Status",
-            webview_height_ratio: 'full',
-            messenger_extensions: true
-          }
-        ]
-      }
-    ]
   end
 end
