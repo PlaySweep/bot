@@ -16,15 +16,6 @@ Facebook::Messenger::Subscriptions.subscribe(
 )
 
 Facebook::Messenger::Profile.set({
-  greeting: [
-    {
-      locale: 'default',
-      text: ""
-    }
-  ]
-}, access_token: ENV['ACCESS_TOKEN'])
-
-Facebook::Messenger::Profile.set({
   get_started: {
     payload: 'START'
   }
@@ -35,18 +26,15 @@ Rubotnik.route :postback do
 end
 
 Rubotnik.route :message do
-  if message.quick_reply == "START"
-    puts "*" * 25
-    puts "Running ad..."
-    puts "*" * 25
-    Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
+  if message.quick_reply
+    check_for_payloads
   else
     sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
     if sweepy.locked
       say "Sorry #{sweepy.first_name}, you are unable to play at this time."
       stop_thread
     else
-      if sweepy.confirmed  #TODO figure out a way to not call out to api every time to verify if they are confirmed
+      if sweepy.confirmed
         unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
           response = $wit.message(message.text).to_dot
           entity_objects = response.entities
@@ -58,8 +46,6 @@ Rubotnik.route :message do
           show_how_to_play if entities.include?("how_to_play")
           show_prizes if entities.include?("prizes")
           send_help if entities.include?("help")
-          list_of_commands if entities.include?("commands")
-          location if entities.include?("local_events")
           switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
           
           positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 

@@ -5,8 +5,14 @@ require 'facebook/messenger'
 require 'sinatra'
 require 'mixpanel-ruby'
 require 'haversine'
+require 'popcorn'
 require_relative './bot/bot.rb'
 $wit = Wit.new(access_token: ENV["WIT_ACCESS_TOKEN"])
+
+
+Popcorn.configure do |config|
+  config.api_key = ENV["POPCORNNOTIFY_API_KEY"]
+end
 
 map('/webhook') do
   run Facebook::Messenger::Server

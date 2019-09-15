@@ -10,8 +10,10 @@ def matchups_available?
 end
 
 def handle_show_sports
+  message.typing_on
   show_carousel(elements: picks_elements)
   stop_thread
+  message.typing_off
 end
 
 def picks_elements

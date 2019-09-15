@@ -1,4 +1,5 @@
 def show_how_to_play
+  message.typing_on
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   if sweepy.roles.first
     how_to_play_copy = sweepy.copies.find { |copy| copy.category == "How To Play" }
@@ -9,4 +10,5 @@ def show_how_to_play
     say national_how_to_play_copy.message
   end
   stop_thread
+  message.typing_off
 end

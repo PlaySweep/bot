@@ -1,9 +1,5 @@
 module Profile
 
-  def fetch_greeting
-
-  end
-
   START_BUTTON = {
     get_started: {
       payload: 'START'
