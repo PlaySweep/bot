@@ -16,13 +16,14 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :confirmed, :locked, :slug, :roles, :account, :copies, :images, :links
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :locked, :slug, :roles, :account, :copies, :images, :links, :stats
 
     def initialize attributes
       @id = attributes['id']
       @facebook_uuid = attributes['facebook_uuid']
       @first_name = attributes['first_name']
       @last_name = attributes['last_name']
+      @email = attributes['email']
       @confirmed = attributes['confirmed']
       @locked = attributes['locked']
       @slug = attributes['slug']
@@ -31,6 +32,7 @@ module Sweep
       @copies = attributes['copies']
       @images = attributes['images']
       @links = attributes['links']
+      @stats = attributes['stats']
     end
 
     def self.find facebook_uuid:, onboard: false
@@ -110,18 +112,21 @@ module Sweep
   end
 
   class Slate
-    attr_reader :id, :events, :status
+    attr_reader :id, :name, :status, :start_time
 
     def initialize attributes
       @id = attributes['id']
-      @events = attributes['events']
+      @name = attributes['name']
       @status = attributes['status']
+      @start_time = attributes['start_time']
     end
 
-    def self.all facebook_uuid:, type: nil
-      response = $api.get("slates")
-      events = JSON.parse(response.body)['slates']
-      events.map { |attributes| new(attributes) }
+    def self.all user_id:
+      response = $api.get("slates?user_id=#{user_id}")
+      slates = JSON.parse(response.body)['slates']
+      if slates
+        slates.map { |attributes| new(attributes) }
+      end
     end
 
     def self.find id:

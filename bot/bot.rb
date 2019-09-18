@@ -30,41 +30,37 @@ Rubotnik.route :message do
     check_for_payloads
   else
     sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
-    if sweepy.locked
-      say "Sorry #{sweepy.first_name}, you are unable to play at this time."
-      stop_thread
-    else
-      if sweepy.confirmed
-        unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
-          response = $wit.message(message.text).to_dot
-          entity_objects = response.entities
-          entities = response.entities.keys
-          unsubscribe if entities.include?("unsubscribe")
-          fetch_picks if entities.include?("make_picks")
-          fetch_status if entities.include?("status") unless entities.include?("make_picks")
-          trigger_invite if entities.include?("share")
-          show_how_to_play if entities.include?("how_to_play")
-          show_prizes if entities.include?("prizes")
-          send_help if entities.include?("help")
-          switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes")
-          
-          positive_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          negative_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "negative" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          neutral_sentiment if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "neutral" && entities.size == 1 unless message.text.split(' ').map(&:downcase).include?("switch") 
-          default do
-            say "Hmm, I do not follow that one..."
-            stop_thread
-          end unless entities
+    if sweepy.confirmed
+      unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
+        response = $wit.message(message.text).to_dot
+        entities = response.entities.keys
+        entity_objects = response.entities
+        unsubscribe if entities.include?("unsubscribe")
+        fetch_picks if entities.include?("make_picks")
+        fetch_status if entities.include?("status") unless entities.include?("make_picks")
+        trigger_invite if entities.include?("share")
+        show_how_to_play if entities.include?("how_to_play")
+        start_prizes if entities.include?("prizes")
+        start_help if entities.include?("help")
+        switch_prompt_message if message.text.split(' ').map(&:downcase).include?("switch") unless entities.include?("status") || entities.include?("prizes") 
+        default do
+          if entities.size <= 1
+            if entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] != "positive"
+              start_help
+            else
+              positive_sentiment if entity_objects["sentiment"]
+            end
+          end 
         end
-      else
-        unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
-          response = $wit.message(message.text).to_dot
-          entities = response.entities.keys
-          if entities.include?("unsubscribe")
-            unsubscribe
-          else
-            account_confirmation
-          end
+      end
+    else
+      unless message.messaging['message']['attachments'] && message.messaging['message']['attachments'].any?
+        response = $wit.message(message.text).to_dot
+        entities = response.entities.keys
+        if entities.include?("unsubscribe")
+          unsubscribe
+        else
+          account_confirmation
         end
       end
     end

@@ -1,4 +1,4 @@
-def show_how_to_play
+def general_how_to_play
   message.typing_on
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   if sweepy.roles.first
