@@ -27,14 +27,14 @@ def picks_elements
             type: :web_url,
             url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}/1",
             title: "More contests",
-            webview_height_ratio: 'full',
+            webview_height_ratio: :full,
             messenger_extensions: true
           },
           {
             type: :web_url,
             url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}/2",
             title: "See results",
-            webview_height_ratio: 'full',
+            webview_height_ratio: :full,
             messenger_extensions: true
           }
         ]

@@ -10,7 +10,7 @@ module Commands
         type: :web_url,
         url: url || "#{ENV["WEBVIEW_URL"]}",
         title: title,
-        webview_height_ratio: 'full',
+        webview_height_ratio: :full,
         messenger_extensions: true
       }
     ]
@@ -31,13 +31,13 @@ module Commands
       attachment: {
         type: "template",
         payload: {
-           template_type: "media",
+           template_type: :media,
            elements: [
               {
-                 media_type: "image",
+                 media_type: :image,
                  attachment_id: attachment_id,
                  buttons: [
-                   { type: "web_url", url: url, title: title, messenger_extensions: true, webview_height_ratio: 'full' }
+                   { type: :web_url, url: url, title: title, messenger_extensions: true, webview_height_ratio: :full }
                  ]
               }
            ]

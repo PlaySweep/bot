@@ -16,7 +16,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :locked, :slug, :roles, :account, :copies, :images, :links, :stats
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :locked, :slug, :roles, :account, :copies, :images, :links, :stats, :latest_stats
 
     def initialize attributes
       @id = attributes['id']
@@ -33,6 +33,7 @@ module Sweep
       @images = attributes['images']
       @links = attributes['links']
       @stats = attributes['stats']
+      @latest_stats = attributes['latest_stats']
     end
 
     def self.find facebook_uuid:, onboard: false

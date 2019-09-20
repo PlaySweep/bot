@@ -11,7 +11,7 @@ def general_prizing_info
   message.typing_on
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   prizing_copy = sweepy.copies.find { |copy| copy.category == "Prizing Info" }
-  quick_replies = [{content_type: :text, title: "Play again", payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.roles.first.team_image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
   say prizing_copy.message, quick_replies: quick_replies
   stop_thread
   message.typing_off
@@ -28,7 +28,7 @@ end
 
 def my_prizing_info
   message.typing_on
-  quick_replies = [{content_type: :text, title: "Play again", payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Help", payload: "HELP"}]
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.roles.first.team_image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Help", payload: "HELP"}]
   say "We currently do not see any pending prizes for your account.", quick_replies: quick_replies
   stop_thread
   message.typing_off
