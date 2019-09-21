@@ -10,7 +10,7 @@ end
 def help
   message.typing_on
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.roles.first.team_image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.team_image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
   say "We will reach out to you within the next 24 hours", quick_replies: quick_replies
   phone_number = "2054137379"
   Popcorn.notify(phone_number, "#{sweepy.account.app_name} help:\n\n#{sweepy.first_name} #{sweepy.last_name}\n#{sweepy.email}")
