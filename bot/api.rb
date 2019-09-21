@@ -44,12 +44,12 @@ module Sweep
       end
     end
 
-    def self.find_or_create facebook_uuid:, onboard: false, team: nil, source: nil
+    def self.find_or_create facebook_uuid:, onboard: false, team: nil, referral_code: nil, source: nil
       sweepy = find(facebook_uuid: facebook_uuid, onboard: onboard)
       if sweepy
         sweepy
       else
-        sweepy = create(facebook_uuid: facebook_uuid, onboard: onboard, team: team, source: source)
+        sweepy = create(facebook_uuid: facebook_uuid, onboard: onboard, team: team, referral_code: referral_code, source: source)
       end
       sweepy
     end
@@ -72,7 +72,13 @@ module Sweep
         }
         
         if onboard
-          response = team ? $api.post("users?onboard=true&team=#{team}", params) : $api.post("users?onboard=true", params)
+          if referral_code
+            response = $api.post("users?onboard=true&referral_code=#{referral_code}", params)
+          elsif team
+            response = $api.post("users?onboard=true&team=#{team}", params)
+          else
+            response = $api.post("users?onboard=true", params)
+          end
         else
           response = $api.post("users", params)
         end
