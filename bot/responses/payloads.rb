@@ -15,10 +15,10 @@ def check_for_payloads
     start_prizes
   when "PRIZING FAQ"
     general_prizing_info
-  when "PRIZING"
-    current_prizing_info
   when "PRIZING STATUS"
     my_prizing_info
+  when "HELP"
+    start_help
   when "HUMAN"
     help
   else

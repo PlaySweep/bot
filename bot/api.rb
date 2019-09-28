@@ -16,7 +16,7 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :locked, :slug, :current_team, :account, :copies, :images, :links, :stats, :latest_stats
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :locked, :slug, :current_team, :account, :copies, :images, :links, :stats, :latest_stats, :recent_orders
 
     def initialize attributes
       @id = attributes['id']
@@ -34,6 +34,7 @@ module Sweep
       @links = attributes['links']
       @stats = attributes['stats']
       @latest_stats = attributes['latest_stats']
+      @recent_orders = attributes['recent_orders']
     end
 
     def self.find facebook_uuid:, onboard: false
@@ -54,7 +55,7 @@ module Sweep
       sweepy
     end
 
-    def self.create facebook_uuid:, onboard: false, team: nil, source: nil
+    def self.create facebook_uuid:, onboard: false, team: nil, referral_code: nil, source: nil
       graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
       if graph_response.status == 200
         user = JSON.parse(graph_response.body)

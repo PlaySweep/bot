@@ -14,13 +14,13 @@ end
 
 def picks_elements
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  if sweepy.roles.first
+  if sweepy.current_team
     contest_copy = sweepy.copies.find { |copy| copy.category == "Contest Subtitle" }
     interpolated_contest_copy = contest_copy.message % { team_abbreviation: sweepy.current_team.abbreviation }
     [
       {
         title: "#{sweepy.current_team.abbreviation.possessive} Contests",
-        image_url: sweepy.current_team.team_entry_image,
+        image_url: sweepy.current_team.entry_image,
         subtitle: interpolated_contest_copy,
         buttons: [
           {
