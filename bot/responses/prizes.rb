@@ -20,10 +20,10 @@ end
 def my_prizing_info
   message.typing_on
   sweepy = Sweep::User.find(facebook_uuid: user.id)
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Help", payload: "HELP"}]
   order = sweepy.recent_orders[0]
   if order
     prize = { name: order.slate.prizes.first.name, slate_name: order.slate.name, date: Date.parse(order.slate.start_time).strftime("%B %d") }
-    quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Help", payload: "HELP"}]
     say "Congratulations again, #{sweepy.first_name}!"
     message.typing_off
     message.typing_on
