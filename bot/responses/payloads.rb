@@ -5,6 +5,8 @@ def check_for_payloads
     onboard
   when "PLAY"
     fetch_picks
+  when "PLAY NOW"
+    fetch_picks
   when "STATUS"
     fetch_status
   when "SHARE"
