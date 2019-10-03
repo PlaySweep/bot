@@ -1,7 +1,7 @@
 require 'possessive'
 
 def fetch_status
-  message.typing_on
+  
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   contest_size = sweepy.latest_stats.size == 1 ? "contest" : "#{sweepy.latest_stats.size} contests"
   if sweepy.latest_stats.size >= 1
@@ -11,5 +11,5 @@ def fetch_status
   end
   fetch_picks
   stop_thread
-  message.typing_off
+  
 end

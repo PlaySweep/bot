@@ -1,5 +1,5 @@
 def general_how_to_play
-  message.typing_on
+  
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   if sweepy.current_team
     how_to_play_copy = sweepy.copies.find { |copy| copy.category == "How To Play" }
@@ -12,5 +12,5 @@ def general_how_to_play
     say national_how_to_play_copy.message, quick_replies: quick_replies
   end
   stop_thread
-  message.typing_off
+  
 end

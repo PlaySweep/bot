@@ -5,11 +5,11 @@ def fetch_picks
 end
 
 def handle_show_sports
-  message.typing_on
+  
   quick_replies = [{content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Share", payload: "SHARE"}]
   show_carousel(elements: picks_elements, quick_replies: quick_replies)
   stop_thread
-  message.typing_off
+  
 end
 
 def picks_elements

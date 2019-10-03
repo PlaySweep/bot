@@ -1,5 +1,5 @@
 def show_rules
-  message.typing_on
+  
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   rules_url = sweepy.links.find { |image| image.category == "Rules" }.url
   show_button("Rules", "You can view the official Rules by tapping below 👇", nil, rules_url)
@@ -11,5 +11,5 @@ def show_rules
   show_button("Privacy Policy", "You can view the official Privacy Policy by tapping below 👇", nil, privacy_url)
   
   stop_thread
-  message.typing_off
+  
 end

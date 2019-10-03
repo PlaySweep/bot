@@ -1,5 +1,5 @@
 def check_for_payloads
-  message.typing_on
+  
   case message.quick_reply
   when "START"
     onboard
@@ -30,7 +30,7 @@ def check_for_payloads
     end
     stop_thread
   end
-  message.typing_off
+  
 end
 
 def onboard
