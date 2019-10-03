@@ -58,55 +58,58 @@ module Sweep
 
     def self.create facebook_uuid:, onboard: false, team: nil, referral_code: nil, source: nil
       # graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
-      # if graph_response.status == 200
-      #   user = JSON.parse(graph_response.body)
-      #   params = { :user => 
-      #     { 
-      #       :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
-      #       :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
-      #       :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
-      #       :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
-      #       :locale => user.has_key?('locale') ? user['locale'] : nil, 
-      #       :gender => user.has_key?('gender') ? user['gender'] : nil, 
-      #       :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-      #       :data => { :referral => source ? source : "landing_page" }
-      #     } 
-      #   }
+      if false #graph_response.status == 200
+        user = JSON.parse(graph_response.body)
+        params = { :user => 
+          { 
+            :facebook_uuid => user.has_key?('id') ? user['id'] : nil, 
+            :first_name => user.has_key?('first_name') ? user['first_name'] : nil, 
+            :last_name => user.has_key?('last_name') ? user['last_name'] : nil, 
+            :profile_pic => user.has_key?('profile_pic') ? user['profile_pic'] : nil, 
+            :locale => user.has_key?('locale') ? user['locale'] : nil, 
+            :gender => user.has_key?('gender') ? user['gender'] : nil, 
+            :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
+            :data => { :referral => source ? source : "landing_page" }
+          } 
+        }
         
-      #   if onboard
-      #     if referral_code
-      #       response = $api.post("users?onboard=true&referral_code=#{referral_code}", params)
-      #     elsif team
-      #       response = $api.post("users?onboard=true&team=#{team}", params)
-      #     else
-      #       response = $api.post("users?onboard=true", params)
-      #     end
-      #   else
-      #     response = $api.post("users", params)
-      #   end
+        if onboard
+          if referral_code
+            response = $api.post("users?onboard=true&referral_code=#{referral_code}", params)
+          elsif team
+            response = $api.post("users?onboard=true&team=#{team}", params)
+          else
+            response = $api.post("users?onboard=true", params)
+          end
+        else
+          response = $api.post("users", params)
+        end
 
-      #   attributes = JSON.parse(response.body)['user']
-      #   new(attributes)
-      # else
-      #   params = { :user => 
-      #     { 
-      #       :facebook_uuid => facebook_uuid,
-      #       :referral => "landing_page"
-      #     } 
-      #   }
-      #   response = $api.post("users?onboard=true", params)
-      #   attributes = JSON.parse(response.body)['user']
-      #   new(attributes)
-      # end
-      params = { :user => 
-        { 
-          :facebook_uuid => facebook_uuid,
-          :referral => "landing_page"
-        } 
-      }
-      response = $api.post("users?onboard=true", params)
-      attributes = JSON.parse(response.body)['user']
-      new(attributes)
+        attributes = JSON.parse(response.body)['user']
+        new(attributes)
+      else
+        params = { :user => 
+          { 
+            :facebook_uuid => facebook_uuid,
+            :referral => "landing_page"
+          } 
+        }
+
+        if onboard
+          if referral_code
+            response = $api.post("users?onboard=true&referral_code=#{referral_code}", params)
+          elsif team
+            response = $api.post("users?onboard=true&team=#{team}", params)
+          else
+            response = $api.post("users?onboard=true", params)
+          end
+        else
+          response = $api.post("users", params)
+        end
+
+        attributes = JSON.parse(response.body)['user']
+        new(attributes)
+      end
     end
 
     def unsubscribe id:
