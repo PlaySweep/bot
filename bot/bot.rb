@@ -10,10 +10,10 @@ Rubotnik::Autoloader.load('bot')
 
 include Facebook::Messenger
 
-Facebook::Messenger::Subscriptions.subscribe(
-  access_token: ENV["ACCESS_TOKEN"],
-  subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
-)
+# Facebook::Messenger::Subscriptions.subscribe(
+#   access_token: ENV["ACCESS_TOKEN"],
+#   subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
+# )
 
 Facebook::Messenger::Profile.set({
   get_started: {
