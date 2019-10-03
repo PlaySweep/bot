@@ -15,11 +15,11 @@ include Facebook::Messenger
 #   subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
 # )
 
-Facebook::Messenger::Profile.set({
-  get_started: {
-    payload: 'START'
-  }
-}, access_token: ENV['ACCESS_TOKEN'])
+# Facebook::Messenger::Profile.set({
+#   get_started: {
+#     payload: 'START'
+#   }
+# }, access_token: ENV['ACCESS_TOKEN'])
 
 Rubotnik.route :postback do
   start
