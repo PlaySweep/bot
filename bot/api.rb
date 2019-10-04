@@ -57,8 +57,8 @@ module Sweep
     end
 
     def self.create facebook_uuid:, onboard: false, team: nil, referral_code: nil, source: nil
-      # graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
-      if false #graph_response.status == 200
+      graph_response = Faraday.get("https://graph.facebook.com/v3.2/#{facebook_uuid}?fields=first_name,last_name,profile_pic,email,gender,locale&access_token=#{ENV["ACCESS_TOKEN"]}")
+      if graph_response.status == 200
         user = JSON.parse(graph_response.body)
         params = { :user => 
           { 
