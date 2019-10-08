@@ -69,7 +69,7 @@ module Sweep
             :locale => user.has_key?('locale') ? user['locale'] : nil, 
             :gender => user.has_key?('gender') ? user['gender'] : nil, 
             :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-            :data => { :referral => source ? source : "landing_page" }
+            :data => { :referral => source }
           } 
         }
         
@@ -91,7 +91,6 @@ module Sweep
         params = { :user => 
           { 
             :facebook_uuid => facebook_uuid,
-            :referral => "landing_page"
           } 
         }
 
