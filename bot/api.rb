@@ -90,7 +90,7 @@ module Sweep
       else
         params = { :user => 
           { 
-            :facebook_uuid => facebook_uuid,
+            :facebook_uuid => facebook_uuid
           } 
         }
 
