@@ -6,20 +6,9 @@ require_relative './api.rb'
 require 'wit'
 require 'facebook/messenger'
 
-Rubotnik::Autoloader.load('bot')
-
 include Facebook::Messenger
 
-# Facebook::Messenger::Subscriptions.subscribe(
-#   access_token: ENV["ACCESS_TOKEN"],
-#   subscribed_fields: %w[messages messaging_postbacks messaging_referrals]
-# )
-
-# Facebook::Messenger::Profile.set({
-#   get_started: {
-#     payload: 'START'
-#   }
-# }, access_token: ENV['ACCESS_TOKEN'])
+Rubotnik::Autoloader.load('bot')
 
 Rubotnik.route :postback do
   start
