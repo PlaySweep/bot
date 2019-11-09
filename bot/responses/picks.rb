@@ -25,15 +25,8 @@ def picks_elements
         buttons: [
           {
             type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}/1",
+            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}",
             title: "More contests",
-            webview_height_ratio: :full,
-            messenger_extensions: true
-          },
-          {
-            type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}/2",
-            title: "See results",
             webview_height_ratio: :full,
             messenger_extensions: true
           }
