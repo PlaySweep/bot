@@ -5,7 +5,10 @@ def start
   bind 'START' do
     begin
       if postback.referral
-        if postback.referral.ref && postback.referral.ref != ""
+        if postback.referral.ad_id
+          source = postback.referral.ad_id
+          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
+        elsif postback.referral.ref && postback.referral.ref != ""
           ref = postback.referral.ref
           if ref.start_with?("rc")
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: ref, source: "referred")
