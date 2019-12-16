@@ -10,7 +10,7 @@ def fetch_status
   # else
   #   say "You're just getting started, #{sweepy.first_name}! Check back once you begin collecting some stats.", quick_replies: quick_replies
   # end
-  say "We will be back up with your status shortly..."
+  say "We will be back up with your status shortly...", quick_replies: quick_replies
   stop_thread
   
 end
