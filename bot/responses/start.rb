@@ -12,15 +12,16 @@ def start
         elsif referral.ref && referral.ref != ""
           if referral.ref.start_with?("rc")
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral.ref, source: "referred")
+            puts "Friend referral: #{referral.ref}"
+          elsif referral.ref.include?("lp")
+            ref = referral.ref.split('_').map(&:capitalize)[0]
+            source = referral.ref
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: source)
+            puts "Landing page: ref => #{ref} source => #{source}"
           else
-            ref = referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
-            param_key = referral.ref.split('?')[-1].split('=')[0]
-            source = referral.ref.split('?')[-1].split('=')[1]
-            if param_key == "source"
-              Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: source)
-            else
-              Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref)
-            end
+            ref = referral.ref.split('_').map(&:capitalize)[0]
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: "social_media")
+            puts "Social Media Post: ref => #{ref}"
           end
         else
           Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
