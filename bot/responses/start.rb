@@ -4,18 +4,18 @@ require 'httparty'
 def start
   bind 'START' do
     begin
-      if postback.referral
-        if postback.referral.ad_id
-          source = postback.referral.ad_id
+      referral = postback.referral
+      if referral
+        if referral.ad_id
+          source = "ad_#{referral.ad_id}"
           Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
-        elsif postback.referral.ref && postback.referral.ref != ""
-          ref = postback.referral.ref
-          if ref.start_with?("rc")
-            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: ref, source: "referred")
+        elsif referral.ref && referral.ref != ""
+          if referral.ref.start_with?("rc")
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral.ref, source: "referred")
           else
-            ref = ref.split('_').map(&:capitalize).join(' ').split('?')[0]
-            param_key = postback.referral.ref.split('?')[-1].split('=')[0]
-            source = postback.referral.ref.split('?')[-1].split('=')[1]
+            ref = referral.ref.split('_').map(&:capitalize).join(' ').split('?')[0]
+            param_key = referral.ref.split('?')[-1].split('=')[0]
+            source = referral.ref.split('?')[-1].split('=')[1]
             if param_key == "source"
               Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: source)
             else
