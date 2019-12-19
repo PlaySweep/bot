@@ -16,26 +16,13 @@ module Sweep
   Hash.use_dot_syntax = true
 
   class User
-    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, :confirmed, :zipcode, :locked, :slug, :current_team, :account, :copies, :images, :links, :stats, :latest_stats, :recent_orders
+    attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, 
+                :confirmed, :zipcode, :locked, :slug, :current_team, 
+                :account, :copies, :images, :links, :stats, 
+                :latest_stats, :recent_orders
 
     def initialize attributes
-      @id = attributes['id']
-      @facebook_uuid = attributes['facebook_uuid']
-      @first_name = attributes['first_name']
-      @last_name = attributes['last_name']
-      @email = attributes['email']
-      @confirmed = attributes['confirmed']
-      @zipcode = attributes['zipcode']
-      @locked = attributes['locked']
-      @slug = attributes['slug']
-      @current_team = attributes['current_team']
-      @account = attributes['account']
-      @copies = attributes['copies']
-      @images = attributes['images']
-      @links = attributes['links']
-      @stats = attributes['stats']
-      @latest_stats = attributes['latest_stats']
-      @recent_orders = attributes['recent_orders']
+      attributes.each { |name, value| instance_variable_set("@#{name}", value) }
     end
 
     def self.find facebook_uuid:, onboard: false
@@ -119,34 +106,13 @@ module Sweep
         puts "⁉️"
       end
     end
-
-    def update uuid:, team:
-      response = $api.patch("users/#{uuid}?team=#{team}", { :user => {:confirmed => true} })
-      if response.status == 200
-        puts "👍"
-      else
-        puts "⁉️"
-      end
-    end
-
   end
 
   class Slate
     attr_reader :id, :name, :status, :start_time
 
     def initialize attributes
-      @id = attributes['id']
-      @name = attributes['name']
-      @status = attributes['status']
-      @start_time = attributes['start_time']
-    end
-
-    def self.all user_id:
-      response = $api.get("slates?user_id=#{user_id}")
-      slates = JSON.parse(response.body)['slates']
-      if slates
-        slates.map { |attributes| new(attributes) }
-      end
+      attributes.each { |name, value| instance_variable_set("@#{name}", value) }
     end
 
     def self.find id:
@@ -154,32 +120,6 @@ module Sweep
       attributes = JSON.parse(response.body)['slate']
       new(attributes)
     end
-
-  end
-
-  class Team
-    attr_reader :id, :name, :abbreviation, :lat, :long
-
-    def initialize attributes
-      @id = attributes['id']
-      @name = attributes['name']
-      @abbreviation = attributes['abbreviation']
-      @lat = attributes['lat']
-      @long = attributes['long']
-    end
-
-    def self.all
-      response = $admin.get("teams?active=true")
-      collection = JSON.parse(response.body)["teams"]
-      collection.map { |attributes| new(attributes) }
-    end
-
-    def self.by_name name:
-      response = $admin.get("teams?team=#{name}")
-      collection = JSON.parse(response.body)["teams"]
-      collection.map { |attributes| new(attributes) }
-    end
-
   end
 
 end

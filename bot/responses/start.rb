@@ -10,9 +10,10 @@ def start
           source = "ad_#{referral.ad_id}"
           Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
         elsif referral.ref && referral.ref != ""
-          if referral.ref.start_with?("rc")
-            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral.ref, source: "referred")
-            puts "Friend referral: #{referral.ref}"
+          if referral.ref.start_with?("referral")
+            referral_code = referral.ref.split('?')[-1].split('=')[-1]
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral_code, source: "referred")
+            puts "Friend referral: #{referral_code}"
           elsif referral.ref.include?("lp")
             ref = referral.ref.split('_').map(&:capitalize)[0]
             source = referral.ref
