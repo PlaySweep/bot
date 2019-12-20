@@ -14,6 +14,11 @@ def start
             referral_code = referral.ref.split('?')[-1].split('=')[-1]
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral_code, source: "referred")
             puts "Friend referral: #{referral_code}"
+          elsif referral.ref.start_with?("fb_group")
+            team = referral.ref.split("_")[-1].capitalize
+            source = referral.ref.split('?')[-1].split('=')[-1]
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: source)
+            puts "Facebook Group: Team => #{team} Source => #{source}"
           elsif referral.ref.include?("lp")
             ref = referral.ref.split('_').map(&:capitalize)[0]
             source = referral.ref
@@ -21,8 +26,13 @@ def start
             puts "Landing page: ref => #{ref} source => #{source}"
           else
             ref = referral.ref.split('_').map(&:capitalize)[0]
-            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: "social_media")
-            puts "Social Media Post: ref => #{ref}"
+            if ref.nil?
+              Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: "other")
+              puts "Other: Bad Ref => #{ref}"
+            else
+              Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: "social_media")
+              puts "Social Media Post: ref => #{ref}"
+            end 
           end
         else
           Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
