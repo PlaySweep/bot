@@ -9,6 +9,10 @@ def check_for_payloads
     fetch_picks
   when "STATUS"
     fetch_status
+  when "LEADERBOARD"
+    fetch_leaderboard
+  when "OWNER LEADERBOARD"
+    fetch_owner_leaderboard
   when "SHARE"
     trigger_invite
   when "HOW TO PLAY START"
