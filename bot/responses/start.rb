@@ -19,9 +19,13 @@ def start
             source = referral.ref.split('?')[-1].split('=')[-1]
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: source)
             puts "Facebook Group: Team => #{team} Source => #{source}"
+          elsif referral.ref.start_with?("global_fb_group")
+            source = referral.ref.split('?')[-1].split('=')[-1]
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
+            puts "Global Facebook Group: Source => #{source}"
           elsif referral.ref.include?("lp")
-            ref = referral.ref.split('_').map(&:capitalize)[0]
-            source = referral.ref
+            ref = referral.ref.split('?').map(&:capitalize)[0]
+            source = referral.ref.split('?')[-1].split("=")[-1]
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: ref, source: source)
             puts "Landing page: ref => #{ref} source => #{source}"
           else
@@ -35,10 +39,10 @@ def start
             end 
           end
         else
-          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
+          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: "other")
         end
       else
-        Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
+        Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: "other")
       end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"
