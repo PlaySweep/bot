@@ -19,7 +19,8 @@ module Sweep
     attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, 
                 :confirmed, :zipcode, :locked, :slug, :current_team, 
                 :account, :copies, :images, :links, :stats, 
-                :latest_stats, :recent_orders
+                :latest_stats, :latest_contest_activity, :recent_orders,
+                :leaderboard, :current_team_leaderboard, :current_account_leaderboard
 
     def initialize attributes
       attributes.each { |name, value| instance_variable_set("@#{name}", value) }
@@ -56,7 +57,7 @@ module Sweep
             :locale => user.has_key?('locale') ? user['locale'] : nil, 
             :gender => user.has_key?('gender') ? user['gender'] : nil, 
             :timezone => user.has_key?('timezone') ? user['timezone'] : nil,
-            :referral => source
+            :data => { :referral => source }
           } 
         }
         
