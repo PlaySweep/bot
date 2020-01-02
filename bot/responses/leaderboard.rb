@@ -1,10 +1,11 @@
 def fetch_leaderboard
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  if sweepy.current_team_leaderboard
-    quick_replies = [{ content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY" }, { content_type: :text, title: "#{sweepy.current_team.abbreviation} Leaderboard", payload: "OWNER LEADERBOARD" }, { content_type: :text, title: "Share", payload: "SHARE" }]
-  else
-    quick_replies = [{ content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY" }, { content_type: :text, title: "Share", payload: "SHARE" }]
-  end
+  # if sweepy.current_team_leaderboard
+  #   quick_replies = [{ content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY" }, { content_type: :text, title: "#{sweepy.current_team.abbreviation} Leaderboard", payload: "OWNER LEADERBOARD" }, { content_type: :text, title: "Share", payload: "SHARE" }]
+  # else
+  #   quick_replies = [{ content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY" }, { content_type: :text, title: "Share", payload: "SHARE" }]
+  # end
+  quick_replies = [{ content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY" }, { content_type: :text, title: "Share", payload: "SHARE" }]
   if sweepy.leaderboard.account
     if sweepy.leaderboard.account.score.to_i <= 0
       say "You're just getting started with the #{sweepy.leaderboard.account.name}, come back once you've started earning some points!", quick_replies: quick_replies
