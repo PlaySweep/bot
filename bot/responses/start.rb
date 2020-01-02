@@ -23,6 +23,9 @@ def start
             source = referral.ref.split('?')[-1].split('=')[-1]
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
             puts "Global Facebook Group: Source => #{source}"
+          elsif referral.ref.start_with?("global")
+            source = referral.ref.split('?')[-1].split("=")[-1]
+            Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
           elsif referral.ref.include?("lp")
             ref = referral.ref.split('?').map(&:capitalize)[0]
             source = referral.ref.split('?')[-1].split("=")[-1]
