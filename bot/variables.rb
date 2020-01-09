@@ -11,6 +11,7 @@ module Commands
         url: url || "#{ENV["WEBVIEW_URL"]}",
         title: title,
         webview_height_ratio: :full,
+        webview_share_button: :hide,
         messenger_extensions: true
       }
     ]
@@ -37,7 +38,7 @@ module Commands
                  media_type: :image,
                  attachment_id: attachment_id,
                  buttons: [
-                   { type: :web_url, url: url, title: title, messenger_extensions: true, webview_height_ratio: :full }
+                   { type: :web_url, url: url, title: title, messenger_extensions: true, webview_share_button: :hide, webview_height_ratio: :full }
                  ]
               }
            ]

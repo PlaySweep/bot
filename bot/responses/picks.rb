@@ -28,6 +28,7 @@ def picks_elements
             url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}",
             title: "More contests",
             webview_height_ratio: :full,
+            webview_share_button: :hide,
             messenger_extensions: true
           }
         ]
