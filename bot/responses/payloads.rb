@@ -39,6 +39,7 @@ end
 
 def onboard
   Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
+  puts "ONBOARD MESSAGE: #{message.inspect}"
   stop_thread
 end
 
