@@ -38,8 +38,8 @@ def check_for_payloads
 end
 
 def onboard
-  Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true)
-  puts "ONBOARD MESSAGE: #{message.inspect}"
+  source = "payload_#{message.text.split(' ').map(&:downcase)[1..-1].join('')}"
+  Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: source)
   stop_thread
 end
 
