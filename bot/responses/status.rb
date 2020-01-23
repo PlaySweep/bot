@@ -2,7 +2,7 @@ def fetch_status
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   contest_size = sweepy.latest_stats.size == 1 ? "contest" : "#{sweepy.latest_stats.size} contests"
   if sweepy.current_account_leaderboard
-    quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, { content_type: :text, title: "Leaderboard", payload: "LEADERBOARD" }, {content_type: :text, title: "Share", payload: "SHARE"}]
+    quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Share", payload: "SHARE"}]
   else
     quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Share", payload: "SHARE"}]
   end
