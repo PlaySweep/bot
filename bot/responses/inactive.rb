@@ -1,7 +1,6 @@
 def trigger_offseason
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  url = "https://m.me/BudLightSweeps"
-  say "Thanks for playing the #{sweepy.account.app_name}, #{sweepy.first_name} - we'll be back next year!"
-  say "Looking to play some football? Start playing the Bud Light Sweeps by following the link below 🏈\n\n#{url}"
+  quick_replies = [{content_type: :text, title: "Share", payload: "SHARE"}]
+  say "The #{sweepy.account.app_name} first contests for the season will be available in 12 days, #{sweepy.first_name}!"
   stop_thread
 end
