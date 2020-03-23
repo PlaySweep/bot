@@ -1,7 +1,7 @@
 def start_help
   
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  quick_replies = [{content_type: :text, title: "Talk to human", payload: "HUMAN"}, {content_type: :text, title: "Prizing", payload: "PRIZING START"}, {content_type: :text, title: "How to play", payload: "HOW TO PLAY START"}]
+  quick_replies = [{content_type: :text, title: "Talk to human", payload: "HUMAN"}, {content_type: :text, title: "How to play", payload: "HOW TO PLAY START"}]
   say "How can I help, #{sweepy.first_name}?", quick_replies: quick_replies
   stop_thread
   
@@ -11,9 +11,8 @@ def help
   
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
-  say "We're on it, #{sweepy.first_name}. We will reach out to you within the next 24 hours. Thanks for your patience.", quick_replies: quick_replies
-  phone_number = "2054137379"
-  Popcorn.notify(phone_number, "#{sweepy.account.app_name} Customer Support Alert:\n\n#{sweepy.first_name} #{sweepy.last_name}\n#{sweepy.email}\n#{sweepy.zipcode}")
+  url= "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}"
+  show_button("Reach out to us!", "Let us know what's up and we'll get back to you as soon as possible.", quick_replies, url)
   stop_thread
   
 end
