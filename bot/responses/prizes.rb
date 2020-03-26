@@ -18,23 +18,9 @@ def general_prizing_info
 end
 
 def my_prizing_info
-  
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Help", payload: "HELP"}]
-  # order = sweepy.recent_orders[0]
-  # if order
-  #   prize = { name: order.slate.prizes.first.name, slate_name: order.slate.name, date: Date.parse(order.slate.start_time).strftime("%B %d") }
-  #   say "Congratulations again, #{sweepy.first_name}!"
-    
-    
-  #   say "We are currently processing the #{prize.name} you won on #{prize.date}. Please allow 10-14 business days for shipment of physical items.", quick_replies: quick_replies
-  #   stop_thread
-    
-  # else
-  #   say "We currently do not see any pending prizes for your account.", quick_replies: quick_replies
-  #   stop_thread
-    
-  # end
-  say "We currently do not see any pending prizes for your account.", quick_replies: quick_replies
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
+  url= "#{ENV["WEBVIEW_URL"]}/customer_support/#{sweepy.slug}"
+  show_button("Request more info", "If you still have questions concerning a prize you've won, reach out to us below!", quick_replies, url)
   stop_thread
 end
