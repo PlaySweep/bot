@@ -11,7 +11,7 @@ def start
           Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: "Chiefs", source: source)
         elsif referral.ref && referral.ref != ""
           if referral.ref.start_with?("referral")
-            referral_code = referral.ref.split('?')[-1].split('=')[-1]
+            referral_code = referral.ref.split('/')[-1]
             Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, referral_code: referral_code, source: "referred")
             puts "Friend referral: #{referral_code}"
           elsif referral.ref.start_with?("fb_group")
