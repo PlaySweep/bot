@@ -33,6 +33,7 @@ Rubotnik.route :message do
             trigger_invite if entities.include?("share")
             start_prizes if entities.include?("prizes")
             start_help if entities.include?("help")
+            fetch_rules if entities.include?("rules")
             switch_prompt_message if entities.include?("switch")
             positive_sentiment if entities.size < 1 && entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive"
             default do
