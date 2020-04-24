@@ -26,7 +26,7 @@ Rubotnik.route :message do
             response = $wit.message(message.text).to_dot
             entities = response.entities.keys
             entity_objects = response.entities
-            unsubscribe if entities.include?("unsubscribe")
+            # unsubscribe if entities.include?("unsubscribe")
             general_how_to_play if entities.include?("how_to_play")
             fetch_picks if entities.include?("make_picks") unless entities.include?("how_to_play")
             fetch_status if entities.include?("status") unless entities.include?("make_picks")
