@@ -45,7 +45,8 @@ Rubotnik.route :message do
             response = $wit.message(message.text).to_dot
             entities = response.entities.keys
             if entities.include?("unsubscribe")
-              unsubscribe
+              # unsubscribe
+              stop_thread
             else
               account_confirmation
             end
