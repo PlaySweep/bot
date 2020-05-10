@@ -52,6 +52,8 @@ Rubotnik.route :message do
             entities = response.entities.keys
             if entities.include?("unsubscribe")
               unsubscribe
+            elsif entities.include?("help")
+              help
             else
               account_confirmation
             end
