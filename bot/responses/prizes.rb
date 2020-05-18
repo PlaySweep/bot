@@ -1,8 +1,9 @@
 def start_prizes
   
   sweepy = Sweep::User.find(facebook_uuid: user.id)
-  quick_replies = [{content_type: :text, title: "How it works", payload: "PRIZING FAQ"}, {content_type: :text, title: "Where is my prize?", payload: "PRIZING STATUS"}]
-  say "How can I help with prizing, #{sweepy.first_name}?", quick_replies: quick_replies
+  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Status", payload: "STATUS"}]
+  url= "#{ENV["WEBVIEW_URL"]}/customer_support/#{sweepy.slug}"
+  show_button("Request more info", "If you still have questions concerning a prize you've won, reach out to us below!", quick_replies, url)
   stop_thread
   
 end
