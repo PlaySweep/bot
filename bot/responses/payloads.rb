@@ -2,6 +2,7 @@ def check_for_payloads
   
   case message.quick_reply
   when "START"
+    puts "Does this ever run on I'm Ready ad?"
     onboard
   when "PLAY"
     fetch_picks
