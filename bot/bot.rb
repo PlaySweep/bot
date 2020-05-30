@@ -18,6 +18,7 @@ Facebook::Messenger::Profile.set({
 
 Rubotnik.route :postback do
   start
+  owner_start
 end
 
 Rubotnik.route :message do

@@ -5,6 +5,10 @@ def start
   bind 'START' do
     begin
       referral = postback.referral
+      puts "**" * 10
+      puts "Postback #{postback.inspect}"
+      puts "Postback payload #{postback.payload.inspect}"
+      puts "**" * 10
       if referral
         if referral.ad_id
           source = "ad_#{referral.ad_id}"
