@@ -8,7 +8,7 @@ def start
       if referral
         if referral.ad_id
           source = "ad_#{referral.ad_id}"
-          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: "Chiefs", source: source)
+          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: "49ers", source: source)
         elsif referral.ref && referral.ref != ""
           if referral.ref.start_with?("referral")
             referral_code = referral.ref.split('?')[-1].split('=')[-1]
