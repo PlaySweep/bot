@@ -3,9 +3,15 @@ require 'httparty'
 
 def owner_start
   begin
-    if postback.payload.include?("!")
-      team = postback.payload.split("!", -1)[0]
-      bind team do
+    bind postback.payload do
+      puts "👀" * 10
+      puts "Running the payload bind in owner start..."
+      puts "👀" * 10
+      if postback.payload.include?("!")
+        puts "Running team payload with !"
+        puts "Running team payload with !"
+        puts "Running team payload with !"
+        team = postback.payload.split("!", -1)[0]
         abbreviation = team.split("_").map(&:downcase).join("_")
         puts "#{abbreviation} from onboard method"
         Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "ad_#{postback.referral.ad_id}")
