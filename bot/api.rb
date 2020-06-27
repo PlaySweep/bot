@@ -8,9 +8,7 @@ require 'faraday'
 require 'json'
 
 API_URL = "#{ENV["API_ROOT_URL"]}"
-ADMIN_URL = "#{ENV["ADMIN_ROOT_URL"]}"
 $api = Faraday.new(API_URL)
-$admin = Faraday.new(ADMIN_URL)
 
 module Sweep
   Hash.use_dot_syntax = true
