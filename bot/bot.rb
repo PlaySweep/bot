@@ -36,7 +36,6 @@ Rubotnik.route :message do
             unsubscribe if entities.include?("unsubscribe")
             general_how_to_play if entities.include?("how_to_play")
             fetch_picks if entities.include?("make_picks") unless entities.include?("how_to_play")
-            fetch_status if entities.include?("status") unless entities.include?("make_picks")
             trigger_invite if entities.include?("share")
             start_prizes if entities.include?("prizes")
             start_help if entities.include?("help")

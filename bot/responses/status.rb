@@ -11,7 +11,5 @@ def fetch_status
   # else
   #   say "You're just getting started, #{sweepy.first_name}! We'll begin collecting some stats for you soon...", quick_replies: quick_replies
   # end
-  quick_replies = [{content_type: :text, title: "Play again", image_url: sweepy.current_team.image, payload: "PLAY"}, {content_type: :text, title: "Share", payload: "SHARE"}]
-  say "You're just getting started, #{sweepy.first_name}! We'll begin collecting some stats for you soon...", quick_replies: quick_replies
   stop_thread
 end

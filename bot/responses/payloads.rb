@@ -8,8 +8,6 @@ def check_for_payloads
     fetch_picks
   when "PLAY NOW"
     fetch_picks
-  when "STATUS"
-    fetch_status
   when "LEADERBOARD"
     fetch_leaderboard
   when "OWNER LEADERBOARD"

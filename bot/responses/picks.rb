@@ -6,7 +6,7 @@ end
 
 def handle_show_sports
   
-  quick_replies = [{content_type: :text, title: "Status", payload: "STATUS"}, {content_type: :text, title: "Share", payload: "SHARE"}]
+  quick_replies = [{content_type: :text, title: "Share", payload: "SHARE"}]
   show_carousel(elements: picks_elements, quick_replies: quick_replies)
   stop_thread
   
