@@ -1,5 +1,14 @@
 require 'possessive'
 
+def check_confirmed_and_fetch_picks
+  sweepy = Sweep::User.find(facebook_uuid: user.id)
+  if sweepy.confirmed
+    fetch_picks
+  else
+    account_confirmation
+  end
+end
+
 def fetch_picks
   handle_show_sports
 end
@@ -25,7 +34,7 @@ def picks_elements
         buttons: [
           {
             type: :web_url,
-            url: "#{ENV["WEBVIEW_URL"]}/dashboard/#{sweepy.slug}",
+            url: "#{ENV['WEBVIEW_URL']}/messenger/#{sweepy.facebook_uuid}",
             title: "More contests",
             webview_height_ratio: :full,
             webview_share_button: :hide,

@@ -8,7 +8,7 @@ set :port, '22'
 set :migration_role, :app
 set :assets_roles, [:web, :app]
 
-set :rvm_ruby_version, 'ruby-2.4.1@default'      # Defaults to: 'default'
+set :rvm_ruby_version, 'ruby-2.7.1@default'      # Defaults to: 'default'
 set :rvm_map_bins, %w{gem rake ruby rails bundle}
 
 set :stages, %w{beta production}

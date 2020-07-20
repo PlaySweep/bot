@@ -25,7 +25,7 @@ module Sweep
     end
 
     def self.find facebook_uuid:, onboard: false
-      response = onboard ? $api.get("facebook/sessions/#{facebook_uuid}?onboard=true") : $api.get("facebook/sessions/#{facebook_uuid}")
+      response = onboard ? $api.get("messenger/users/#{facebook_uuid}?onboard=true") : $api.get("messenger/users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
       unless attributes.empty?
         new(attributes)

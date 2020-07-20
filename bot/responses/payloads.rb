@@ -4,6 +4,8 @@ def check_for_payloads
   when "START"
     puts "Does this ever run on I'm Ready ad?"
     onboard
+  when "PLAY READY"
+    check_confirmed_and_fetch_picks
   when "PLAY"
     fetch_picks
   when "PLAY NOW"
