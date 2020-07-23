@@ -15,7 +15,7 @@ module Sweep
 
   class User
     attr_reader :id, :facebook_uuid, :first_name, :last_name, :email, 
-                :confirmed, :zipcode, :locked, :slug, :current_team, 
+                :confirmed, :zipcode, :locked, :slug, :current_team, :current_team_is_default, 
                 :account, :copies, :images, :links, :stats, 
                 :latest_stats, :latest_contest_activity, :recent_orders,
                 :leaderboard, :current_team_leaderboard, :current_account_leaderboard
