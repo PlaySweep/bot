@@ -69,7 +69,9 @@ module Sweep
         end
 
         attributes = JSON.parse(response.body)['user']
-        new(attributes)
+        if attributes
+          new(attributes)
+        end
       else
         params = { :user => 
           { 
@@ -90,7 +92,9 @@ module Sweep
         end
 
         attributes = JSON.parse(response.body)['user']
-        new(attributes)
+        if attributes
+          new(attributes)
+        end
       end
     end
 
@@ -101,20 +105,6 @@ module Sweep
       else
         puts "⁉️"
       end
-    end
-  end
-
-  class Slate
-    attr_reader :id, :name, :status, :start_time
-
-    def initialize attributes
-      attributes.each { |name, value| instance_variable_set("@#{name}", value) }
-    end
-
-    def self.find id:
-      response = $api.get("users/#{facebook_uuid}/slates/#{id}")
-      attributes = JSON.parse(response.body)['slate']
-      new(attributes)
     end
   end
 
