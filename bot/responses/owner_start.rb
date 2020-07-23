@@ -29,11 +29,11 @@ def fetch_team abbreviation
     return "CIN"
   elsif abbreviation == "nationals"
     return "WSH"
+  elsif abbreviation == "marlins"
+    return "MIA"
+  elsif abbreviation == "yankees"
+    return "NYY"
   elsif abbreviation == "d-backs"
-    return "marlins"
-  elsif abbreviation == "MIA"
-    return "yankees"
-  elsif abbreviation == "NYY"
     return "ARI"
   elsif abbreviation == "phillies"
     return "PHI"
@@ -59,5 +59,7 @@ def fetch_team abbreviation
     return "MIN"
   elsif abbreviation == "cubs"
     return "CHC"
+  elsif abbreviation == "cardinals"
+    return "STL"
   end
 end
