@@ -12,19 +12,22 @@ def owner_start
         puts "Running team payload with !"
         puts "Running team payload with !"
         team = postback.payload.split("!", -1)[0]
+        initials = fetch_team(team)
         abbreviation = team.split("_").map(&:downcase).join("_")
         puts "#{abbreviation} from onboard method"
-        puts "postback.payload.referral => #{postback.payload.referral}"
-        puts "postback.referral => #{postback.referral}"
-        if postback.payload.referral.ad_id
-          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "ad_#{postback.payload.referral.ad_id}")
-        else
-          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "issue")
-        end
+        Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: initials, source: postback.referral.ad_id ? "ad_#{postback.referral.ad_id}" : "ad_id")
         stop_thread
       end
     end
   rescue => exception
     puts "owner start exception => #{exception.inspect}"
+  end
+end
+
+def fetch_team abbreviation
+  if abbreviation == "reds"
+    return "CIN"
+  elsif abbreviation == "nationals"
+    return "WSH"
   end
 end
