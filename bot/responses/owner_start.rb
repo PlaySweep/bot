@@ -14,7 +14,13 @@ def owner_start
         team = postback.payload.split("!", -1)[0]
         abbreviation = team.split("_").map(&:downcase).join("_")
         puts "#{abbreviation} from onboard method"
-        Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "ad_#{postback.referral.ad_id}")
+        puts "postback.payload.referral => #{postback.payload.referral}"
+        puts "postback.referral => #{postback.referral}"
+        if postback.payload.referral.ad_id
+          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "ad_#{postback.payload.referral.ad_id}")
+        else
+          Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, team: team, source: "issue")
+        end
         stop_thread
       end
     end
