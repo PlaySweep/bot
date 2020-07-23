@@ -2,7 +2,6 @@ def general_how_to_play
   
   sweepy = Sweep::User.find(facebook_uuid: user.id)
   if sweepy.confirmed
-    puts "Sweepy #{sweepy.inspect}"
     how_to_play_copy = sweepy.copies.find { |copy| copy.category == "How To Play" }
     if sweepy.current_team_is_default
       interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.account }
