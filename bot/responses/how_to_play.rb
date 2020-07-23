@@ -5,7 +5,7 @@ def general_how_to_play
     puts "Sweepy #{sweepy.inspect}"
     how_to_play_copy = sweepy.copies.find { |copy| copy.category == "How To Play" }
     if sweepy.current_team_is_default
-      interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: current_team.account }
+      interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.account }
     else
       interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.abbreviation }
     end
@@ -14,7 +14,7 @@ def general_how_to_play
   else
     how_to_play_copy = sweepy.copies.find { |copy| copy.category == "How To Play" }
     if sweepy.current_team_is_default
-      interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: current_team.account }
+      interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.account }
     else
       interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.abbreviation }
     end
