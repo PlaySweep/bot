@@ -36,6 +36,7 @@ Rubotnik.route :message do
             unsubscribe if entities.include?("unsubscribe")
             general_how_to_play if entities.include?("how_to_play")
             fetch_picks if entities.include?("make_picks") unless entities.include?("how_to_play")
+            fetch_picks if entities.include?("status")
             trigger_invite if entities.include?("share")
             start_prizes if entities.include?("prizes")
             start_help if entities.include?("help")
@@ -43,7 +44,7 @@ Rubotnik.route :message do
             switch_prompt_message if entities.include?("switch")
             positive_sentiment if entities.size < 1 && entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive"
             default do
-              fetch_picks
+              start_help if entities.size == 1 && entities.include?("sentiment")
             end
           end
         else
