@@ -27,7 +27,7 @@ module Sweep
     def self.find facebook_uuid:, onboard: false
       response = onboard ? $api.get("messenger/users/#{facebook_uuid}?onboard=true") : $api.get("messenger/users/#{facebook_uuid}")
       attributes = JSON.parse(response.body)['user']
-      unless attributes.nil?
+      unless attributes.empty?
         new(attributes)
       end
     end
