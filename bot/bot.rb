@@ -43,7 +43,7 @@ Rubotnik.route :message do
             switch_prompt_message if entities.include?("switch")
             positive_sentiment if entities.size < 1 && entity_objects["sentiment"] && entity_objects["sentiment"].first["value"] == "positive"
             default do
-              start_help if entities.size == 1 && entities.include?("sentiment")
+              fetch_picks
             end
           end
         else
