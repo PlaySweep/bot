@@ -15,7 +15,7 @@ def owner_start
         initials = fetch_team(team)
         abbreviation = team.split("_").map(&:downcase).join("_")
         puts "#{abbreviation} from onboard method"
-        Sweep::User.create(facebook_uuid: user.id, onboard: true, team: initials)
+        Sweep::User.create(facebook_uuid: user.id, onboard: true, team: initials, source: postback.referral ? "ad_#{postback.referral.ad_id}" : "ad_id")
         stop_thread
       end
     end
