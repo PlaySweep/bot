@@ -49,7 +49,7 @@ def start
           Sweep::User.create(facebook_uuid: user.id, onboard: true, source: "other")
         end
       else
-        Sweep::User.create(facebook_uuid: user.id, onboard: true, source: "other")
+        Sweep::User.find_or_create(facebook_uuid: user.id, onboard: true, source: "other")
       end
     rescue NoMethodError => e
       puts "Error => #{e.inspect}\n"
