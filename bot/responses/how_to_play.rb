@@ -17,7 +17,7 @@ def general_how_to_play
     else
       interpolated_how_to_play_copy = how_to_play_copy.message % { team_abbreviation: sweepy.current_team.abbreviation }
     end
-    quick_replies = [{content_type: :text, title: "Sign up now!", payload: "PLAY READY"}]
+    quick_replies = [{content_type: :text, title: "Start playing now!", payload: "PLAY READY"}]
     say interpolated_how_to_play_copy, quick_replies: quick_replies
   end
   stop_thread

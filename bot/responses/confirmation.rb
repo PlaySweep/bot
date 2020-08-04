@@ -5,7 +5,7 @@ def account_confirmation
   confirmation_text = copy.message
   quick_replies = [{content_type: :text, title: "Help", payload: "HELP"}]
   url = "#{ENV['WEBVIEW_URL']}/messenger/#{sweepy.facebook_uuid}"
-  show_button("Sign up now!", confirmation_text, quick_replies, url)
+  show_button("Start playing now!", confirmation_text, quick_replies, url)
   stop_thread
   
 end
