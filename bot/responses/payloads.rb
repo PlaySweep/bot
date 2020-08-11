@@ -8,6 +8,8 @@ def check_for_payloads
     check_confirmed_and_fetch_picks
   when "PLAY"
     fetch_picks
+  when "STATUS"
+    fetch_picks
   when "PLAY NOW"
     fetch_picks
   when "LEADERBOARD"
