@@ -24,7 +24,6 @@ end
 Rubotnik.route :message do
   begin
     sweepy = Sweep::User.find_or_create(facebook_uuid: user.id)
-    if sweepy.account.active
       if message.quick_reply
         check_for_payloads
       else
@@ -61,9 +60,6 @@ Rubotnik.route :message do
           end
         end
       end
-    else
-      trigger_offseason
-    end
   rescue Wit::Error => e
     puts "Wit AI error\n\n => #{e.inspect}"
   end
